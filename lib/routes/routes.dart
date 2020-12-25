@@ -3,6 +3,12 @@ import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
+import 'package:bml_supervisor/screens/viewentry/view_entry_detailed_view.dart';
+import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
+import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
+import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
+import 'package:bml_supervisor/models/view_expenses_response.dart';
+
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -27,9 +33,33 @@ class AppRouter {
           builder: (_) => EntryLogsView(),
         );
 
+      case viewEntryLogPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ViewEntryView(),
+        );
+
+      case viewEntryDetailedViewPageRoute:
+        Map<String, dynamic> args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ViewEntryDetailedView(arguments: args),
+        );
+
       case addExpensesPageRoute:
         return MaterialPageRoute(
           builder: (_) => ExpensesMobileView(),
+        );
+
+      case viewExpensesPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ViewExpensesView(),
+        );
+      case viewExpensesDetailedViewPageRoute:
+        List<ViewExpensesResponse> args = settings.arguments;
+
+        return MaterialPageRoute(
+          builder: (_) => ViewExpensesDetailedView(
+            viewExpensesDetailedList: args,
+          ),
         );
 
       default:
