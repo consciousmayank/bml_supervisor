@@ -36,6 +36,24 @@ class ApiService {
     return response;
   }
 
+// Added by Vikas
+  Future<Response> vehicleEntrySearch({
+    String registrationNumber,
+    int duration,
+  }) async {
+    Response response;
+    try {
+      print(
+          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
+      // URL is subject to change -
+      response = await Dio().get(
+          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
+    } on DioError catch (e) {
+      throw e;
+    }
+    return response;
+  }
+
   Future submitVehicleEntry(EntryLog entryLogRequest) async {
     Response response;
     final request = {
@@ -97,6 +115,7 @@ class ApiService {
       {String regNo, String dateFrom, int pageNumber, String toDate}) async {
     Response response;
     try {
+      print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
       response = await dioClient.getDio().get(
             GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
           );

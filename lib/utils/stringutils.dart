@@ -104,6 +104,12 @@ const List<String> expenseTypes = [
   'Others'
 ];
 
+const List<String> selectDurationList = [
+  "THIS MONTH",
+  "LAST MONTH",
+  "LAST 3 MONTHS"
+];
+
 const String registrationText = "Registration";
 const String addText = "Add";
 const String viewText = "View";
