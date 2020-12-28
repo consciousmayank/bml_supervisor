@@ -8,7 +8,6 @@ import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 
 class ApiService {
@@ -132,7 +131,6 @@ class ApiService {
     try {
       response = await dioClient.getDio().get(
             "$GET_ROUTES_FOR_CLIENT_ID$clientId",
-            options: buildCacheOptions(Duration(days: 1)),
           );
     } on DioError catch (e) {
       return e.message;
@@ -145,7 +143,6 @@ class ApiService {
     try {
       response = await dioClient.getDio().get(
             "$GET_HUB_DATA$hubId",
-            options: buildCacheOptions(Duration(days: 1)),
           );
     } on DioError catch (e) {
       return e.message;

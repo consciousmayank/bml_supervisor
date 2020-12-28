@@ -64,14 +64,19 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     return Expanded(
       child: Timeline.builder(
           itemBuilder: (context, index) => TimelineModel(
-                SizedBox(
-                  height: 100,
-                  child: HubView(
-                      hub: viewModel
-                          .routesList[viewModel.routesList
-                              .indexOf(viewModel.selectedRoute)]
-                          .hub[index]),
-                ),
+                HubView(
+                    title: viewModel
+                        .routesList[viewModel.routesList
+                            .indexOf(viewModel.selectedRoute)]
+                        .title,
+                    routeId: viewModel
+                        .routesList[viewModel.routesList
+                            .indexOf(viewModel.selectedRoute)]
+                        .id,
+                    hub: viewModel
+                        .routesList[viewModel.routesList
+                            .indexOf(viewModel.selectedRoute)]
+                        .hub[index]),
                 position:
                     // TimelineItemPosition.right,
                     TimelineItemPosition.left,
@@ -92,9 +97,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
               .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
               .hub
               .length,
-          physics:
-              // ClampingScrollPhysics(),
-              BouncingScrollPhysics(),
+          physics: ClampingScrollPhysics(),
+          // BouncingScrollPhysics(),
           position: TimelinePosition.Left),
     );
   }
