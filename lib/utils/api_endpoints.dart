@@ -10,3 +10,6 @@ final GET_ENTRIES_BTW_DATES = (vehicleId, dateFrom, dateTo, page) =>
 final GET_EXPENSES_LIST = (vehicleId, dateFrom, dateTo, page) =>
     '/vehicle/expenses/find/$vehicleId/$dateFrom/$dateTo/$page';
 const String ADD_EXPENSE = "/vehicle/expenses/add";
+//new Apis
+const String GET_ROUTES_FOR_CLIENT_ID = "/route/client/";
+const String GET_HUB_DATA = "/hub/find/";

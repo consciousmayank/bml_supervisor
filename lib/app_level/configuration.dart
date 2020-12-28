@@ -1,2 +1,3 @@
 // baseRestUrl(ipAddress) => "http://http://bookmyloading.com/api";
-String baseRestUrl = "http://192.168.0.193:8080//bookmyloading/api";
+final String baseRestUrl = "http://192.168.0.150:8080//bookmyloading/api";
+final int clientId = 1;

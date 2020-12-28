@@ -1,14 +1,14 @@
+import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
-import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
-import 'package:bml_supervisor/models/view_expenses_response.dart';
-
+import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -60,6 +60,11 @@ class AppRouter {
           builder: (_) => ViewExpensesDetailedView(
             viewExpensesDetailedList: args,
           ),
+        );
+
+      case allotConsignmentsPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ConsignmentAllotmentView(),
         );
 
       default:
