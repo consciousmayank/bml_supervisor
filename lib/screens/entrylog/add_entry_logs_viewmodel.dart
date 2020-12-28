@@ -90,36 +90,18 @@ class EntryLogsViewModel extends GeneralisedBaseViewModel {
 
   void getEntryForSelectedDate() async {
     setBusy(true);
-    try {
-      var entryLog = await apiService.getEntryLogForDate(
-          selectedSearchVehicle.registrationNumber,
-          DateFormat('dd-MM-yyyy').format(entryDate).toLowerCase());
+    var entryLog = await apiService.getEntryLogForDate(
+        selectedSearchVehicle.registrationNumber,
+        DateFormat('dd-MM-yyyy').format(entryDate).toLowerCase());
 
-      if (entryLog is String) {
-        snackBarService.showSnackbar(message: entryLog);
-      } else {
-        vehicleLog = EntryLog.fromMap(entryLog.data);
+    if (entryLog is String) {
+      snackBarService.showSnackbar(message: entryLog);
+    } else {
+      vehicleLog = EntryLog.fromMap(entryLog.data);
+      if (vehicleLog.failed != null) {
+        vehicleLog = vehicleLog.copyWith(
+            startReading: selectedSearchVehicle.initReading.toDouble());
       }
-    } catch (e) {
-      // snackBarService.showSnackbar(message: e.toString());
-      vehicleLog = EntryLog(
-          amountPaid: null,
-          drivenKm: null,
-          endReading: null,
-          entryDate: null,
-          fuelLtr: null,
-          fuelMeterReading: null,
-          id: -1,
-          loginTime: null,
-          logoutTime: null,
-          ratePerLtr: null,
-          remarks: null,
-          startReading: null,
-          status: null,
-          trips: null,
-          vehicleId: null,
-          drivenKmGround: null,
-          startReadingGround: null);
     }
     setBusy(false);
   }

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-import 'dart:convert';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:flutter/material.dart';
 
 class ViewEntryDetailedView extends StatefulWidget {
   final Map<String, dynamic> arguments;

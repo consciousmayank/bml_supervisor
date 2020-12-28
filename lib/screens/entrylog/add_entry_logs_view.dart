@@ -36,8 +36,7 @@ class _EntryLogsViewState extends State<EntryLogsView> {
   final FocusNode selectedDateFocusNode = FocusNode();
 
   final FocusNode initialReadingFocusNode = FocusNode();
-  final TextEditingController initialReadingController =
-      TextEditingController();
+  TextEditingController initialReadingController = TextEditingController();
 
   final FocusNode endReadingFocusNode = FocusNode();
   final TextEditingController endReadingController = TextEditingController();
@@ -596,6 +595,18 @@ class _EntryLogsViewState extends State<EntryLogsView> {
                 ? 0
                 : viewModel.selectedSearchVehicle.initReading
             : viewModel.vehicleLog.endReading;
+
+    if (viewModel.vehicleLog != null) {
+      if (viewModel.vehicleLog.failed != null) {
+        initialReadingController = TextEditingController(
+            text: viewModel.vehicleLog.startReading.toString());
+      }
+      // else {
+      //   initialReadingController = TextEditingController(
+      //       text: viewModel.vehicleLog.endReading.toString());
+      // }
+    }
+
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
@@ -608,6 +619,36 @@ class _EntryLogsViewState extends State<EntryLogsView> {
       hintText: vehicleInitialReadingHint,
       keyboardType: TextInputType.number,
       onFieldSubmitted: (_) {
+        if (viewModel.vehicleLog.failed != null) {
+          if (int.parse(initialReadingController.text) <
+              viewModel.selectedSearchVehicle.initReading) {
+            locator<DialogService>()
+                .showConfirmationDialog(
+              title: 'Vehicle Start Reading Error',
+              description: vehicleEntryStartReadingError,
+            )
+                .then((value) {
+              endReadingController.clear();
+            }).then((value) {
+              FocusScope.of(context).requestFocus(initialReadingFocusNode);
+            });
+          }
+        } else {
+          if (int.parse(initialReadingController.text) <
+              viewModel.vehicleLog.startReading) {
+            locator<DialogService>()
+                .showConfirmationDialog(
+              title: 'Vehicle Start Reading Error',
+              description: vehicleEntryStartReadingError,
+            )
+                .then((value) {
+              endReadingController.clear();
+            }).then((value) {
+              FocusScope.of(context).requestFocus(initialReadingFocusNode);
+            });
+          }
+        }
+
         fieldFocusChange(context, initialReadingFocusNode, endReadingFocusNode);
       },
       validator: (value) {
@@ -838,7 +879,7 @@ class _EntryLogsViewState extends State<EntryLogsView> {
       maxLines: 5,
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
+        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 , -- /]')),
       ],
       controller: remarksController,
       focusNode: remarksFocusNode,

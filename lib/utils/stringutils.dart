@@ -63,6 +63,9 @@ const String fuelMeterReadingError =
 const String vehicleEntryEndReadingError =
     "End Reading cannot be less then, or equal to Start Reading";
 
+const String vehicleEntryStartReadingError =
+    "Start Reading cannot be less then, yesterday's End Reading";
+
 const String logoutTimeError =
     "Logout time cannot be less then, or equal to Login time";
 

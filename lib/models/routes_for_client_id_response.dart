@@ -18,7 +18,7 @@ class GetRoutesResponse {
 
   final int id;
   final String title;
-  final List<Hub> hub;
+  final List<Hubs> hub;
   final int client;
   final String remarks;
   final bool status;
@@ -28,7 +28,7 @@ class GetRoutesResponse {
   GetRoutesResponse copyWith({
     int id,
     String title,
-    List<Hub> hub,
+    List<Hubs> hub,
     int client,
     String remarks,
     bool status,
@@ -55,7 +55,7 @@ class GetRoutesResponse {
       GetRoutesResponse(
         id: json["id"],
         title: json["title"],
-        hub: List<Hub>.from(json["hub"].map((x) => Hub.fromMap(x))),
+        hub: List<Hubs>.from(json["hubs"].map((x) => Hubs.fromMap(x))),
         client: json["client"],
         remarks: json["remarks"],
         status: json["status"],
@@ -75,8 +75,8 @@ class GetRoutesResponse {
       };
 }
 
-class Hub {
-  Hub({
+class Hubs {
+  Hubs({
     this.id,
     this.hub,
     this.sequence,
@@ -90,14 +90,14 @@ class Hub {
   final int kms;
   final int tag;
 
-  Hub copyWith({
+  Hubs copyWith({
     int id,
     int hub,
     int sequence,
     int kms,
     int tag,
   }) =>
-      Hub(
+      Hubs(
         id: id ?? this.id,
         hub: hub ?? this.hub,
         sequence: sequence ?? this.sequence,
@@ -105,11 +105,11 @@ class Hub {
         tag: tag ?? this.tag,
       );
 
-  factory Hub.fromJson(String str) => Hub.fromMap(json.decode(str));
+  factory Hubs.fromJson(String str) => Hubs.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Hub.fromMap(Map<String, dynamic> json) => Hub(
+  factory Hubs.fromMap(Map<String, dynamic> json) => Hubs(
         id: json["id"],
         hub: json["hub"],
         sequence: json["sequence"],
