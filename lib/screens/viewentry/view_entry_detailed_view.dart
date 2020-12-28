@@ -238,32 +238,46 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text("Trips: "),
-                              Text(vehicleEntrySearchResponse[index]
-                                  .trips
-                                  .toString())
+                              Expanded(
+                                flex: 1,
+                                child: Text("Start Reading : "),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(vehicleEntrySearchResponse[index]
+                                    .startReading
+                                    .toString()),
+                              )
                             ],
                           ),
                           hSizedBox(5),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text("Start Reading : "),
-                              Text(vehicleEntrySearchResponse[index]
-                                  .startReading
-                                  .toString())
+                              Expanded(
+                                flex: 1,
+                                child: Text("End Reading : "),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(vehicleEntrySearchResponse[index]
+                                    .endReading
+                                    .toString()),
+                              )
                             ],
                           ),
-                          hSizedBox(5),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text("End Reading : "),
-                              Text(vehicleEntrySearchResponse[index]
-                                  .endReading
-                                  .toString())
+                              Expanded(
+                                flex: 1,
+                                child: Text("Login Time : "),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(vehicleEntrySearchResponse[index]
+                                    .loginTime
+                                    .toString()),
+                              )
                             ],
                           ),
                           Row(
@@ -292,7 +306,7 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
             ),
           );
         },
-        itemCount: vehicleEntrySearchResponse.length);
+        itemCount: vehicleEntrySearchResponse.length + 1);
   }
 
   void showViewEntryDetailPreview(

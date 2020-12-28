@@ -8,40 +8,46 @@ import 'package:dio/dio.dart';
 
 class ViewEntryViewModel extends GeneralisedBaseViewModel {
   int _totalKm = 0;
-  int get totalKm => _totalKm;
-  set totalKm(int totalKm) {
-    _totalKm = totalKm;
-    notifyListeners();
-  }
+  // int get totalKm => _totalKm;
+  // set totalKm(int totalKm) {
+  //   _totalKm = totalKm;
+  //   notifyListeners();
+  // }
 
   int _totalKmGround = 0;
+  // int get totalKmGround => _totalKmGround;
+  // set totalKmGround(int totalKmGround) {
+  //   totalKmGround = totalKmGround;
+  //   notifyListeners();
+  // }
+
   int _kmDifference = 0;
-  int get kmDifference => _kmDifference;
-  set kmDifference(int kmDifference) {
-    _kmDifference = kmDifference;
-    notifyListeners();
-  }
+  // int get kmDifference => _kmDifference;
+  // set kmDifference(int kmDifference) {
+  //   _kmDifference = kmDifference;
+  //   notifyListeners();
+  // }
 
   double _totalFuelInLtr = 0.0;
-  double get totalFuelInLtr => _totalFuelInLtr;
-  set totalFuelInLtr(double totalFuelInLtr) {
-    _totalFuelInLtr = totalFuelInLtr;
-    notifyListeners();
-  }
+  // double get totalFuelInLtr => _totalFuelInLtr;
+  // set totalFuelInLtr(double totalFuelInLtr) {
+  //   _totalFuelInLtr = totalFuelInLtr;
+  //   notifyListeners();
+  // }
 
   double _avgPerLitre = 0.0;
-  double get avgPerLitre => _avgPerLitre;
-  set avgPerLitre(double avgPerLitre) {
-    _avgPerLitre = avgPerLitre;
-    notifyListeners();
-  }
+  // double get avgPerLitre => _avgPerLitre;
+  // set avgPerLitre(double avgPerLitre) {
+  //   _avgPerLitre = avgPerLitre;
+  //   notifyListeners();
+  // }
 
   double _totalFuelAmt = 0.0;
-  double get totalFuelAmt => _totalFuelAmt;
-  set totalFuelAmt(double totalFuelAmt) {
-    _totalFuelAmt = totalFuelAmt;
-    notifyListeners();
-  }
+  // double get totalFuelAmt => _totalFuelAmt;
+  // set totalFuelAmt(double totalFuelAmt) {
+  //   _totalFuelAmt = totalFuelAmt;
+  //   notifyListeners();
+  // }
 
   String _selectedDuration = "";
   bool _selectedDurationError = false;
@@ -81,7 +87,11 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
 
   void takeToViewEntryDetailedPage() {
     // vehicleEntrySearch(registrationNumber, selectedDuration);
-    print('before sending: total km' + _totalKm.toString());
+    print('before sending: total km ' + _totalKm.toString());
+    print('before sending: _kmDifference' + _kmDifference.toString());
+    print('before sending: _totalFuelInLtr' + _totalFuelInLtr.toString());
+    print('before sending: _avgPerLitre' + _avgPerLitre.toString());
+    print('before sending: _totalFuelAmt' + _totalFuelAmt.toString());
     navigationService.navigateTo(viewEntryDetailedViewPageRoute, arguments: {
       'totalKm': _totalKm,
       'kmDifference': _kmDifference,
@@ -90,6 +100,12 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
       'totalFuelAmt': _totalFuelAmt,
       'vehicleEntrySearchResponseList': vehicleEntrySearchResponse,
     });
+    _totalFuelAmt = 0;
+    _kmDifference = 0;
+    _totalFuelInLtr = 0;
+    _avgPerLitre = 0;
+    _totalKm = 0;
+    _totalKmGround = 0;
   }
 
   void vehicleEntrySearch(
@@ -110,20 +126,20 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
             ViewEntryResponse singleSearchResult =
                 ViewEntryResponse.fromMap(singleItem);
             vehicleEntrySearchResponse.add(singleSearchResult);
-            totalKm += singleSearchResult.drivenKm;
             _totalKmGround += singleSearchResult.drivenKmGround;
-            totalFuelInLtr += singleSearchResult.fuelLtr;
-            totalFuelAmt += singleSearchResult.amountPaid;
+            _totalFuelInLtr += singleSearchResult.fuelLtr;
+            _totalKm += singleSearchResult.drivenKm;
+            _totalFuelAmt += singleSearchResult.amountPaid;
           }
-          if (!(totalKm == 0 && _totalKmGround == 0)) {
-            kmDifference = _totalKmGround - totalKm;
-            print('km Diff' + kmDifference.toString());
+          if (!(_totalKm == 0 && _totalKmGround == 0)) {
+            _kmDifference = _totalKmGround - _totalKm;
+            // print('km Diff' + _kmDifference.toString());
           }
-          print('total fuel in ltr: $totalFuelInLtr');
-          print('total fuel amt: $totalFuelAmt');
-          if (!(totalKm == 0 && totalFuelInLtr == 0)) {
-            avgPerLitre = totalKm / totalFuelInLtr;
-            print('avg per litr: ${avgPerLitre.toStringAsFixed(2)}');
+          // print('total fuel in ltr: $_totalFuelInLtr');
+          // print('total fuel amt: $_totalFuelAmt');
+          if (!(_totalKm == 0 && _totalFuelInLtr == 0)) {
+            _avgPerLitre = _totalKm / _totalFuelInLtr;
+            // print('avg per litr: ${_avgPerLitre.toStringAsFixed(2)}');
           }
         } else {
           snackBarService.showSnackbar(
