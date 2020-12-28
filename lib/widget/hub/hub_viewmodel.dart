@@ -13,7 +13,7 @@ class HubViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getHubData(Hub hub) async {
+  getHubData(Hubs hub) async {
     setBusy(true);
     var response = await apiService.getHubData(hub.hub);
 

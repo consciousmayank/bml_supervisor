@@ -619,6 +619,36 @@ class _EntryLogsViewState extends State<EntryLogsView> {
       hintText: vehicleInitialReadingHint,
       keyboardType: TextInputType.number,
       onFieldSubmitted: (_) {
+        if (viewModel.vehicleLog.failed != null) {
+          if (int.parse(initialReadingController.text) <
+              viewModel.selectedSearchVehicle.initReading) {
+            locator<DialogService>()
+                .showConfirmationDialog(
+              title: 'Vehicle Start Reading Error',
+              description: vehicleEntryStartReadingError,
+            )
+                .then((value) {
+              endReadingController.clear();
+            }).then((value) {
+              FocusScope.of(context).requestFocus(initialReadingFocusNode);
+            });
+          }
+        } else {
+          if (int.parse(initialReadingController.text) <
+              viewModel.vehicleLog.startReading) {
+            locator<DialogService>()
+                .showConfirmationDialog(
+              title: 'Vehicle Start Reading Error',
+              description: vehicleEntryStartReadingError,
+            )
+                .then((value) {
+              endReadingController.clear();
+            }).then((value) {
+              FocusScope.of(context).requestFocus(initialReadingFocusNode);
+            });
+          }
+        }
+
         fieldFocusChange(context, initialReadingFocusNode, endReadingFocusNode);
       },
       validator: (value) {
