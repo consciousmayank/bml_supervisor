@@ -128,10 +128,12 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
       dropdown.add(DropdownMenuItem(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Text(widget.optionList[i].title,
-              style: TextStyle(
-                color: Colors.black54,
-              )),
+          child: Text(
+            widget.optionList[i].title,
+            style: TextStyle(
+              color: Colors.black54,
+            ),
+          ),
         ),
         value: widget.optionList[i],
       ));

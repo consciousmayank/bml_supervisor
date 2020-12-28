@@ -306,7 +306,7 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
             ),
           );
         },
-        itemCount: vehicleEntrySearchResponse.length);
+        itemCount: vehicleEntrySearchResponse.length + 1);
   }
 
   void showViewEntryDetailPreview(
