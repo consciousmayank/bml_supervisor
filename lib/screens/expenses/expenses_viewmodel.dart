@@ -150,7 +150,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     } else if (response is Response) {
       saveExpenseResponse = ApiResponse.fromMap(response.data);
 
-      if (saveExpenseResponse.failed == null) {
+      if (saveExpenseResponse.status == "success") {
         snackBarService.showCustomSnackBar(
             message: "Expense Added Successfully.", title: "Congrats !");
       } else {

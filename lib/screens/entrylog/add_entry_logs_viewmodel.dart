@@ -120,10 +120,10 @@ class EntryLogsViewModel extends GeneralisedBaseViewModel {
           entyLogSubmitResponse = ApiResponse.fromMap(actualResponse.data);
         }
 
-        if (entyLogSubmitResponse.failed == null) {
+        if (entyLogSubmitResponse.status == "success") {
           var response = await dialogService.showConfirmationDialog(
             title: 'Congratulations...',
-            description: entyLogSubmitResponse.success,
+            description: entyLogSubmitResponse.message.split("!")[0],
           );
 
           if (response == null || response.confirmed) {
@@ -132,7 +132,7 @@ class EntryLogsViewModel extends GeneralisedBaseViewModel {
         } else {
           var response = await dialogService.showConfirmationDialog(
             title: 'Oops...',
-            description: entyLogSubmitResponse.failed,
+            description: entyLogSubmitResponse.message,
           );
 
           if (response == null || response.confirmed) {

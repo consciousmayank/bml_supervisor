@@ -1,31 +1,25 @@
 // To parse this JSON data, do
 //
-//     final vehicleRegistrationResponse = vehicleRegistrationResponseFromMap(jsonString);
+//     final apiResponse = apiResponseFromMap(jsonString);
 
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
-
 class ApiResponse {
   ApiResponse({
-    @required this.success,
-    @required this.recordId,
-    @required this.failed,
+    this.status,
+    this.message,
   });
 
-  final String success;
-  final int recordId;
-  final String failed;
+  final String status;
+  final String message;
 
   ApiResponse copyWith({
-    String success,
-    int recordId,
-    String failed,
+    String status,
+    String message,
   }) =>
       ApiResponse(
-        success: success ?? this.success,
-        recordId: recordId ?? this.recordId,
-        failed: failed ?? this.failed,
+        status: status ?? this.status,
+        message: message ?? this.message,
       );
 
   factory ApiResponse.fromJson(String str) =>
@@ -34,14 +28,12 @@ class ApiResponse {
   String toJson() => json.encode(toMap());
 
   factory ApiResponse.fromMap(Map<String, dynamic> json) => ApiResponse(
-        success: json["Success"],
-        recordId: json["RecordId"],
-        failed: json["Failed"],
+        status: json["status"],
+        message: json["message"],
       );
 
   Map<String, dynamic> toMap() => {
-        "Success": success,
-        "RecordId": recordId,
-        "Failed": failed,
+        "status": status,
+        "message": message,
       };
 }
