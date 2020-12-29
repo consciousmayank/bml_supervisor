@@ -4,11 +4,11 @@ import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/add_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 
 class ApiService {
@@ -132,7 +132,6 @@ class ApiService {
     try {
       response = await dioClient.getDio().get(
             "$GET_ROUTES_FOR_CLIENT_ID$clientId",
-            options: buildCacheOptions(Duration(days: 1)),
           );
     } on DioError catch (e) {
       return e.message;
@@ -145,8 +144,32 @@ class ApiService {
     try {
       response = await dioClient.getDio().get(
             "$GET_HUB_DATA$hubId",
-            options: buildCacheOptions(Duration(days: 1)),
           );
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future addConsignmentDataToHub(AddConsignmentRequest request) async {
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getConsignmentsList(
+      {@required String hubId, @required String date}) async {
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .get("$GET_CONSIGNMENTS_LIST$clientId/$hubId/$date");
     } on DioError catch (e) {
       return e.message;
     }

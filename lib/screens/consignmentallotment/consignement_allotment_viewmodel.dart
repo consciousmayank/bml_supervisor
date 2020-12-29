@@ -32,14 +32,9 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       routesList.forEach((element) {
         GetRoutesResponse getRoutesResponse =
             GetRoutesResponse.fromMap(element);
-        getRoutesResponse.hub.sort((hub1, hub2) {
-          return hub1.sequence.compareTo(hub2.sequence);
-        });
-
         this.routesList.add(getRoutesResponse);
       });
     }
-    this.routesList.forEach((element) {});
     setBusy(false);
     notifyListeners();
   }

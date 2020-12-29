@@ -63,38 +63,89 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
     return Expanded(
       child: Timeline.builder(
-          itemBuilder: (context, index) => TimelineModel(
-                SizedBox(
-                  height: 100,
-                  child: HubView(
-                      hub: viewModel
-                          .routesList[viewModel.routesList
-                              .indexOf(viewModel.selectedRoute)]
-                          .hub[index]),
-                ),
-                position:
-                    // TimelineItemPosition.right,
-                    TimelineItemPosition.left,
-                isFirst: index == 0,
-                isLast: index ==
-                    viewModel
+          itemBuilder: (context, index) {
+            return TimelineModel(
+              Padding(
+                padding: EdgeInsets.only(
+                    top: index == 0 ? 20 : 0,
+                    bottom: index ==
+                            viewModel
+                                    .routesList[viewModel.routesList
+                                        .indexOf(viewModel.selectedRoute)]
+                                    .hub
+                                    .length -
+                                1
+                        ? 20
+                        : 0),
+                child: HubView(
+                    length: viewModel
                         .routesList[viewModel.routesList
                             .indexOf(viewModel.selectedRoute)]
                         .hub
                         .length,
-                iconBackground: ThemeConfiguration.primaryBackground,
-                icon: Icon(
-                  Icons.location_on_rounded,
-                  color: Colors.white,
-                ),
+                    title: viewModel
+                        .routesList[viewModel.routesList
+                            .indexOf(viewModel.selectedRoute)]
+                        .title,
+                    routeId: viewModel.selectedRoute.id,
+                    hub: viewModel
+                        .routesList[viewModel.routesList
+                            .indexOf(viewModel.selectedRoute)]
+                        .hub[index]),
               ),
+              position:
+                  // TimelineItemPosition.right,
+                  TimelineItemPosition.left,
+              isFirst: index == 0,
+              isLast: index ==
+                  viewModel
+                      .routesList[
+                          viewModel.routesList.indexOf(viewModel.selectedRoute)]
+                      .hub
+                      .length,
+              iconBackground: viewModel
+                          .routesList[viewModel.routesList
+                              .indexOf(viewModel.selectedRoute)]
+                          .hub[index]
+                          .tag ==
+                      viewModel
+                          .routesList[viewModel.routesList
+                              .indexOf(viewModel.selectedRoute)]
+                          .hub[index]
+                          .sequence
+                  ? Colors.green
+                  : viewModel.routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)].hub[index].tag ==
+                          0
+                      ? Colors.blue
+                      : viewModel
+                                      .routesList[viewModel.routesList
+                                          .indexOf(viewModel.selectedRoute)]
+                                      .hub[index]
+                                      .tag ==
+                                  2 &&
+                              viewModel
+                                      .routesList[viewModel.routesList
+                                          .indexOf(viewModel.selectedRoute)]
+                                      .hub[index]
+                                      .sequence ==
+                                  viewModel
+                                      .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
+                                      .hub
+                                      .length
+                          ? Colors.orange
+                          : ThemeConfiguration.primaryBackground,
+              icon: Icon(
+                Icons.location_on_rounded,
+                color: Colors.white,
+              ),
+            );
+          },
           itemCount: viewModel
               .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
               .hub
               .length,
-          physics:
-              // ClampingScrollPhysics(),
-              BouncingScrollPhysics(),
+          physics: ClampingScrollPhysics(),
+          // BouncingScrollPhysics(),
           position: TimelinePosition.Left),
     );
   }
@@ -106,6 +157,7 @@ class RoutesDropDown extends StatefulWidget {
   final String hint;
   final Function onOptionSelect;
   final showUnderLine;
+
   RoutesDropDown(
       {@required this.optionList,
       this.selectedValue,
