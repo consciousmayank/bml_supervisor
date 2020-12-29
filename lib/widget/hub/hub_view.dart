@@ -16,8 +16,13 @@ class HubView extends StatefulWidget {
   final Hubs hub;
   final int routeId;
   final String title;
+  final int length;
 
-  HubView({@required this.hub, @required this.routeId, @required this.title});
+  HubView(
+      {@required this.hub,
+      @required this.routeId,
+      @required this.title,
+      @required this.length});
 
   @override
   _HubViewState createState() => _HubViewState();
@@ -38,7 +43,18 @@ class _HubViewState extends State<HubView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HubViewModel>.reactive(
-        onModelReady: (viewModel) => viewModel.getHubData(widget.hub),
+        onModelReady: (viewModel) {
+          viewModel.addConsignmentRequest = AddConsignmentRequest(
+              routeId: widget.routeId,
+              hubId: widget.hub.hub,
+              entryDate: getCurrentDate(),
+              title: widget.title,
+              dropOff: 0,
+              collect: 0,
+              payment: 0,
+              tag: widget.hub.tag);
+          viewModel.getHubData(widget.hub);
+        },
         builder: (context, viewModel, child) => viewModel.isBusy
             ? Center(
                 child: CircularProgressIndicator(),
@@ -50,8 +66,9 @@ class _HubViewState extends State<HubView> {
   body({BuildContext context, HubViewModel viewModel}) {
     return InkWell(
       onTap: () =>
-          showAddEditConsignment(context: context, viewModel: viewModel),
+          showAddEditConsignment(parentContext: context, viewModel: viewModel),
       child: Card(
+        color: Colors.white,
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -84,13 +101,13 @@ class _HubViewState extends State<HubView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: getConsignmentDropValue(
+                      child: getConsignmentPickValue(
                           context: context, viewModel: viewModel),
                       flex: 1,
                     ),
                     wSizedBox(10),
                     Expanded(
-                      child: getConsignmentPickValue(
+                      child: getConsignmentDropValue(
                           context: context, viewModel: viewModel),
                       flex: 1,
                     ),
@@ -136,7 +153,7 @@ class _HubViewState extends State<HubView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("Pick"),
+          Text("Collect"),
           hSizedBox(5),
           viewModel.addConsignmentRequest.collect == null
               ? Container()
@@ -172,7 +189,8 @@ class _HubViewState extends State<HubView> {
   }
 
   showAddEditConsignment(
-      {@required BuildContext context, @required HubViewModel viewModel}) {
+      {@required BuildContext parentContext,
+      @required HubViewModel viewModel}) {
     var bottomSheetController = showModalBottomSheet(
       context: context,
       builder: (context) => Scaffold(
@@ -189,100 +207,109 @@ class _HubViewState extends State<HubView> {
           child: Padding(
             padding:
                 const EdgeInsets.only(top: 8, right: 4, left: 4, bottom: 8),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  appTextFormField(
-                    focusNode: dropFocusNode,
-                    hintText: "Enter Drop Value",
-                    formatter: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      LengthLimitingTextInputFormatter(7)
-                    ],
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return textRequired;
-                      } else {
-                        return null;
-                      }
-                    },
-                    onFieldSubmitted: (_) {
-                      fieldFocusChange(context, dropFocusNode, pickFocusNode);
-                    },
-                    controller: dropTextEditingController,
-                  ),
-                  appTextFormField(
-                    focusNode: pickFocusNode,
-                    hintText: "Enter Pick Value",
-                    formatter: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      LengthLimitingTextInputFormatter(7)
-                    ],
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return textRequired;
-                      } else {
-                        return null;
-                      }
-                    },
-                    onFieldSubmitted: (_) {
-                      fieldFocusChange(
-                          context, pickFocusNode, paymentFocusNode);
-                    },
-                    controller: pickTextEditingController,
-                  ),
-                  Expanded(
-                    child: appTextFormField(
-                      focusNode: paymentFocusNode,
-                      hintText: "Enter Payment Value",
-                      formatter: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        LengthLimitingTextInputFormatter(7)
-                      ],
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return textRequired;
-                        } else {
-                          return null;
-                        }
-                      },
-                      onFieldSubmitted: (_) {
-                        paymentFocusNode.unfocus();
-                      },
-                      controller: paymentTextEditingController,
+            child: viewModel.isBusy
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                  SizedBox(
-                    height: buttonHeight,
-                    child: RaisedButton(
-                      child: Text("Submit"),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          AddConsignmentRequest request = AddConsignmentRequest(
-                              dropOff:
-                                  int.parse(dropTextEditingController.text),
-                              collect:
-                                  int.parse(pickTextEditingController.text),
-                              payment:
-                                  int.parse(paymentTextEditingController.text),
-                              routeId: widget.routeId,
-                              hubId: widget.hub.hub,
-                              title: widget.title,
-                              tag: widget.hub.tag,
-                              entryDate: DateFormat('dd-MM-yyyy')
-                                  .format(DateTime.now())
-                                  .toLowerCase());
+                  )
+                : Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: [
+                        appTextFormField(
+                          focusNode: pickFocusNode,
+                          hintText: "Collect",
+                          formatter: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(7)
+                          ],
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return textRequired;
+                            } else {
+                              return null;
+                            }
+                          },
+                          onFieldSubmitted: (_) {
+                            fieldFocusChange(
+                                context, pickFocusNode, paymentFocusNode);
+                          },
+                          controller: pickTextEditingController,
+                        ),
+                        appTextFormField(
+                          focusNode: dropFocusNode,
+                          hintText: "Drop",
+                          formatter: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(7)
+                          ],
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return textRequired;
+                            } else {
+                              return null;
+                            }
+                          },
+                          onFieldSubmitted: (_) {
+                            fieldFocusChange(
+                                context, dropFocusNode, pickFocusNode);
+                          },
+                          controller: dropTextEditingController,
+                        ),
+                        Expanded(
+                          child: appTextFormField(
+                            focusNode: paymentFocusNode,
+                            hintText: "Payment",
+                            formatter: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
+                              LengthLimitingTextInputFormatter(7)
+                            ],
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return textRequired;
+                              } else {
+                                return null;
+                              }
+                            },
+                            onFieldSubmitted: (_) {
+                              paymentFocusNode.unfocus();
+                            },
+                            controller: paymentTextEditingController,
+                          ),
+                        ),
+                        SizedBox(
+                          height: buttonHeight,
+                          child: RaisedButton(
+                            child: Text("Submit"),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                AddConsignmentRequest request =
+                                    AddConsignmentRequest(
+                                        dropOff: int.parse(
+                                            dropTextEditingController.text),
+                                        collect: int.parse(
+                                            pickTextEditingController.text),
+                                        payment: double.parse(
+                                            paymentTextEditingController.text),
+                                        routeId: widget.routeId,
+                                        hubId: widget.hub.hub,
+                                        title: widget.title,
+                                        tag: widget.hub.tag,
+                                        entryDate: DateFormat('dd-MM-yyyy')
+                                            .format(DateTime.now())
+                                            .toLowerCase());
 
-                          viewModel.navigationService
-                              .back(result: request.toMap());
-                        }
-                      },
+                                viewModel.navigationService
+                                    .back(result: request.toMap());
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ),
         ),
       ),
@@ -290,7 +317,15 @@ class _HubViewState extends State<HubView> {
 
     bottomSheetController.then((value) {
       if (value != null) {
-        viewModel.addConsignmentRequest = AddConsignmentRequest.fromMap(value);
+        viewModel
+            .saveConsignment(request: AddConsignmentRequest.fromMap(value))
+            .then((value) {
+          if (value is AddConsignmentRequest) {
+            AddConsignmentRequest request = value;
+
+            viewModel.addConsignmentRequest = request;
+          }
+        });
       }
     });
   }
