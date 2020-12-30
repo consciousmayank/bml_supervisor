@@ -83,11 +83,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
           toDate: uptoDate,
           pageNumber: 1 // Default - Subject to change
           );
-      // if (res is! List) {
-      //   print('result is not a list');
-      //   snackBarService.showSnackbar(message: 'No Results Found');
-      // }
-      // else {
 
       if (res.data is! List) {
         print('data is not list');

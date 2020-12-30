@@ -10,3 +10,6 @@ const String viewEntryLogPageRoute = '/viewEntryLogPage';
 const String viewEntryDetailedViewPageRoute = '/viewEntryDetailedViewPage';
 const String allotConsignmentsPageRoute = '/allotConsignmentsPage';
 const String viewConsignmentsPageRoute = '/viewConsignmentsPage';
+const String addEntry2PointOLogPageRoute = '/addEntry2PointOLogPage';
+const String addEntry2PointOFormViewPageRoute = '/addEntry2PointOFormViewPage';
+const String viewEntry2PointOLogPageRoute = '/viewEntry2PointOLogPage';

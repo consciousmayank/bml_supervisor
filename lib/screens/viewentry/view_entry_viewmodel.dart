@@ -86,12 +86,6 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToViewEntryDetailedPage() {
-    // vehicleEntrySearch(registrationNumber, selectedDuration);
-    print('before sending: total km ' + _totalKm.toString());
-    print('before sending: _kmDifference' + _kmDifference.toString());
-    print('before sending: _totalFuelInLtr' + _totalFuelInLtr.toString());
-    print('before sending: _avgPerLitre' + _avgPerLitre.toString());
-    print('before sending: _totalFuelAmt' + _totalFuelAmt.toString());
     navigationService.navigateTo(viewEntryDetailedViewPageRoute, arguments: {
       'totalKm': _totalKm,
       'kmDifference': _kmDifference,

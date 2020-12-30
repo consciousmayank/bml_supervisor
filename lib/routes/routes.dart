@@ -9,6 +9,8 @@ import 'package:bml_supervisor/screens/viewentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
+import 'package:bml_supervisor/screens/entrylog2.0/add_entry_logs_view_2.dart';
+import 'package:bml_supervisor/screens/entrylog2.0/add_entry_form_view_2.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -53,9 +55,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ViewExpensesView(),
         );
+
       case viewExpensesDetailedViewPageRoute:
         List<ViewExpensesResponse> args = settings.arguments;
-
         return MaterialPageRoute(
           builder: (_) => ViewExpensesDetailedView(
             viewExpensesDetailedList: args,
@@ -65,6 +67,17 @@ class AppRouter {
       case allotConsignmentsPageRoute:
         return MaterialPageRoute(
           builder: (_) => ConsignmentAllotmentView(),
+        );
+
+      case addEntry2PointOLogPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => AddEntryLogsView2PointO(),
+        );
+
+      case addEntry2PointOFormViewPageRoute:
+        Map<String, dynamic> args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => AddEntry2PointOFormView(arguments: args),
         );
 
       default:

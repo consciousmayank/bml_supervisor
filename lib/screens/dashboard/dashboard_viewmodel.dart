@@ -11,6 +11,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     Icons.date_range,
     Icons.list,
     Icons.title,
+    Icons.access_alarm,
+    Icons.access_time,
   ];
 
   List<String> optionsTitle = [
@@ -20,6 +22,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Expenses",
     "Allot Consignments",
     "View Consignments",
+    "Add Entry 2.0",
+    "View Entry 2.0",
   ];
 
   takeToAddEntryPage() {
@@ -44,5 +48,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
 
   takeToViewConsignmentsPage() {
     navigationService.navigateTo(viewConsignmentsPageRoute);
+  }
+
+  takeToAddEntry2PointOPage() {
+    navigationService.navigateTo(addEntry2PointOLogPageRoute);
+  }
+
+  takeToViewEntry2PointOPage() {
+    navigationService.navigateTo(viewEntry2PointOLogPageRoute);
   }
 }
