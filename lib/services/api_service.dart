@@ -77,6 +77,8 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
+    print('form data: ' + body);
+
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
     } on DioError catch (e) {

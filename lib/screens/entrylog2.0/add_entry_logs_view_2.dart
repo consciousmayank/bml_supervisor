@@ -196,14 +196,13 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
       child: appSuffixIconButton(
         icon: Icon(Icons.search),
         onPressed: () {
-          if (selectedRegNoController.text.length != 0) {
-            // viewModel.entryDate = selectedDateController.text;
-            // viewModel.entryDate = DateFormat('dd-MM-yyyy').format(selectedDateController.text).toLowerCase());
+          if (selectedRegNoController.text.length == 0 ||
+              selectedDateController.text.length == 0) {
+            viewModel.snackBarService
+                .showSnackbar(message: 'Please fill all the fields');
+          } else {
             viewModel.getEntryLogForLastDate(
                 selectedRegNoController.text.toUpperCase());
-          } else {
-            viewModel.snackBarService
-                .showSnackbar(message: 'Please enter Registration Number');
           }
         },
       ),

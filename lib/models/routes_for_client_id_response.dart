@@ -94,7 +94,7 @@ class Hubs {
     int id,
     int hub,
     int sequence,
-    int kms,
+    double kms,
     int tag,
   }) =>
       Hubs(

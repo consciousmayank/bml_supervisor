@@ -8,6 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
+  int _flagForSearch = 0; // [0-Search Via LastEntryDate, 1-Search Via Reg Num ]
+//  int _flagForSearch;
+  int get flagForSearch => _flagForSearch;
+  set flagForSearch(int flagForSearch) {
+    _flagForSearch = flagForSearch;
+    notifyListeners();
+  }
+
   String _registrationNumber;
   List<SearchByRegNoResponse> searchResponse = [];
 
@@ -82,7 +90,9 @@ class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
     _registrationNumber = registrationNumber;
     var entryLog = await apiService.getEntryLogForDate(registrationNumber,
         DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase());
-    if (entryLog.data['status'].toString() == 'failed') {
+    if (entryLog is String) {
+      snackBarService.showSnackbar(message: entryLog);
+    } else if (entryLog.data['status'].toString() == 'failed') {
       search(registrationNumber);
     } else {
       vehicleLog = EntryLog.fromMap(entryLog.data);
@@ -107,7 +117,26 @@ class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
                 SearchByRegNoResponse.fromMap(singleItem);
             searchResponse.add(singleSearchResult);
           }
+
           setBusy(false);
+          vehicleLog = EntryLog(
+              vehicleId: null,
+              entryDate: null,
+              startReading: searchResponse.first.initReading,
+              endReading: null,
+              drivenKm: null,
+              fuelLtr: null,
+              fuelMeterReading: null,
+              ratePerLtr: null,
+              amountPaid: null,
+              trips: null,
+              loginTime: null,
+              logoutTime: null,
+              remarks: null,
+              startReadingGround: null,
+              drivenKmGround: null);
+          print('making flag 1');
+          flagForSearch = 1;
           takeToAddEntry2PointOFormViewPage();
         } else {
           snackBarService.showSnackbar(
@@ -135,10 +164,10 @@ class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
           entyLogSubmitResponse = ApiResponse.fromMap(actualResponse.data);
         }
 
-        if (entyLogSubmitResponse.failed == null) {
+        if (entyLogSubmitResponse.status == "success") {
           var response = await dialogService.showConfirmationDialog(
             title: 'Congratulations...',
-            description: entyLogSubmitResponse.success,
+            description: entyLogSubmitResponse.message.split("!")[0],
           );
 
           if (response == null || response.confirmed) {
@@ -147,7 +176,7 @@ class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
         } else {
           var response = await dialogService.showConfirmationDialog(
             title: 'Oops...',
-            description: entyLogSubmitResponse.failed,
+            description: entyLogSubmitResponse.message,
           );
 
           if (response == null || response.confirmed) {
@@ -169,39 +198,56 @@ class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
   }
 
   void takeToAddEntry2PointOFormViewPage() {
-    if (searchResponse.isEmpty) {
-      // send entry date and vehicle log
-      print('sending vehicle log');
-      print('before sending, login time' + vehicleLog.loginTime);
-      print('before sending - searchResponse: ' + searchResponse.toString());
-
-      navigationService.navigateTo(
-        addEntry2PointOFormViewPageRoute,
-        arguments: {
-          'entryDateArg': entryDate,
-          'vehicleLogArg': vehicleLog,
-          'regNumArg': _registrationNumber,
-        },
-      ).then((value) => _registrationNumber = '');
-    } else {
-      // send entry date and searchResponse
-      print('sending searchResponse');
-      // print('send entry date and search response');;
-      print('****before sending searchResponse data: ' +
-          searchResponse.toString());
-      print('before sending - search response length ' +
-          searchResponse.length.toString());
-
-      navigationService
-          .navigateTo(addEntry2PointOFormViewPageRoute, arguments: {
-        'entryDateArg': entryDate,
-        'searchResponseArg': searchResponse,
-        'regNumArg': _registrationNumber,
-      }).then((_) {
-        searchResponse.clear();
-        _registrationNumber = '';
-      });
-      // searchResponse.clear();
+    if (selectedVehicle == null) {
+      print('selectedvehicle is null- search via last entry');
     }
+    print('flag before sending' + flagForSearch.toString());
+    navigationService.navigateTo(
+      addEntry2PointOFormViewPageRoute,
+      arguments: {
+        'entryDateArg': entryDate,
+        'vehicleLogArg': vehicleLog,
+        'regNumArg': _registrationNumber,
+        'flagForSearchArg': flagForSearch,
+      },
+    ).then((value) {
+      _registrationNumber = '';
+      flagForSearch = 0;
+    });
+
+    // if (searchResponse.isEmpty) {
+    //   // send entry date and vehicle log
+    //   print('sending vehicle log');
+    //   print('before sending, login time' + vehicleLog.loginTime);
+    //   print('before sending - searchResponse: ' + searchResponse.toString());
+
+    //   navigationService.navigateTo(
+    //     addEntry2PointOFormViewPageRoute,
+    //     arguments: {
+    //       'entryDateArg': entryDate,
+    //       'vehicleLogArg': vehicleLog,
+    //       'regNumArg': _registrationNumber,
+    //     },
+    //   ).then((value) => _registrationNumber = '');
+    // } else {
+    //   // send entry date and searchResponse
+    //   print('sending searchResponse');
+    //   // print('send entry date and search response');;
+    //   print('****before sending searchResponse data: ' +
+    //       searchResponse.toString());
+    //   print('before sending - search response length ' +
+    //       searchResponse.length.toString());
+
+    //   navigationService
+    //       .navigateTo(addEntry2PointOFormViewPageRoute, arguments: {
+    //     'entryDateArg': entryDate,
+    //     'searchResponseArg': searchResponse,
+    //     'regNumArg': _registrationNumber,
+    //   }).then((_) {
+    //     searchResponse.clear();
+    //     _registrationNumber = '';
+    //   });
+    //   // searchResponse.clear();
+    // }
   }
 }

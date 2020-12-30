@@ -84,6 +84,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
           0) {
         await locator<DialogService>()
             .showConfirmationDialog(
+          barrierDismissible: true,
           title: 'Vehicle End Reading Error',
           description: vehicleEntryEndReadingError,
         )
@@ -149,8 +150,8 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   @override
   Widget build(BuildContext context) {
-    final entryDate = widget.arguments['entryDateArg'];
-    print('after reveiving-entryDate' + entryDate.toString());
+    // final entryDate = widget.arguments['entryDateArg'];
+    // print('after reveiving-entryDate' + entryDate.toString());
     return ViewModelBuilder<AddEntryLogsViewModel2PointO>.reactive(
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -178,6 +179,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     if (viewModel.selectedVehicle == null &&
         viewModel.vehicleLog == null &&
         viewModel.entryDate == null) {
+      print('selected vehicle is null');
       initialReadingController.clear();
       endReadingController.clear();
       distanceDrivenController.clear();
@@ -371,9 +373,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
               ],
             )
           : Container(),
-      viewModel.selectedVehicle != null &&
-              viewModel.vehicleLog != null &&
-              viewModel.entryDate != null
+      viewModel.vehicleLog != null && viewModel.entryDate != null
           ? SizedBox(
               height: buttonHeight,
               width: MediaQuery.of(context).size.width,
@@ -381,8 +381,10 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     viewModel.submitVehicleEntry(EntryLog(
-                      vehicleId: viewModel.selectedVehicle.registrationNumber,
-                      entryDate: selectedDateController.text.trim(),
+                      vehicleId: widget.arguments['regNumArg'],
+                      entryDate: DateFormat('dd-MM-yyyy')
+                          .format(viewModel.entryDate)
+                          .toLowerCase(),
                       startReading: startReadingHidden,
                       endReading: int.parse(endReadingController.text.trim()),
                       drivenKm: drivenKmHidden,
@@ -424,29 +426,42 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   void setNavigationArguments(AddEntryLogsViewModel2PointO viewModel) {
     viewModel.vehicleLog = widget.arguments['vehicleLogArg'];
     viewModel.entryDate = widget.arguments['entryDateArg'];
-    viewModel.searchResponse = widget.arguments['searchResponseArg'];
-    if (viewModel.searchResponse != null) {
-      viewModel.vehicleLog =
-          EntryLog(startReading: viewModel.searchResponse[0].initReading);
-      print('start reading vehicle log via search' +
-          viewModel.vehicleLog.startReading.toString());
-    }
+    viewModel.flagForSearch = widget.arguments['flagForSearchArg'];
+
+    // viewModel.searchResponse = widget.arguments['searchResponseArg'];
+    // if (viewModel.searchResponse != null) {
+    //   viewModel.vehicleLog =
+    //       EntryLog(startReading: viewModel.searchResponse[0].initReading);
+    //   print('start reading vehicle log via search' +
+    //       viewModel.vehicleLog.startReading.toString());
+    // }
   }
 
   Widget startingReadingView(AddEntryLogsViewModel2PointO viewModel) {
-    startReadingHidden =
-        viewModel.vehicleLog == null || viewModel.vehicleLog.endReading == null
-            ? viewModel.selectedVehicle == null ||
-                    viewModel.selectedVehicle.initReading == null
-                ? 0
-                : viewModel.selectedVehicle.initReading
-            : viewModel.vehicleLog.endReading;
+    startReadingHidden = viewModel.flagForSearch == 0
+        ? viewModel.vehicleLog.endReading
+        : viewModel.vehicleLog.startReading;
+    // startReadingHidden =
+    //     viewModel.vehicleLog == null || viewModel.vehicleLog.endReading == null
+    //         ? viewModel.selectedVehicle == null ||
+    //                 viewModel.selectedVehicle.initReading == null
+    //             ? 0
+    //             : viewModel.selectedVehicle.initReading
+    //         : viewModel.vehicleLog.endReading;
 
     if (viewModel.vehicleLog != null) {
-      if (viewModel.vehicleLog.failed != null) {
+      // if (viewModel.vehicleLog.failed != null) {
+      if (viewModel.flagForSearch == 0) {
+        print('flag is zero');
+        initialReadingController = TextEditingController(
+            text: viewModel.vehicleLog.endReading.toString());
+      } else {
+        print('flag is one');
         initialReadingController = TextEditingController(
             text: viewModel.vehicleLog.startReading.toString());
       }
+
+      // }
       // else {
       //   initialReadingController = TextEditingController(
       //       text: viewModel.vehicleLog.endReading.toString());
@@ -467,7 +482,9 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
       onFieldSubmitted: (_) {
         if (viewModel.vehicleLog.failed != null) {
           if (int.parse(initialReadingController.text) <
-              viewModel.selectedVehicle.initReading) {
+                  // viewModel.selectedVehicle.initReading) { // initial statement
+                  viewModel.vehicleLog.startReading ??
+              viewModel.vehicleLog.endReading) {
             locator<DialogService>()
                 .showConfirmationDialog(
               title: 'Vehicle Start Reading Error',
