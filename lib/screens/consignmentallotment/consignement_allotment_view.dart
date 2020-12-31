@@ -78,11 +78,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                         ? 20
                         : 0),
                 child: HubView(
-                    length: viewModel
-                        .routesList[viewModel.routesList
-                            .indexOf(viewModel.selectedRoute)]
-                        .hub
-                        .length,
+                    key: UniqueKey(),
+                    isStart: isSource(viewModel: viewModel, index: index),
+                    isLast: isLastStop(viewModel: viewModel, index: index),
+                    isDestination:
+                        isDestination(viewModel: viewModel, index: index),
                     title: viewModel
                         .routesList[viewModel.routesList
                             .indexOf(viewModel.selectedRoute)]
@@ -103,35 +103,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                           viewModel.routesList.indexOf(viewModel.selectedRoute)]
                       .hub
                       .length,
-              iconBackground: viewModel
-                          .routesList[viewModel.routesList
-                              .indexOf(viewModel.selectedRoute)]
-                          .hub[index]
-                          .tag ==
-                      viewModel
-                          .routesList[viewModel.routesList
-                              .indexOf(viewModel.selectedRoute)]
-                          .hub[index]
-                          .sequence
+              iconBackground: isSource(viewModel: viewModel, index: index)
                   ? Colors.green
-                  : viewModel.routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)].hub[index].tag ==
-                          0
+                  : isDestination(viewModel: viewModel, index: index)
                       ? Colors.blue
-                      : viewModel
-                                      .routesList[viewModel.routesList
-                                          .indexOf(viewModel.selectedRoute)]
-                                      .hub[index]
-                                      .tag ==
-                                  2 &&
-                              viewModel
-                                      .routesList[viewModel.routesList
-                                          .indexOf(viewModel.selectedRoute)]
-                                      .hub[index]
-                                      .sequence ==
-                                  viewModel
-                                      .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
-                                      .hub
-                                      .length
+                      : isLastStop(viewModel: viewModel, index: index)
                           ? Colors.orange
                           : ThemeConfiguration.primaryBackground,
               icon: Icon(
@@ -148,6 +124,44 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           // BouncingScrollPhysics(),
           position: TimelinePosition.Left),
     );
+  }
+
+  isSource({ConsignmentAllotmentViewModel viewModel, int index}) {
+    return viewModel
+            .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
+            .hub[index]
+            .tag ==
+        viewModel
+            .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
+            .hub[index]
+            .sequence;
+  }
+
+  isDestination({ConsignmentAllotmentViewModel viewModel, int index}) {
+    return viewModel
+            .routesList[viewModel.routesList.indexOf(viewModel.selectedRoute)]
+            .hub[index]
+            .tag ==
+        0;
+  }
+
+  isLastStop({ConsignmentAllotmentViewModel viewModel, int index}) {
+    return viewModel
+                .routesList[
+                    viewModel.routesList.indexOf(viewModel.selectedRoute)]
+                .hub[index]
+                .tag ==
+            2 &&
+        viewModel
+                .routesList[
+                    viewModel.routesList.indexOf(viewModel.selectedRoute)]
+                .hub[index]
+                .sequence ==
+            viewModel
+                .routesList[
+                    viewModel.routesList.indexOf(viewModel.selectedRoute)]
+                .hub
+                .length;
   }
 }
 
@@ -181,7 +195,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            widget.optionList[i].title,
+            "${widget.optionList[i].title}  (${widget.optionList[i].id})",
             style: TextStyle(
               color: Colors.black54,
             ),

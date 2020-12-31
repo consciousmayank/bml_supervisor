@@ -10,6 +10,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   set routesList(List<GetRoutesResponse> value) {
     _routesList = value;
+    notifyListeners();
   }
 
   GetRoutesResponse get selectedRoute => _selectedRoute;
@@ -21,6 +22,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   getRoutes() async {
     setBusy(true);
+    routesList = [];
     var response = await apiService.getRoutesForClient();
 
     if (response is String) {
@@ -32,6 +34,10 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       routesList.forEach((element) {
         GetRoutesResponse getRoutesResponse =
             GetRoutesResponse.fromMap(element);
+        getRoutesResponse.hub.sort((hub1, hub2) {
+          return hub1.sequence.compareTo(hub2.sequence);
+        });
+
         this.routesList.add(getRoutesResponse);
       });
     }

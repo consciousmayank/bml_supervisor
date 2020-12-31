@@ -87,7 +87,7 @@ class Hubs {
   final int id;
   final int hub;
   final int sequence;
-  final int kms;
+  final double kms;
   final int tag;
 
   Hubs copyWith({

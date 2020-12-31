@@ -151,11 +151,9 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       saveExpenseResponse = ApiResponse.fromMap(response.data);
 
       if (saveExpenseResponse.status == "success") {
-        snackBarService.showCustomSnackBar(
-            message: "Expense Added Successfully.", title: "Congrats !");
+        snackBarService.showSnackbar(message: "Expense Added Successfully.");
       } else {
-        snackBarService.showCustomSnackBar(
-            message: "Expense Not Added.", title: "Please Try Again.");
+        snackBarService.showSnackbar(message: "Expense Not Added.");
       }
     }
 

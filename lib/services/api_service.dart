@@ -164,12 +164,11 @@ class ApiService {
   }
 
   Future getConsignmentsList(
-      {@required String hubId, @required String date}) async {
+      {@required int routeId, @required String hubId}) async {
     Response response;
     try {
-      response = await dioClient
-          .getDio()
-          .get("$GET_CONSIGNMENTS_LIST$clientId/$hubId/$date");
+      response =
+          await dioClient.getDio().get("$GET_CONSIGNMENTS_LIST$routeId/$hubId");
     } on DioError catch (e) {
       return e.message;
     }

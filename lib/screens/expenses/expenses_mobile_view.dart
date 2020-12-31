@@ -159,6 +159,8 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                         onPressed: (() async {
                           DateTime selectedDate = await selectDate();
                           if (selectedDate != null) {
+                            selectedDateController.text =
+                                getDateString(selectedDate);
                             viewModel.entryDate = selectedDate;
                             viewModel.showSubmitForm = true;
                           }
