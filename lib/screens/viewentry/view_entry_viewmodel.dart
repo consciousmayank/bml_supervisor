@@ -88,7 +88,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
   void takeToViewEntryDetailedPage() {
     navigationService.navigateTo(viewEntryDetailedViewPageRoute, arguments: {
       'totalKm': _totalKm,
-      'kmDifference': _kmDifference,
+      'kmDifference': _kmDifference.abs(),
       'totalFuelInLtr': _totalFuelInLtr,
       'avgPerLitre': _avgPerLitre,
       'totalFuelAmt': _totalFuelAmt,

@@ -175,13 +175,19 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
         child: RaisedButton(
           child: Text("Get Expenses List"),
           onPressed: () {
-            print(
-                DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase());
-            print(selectedDateController.text);
-            print(selectedRegNoController.text);
-            viewModel.vehicleRegNumber = selectedRegNoController.text;
-            getExpensesList(selectedRegNoController.text,
-                selectedDateController.text, viewModel);
+            if (selectedDateController.text.length == 0) {
+              viewModel.snackBarService
+                  .showSnackbar(message: 'Please select a date');
+            } else {
+              print(DateFormat('dd-MM-yyyy')
+                  .format(DateTime.now())
+                  .toLowerCase());
+              print(selectedDateController.text);
+              print(selectedRegNoController.text);
+              viewModel.vehicleRegNumber = selectedRegNoController.text;
+              getExpensesList(selectedRegNoController.text,
+                  selectedDateController.text, viewModel);
+            }
             // vehicleEntrySearch(
             //   context,
             //   viewModel,

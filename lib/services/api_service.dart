@@ -45,11 +45,9 @@ class ApiService {
   }) async {
     Response response;
     try {
-      print(
-          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
-      // URL is subject to change -
-      response = await Dio().get(
-          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
+      response = await dioClient
+          .getDio()
+          .get('$VIEW_ENTRY/$registrationNumber/$duration');
     } on DioError catch (e) {
       throw e;
     }

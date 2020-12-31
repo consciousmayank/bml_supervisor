@@ -7,6 +7,8 @@ import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
+import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_view_2.dart';
+import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_detailed_view_2.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/entrylog2.0/add_entry_logs_view_2.dart';
@@ -39,11 +41,21 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ViewEntryView(),
         );
+      case viewEntry2PointOLogPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ViewEntryView2PointO(),
+        );
 
       case viewEntryDetailedViewPageRoute:
         Map<String, dynamic> args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => ViewEntryDetailedView(arguments: args),
+        );
+
+      case viewEntryDetailedView2PointOPageRoute:
+        Map<String, dynamic> args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ViewEntryDetailedView2Point0(arguments: args),
         );
 
       case addExpensesPageRoute:
