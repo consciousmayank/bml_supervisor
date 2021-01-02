@@ -204,11 +204,9 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
         ),
         desktop: ListView(
           controller: _controller,
-          // children: tabletFormView(context: context, viewModel: viewModel),
         ),
         tablet: ListView(
           controller: _controller,
-          // children: tabletFormView(context: context, viewModel: viewModel),
         ),
       ),
     );
@@ -225,56 +223,8 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
             context: context,
             mobile: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: headerText("Daily Entry"),
-                // ),
-                // // registrationSelector(context: context, viewModel: viewModel),
-                // viewModel.selectedSearchVehicle == null
-                //     ? Container()
-                //     : dateSelector(context: context, viewModel: viewModel),
-                // hSizedBox(20)
-              ],
+              children: [],
             ),
-            // tablet: Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     Expanded(
-            //       flex: 1,
-            //       child: registrationSelector(
-            //           context: context, viewModel: viewModel),
-            //     ),
-            //     wSizedBox(20),
-            //     Expanded(
-            //       flex: 1,
-            //       child: viewModel.selectedSearchVehicle == null
-            //           ? Container()
-            //           : dateSelector(context: context, viewModel: viewModel),
-            //     )
-            //   ],
-            // ),
-            // desktop: Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     Expanded(
-            //       flex: 1,
-            //       child: registrationSelector(
-            //           context: context, viewModel: viewModel),
-            //     ),
-            //     wSizedBox(20),
-            //     Expanded(
-            //       flex: 1,
-            //       child: viewModel.selectedSearchVehicle == null
-            //           ? Container()
-            //           : dateSelector(context: context, viewModel: viewModel),
-            //     )
-            //   ],
-            // ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -427,27 +377,12 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     viewModel.vehicleLog = widget.arguments['vehicleLogArg'];
     viewModel.entryDate = widget.arguments['entryDateArg'];
     viewModel.flagForSearch = widget.arguments['flagForSearchArg'];
-
-    // viewModel.searchResponse = widget.arguments['searchResponseArg'];
-    // if (viewModel.searchResponse != null) {
-    //   viewModel.vehicleLog =
-    //       EntryLog(startReading: viewModel.searchResponse[0].initReading);
-    //   print('start reading vehicle log via search' +
-    //       viewModel.vehicleLog.startReading.toString());
-    // }
   }
 
   Widget startingReadingView(AddEntryLogsViewModel2PointO viewModel) {
     startReadingHidden = viewModel.flagForSearch == 0
         ? viewModel.vehicleLog.endReading
         : viewModel.vehicleLog.startReading;
-    // startReadingHidden =
-    //     viewModel.vehicleLog == null || viewModel.vehicleLog.endReading == null
-    //         ? viewModel.selectedVehicle == null ||
-    //                 viewModel.selectedVehicle.initReading == null
-    //             ? 0
-    //             : viewModel.selectedVehicle.initReading
-    //         : viewModel.vehicleLog.endReading;
 
     if (viewModel.vehicleLog != null) {
       // if (viewModel.vehicleLog.failed != null) {
@@ -460,12 +395,6 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
         initialReadingController = TextEditingController(
             text: viewModel.vehicleLog.startReading.toString());
       }
-
-      // }
-      // else {
-      //   initialReadingController = TextEditingController(
-      //       text: viewModel.vehicleLog.endReading.toString());
-      // }
     }
 
     return appTextFormField(

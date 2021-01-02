@@ -110,7 +110,10 @@ const List<String> expenseTypes = [
 const List<String> selectDurationList = [
   "THIS MONTH",
   "LAST MONTH",
-  "LAST 3 MONTHS"
+];
+const List<String> selectClientList = [
+  'ALL',
+  "GOLDEN HARVEST",
 ];
 
 const String registrationText = "Registration";

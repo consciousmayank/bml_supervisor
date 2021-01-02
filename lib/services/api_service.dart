@@ -41,13 +41,27 @@ class ApiService {
 // Added by Vikas
   Future<Response> vehicleEntrySearch({
     String registrationNumber,
+    String clientId,
     int duration,
   }) async {
     Response response;
     try {
-      response = await dioClient
-          .getDio()
-          .get('$VIEW_ENTRY/$registrationNumber/$duration');
+      if (registrationNumber.length != 0 && clientId.length != 0) {
+        response = await dioClient.getDio().get(
+            '$VIEW_ENTRY/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length != 0 && clientId.length == 0) {
+        response = await dioClient
+            .getDio()
+            .get('$VIEW_ENTRY/vehicle/$registrationNumber/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length == 0 && clientId.length != 0) {
+        response = await dioClient
+            .getDio()
+            .get('$VIEW_ENTRY/client/$clientId/period/$duration');
+      } else {
+        response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
+      }
     } on DioError catch (e) {
       throw e;
     }
@@ -75,7 +89,6 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
-    print('form data: ' + body);
 
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);

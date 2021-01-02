@@ -104,7 +104,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
 
   void vehicleEntrySearch(
       String registrationNumber, String selectedDuration) async {
-    int selectedDurationValue = getSelectedDurationValue(selectedDuration);
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     vehicleEntrySearchResponse.clear();
     _vehicleLog = null;
     notifyListeners();
@@ -147,18 +147,5 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
     setBusy(false);
     takeToViewEntryDetailedPage();
-  }
-
-  int getSelectedDurationValue(String selectedDuration) {
-    switch (selectedDuration) {
-      case 'THIS MONTH':
-        return 0;
-      case 'LAST MONTH':
-        return 1;
-      case 'LAST 3 MONTHS':
-        return 2;
-      default:
-        return 1;
-    }
   }
 }

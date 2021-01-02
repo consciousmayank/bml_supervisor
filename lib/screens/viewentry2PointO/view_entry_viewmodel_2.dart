@@ -1,12 +1,8 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
   int _totalKm = 0;
@@ -21,6 +17,14 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
 
   double _totalFuelAmt = 0.0;
 
+  String _selectedClient = "";
+  String get selectedClient => _selectedClient;
+
+  set selectedClient(String selectedClient) {
+    _selectedClient = selectedClient;
+    notifyListeners();
+  }
+
   List<ViewEntryResponse> vehicleEntrySearchResponse = [];
 
   List<SearchByRegNoResponse> searchResponse = [];
@@ -29,6 +33,14 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
 
   set selectedDuration(String selectedDuration) {
     _selectedDuration = selectedDuration;
+    notifyListeners();
+  }
+
+  String _selectedRegistrationNumber = "";
+  String get selectedRegistrationNumber => _selectedRegistrationNumber;
+
+  set selectedRegistrationNumber(String selectedRegistrationNumber) {
+    _selectedRegistrationNumber = selectedRegistrationNumber;
     notifyListeners();
   }
 
@@ -47,62 +59,30 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // void search(String regNum, String duration) async {
-  //   searchResponse.clear();
-  //   selectedVehicle = null;
-  //   notifyListeners();
-  //   setBusy(true);
-  //   try {
-  //     final res = await apiService.search(registrationNumber: regNum);
-  //     if (res.statusCode == 200) {
-  //       var list = res.data as List;
-  //       if (list.length > 0) {
-  //         for (Map singleItem in list) {
-  //           SearchByRegNoResponse singleSearchResult =
-  //               SearchByRegNoResponse.fromMap(singleItem);
-  //           searchResponse.add(singleSearchResult);
-  //         }
-
-  //         setBusy(false);
-  //         print('record exists, take to detailed view page');
-  //         vehicleEntrySearch(regNum, duration);
-  //         // takeToAddEntry2PointOFormViewPage();
-  //       } else {
-  //         snackBarService.showSnackbar(
-  //             message: "No Results found for \"$regNum\"");
-  //       }
-  //     }
-  //   } on DioError catch (e) {
-  //     snackBarService.showSnackbar(message: e.message);
-  //     setBusy(false);
-  //   }
-  //   setBusy(false);
-  // }
-
   int getSelectedDurationValue(String selectedDuration) {
     switch (selectedDuration) {
       case 'THIS MONTH':
-        return 0;
-      case 'LAST MONTH':
         return 1;
-      case 'LAST 3 MONTHS':
+      case 'LAST MONTH':
         return 2;
       default:
         return 1;
     }
   }
 
-  void vehicleEntrySearch(
-      String registrationNumber, String selectedDuration) async {
-    int selectedDurationValue = getSelectedDurationValue(selectedDuration);
+  void vehicleEntrySearch(String regNum, String selectedDuration) async {
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+    int selectedClientValue = selectedClient == 'ALL' ? 0 : 1;
     vehicleEntrySearchResponse.clear();
     _vehicleLog = null;
     notifyListeners();
     setBusy(true);
     try {
       final res = await apiService.vehicleEntrySearch(
-          registrationNumber: registrationNumber,
-          duration: selectedDurationValue);
+        registrationNumber: regNum,
+        duration: selectedDurationValue,
+        clientId: selectedClientValue.toString(),
+      );
 
       if (res.statusCode == 200) {
         print('status code 200');
@@ -140,12 +120,13 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
             takeToViewEntryDetailedPage2Point0();
           } else {
             snackBarService.showSnackbar(
-                message: "No Results found for \"$registrationNumber\"");
+                message:
+                    "No Results found for \"$selectedRegistrationNumber\"");
           }
         } else if (res.data['status'].toString() == 'failed') {
           print('res status is falied');
           snackBarService.showSnackbar(
-              message: 'No Result for $registrationNumber');
+              message: 'No Result for $selectedRegistrationNumber');
         }
       }
     } on DioError catch (e) {

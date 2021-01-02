@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
@@ -12,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'add_entry_logs_viewmodel_2.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
 
 class AddEntryLogsView2PointO extends StatefulWidget {
   @override

@@ -4,7 +4,6 @@ import 'package:stacked/stacked.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 
@@ -33,6 +32,7 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   registrationSelector(context: context, viewModel: viewModel),
+                  selectClient(viewModel: viewModel),
                   selectDuration(viewModel: viewModel),
                 ],
               ),
@@ -53,6 +53,19 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
     );
   }
 
+  Widget selectClient({ViewEntryViewModel2PointO viewModel}) {
+    return AppDropDown(
+      optionList: selectClientList,
+      hint: "Select Client",
+      onOptionSelect: (selectedValue) {
+        viewModel.selectedClient = selectedValue;
+        print(viewModel.selectedClient);
+      },
+      selectedValue:
+          viewModel.selectedClient.isEmpty ? null : viewModel.selectedClient,
+    );
+  }
+
   Widget searchEntryButton({ViewEntryViewModel2PointO viewModel}) {
     return SizedBox(
       height: buttonHeight,
@@ -62,17 +75,17 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
         child: RaisedButton(
           child: Text("Search Entry"),
           onPressed: () {
-            if (selectedRegNoController.text.length == 0 ||
-                viewModel.selectedDuration.length == 0) {
+            if (viewModel.selectedDuration.length == 0) {
               viewModel.snackBarService
-                  .showSnackbar(message: 'Please fill all the fields');
+                  .showSnackbar(message: 'Please provide duration');
             } else {
+              if (selectedRegNoController.text.length != 0) {
+                viewModel.selectedRegistrationNumber =
+                    selectedRegNoController.text.toUpperCase();
+              }
               viewModel.vehicleEntrySearch(
                   selectedRegNoController.text.toUpperCase(),
                   viewModel.selectedDuration);
-
-              // viewModel.search(selectedRegNoController.text.toUpperCase(),
-              //     viewModel.selectedDuration);
             }
             // vehicleEntrySearch(
             //   context,
