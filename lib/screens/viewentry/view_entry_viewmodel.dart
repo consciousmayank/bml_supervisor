@@ -3,6 +3,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 
@@ -131,7 +132,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
           }
           // print('total fuel in ltr: $_totalFuelInLtr');
           // print('total fuel amt: $_totalFuelAmt');
-          if (!(_totalKm == 0 && _totalFuelInLtr == 0)) {
+          if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
             _avgPerLitre = _totalKm / _totalFuelInLtr;
             // print('avg per litr: ${_avgPerLitre.toStringAsFixed(2)}');
           }

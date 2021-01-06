@@ -36,8 +36,9 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
       BuildContext context, List<ViewExpensesResponse> viewExpenseResponse) {
     return ListView.builder(
         itemBuilder: (context, index) {
+          // ! Below code is imp, helps to show custom header in a ListView
           // if (index == 0) {
-          //   // return the header
+          //    return the header
           //   return _buildChip();
           // }
           // index -= 1;
@@ -70,7 +71,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Date',
+                                viewExpenseResponse[index].vehicleId,
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(

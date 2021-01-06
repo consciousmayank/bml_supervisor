@@ -18,6 +18,7 @@ class ApiService {
   Future<Response> search({String registrationNumber}) async {
     Response response;
     try {
+      print('$SEARCH_BY_REG_NO$registrationNumber');
       response =
           await dioClient.getDio().get('$SEARCH_BY_REG_NO$registrationNumber');
     } on DioError catch (e) {
@@ -38,6 +39,20 @@ class ApiService {
     return response;
   }
 
+  // Added by Vikas
+
+  Future searchByRegistrationNumber(String registrationNumber) async {
+    Response response;
+    try {
+      response =
+          await dioClient.getDio().get('/vehicle/find/$registrationNumber');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    // print(response);
+    return response;
+  }
+
 // Added by Vikas
   Future<Response> vehicleEntrySearch({
     String registrationNumber,
@@ -45,6 +60,7 @@ class ApiService {
     int duration,
   }) async {
     Response response;
+    print('client id before api call: $clientId');
     try {
       if (registrationNumber.length != 0 && clientId.length != 0) {
         response = await dioClient.getDio().get(
@@ -71,6 +87,7 @@ class ApiService {
   Future submitVehicleEntry(EntryLog entryLogRequest) async {
     Response response;
     final request = {
+      "clientId": entryLogRequest.clientId,
       "vehicleId": entryLogRequest.vehicleId,
       "entryDate": entryLogRequest.entryDate,
       "startReading": entryLogRequest.startReading,
@@ -89,6 +106,7 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
+    print(body);
 
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
@@ -117,23 +135,51 @@ class ApiService {
 
   Future addExpense({SaveExpenseRequest request}) async {
     String body = request.toJson();
+    print('before saving expense: ' + body);
+
     Response response;
     try {
       response = await dioClient.getDio().post(ADD_EXPENSE, data: body);
     } on DioError catch (e) {
       return e.toString();
     }
+    print(response);
     return response;
   }
 
-  Future getExpensesList(
-      {String regNo, String dateFrom, int pageNumber, String toDate}) async {
+  Future getExpensesList({String regNum, String duration}) async {
+    Response response;
+    // print('reg num is api' + regNo);
+    try {
+      // print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
+      if (regNum != null) {
+        print('/vehicle/expenses/find/$regNum/period/$duration');
+
+        response = await dioClient
+            .getDio()
+            .get('/vehicle/expenses/find/$regNum/period/$duration');
+      } else {
+        print('/vehicle/expenses/find/period/$duration');
+
+        response = await dioClient
+            .getDio()
+            .get('/vehicle/expenses/find/period/$duration');
+      }
+      // response = await dioClient.getDio().get(
+      //       GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
+      //     );
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('expense list: ' + response.toString());
+    return response;
+  }
+
+  Future getClientsList() async {
     Response response;
     try {
-      print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
-      response = await dioClient.getDio().get(
-            GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
-          );
+      print('calling this api: $GET_CLIENTS');
+      response = await dioClient.getDio().get('$GET_CLIENTS');
     } on DioError catch (e) {
       return e.message;
     }

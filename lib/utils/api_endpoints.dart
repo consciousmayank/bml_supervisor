@@ -16,3 +16,4 @@ const String GET_ROUTES_FOR_CLIENT_ID = "/route/client/";
 const String GET_HUB_DATA = "/hub/find/";
 const String ADD_CONSIGNMENT_DATA_TO_HUB = "/consignment/add";
 const String GET_CONSIGNMENTS_LIST = "/consignment/find/";
+const String GET_CLIENTS = "/client/list/";

@@ -329,8 +329,14 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
               width: MediaQuery.of(context).size.width,
               child: RaisedButton(
                 onPressed: () {
+                  print('submit btn pressed');
+                  print(
+                      'in form page-selected client id: ${widget.arguments['selectedClientId']}');
+                  // print(
+                  //     'in form page-selected client: ${viewModel.selectedClient.title}');
                   if (_formKey.currentState.validate()) {
                     viewModel.submitVehicleEntry(EntryLog(
+                      clientId: widget.arguments['selectedClientId'],
                       vehicleId: widget.arguments['regNumArg'],
                       entryDate: DateFormat('dd-MM-yyyy')
                           .format(viewModel.entryDate)

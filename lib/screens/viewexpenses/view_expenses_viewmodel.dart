@@ -16,6 +16,14 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  String _selectedDuration = "";
+  String get selectedDuration => _selectedDuration;
+
+  set selectedDuration(String selectedDuration) {
+    _selectedDuration = selectedDuration;
+    notifyListeners();
+  }
+
   String _vehicleRegNumber;
   String get vehicleRegNumber => _vehicleRegNumber;
   set vehicleRegNumber(String vehicleRegNumber) {
@@ -66,29 +74,29 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     _emptyDateSelector = emptyDateSelector;
   }
 
-  void takeToSearch() async {
-    selectedSearchVehicle = await navigationService.navigateTo(searchPageRoute);
-  }
+  // void takeToSearch() async {
+  //   selectedSearchVehicle = await navigationService.navigateTo(searchPageRoute);
+  // }
 
-  void getExpensesList(String vehicleRegNumber, String fromDate) async {
+  void getExpensesList() async {
     viewExpensesResponse.clear();
-    final uptoDate =
-        DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+    print(
+        '**selected duration: $selectedDuration, selected reg num $vehicleRegNumber');
+    // final uptoDate =
+    //     DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
     notifyListeners();
     setBusy(true);
     try {
       final res = await apiService.getExpensesList(
-          regNo: vehicleRegNumber,
-          dateFrom: fromDate,
-          toDate: uptoDate,
-          pageNumber: 1 // Default - Subject to change
-          );
+        regNum: vehicleRegNumber,
+        duration: selectedDurationValue.toString(),
+      );
 
       if (res.data is! List) {
         print('data is not list');
         snackBarService.showSnackbar(
-            message:
-                "No Results found for \"$vehicleRegNumber\" from \"$fromDate\" till today.");
+            message: "No Results found for $vehicleRegNumber");
       } else {
         if (res.statusCode == 200) {
           var list = res.data as List;
@@ -119,7 +127,12 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     print(
         'before sending - expense type: $viewExpensesResponse[0].expenseType');
 
-    navigationService.navigateTo(viewExpensesDetailedViewPageRoute,
-        arguments: viewExpensesResponse);
+    navigationService
+        .navigateTo(viewExpensesDetailedViewPageRoute,
+            arguments: viewExpensesResponse)
+        .then((value) {
+      vehicleRegNumber = null;
+      // selectedDuration = null;
+    });
   }
 }

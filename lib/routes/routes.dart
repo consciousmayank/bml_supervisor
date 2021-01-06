@@ -2,11 +2,11 @@ import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
-import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
+// import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/viewentry/view_entry_detailed_view.dart';
-import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
+// import 'package:bml_supervisor/screens/viewentry/view_entry_view.dart';
 import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_view_2.dart';
 import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_detailed_view_2.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
@@ -34,17 +34,17 @@ class AppRouter {
 
       case addEntryLogPageRoute:
         return MaterialPageRoute(
-          builder: (_) => EntryLogsView(),
-        );
+            builder: (_) => AddEntryLogsView2PointO() //EntryLogsView(),
+            );
 
       case viewEntryLogPageRoute:
         return MaterialPageRoute(
-          builder: (_) => ViewEntryView(),
-        );
-      case viewEntry2PointOLogPageRoute:
-        return MaterialPageRoute(
-          builder: (_) => ViewEntryView2PointO(),
-        );
+            builder: (_) => ViewEntryView2PointO() //ViewEntryView(),
+            );
+      // case viewEntry2PointOLogPageRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => ViewEntryView2PointO(),
+      //   );
 
       case viewEntryDetailedViewPageRoute:
         Map<String, dynamic> args = settings.arguments;
@@ -81,10 +81,10 @@ class AppRouter {
           builder: (_) => ConsignmentAllotmentView(),
         );
 
-      case addEntry2PointOLogPageRoute:
-        return MaterialPageRoute(
-          builder: (_) => AddEntryLogsView2PointO(),
-        );
+      // case addEntry2PointOLogPageRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => AddEntryLogsView2PointO(),
+      //   );
 
       case addEntry2PointOFormViewPageRoute:
         Map<String, dynamic> args = settings.arguments;

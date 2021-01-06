@@ -59,12 +59,12 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   }
 
   body(BuildContext context, ExpensesViewModel viewModel) {
-    if (viewModel.selectedSearchVehicle != null) {
-      selectedRegNoController = TextEditingController(
-          text: viewModel.selectedSearchVehicle.registrationNumber);
-    } else {
-      selectedRegNoController = TextEditingController();
-    }
+    // if (viewModel.selectedSearchVehicle != null) {
+    //   selectedRegNoController = TextEditingController(
+    //       text: viewModel.selectedSearchVehicle.registrationNumber);
+    // } else {
+    //   selectedRegNoController = TextEditingController();
+    // }
 
     return AbsorbPointer(
       absorbing: viewModel.isExpenseListLoading,
@@ -103,17 +103,17 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       key: _formKey,
       child: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: headerText("Vehicle Expenses"),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: headerText("Vehicle Expenses"),
+          // ),
           Stack(
             alignment: Alignment.bottomRight,
             children: [
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: appTextFormField(
-                  enabled: false,
+                  // enabled: false,
                   controller: selectedRegNoController,
                   focusNode: selectedRegNoFocusNode,
                   hintText: drRegNoHint,
@@ -127,77 +127,80 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                   },
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 5.0, right: 4),
+              //   child: appSuffixIconButton(
+              //     icon: Icon(Icons.search),
+              //     onPressed: () {
+              //       viewModel.entryDate = null;
+              //       viewModel.takeToSearch();
+              //     },
+              //   ),
+              // ),
+            ],
+          ),
+          // viewModel.selectedSearchVehicle == null
+          //     ? Container()
+          //     :
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              appTextFormField(
+                enabled: false,
+                controller: selectedDateController,
+                focusNode: selectedDateFocusNode,
+                hintText: "Select Entry Date",
+                labelText: "Entry Date",
+                keyboardType: TextInputType.text,
+              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 5.0, right: 4),
+                padding: const EdgeInsets.only(bottom: 2.0, right: 4),
                 child: appSuffixIconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    viewModel.entryDate = null;
-                    viewModel.takeToSearch();
-                  },
+                  icon: Icon(Icons.calendar_today_outlined),
+                  onPressed: (() async {
+                    DateTime selectedDate = await selectDate();
+                    if (selectedDate != null) {
+                      selectedDateController.text = getDateString(selectedDate);
+                      viewModel.entryDate = selectedDate;
+                      viewModel.showSubmitForm = true;
+                    }
+                  }),
                 ),
               ),
             ],
           ),
-          viewModel.selectedSearchVehicle == null
-              ? Container()
-              : Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    appTextFormField(
-                      enabled: false,
-                      controller: selectedDateController,
-                      focusNode: selectedDateFocusNode,
-                      hintText: "Select Entry Date",
-                      labelText: "Entry Date",
-                      keyboardType: TextInputType.text,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-                      child: appSuffixIconButton(
-                        icon: Icon(Icons.calendar_today_outlined),
-                        onPressed: (() async {
-                          DateTime selectedDate = await selectDate();
-                          if (selectedDate != null) {
-                            selectedDateController.text =
-                                getDateString(selectedDate);
-                            viewModel.entryDate = selectedDate;
-                            viewModel.showSubmitForm = true;
-                          }
-                        }),
-                      ),
-                    ),
-                  ],
-                ),
-          viewModel.entryDate == null
-              ? Container()
-              : AppDropDown(
-                  showUnderLine: true,
-                  selectedValue: viewModel.expenseType != null
-                      ? viewModel.expenseType
-                      : null,
-                  hint: "Select Expense",
-                  onOptionSelect: (selectedValue) {
-                    viewModel.expenseType = selectedValue;
-                    // if (viewModel.selectedSearchVehicle != null &&
-                    //     viewModel.entryDate != null) {
-                    //   viewModel.getExpensesList();
-                    // }
-                  },
-                  optionList: expenseTypes,
-                ),
+          // viewModel.entryDate == null
+          //     ? Container()
+          //     :
+          AppDropDown(
+            showUnderLine: true,
+            selectedValue:
+                viewModel.expenseType != null ? viewModel.expenseType : null,
+            hint: "Select Expense",
+            onOptionSelect: (selectedValue) {
+              viewModel.expenseType = selectedValue;
+              // if (viewModel.selectedSearchVehicle != null &&
+              //     viewModel.entryDate != null) {
+              //   viewModel.getExpensesList();
+              // }
+            },
+            optionList: expenseTypes,
+          ),
           hSizedBox(10),
-          viewModel.entryDate == null
-              ? Container()
-              : getAmount(context: context, viewModel: viewModel),
+          // viewModel.entryDate == null
+          //     ? Container()
+          //     :
+          getAmount(context: context, viewModel: viewModel),
           hSizedBox(10),
-          viewModel.entryDate == null
-              ? Container()
-              : getDescription(context: context, viewModel: viewModel),
+          // viewModel.entryDate == null
+          //     ? Container()
+          //     :
+          getDescription(context: context, viewModel: viewModel),
           hSizedBox(10),
-          viewModel.entryDate == null
-              ? Container()
-              : saveExpenseButton(context: context, viewModel: viewModel),
+          // viewModel.entryDate == null
+          //     ? Container()
+          //     :
+          saveExpenseButton(context: context, viewModel: viewModel),
         ],
       ),
     );
@@ -260,20 +263,26 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       height: buttonHeight,
       child: RaisedButton(
         onPressed: () {
+          // ! Validation Code Below
           if (_formKey.currentState.validate()) {
             if (viewModel.expenseType != null) {
-              viewModel.saveExpense(SaveExpenseRequest(
-                  vehicleId: viewModel.selectedSearchVehicle.registrationNumber,
-                  entryDate:
-                      DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
-                  expenseType: viewModel.expenseType,
-                  expenseAmount: double.parse(amountController.text),
-                  expenseDesc: descriptionController.text,
-                  status: false));
+              viewModel.searchByRegistrationNumber(
+                SaveExpenseRequest(
+                    vehicleId: selectedRegNoController.text.toUpperCase(),
+                    // viewModel.selectedSearchVehicle.registrationNumber,
+                    entryDate:
+                        DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
+                    expenseType: viewModel.expenseType,
+                    expenseAmount: double.parse(amountController.text),
+                    expenseDesc: descriptionController.text,
+                    status: false),
+              );
               descriptionFocusNode.unfocus();
               amountFocusNode.unfocus();
-              amountController.clear();
-              descriptionController.clear();
+              if (viewModel.isRegNumCorrect) {
+                amountController.clear();
+                descriptionController.clear();
+              }
             } else {
               viewModel.snackBarService
                   .showSnackbar(message: "Please Select Expense Type");

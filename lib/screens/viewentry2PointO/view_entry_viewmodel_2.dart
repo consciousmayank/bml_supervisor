@@ -1,6 +1,8 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 
@@ -17,10 +19,10 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
 
   double _totalFuelAmt = 0.0;
 
-  String _selectedClient = "";
-  String get selectedClient => _selectedClient;
+  GetClientsResponse _selectedClient;
+  GetClientsResponse get selectedClient => _selectedClient;
 
-  set selectedClient(String selectedClient) {
+  set selectedClient(GetClientsResponse selectedClient) {
     _selectedClient = selectedClient;
     notifyListeners();
   }
@@ -59,6 +61,15 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  List<GetClientsResponse> _clientsList = [];
+
+  List<GetClientsResponse> get clientsList => _clientsList;
+
+  set clientsList(List<GetClientsResponse> value) {
+    _clientsList = value;
+    notifyListeners();
+  }
+
   int getSelectedDurationValue(String selectedDuration) {
     switch (selectedDuration) {
       case 'THIS MONTH':
@@ -70,9 +81,47 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
     }
   }
 
+  getClients() async {
+    setBusy(true);
+    clientsList = [];
+    // call client api
+    // get the data as list
+    // add Book my loading at 0
+    // pupulate the clients dropdown
+    var response = await apiService.getClientsList();
+
+    if (response is String) {
+      snackBarService.showSnackbar(message: response);
+    } else {
+      Response apiResponse = response;
+      var clientsList = apiResponse.data as List;
+
+      clientsList.forEach((element) {
+        GetClientsResponse getClientsResponse =
+            GetClientsResponse.fromMap(element);
+        this.clientsList.add(getClientsResponse);
+      });
+      this.clientsList.insert(
+          0,
+          GetClientsResponse(
+            id: 0,
+            title: 'Book My Loading',
+          ));
+    }
+
+    setBusy(false);
+    notifyListeners();
+    print('Number of clients: ${clientsList.length}');
+    clientsList.forEach((element) {
+      print(element.id);
+      print(element.title);
+    });
+    // print(clientsList);
+  }
+
   void vehicleEntrySearch(String regNum, String selectedDuration) async {
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
-    int selectedClientValue = selectedClient == 'ALL' ? 0 : 1;
+    // int selectedClientValue = selectedClient == 'BOOK MY LOADING' ? 0 : 1;
     vehicleEntrySearchResponse.clear();
     _vehicleLog = null;
     notifyListeners();
@@ -81,7 +130,7 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
       final res = await apiService.vehicleEntrySearch(
         registrationNumber: regNum,
         duration: selectedDurationValue,
-        clientId: selectedClientValue.toString(),
+        clientId: selectedClient.id.toString(),
       );
 
       if (res.statusCode == 200) {
@@ -113,7 +162,7 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
             }
             // print('total fuel in ltr: $_totalFuelInLtr');
             // print('total fuel amt: $_totalFuelAmt');
-            if (!(_totalKm == 0 && _totalFuelInLtr == 0)) {
+            if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
               _avgPerLitre = _totalKm / _totalFuelInLtr;
               // print('avg per litr: ${_avgPerLitre.toStringAsFixed(2)}');
             }

@@ -8,6 +8,14 @@ import 'package:dio/dio.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
   // DateTime _fromDate;
+  bool _isRegNumCorrect = false;
+
+  bool get isRegNumCorrect => _isRegNumCorrect;
+
+  set isRegNumCorrect(bool isRegNumCorrect) {
+    _isRegNumCorrect = isRegNumCorrect;
+    notifyListeners();
+  }
 
   DateTime _entryDate;
 
@@ -141,8 +149,13 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   // }
 
   void saveExpense(SaveExpenseRequest saveExpenseRequest) async {
-    isExpenseListLoading = true;
+    // call reg num api
+    // if num exists call below code
+    // else show wrong num message
 
+    // searchByRegistrationNumber(saveExpenseRequest.vehicleId);
+    // if (_isRegNumCorrect) {
+    isExpenseListLoading = true;
     var response = await apiService.addExpense(request: saveExpenseRequest);
 
     if (response is String) {
@@ -153,10 +166,37 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       if (saveExpenseResponse.status == "success") {
         snackBarService.showSnackbar(message: "Expense Added Successfully.");
       } else {
-        snackBarService.showSnackbar(message: "Expense Not Added.");
+        snackBarService.showSnackbar(message: saveExpenseResponse.message);
       }
     }
 
     isExpenseListLoading = false;
+    // }
+  }
+
+  void searchByRegistrationNumber(
+      SaveExpenseRequest saveExpenseResponse) async {
+    setBusy(true);
+
+    var entryLog = await apiService
+        .searchByRegistrationNumber(saveExpenseResponse.vehicleId);
+    if (entryLog is String) {
+      snackBarService.showSnackbar(message: entryLog);
+    } else if (entryLog.data['status'].toString() == 'failed') {
+      setBusy(false);
+      snackBarService.showSnackbar(
+          message: "Enter Correct Registration Number");
+    } else {
+      SearchByRegNoResponse singleSearchResult =
+          SearchByRegNoResponse.fromMap(entryLog.data);
+      print('init reading - ${singleSearchResult.initReading}');
+      isRegNumCorrect = true;
+      // vehicleLog = EntryLog.fromMap(entryLog.data);
+
+      // *call saveExpense api here
+      saveExpense(saveExpenseResponse);
+      setBusy(false);
+    }
+    // return isRegNumCorrect;
   }
 }

@@ -22,8 +22,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Expenses",
     "Allot Consignments",
     "View Consignments",
-    "Add Entry 2.0",
-    "View Entry 2.0",
+    // "Add Entry 2.0",
+    // "View Entry 2.0",
   ];
 
   takeToAddEntryPage() {
@@ -50,11 +50,11 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(viewConsignmentsPageRoute);
   }
 
-  takeToAddEntry2PointOPage() {
-    navigationService.navigateTo(addEntry2PointOLogPageRoute);
-  }
+  // takeToAddEntry2PointOPage() {
+  //   navigationService.navigateTo(addEntry2PointOLogPageRoute);
+  // }
 
-  takeToViewEntry2PointOPage() {
-    navigationService.navigateTo(viewEntry2PointOLogPageRoute);
-  }
+  // takeToViewEntry2PointOPage() {
+  //   navigationService.navigateTo(viewEntry2PointOLogPageRoute);
+  // }
 }
