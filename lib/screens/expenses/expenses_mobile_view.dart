@@ -92,7 +92,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       context: context,
       initialDate: new DateTime.now(),
       firstDate: new DateTime(1990),
-      lastDate: new DateTime(2035),
+      lastDate: new DateTime.now(),
     );
 
     return picked;
