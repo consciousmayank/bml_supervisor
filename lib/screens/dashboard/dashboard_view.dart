@@ -96,6 +96,12 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       case 5:
         return viewModel.takeToViewConsignmentsPage();
         break;
+      // case 6:
+      //   return viewModel.takeToAddEntry2PointOPage();
+      //   break;
+      // case 7:
+      //   return viewModel.takeToViewEntry2PointOPage();
+      //   break;
       default:
         return viewModel.takeToAddEntryPage();
     }

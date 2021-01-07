@@ -3,6 +3,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/services/api_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -96,6 +97,11 @@ class EntryLogsViewModel extends GeneralisedBaseViewModel {
 
     if (entryLog is String) {
       snackBarService.showSnackbar(message: entryLog);
+    } else if (entryLog is ApiResponse) {
+      if (entryLog.status == 'failed') {
+      } else {
+        snackBarService.showSnackbar(message: entryLog.message);
+      }
     } else {
       vehicleLog = EntryLog.fromMap(entryLog.data);
       if (vehicleLog.failed != null) {

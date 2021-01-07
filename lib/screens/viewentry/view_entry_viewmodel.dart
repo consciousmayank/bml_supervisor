@@ -3,6 +3,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 
@@ -86,15 +87,9 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToViewEntryDetailedPage() {
-    // vehicleEntrySearch(registrationNumber, selectedDuration);
-    print('before sending: total km ' + _totalKm.toString());
-    print('before sending: _kmDifference' + _kmDifference.toString());
-    print('before sending: _totalFuelInLtr' + _totalFuelInLtr.toString());
-    print('before sending: _avgPerLitre' + _avgPerLitre.toString());
-    print('before sending: _totalFuelAmt' + _totalFuelAmt.toString());
     navigationService.navigateTo(viewEntryDetailedViewPageRoute, arguments: {
       'totalKm': _totalKm,
-      'kmDifference': _kmDifference,
+      'kmDifference': _kmDifference.abs(),
       'totalFuelInLtr': _totalFuelInLtr,
       'avgPerLitre': _avgPerLitre,
       'totalFuelAmt': _totalFuelAmt,
@@ -110,7 +105,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
 
   void vehicleEntrySearch(
       String registrationNumber, String selectedDuration) async {
-    int selectedDurationValue = getSelectedDurationValue(selectedDuration);
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     vehicleEntrySearchResponse.clear();
     _vehicleLog = null;
     notifyListeners();
@@ -137,7 +132,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
           }
           // print('total fuel in ltr: $_totalFuelInLtr');
           // print('total fuel amt: $_totalFuelAmt');
-          if (!(_totalKm == 0 && _totalFuelInLtr == 0)) {
+          if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
             _avgPerLitre = _totalKm / _totalFuelInLtr;
             // print('avg per litr: ${_avgPerLitre.toStringAsFixed(2)}');
           }
@@ -153,18 +148,5 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
     setBusy(false);
     takeToViewEntryDetailedPage();
-  }
-
-  int getSelectedDurationValue(String selectedDuration) {
-    switch (selectedDuration) {
-      case 'THIS MONTH':
-        return 0;
-      case 'LAST MONTH':
-        return 1;
-      case 'LAST 3 MONTHS':
-        return 2;
-      default:
-        return 1;
-    }
   }
 }

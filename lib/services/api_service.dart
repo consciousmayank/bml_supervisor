@@ -18,6 +18,7 @@ class ApiService {
   Future<Response> search({String registrationNumber}) async {
     Response response;
     try {
+      print('$SEARCH_BY_REG_NO$registrationNumber');
       response =
           await dioClient.getDio().get('$SEARCH_BY_REG_NO$registrationNumber');
     } on DioError catch (e) {
@@ -38,18 +39,49 @@ class ApiService {
     return response;
   }
 
+  // Added by Vikas
+
+  Future searchByRegistrationNumber(String registrationNumber) async {
+    Response response;
+    try {
+      response =
+          await dioClient.getDio().get('/vehicle/find/$registrationNumber');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    // print(response);
+    return response;
+  }
+
 // Added by Vikas
   Future<Response> vehicleEntrySearch({
     String registrationNumber,
+    String clientId,
     int duration,
   }) async {
     Response response;
+    print('client id before api call: $clientId');
     try {
-      print(
-          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
-      // URL is subject to change -
-      response = await Dio().get(
-          'http://192.168.0.150:8080/bookmyloading/api/vehicle/entrylog/view/$registrationNumber/$duration');
+      if (registrationNumber.length != 0 && clientId.length != 0) {
+        print('api_service: v + c + d');
+        response = await dioClient.getDio().get(
+            '$VIEW_ENTRY/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length != 0 && clientId.length == 0) {
+        print('api_service: v + d');
+        response = await dioClient
+            .getDio()
+            .get('$VIEW_ENTRY/vehicle/$registrationNumber/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length == 0 && clientId.length != 0) {
+        print('api_service: c + d');
+        response = await dioClient
+            .getDio()
+            .get('$VIEW_ENTRY/client/$clientId/period/$duration');
+      } else {
+        print('api_service: d');
+        response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
+      }
     } on DioError catch (e) {
       throw e;
     }
@@ -59,6 +91,7 @@ class ApiService {
   Future submitVehicleEntry(EntryLog entryLogRequest) async {
     Response response;
     final request = {
+      "clientId": entryLogRequest.clientId,
       "vehicleId": entryLogRequest.vehicleId,
       "entryDate": entryLogRequest.entryDate,
       "startReading": entryLogRequest.startReading,
@@ -77,6 +110,8 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
+    print(body);
+
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
     } on DioError catch (e) {
@@ -104,23 +139,80 @@ class ApiService {
 
   Future addExpense({SaveExpenseRequest request}) async {
     String body = request.toJson();
+    print('before saving expense: ' + body);
+
     Response response;
     try {
       response = await dioClient.getDio().post(ADD_EXPENSE, data: body);
     } on DioError catch (e) {
       return e.toString();
     }
+    print(response);
     return response;
   }
 
-  Future getExpensesList(
-      {String regNo, String dateFrom, int pageNumber, String toDate}) async {
+  Future getExpensesList({
+    String registrationNumber,
+    String duration,
+    String clientId,
+  }) async {
+    Response response;
+    // print('reg num is api' + regNo);
+    print('api_service: regNu-$registrationNumber clientId-$clientId');
+    try {
+      //!start
+      if (registrationNumber.length != 0 && clientId.length != 0) {
+        print(
+            'api v + c + d: /expenses/view/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        response = await dioClient.getDio().get(
+            '/expenses/view/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length != 0 && clientId.length == 0) {
+        print(
+            'api v + d: /expenses/view/vehicle/$registrationNumber/period/$duration');
+        response = await dioClient
+            .getDio()
+            .get('/expenses/view/vehicle/$registrationNumber/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length == 0 && clientId.length != 0) {
+        print('api c + d: /expenses/view/client/$clientId/period/$duration');
+        response = await dioClient
+            .getDio()
+            .get('/expenses/view/client/$clientId/period/$duration');
+      } else {
+        print('api d : /expenses/view/period/$duration');
+        response =
+            await dioClient.getDio().get('/expenses/view/period/$duration');
+      }
+      //!end
+      // print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
+      // if (registrationNumber != null) {
+      //   print('/vehicle/expenses/find/$registrationNumber/period/$duration');
+
+      //   response = await dioClient
+      //       .getDio()
+      //       .get('/vehicle/expenses/find/$registrationNumber/period/$duration');
+      // } else {
+      //   print('/expenses/view/period/$duration');
+
+      //   response =
+      //       await dioClient.getDio().get('/expenses/view/period/$duration');
+      // }
+      // response = await dioClient.getDio().get(
+      //       GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
+      //     );
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('expense list: ' + response.toString());
+    return response;
+  }
+
+  Future getClientsList() async {
     Response response;
     try {
-      print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
-      response = await dioClient.getDio().get(
-            GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
-          );
+      print('calling this api: $GET_CLIENTS');
+      response = await dioClient.getDio().get('$GET_CLIENTS');
     } on DioError catch (e) {
       return e.message;
     }

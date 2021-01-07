@@ -1,35 +1,30 @@
-// Added by Vikas
-// Subject to change
-
-import 'package:bml_supervisor/screens/viewexpenses/view_expenses_viewmodel.dart';
+import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_viewmodel_2.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 
-class ViewExpensesView extends StatefulWidget {
+class ViewEntryView2PointO extends StatefulWidget {
   @override
-  _ViewExpensesViewState createState() => _ViewExpensesViewState();
+  _ViewEntryView2PointOState createState() => _ViewEntryView2PointOState();
 }
 
-class _ViewExpensesViewState extends State<ViewExpensesView> {
+class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
-  TextEditingController selectedDateController = TextEditingController();
-  final FocusNode selectedDateFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ViewExpensesViewModel>.reactive(
+    return ViewModelBuilder<ViewEntryViewModel2PointO>.reactive(
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('View Expenses'),
+          title: Text('View Entry 2.0'),
         ),
         body: Padding(
           padding: getSidePadding(context: context),
@@ -41,30 +36,27 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 children: [
                   selectClient(viewModel: viewModel),
                   registrationSelector(context: context, viewModel: viewModel),
-                  // viewModel.selectedSearchVehicle == null
-                  //     ? Container()
-                  //     : dateSelector(context: context, viewModel: viewModel),
-                  // hSizedBox(20),
                   selectDuration(viewModel: viewModel),
                 ],
               ),
-              getExpenseListButton(
-                viewModel: viewModel,
-              ),
-              // viewModel.selectedSearchVehicle == null
-              //     ? Container()
-              //     : searchButton(
-              //         viewModel: viewModel,
-              //       ),
+              searchEntryButton(viewModel: viewModel),
             ],
           ),
         ),
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
+        //     // dateSelector(context: context, viewModel: viewModel),
+        //     selectDuration(viewModel: viewModel),
+        //     registrationSelector(context: context, viewModel: viewModel),
+        //   ],
+        // ),
       ),
-      viewModelBuilder: () => ViewExpensesViewModel(),
+      viewModelBuilder: () => ViewEntryViewModel2PointO(),
     );
   }
 
-  Widget selectClient({ViewExpensesViewModel viewModel}) {
+  Widget selectClient({ViewEntryViewModel2PointO viewModel}) {
     return ClientsDropDown(
       optionList: viewModel.clientsList,
       hint: "Select Client",
@@ -75,7 +67,59 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
     );
   }
 
-  Widget selectDuration({ViewExpensesViewModel viewModel}) {
+  Widget searchEntryButton({ViewEntryViewModel2PointO viewModel}) {
+    return SizedBox(
+      height: buttonHeight,
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4.0),
+        child: RaisedButton(
+          child: Text("Search Entry"),
+          onPressed: () {
+            //!
+            if (viewModel.selectedDuration.length != 0) {
+              // if (selectedRegNoController.text.length != 0) {
+              //   viewModel.selectedRegistrationNumber =
+              //       selectedRegNoController.text;
+              // }
+              viewModel.vehicleEntrySearch(
+                regNum: selectedRegNoController.text.trim().toUpperCase(),
+                selectedDuration: viewModel.selectedDuration,
+                clientId: viewModel.selectedClient != null
+                    ? viewModel.selectedClient.id.toString()
+                    : '',
+              );
+            } else {
+              viewModel.snackBarService
+                  .showSnackbar(message: 'Please select Duration');
+            }
+            //!
+            // if (viewModel.selectedClient == null) {
+            //   viewModel.snackBarService
+            //       .showSnackbar(message: 'Please select Client');
+            // } else if (viewModel.selectedDuration.length == 0) {
+            //   viewModel.snackBarService
+            //       .showSnackbar(message: 'Please select Duration');
+            // } else {
+            //   if (selectedRegNoController.text.length != 0) {
+            //     viewModel.selectedRegistrationNumber =
+            //         selectedRegNoController.text.toUpperCase();
+            //   }
+            //   viewModel.vehicleEntrySearch(
+            //     selectedRegNoController.text.toUpperCase(),
+            //     viewModel.selectedDuration,
+            //     viewModel.selectedClient != null
+            //         ? viewModel.selectedClient.id.toString()
+            //         : '',
+            //   );
+            // }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget selectDuration({ViewEntryViewModel2PointO viewModel}) {
     return AppDropDown(
       optionList: selectDurationList,
       hint: "Select Duration",
@@ -89,8 +133,8 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
     );
   }
 
-  Widget registrationSelector(
-      {BuildContext context, ViewExpensesViewModel viewModel}) {
+  registrationSelector(
+      {BuildContext context, ViewEntryViewModel2PointO viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -98,15 +142,16 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           padding: const EdgeInsets.all(2.0),
           child: registrationNumberTextField(viewModel),
         ),
+        // selectRegButton(context, viewModel),
       ],
     );
   }
 
-  Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
-    viewModel.selectedSearchVehicle != null
-        ? selectedRegNoController.text =
-            viewModel.selectedSearchVehicle.registrationNumber
-        : selectedRegNoController.text = "";
+  registrationNumberTextField(ViewEntryViewModel2PointO viewModel) {
+    // viewModel.selectedVehicle != null
+    //     ? selectedRegNoController.text =
+    //         viewModel.selectedVehicle.registrationNumber
+    //     : selectedRegNoController.text = "";
     return appTextFormField(
       enabled: true,
       controller: selectedRegNoController,
@@ -123,55 +168,24 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
     );
   }
 
-  Widget getExpenseListButton({ViewExpensesViewModel viewModel}) {
-    return SizedBox(
-      height: buttonHeight,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
-          child: Text("Get Expenses List"),
-          onPressed: () {
-            //!
-            // if (viewModel.selectedClient == null) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Client');
-            // } else if (viewModel.selectedDuration.length == 0) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Duration');
-            // } else {
-            //   if (selectedRegNoController.text.length != 0) {
-            //     viewModel.vehicleRegNumber =
-            //         selectedRegNoController.text.toUpperCase();
-            //   }
-            //   viewModel.getExpensesList(
-            //       selectedRegNoController.text.toUpperCase(),
-            //       viewModel.selectedDuration);
-            // }
-            //!
-            if (viewModel.selectedDuration.length != 0) {
-              // if (selectedRegNoController.text.length != 0) {
-              //   viewModel.vehicleRegNumber = selectedRegNoController.text;
-              // }
-              viewModel.getExpensesList(
-                regNum: selectedRegNoController.text.trim().toUpperCase(),
-                selectedDuration: viewModel.selectedDuration,
-                clientId: viewModel.selectedClient != null
-                    ? viewModel.selectedClient.id.toString()
-                    : '',
-                // viewModel.selectedClient != null
-                //     ? viewModel.selectedClient.id.toString()
-                //     : null,
-              );
-            } else {
-              viewModel.snackBarService
-                  .showSnackbar(message: 'Please select Duration');
-            }
-          },
-        ),
-      ),
-    );
-  }
+  // selectRegButton(BuildContext context, ViewEntryViewModel2PointO viewModel) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 5.0, right: 4),
+
+  //     child: appSuffixIconButton(
+
+  //       icon: Icon(Icons.search),
+  //       onPressed: () {
+  //         if (selectedRegNoController.text.length == 0) {
+  //           viewModel.snackBarService
+  //               .showSnackbar(message: 'Please fill all the fields');
+  //         } else {
+  //           viewModel.search(selectedRegNoController.text.toUpperCase());
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
 }
 
 class ClientsDropDown extends StatefulWidget {
