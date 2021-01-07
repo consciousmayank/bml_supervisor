@@ -2,7 +2,6 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 
@@ -119,7 +118,8 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
     // print(clientsList);
   }
 
-  void vehicleEntrySearch(String regNum, String selectedDuration) async {
+  void vehicleEntrySearch(
+      {String regNum, String selectedDuration, String clientId}) async {
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     // int selectedClientValue = selectedClient == 'BOOK MY LOADING' ? 0 : 1;
     vehicleEntrySearchResponse.clear();
@@ -130,7 +130,7 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
       final res = await apiService.vehicleEntrySearch(
         registrationNumber: regNum,
         duration: selectedDurationValue,
-        clientId: selectedClient.id.toString(),
+        clientId: clientId,
       );
 
       if (res.statusCode == 200) {

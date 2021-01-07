@@ -4,8 +4,9 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 
 class ViewExpensesDetailedView extends StatefulWidget {
-  final List<ViewExpensesResponse> viewExpensesDetailedList;
-  ViewExpensesDetailedView({this.viewExpensesDetailedList});
+  // final List<ViewExpensesResponse> viewExpensesDetailedList;
+  final Map<String, dynamic> arguments;
+  ViewExpensesDetailedView({this.arguments});
   @override
   _ViewExpensesDetailedViewState createState() =>
       _ViewExpensesDetailedViewState();
@@ -15,6 +16,8 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
   @override
   Widget build(BuildContext context) {
     // print('expense type: $test');
+    final viewExpensesDetailedList =
+        widget.arguments['viewExpensesDetailedList'];
     return Scaffold(
       appBar: AppBar(
         title: Text('View Expenses - Detailed List'),
@@ -24,7 +27,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
         child: Column(
           children: [
             Expanded(
-              child: searchResults(context, widget.viewExpensesDetailedList),
+              child: searchResults(context, viewExpensesDetailedList),
             ),
           ],
         ),
@@ -37,11 +40,11 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
     return ListView.builder(
         itemBuilder: (context, index) {
           // ! Below code is imp, helps to show custom header in a ListView
-          // if (index == 0) {
-          //    return the header
-          //   return _buildChip();
-          // }
-          // index -= 1;
+          if (index == 0) {
+            // return the header chip
+            return _buildHeader();
+          }
+          index -= 1;
 
           return InkWell(
               onTap: () {
@@ -139,6 +142,60 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                 ),
               ));
         },
-        itemCount: viewExpenseResponse.length);
+        // ! length + 1 is the compensation of including buildHeader()
+        itemCount: viewExpenseResponse.length + 1);
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: getSidePadding(context: context),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: buildHeaderChip(
+                    title: 'TOTAL EXPENSES (INR)',
+                    value: widget.arguments['totalExpenses'].toStringAsFixed(2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildHeaderChip({String title, String value}) {
+    return Chip(
+      labelPadding: EdgeInsets.all(2.0),
+      label: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              title,
+              // style: TextStyle(fontSize: 20),
+            ),
+            wSizedBox(20),
+            Text(
+              value,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Color.fromARGB(255, 52, 58, 64),
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
+    );
   }
 }

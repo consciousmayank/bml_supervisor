@@ -63,19 +63,23 @@ class ApiService {
     print('client id before api call: $clientId');
     try {
       if (registrationNumber.length != 0 && clientId.length != 0) {
+        print('api_service: v + c + d');
         response = await dioClient.getDio().get(
             '$VIEW_ENTRY/vehicle/$registrationNumber/client/$clientId/period/$duration');
         registrationNumber = '';
       } else if (registrationNumber.length != 0 && clientId.length == 0) {
+        print('api_service: v + d');
         response = await dioClient
             .getDio()
             .get('$VIEW_ENTRY/vehicle/$registrationNumber/period/$duration');
         registrationNumber = '';
       } else if (registrationNumber.length == 0 && clientId.length != 0) {
+        print('api_service: c + d');
         response = await dioClient
             .getDio()
             .get('$VIEW_ENTRY/client/$clientId/period/$duration');
       } else {
+        print('api_service: d');
         response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
       }
     } on DioError catch (e) {
@@ -147,24 +151,53 @@ class ApiService {
     return response;
   }
 
-  Future getExpensesList({String regNum, String duration}) async {
+  Future getExpensesList({
+    String registrationNumber,
+    String duration,
+    String clientId,
+  }) async {
     Response response;
     // print('reg num is api' + regNo);
+    print('api_service: regNu-$registrationNumber clientId-$clientId');
     try {
-      // print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
-      if (regNum != null) {
-        print('/vehicle/expenses/find/$regNum/period/$duration');
-
+      //!start
+      if (registrationNumber.length != 0 && clientId.length != 0) {
+        print(
+            'api v + c + d: /expenses/view/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        response = await dioClient.getDio().get(
+            '/expenses/view/vehicle/$registrationNumber/client/$clientId/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length != 0 && clientId.length == 0) {
+        print(
+            'api v + d: /expenses/view/vehicle/$registrationNumber/period/$duration');
         response = await dioClient
             .getDio()
-            .get('/vehicle/expenses/find/$regNum/period/$duration');
+            .get('/expenses/view/vehicle/$registrationNumber/period/$duration');
+        registrationNumber = '';
+      } else if (registrationNumber.length == 0 && clientId.length != 0) {
+        print('api c + d: /expenses/view/client/$clientId/period/$duration');
+        response = await dioClient
+            .getDio()
+            .get('/expenses/view/client/$clientId/period/$duration');
       } else {
-        print('/vehicle/expenses/find/period/$duration');
-
-        response = await dioClient
-            .getDio()
-            .get('/vehicle/expenses/find/period/$duration');
+        print('api d : /expenses/view/period/$duration');
+        response =
+            await dioClient.getDio().get('/expenses/view/period/$duration');
       }
+      //!end
+      // print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
+      // if (registrationNumber != null) {
+      //   print('/vehicle/expenses/find/$registrationNumber/period/$duration');
+
+      //   response = await dioClient
+      //       .getDio()
+      //       .get('/vehicle/expenses/find/$registrationNumber/period/$duration');
+      // } else {
+      //   print('/expenses/view/period/$duration');
+
+      //   response =
+      //       await dioClient.getDio().get('/expenses/view/period/$duration');
+      // }
       // response = await dioClient.getDio().get(
       //       GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
       //     );

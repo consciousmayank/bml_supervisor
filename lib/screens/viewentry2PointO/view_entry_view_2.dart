@@ -34,8 +34,8 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
               Column(
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  registrationSelector(context: context, viewModel: viewModel),
                   selectClient(viewModel: viewModel),
+                  registrationSelector(context: context, viewModel: viewModel),
                   selectDuration(viewModel: viewModel),
                 ],
               ),
@@ -76,21 +76,43 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
         child: RaisedButton(
           child: Text("Search Entry"),
           onPressed: () {
-            if (viewModel.selectedClient == null) {
-              viewModel.snackBarService
-                  .showSnackbar(message: 'Please select Client');
-            } else if (viewModel.selectedDuration.length == 0) {
+            //!
+            if (viewModel.selectedDuration.length != 0) {
+              // if (selectedRegNoController.text.length != 0) {
+              //   viewModel.selectedRegistrationNumber =
+              //       selectedRegNoController.text;
+              // }
+              viewModel.vehicleEntrySearch(
+                regNum: selectedRegNoController.text.trim().toUpperCase(),
+                selectedDuration: viewModel.selectedDuration,
+                clientId: viewModel.selectedClient != null
+                    ? viewModel.selectedClient.id.toString()
+                    : '',
+              );
+            } else {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please select Duration');
-            } else {
-              if (selectedRegNoController.text.length != 0) {
-                viewModel.selectedRegistrationNumber =
-                    selectedRegNoController.text.toUpperCase();
-              }
-              viewModel.vehicleEntrySearch(
-                  selectedRegNoController.text.toUpperCase(),
-                  viewModel.selectedDuration);
             }
+            //!
+            // if (viewModel.selectedClient == null) {
+            //   viewModel.snackBarService
+            //       .showSnackbar(message: 'Please select Client');
+            // } else if (viewModel.selectedDuration.length == 0) {
+            //   viewModel.snackBarService
+            //       .showSnackbar(message: 'Please select Duration');
+            // } else {
+            //   if (selectedRegNoController.text.length != 0) {
+            //     viewModel.selectedRegistrationNumber =
+            //         selectedRegNoController.text.toUpperCase();
+            //   }
+            //   viewModel.vehicleEntrySearch(
+            //     selectedRegNoController.text.toUpperCase(),
+            //     viewModel.selectedDuration,
+            //     viewModel.selectedClient != null
+            //         ? viewModel.selectedClient.id.toString()
+            //         : '',
+            //   );
+            // }
           },
         ),
       ),

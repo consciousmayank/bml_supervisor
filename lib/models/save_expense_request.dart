@@ -13,6 +13,7 @@ class SaveExpenseRequest {
     @required this.expenseAmount,
     @required this.expenseDesc,
     @required this.status,
+    @required this.clientId,
   });
 
   final String vehicleId;
@@ -21,6 +22,7 @@ class SaveExpenseRequest {
   final double expenseAmount;
   final String expenseDesc;
   final bool status;
+  final int clientId;
 
   SaveExpenseRequest copyWith({
     String vehicleId,
@@ -29,6 +31,7 @@ class SaveExpenseRequest {
     int expenseAmount,
     String expenseDesc,
     bool status,
+    int clientId,
   }) =>
       SaveExpenseRequest(
         vehicleId: vehicleId ?? this.vehicleId,
@@ -37,6 +40,7 @@ class SaveExpenseRequest {
         expenseAmount: expenseAmount ?? this.expenseAmount,
         expenseDesc: expenseDesc ?? this.expenseDesc,
         status: status ?? this.status,
+        clientId: clientId ?? this.clientId,
       );
 
   factory SaveExpenseRequest.fromJson(String str) =>
@@ -52,6 +56,7 @@ class SaveExpenseRequest {
         expenseAmount: json["expenseAmount"],
         expenseDesc: json["expenseDesc"],
         status: json["status"],
+        clientId: json["clientId"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -61,5 +66,6 @@ class SaveExpenseRequest {
         "expenseAmount": expenseAmount,
         "expenseDesc": expenseDesc,
         "status": status,
+        "clientId": clientId,
       };
 }

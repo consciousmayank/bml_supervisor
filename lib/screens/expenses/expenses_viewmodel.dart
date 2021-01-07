@@ -4,6 +4,7 @@ import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:dio/dio.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
@@ -113,8 +114,64 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  List<GetClientsResponse> _clientsList = [];
+
+  List<GetClientsResponse> get clientsList => _clientsList;
+
+  set clientsList(List<GetClientsResponse> value) {
+    _clientsList = value;
+    notifyListeners();
+  }
+
+  GetClientsResponse _selectedClient;
+  GetClientsResponse get selectedClient => _selectedClient;
+
+  set selectedClient(GetClientsResponse selectedClient) {
+    _selectedClient = selectedClient;
+    notifyListeners();
+  }
+
   void takeToSearch() async {
     selectedSearchVehicle = await navigationService.navigateTo(searchPageRoute);
+  }
+
+  getClients() async {
+    setBusy(true);
+    clientsList = [];
+    // call client api
+    // get the data as list
+    // add Book my loading at 0
+    // pupulate the clients dropdown
+    var response = await apiService.getClientsList();
+
+    if (response is String) {
+      snackBarService.showSnackbar(message: response);
+    } else {
+      Response apiResponse = response;
+      var clientsList = apiResponse.data as List;
+
+      clientsList.forEach((element) {
+        GetClientsResponse getClientsResponse =
+            GetClientsResponse.fromMap(element);
+        this.clientsList.add(getClientsResponse);
+      });
+      this.clientsList.insert(
+            0,
+            GetClientsResponse(
+              id: 0,
+              title: 'Book My Loading',
+            ),
+          );
+    }
+
+    setBusy(false);
+    notifyListeners();
+    print('Number of clients: ${clientsList.length}');
+    clientsList.forEach((element) {
+      print(element.id);
+      print(element.title);
+    });
+    // print(clientsList);
   }
 
   // Future getExpensesList(

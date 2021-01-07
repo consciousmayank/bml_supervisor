@@ -69,10 +69,11 @@ class AppRouter {
         );
 
       case viewExpensesDetailedViewPageRoute:
-        List<ViewExpensesResponse> args = settings.arguments;
+        Map<String, dynamic> args = settings.arguments;
+        // List<ViewExpensesResponse> args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => ViewExpensesDetailedView(
-            viewExpensesDetailedList: args,
+            arguments: args,
           ),
         );
 

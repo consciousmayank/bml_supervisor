@@ -219,7 +219,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
                 .showSnackbar(message: 'Please provide Reg no.');
           } else {
             viewModel.getEntryLogForLastDate(
-                selectedRegNoController.text.toUpperCase());
+                selectedRegNoController.text.trim().toUpperCase());
           }
         },
       ),
