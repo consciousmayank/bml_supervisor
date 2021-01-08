@@ -55,31 +55,32 @@ class ApiService {
 
 // Added by Vikas
   Future<Response> vehicleEntrySearch({
-    String registrationNumber,
+    String regNum,
     String clientId,
     int duration,
   }) async {
     Response response;
     print('client id before api call: $clientId');
     try {
-      if (registrationNumber.length != 0 && clientId.length != 0) {
-        print('api_service: v + c + d');
+      if (regNum.length != 0 && clientId.length != 0) {
+        print(
+            'view_entry_api=====$VIEW_ENTRY/vehicle/$regNum/client/$clientId/period/$duration');
         response = await dioClient.getDio().get(
-            '$VIEW_ENTRY/vehicle/$registrationNumber/client/$clientId/period/$duration');
-        registrationNumber = '';
-      } else if (registrationNumber.length != 0 && clientId.length == 0) {
-        print('api_service: v + d');
+            '$VIEW_ENTRY/vehicle/$regNum/client/$clientId/period/$duration');
+        regNum = '';
+      } else if (regNum.length != 0 && clientId.length == 0) {
+        print('api_service: $VIEW_ENTRY/vehicle/$regNum/period/$duration');
         response = await dioClient
             .getDio()
-            .get('$VIEW_ENTRY/vehicle/$registrationNumber/period/$duration');
-        registrationNumber = '';
-      } else if (registrationNumber.length == 0 && clientId.length != 0) {
-        print('api_service: c + d');
+            .get('$VIEW_ENTRY/vehicle/$regNum/period/$duration');
+        regNum = '';
+      } else if (regNum.length == 0 && clientId.length != 0) {
+        print('api_service: $VIEW_ENTRY/client/$clientId/period/$duration');
         response = await dioClient
             .getDio()
             .get('$VIEW_ENTRY/client/$clientId/period/$duration');
       } else {
-        print('api_service: d');
+        print('api_service: $VIEW_ENTRY/period/$duration');
         response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
       }
     } on DioError catch (e) {
@@ -110,7 +111,7 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
-    print(body);
+    print('entry in api_service========$body');
 
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
@@ -139,7 +140,7 @@ class ApiService {
 
   Future addExpense({SaveExpenseRequest request}) async {
     String body = request.toJson();
-    print('before saving expense: ' + body);
+    print('add expense in api_servie=========: ' + body);
 
     Response response;
     try {

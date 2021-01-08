@@ -171,7 +171,8 @@ class _ViewEntryDetailedView2Point0State
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Date',
+                            vehicleEntrySearchResponse[index].vehicleId,
+                            // 'Date',
                             style: const TextStyle(color: Colors.white),
                           ),
                           Text(

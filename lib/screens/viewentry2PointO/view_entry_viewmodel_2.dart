@@ -128,7 +128,7 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
     setBusy(true);
     try {
       final res = await apiService.vehicleEntrySearch(
-        registrationNumber: regNum,
+        regNum: regNum,
         duration: selectedDurationValue,
         clientId: clientId,
       );
@@ -168,14 +168,11 @@ class ViewEntryViewModel2PointO extends GeneralisedBaseViewModel {
             }
             takeToViewEntryDetailedPage2Point0();
           } else {
-            snackBarService.showSnackbar(
-                message:
-                    "No Results found for \"$selectedRegistrationNumber\"");
+            snackBarService.showSnackbar(message: "No Results found");
           }
         } else if (res.data['status'].toString() == 'failed') {
           print('res status is falied');
-          snackBarService.showSnackbar(
-              message: 'No Result for $selectedRegistrationNumber');
+          snackBarService.showSnackbar(message: 'No Result');
         }
       }
     } on DioError catch (e) {
