@@ -65,6 +65,8 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   int startReadingHidden, drivenKmHidden;
   final _controller = ScrollController();
 
+  DialogService endReadingDialog = locator<DialogService>();
+
   @override
   void initState() {
     // final entryDate = widget.arguments['entryDateArg'];
@@ -73,7 +75,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     endReadingFocusNode.addListener(endReadingListener);
     fuelReadingFocusNode.addListener(fuelEntryListener);
     fuelRateFocusNode.addListener(fuelRateListener);
-    fuelMeterReadingFocusNode.addListener(fuelMeterReadingListener);
+    // fuelMeterReadingFocusNode.addListener(fuelMeterReadingListener); //! Fuel meter reading listener
     super.initState();
   }
 
@@ -82,7 +84,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
       if (int.parse(endReadingController.text) -
               int.parse(initialReadingController.text) <=
           0) {
-        await locator<DialogService>()
+        await endReadingDialog
             .showConfirmationDialog(
           barrierDismissible: true,
           title: 'Vehicle End Reading Error',
@@ -90,6 +92,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
         )
             .then((value) {
           endReadingController.clear();
+          endReadingFocusNode.unfocus();
         });
       } else {
         distanceDrivenController.text = (int.parse(endReadingController.text) -
@@ -141,6 +144,17 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
           .then((value) {
         fuelMeterReadingController.clear();
       });
+    }
+  }
+
+  bool isFuelMeterReadingCorrect() {
+    if (!(getDoubleValue(initialReadingController.text) <=
+            getDoubleValue(fuelMeterReadingController.text.trim()) &&
+        getDoubleValue(fuelMeterReadingController.text.trim()) <=
+            getDoubleValue(endReadingController.text))) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -334,43 +348,50 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
                       'in form page-selected client id: ${widget.arguments['selectedClientId']}');
                   // print(
                   //     'in form page-selected client: ${viewModel.selectedClient.title}');
+                  // if (isFuelMeterReadingCorrect()) {
                   if (_formKey.currentState.validate()) {
-                    viewModel.submitVehicleEntry(EntryLog(
-                      clientId: widget.arguments['selectedClientId'],
-                      vehicleId: widget.arguments['regNumArg'],
-                      entryDate: DateFormat('dd-MM-yyyy')
-                          .format(viewModel.entryDate)
-                          .toLowerCase(),
-                      startReading: startReadingHidden,
-                      endReading: int.parse(endReadingController.text.trim()),
-                      drivenKm: drivenKmHidden,
-                      fuelLtr: viewModel.isFuelEntryAdded
-                          ? double.parse(fuelReadingController.text.trim())
-                          : 0.00,
-                      fuelMeterReading: viewModel.isFuelEntryAdded
-                          ? int.parse(fuelMeterReadingController.text.trim())
-                          : 0,
-                      ratePerLtr: viewModel.isFuelEntryAdded
-                          ? double.parse(fuelRateController.text.trim())
-                          : 0.00,
-                      amountPaid: viewModel.isFuelEntryAdded
-                          ? double.parse(fuelAmountController.text.trim())
-                          : 0.00,
-                      trips: viewModel.undertakenTrips,
-                      loginTime: getTimeIn24Hrs(
-                          timeToBeConverted: viewModel.loginTime,
-                          context: context),
-                      logoutTime: getTimeIn24Hrs(
-                          timeToBeConverted: viewModel.logoutTime,
-                          context: context),
-                      remarks: remarksController.text.trim(),
-                      status: false,
-                      drivenKmGround:
-                          int.parse(distanceDrivenController.text.trim()),
-                      startReadingGround:
-                          int.parse(initialReadingController.text.trim()),
-                    ));
+                    if (isFuelMeterReadingCorrect()) {
+                      viewModel.submitVehicleEntry(EntryLog(
+                        clientId: widget.arguments['selectedClientId'],
+                        vehicleId: widget.arguments['regNumArg'],
+                        entryDate: DateFormat('dd-MM-yyyy')
+                            .format(viewModel.entryDate)
+                            .toLowerCase(),
+                        startReading: startReadingHidden,
+                        endReading: int.parse(endReadingController.text.trim()),
+                        drivenKm: drivenKmHidden,
+                        fuelLtr: viewModel.isFuelEntryAdded
+                            ? double.parse(fuelReadingController.text.trim())
+                            : 0.00,
+                        fuelMeterReading: viewModel.isFuelEntryAdded
+                            ? int.parse(fuelMeterReadingController.text.trim())
+                            : 0,
+                        ratePerLtr: viewModel.isFuelEntryAdded
+                            ? double.parse(fuelRateController.text.trim())
+                            : 0.00,
+                        amountPaid: viewModel.isFuelEntryAdded
+                            ? double.parse(fuelAmountController.text.trim())
+                            : 0.00,
+                        trips: viewModel.undertakenTrips,
+                        loginTime: getTimeIn24Hrs(
+                            timeToBeConverted: viewModel.loginTime,
+                            context: context),
+                        logoutTime: getTimeIn24Hrs(
+                            timeToBeConverted: viewModel.logoutTime,
+                            context: context),
+                        remarks: remarksController.text.trim(),
+                        status: false,
+                        drivenKmGround:
+                            int.parse(distanceDrivenController.text.trim()),
+                        startReadingGround:
+                            int.parse(initialReadingController.text.trim()),
+                      ));
+                    } else {
+                      viewModel.snackBarService
+                          .showSnackbar(message: "Wrong Reading");
+                    }
                   }
+                  // }
                 },
                 child: Text("Submit"),
               ),
@@ -473,7 +494,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
       labelText: "End Reading in Km",
       onFieldSubmitted: (_) {
         // fieldFocusChange(
-        //     context, endReadingFocusNode, vehicleLoadCapacityFocusNode);
+        // context, endReadingFocusNode, vehicleLoadCapacityFocusNode);
       },
       validator: (value) {
         if (value.isEmpty) {

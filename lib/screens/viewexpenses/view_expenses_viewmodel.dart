@@ -153,8 +153,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
       if (res.data is! List) {
         print('data is not list');
-        snackBarService.showSnackbar(
-            message: "No Results found for $vehicleRegNumber");
+        snackBarService.showSnackbar(message: "No Results found for $regNum");
       } else {
         if (res.statusCode == 200) {
           var list = res.data as List;
@@ -170,7 +169,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
             takeToViewExpenseDetailedPage();
           } else {
             snackBarService.showSnackbar(
-                message: "No Results found for \"$vehicleRegNumber\"");
+                message: "No Results found for \"$regNum\"");
           }
         }
       }

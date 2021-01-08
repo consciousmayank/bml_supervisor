@@ -112,8 +112,7 @@ class ViewEntryViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     try {
       final res = await apiService.vehicleEntrySearch(
-          registrationNumber: registrationNumber,
-          duration: selectedDurationValue);
+          regNum: registrationNumber, duration: selectedDurationValue);
       if (res.statusCode == 200) {
         var list = res.data as List;
         if (list.length > 0) {

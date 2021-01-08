@@ -103,10 +103,10 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
   }
 
   Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
-    viewModel.selectedSearchVehicle != null
-        ? selectedRegNoController.text =
-            viewModel.selectedSearchVehicle.registrationNumber
-        : selectedRegNoController.text = "";
+    // viewModel.selectedSearchVehicle != null
+    //     ? selectedRegNoController.text =
+    //         viewModel.selectedSearchVehicle.registrationNumber
+    //     : selectedRegNoController.text = "";
     return appTextFormField(
       enabled: true,
       controller: selectedRegNoController,
