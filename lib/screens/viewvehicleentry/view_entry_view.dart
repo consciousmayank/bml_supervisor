@@ -1,26 +1,26 @@
-import 'package:bml_supervisor/screens/viewentry2PointO/view_entry_viewmodel_2.dart';
+import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_viewmodel.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 
-class ViewEntryView2PointO extends StatefulWidget {
+class ViewVehicleEntryView extends StatefulWidget {
   @override
-  _ViewEntryView2PointOState createState() => _ViewEntryView2PointOState();
+  _ViewVehicleEntryViewState createState() => _ViewVehicleEntryViewState();
 }
 
-class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
+class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ViewEntryViewModel2PointO>.reactive(
+    return ViewModelBuilder<ViewVehicleEntryViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -52,11 +52,11 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
         //   ],
         // ),
       ),
-      viewModelBuilder: () => ViewEntryViewModel2PointO(),
+      viewModelBuilder: () => ViewVehicleEntryViewModel(),
     );
   }
 
-  Widget selectClient({ViewEntryViewModel2PointO viewModel}) {
+  Widget selectClient({ViewVehicleEntryViewModel viewModel}) {
     return ClientsDropDown(
       optionList: viewModel.clientsList,
       hint: "Select Client",
@@ -67,7 +67,7 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
     );
   }
 
-  Widget searchEntryButton({ViewEntryViewModel2PointO viewModel}) {
+  Widget searchEntryButton({ViewVehicleEntryViewModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
       width: double.infinity,
@@ -119,7 +119,7 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
     );
   }
 
-  Widget selectDuration({ViewEntryViewModel2PointO viewModel}) {
+  Widget selectDuration({ViewVehicleEntryViewModel viewModel}) {
     return AppDropDown(
       optionList: selectDurationList,
       hint: "Select Duration",
@@ -134,7 +134,7 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
   }
 
   registrationSelector(
-      {BuildContext context, ViewEntryViewModel2PointO viewModel}) {
+      {BuildContext context, ViewVehicleEntryViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -147,7 +147,7 @@ class _ViewEntryView2PointOState extends State<ViewEntryView2PointO> {
     );
   }
 
-  registrationNumberTextField(ViewEntryViewModel2PointO viewModel) {
+  registrationNumberTextField(ViewVehicleEntryViewModel viewModel) {
     // viewModel.selectedVehicle != null
     //     ? selectedRegNoController.text =
     //         viewModel.selectedVehicle.registrationNumber

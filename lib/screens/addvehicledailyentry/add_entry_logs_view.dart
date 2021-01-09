@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'add_entry_logs_viewmodel_2.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 
-class AddEntryLogsView2PointO extends StatefulWidget {
+import 'add_entry_logs_viewmodel.dart';
+
+class AddVehicleEntryView extends StatefulWidget {
   @override
-  _AddEntryLogsView2PointOState createState() =>
-      _AddEntryLogsView2PointOState();
+  _AddVehicleEntryViewState createState() => _AddVehicleEntryViewState();
 }
 
-class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
+class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
   final _formKey = GlobalKey<FormState>();
   final _controller = ScrollController();
   final TextEditingController selectedRegNoController = TextEditingController();
@@ -27,7 +27,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AddEntryLogsViewModel2PointO>.reactive(
+    return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -60,11 +60,11 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
                 ),
               ),
       ),
-      viewModelBuilder: () => AddEntryLogsViewModel2PointO(),
+      viewModelBuilder: () => AddVehicleEntryViewModel(),
     );
   }
 
-  Widget addEntryButton({AddEntryLogsViewModel2PointO viewModel}) {
+  Widget addEntryButton({AddVehicleEntryViewModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
       width: double.infinity,
@@ -81,7 +81,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  Widget selectClient({AddEntryLogsViewModel2PointO viewModel}) {
+  Widget selectClient({AddVehicleEntryViewModel viewModel}) {
     return ClientsDropDown(
       optionList: viewModel.clientsList,
       hint: "Select Client",
@@ -96,7 +96,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  dateSelector({BuildContext context, AddEntryLogsViewModel2PointO viewModel}) {
+  dateSelector({BuildContext context, AddVehicleEntryViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -106,8 +106,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  selectDateButton(
-      BuildContext context, AddEntryLogsViewModel2PointO viewModel) {
+  selectDateButton(BuildContext context, AddVehicleEntryViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0, right: 4),
       child: appSuffixIconButton(
@@ -126,7 +125,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  Future<DateTime> selectDate(AddEntryLogsViewModel2PointO viewModel) async {
+  Future<DateTime> selectDate(AddVehicleEntryViewModel viewModel) async {
     DateTime picked = await showDatePicker(
       builder: (BuildContext context, Widget child) {
         return Theme(
@@ -158,7 +157,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     return picked;
   }
 
-  selectedDateTextField(AddEntryLogsViewModel2PointO viewModel) {
+  selectedDateTextField(AddVehicleEntryViewModel viewModel) {
     return appTextFormField(
       enabled: false,
       controller: selectedDateController,
@@ -170,7 +169,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
   }
 
   registrationSelector(
-      {BuildContext context, AddEntryLogsViewModel2PointO viewModel}) {
+      {BuildContext context, AddVehicleEntryViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -183,7 +182,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  registrationNumberTextField(AddEntryLogsViewModel2PointO viewModel) {
+  registrationNumberTextField(AddVehicleEntryViewModel viewModel) {
     // viewModel.selectedVehicle != null
     //     ? selectedRegNoController.text =
     //         viewModel.selectedVehicle.registrationNumber
@@ -204,8 +203,7 @@ class _AddEntryLogsView2PointOState extends State<AddEntryLogsView2PointO> {
     );
   }
 
-  selectRegButton(
-      BuildContext context, AddEntryLogsViewModel2PointO viewModel) {
+  selectRegButton(BuildContext context, AddVehicleEntryViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5.0, right: 4),
       child: appSuffixIconButton(

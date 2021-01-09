@@ -25,7 +25,7 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detailed View Entry'),
+        title: Text('Detailed View Entry 2.0'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -54,49 +54,17 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
             children: [
               Expanded(
                 flex: 1,
-                child: Chip(
-                  labelPadding: EdgeInsets.all(2.0),
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('KILOMETERS'),
-                      wSizedBox(20),
-                      Text(
-                        widget.arguments['totalKm'].toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Color.fromARGB(255, 52, 58, 64),
-                  elevation: 6.0,
-                  shadowColor: Colors.grey[60],
-                  padding: EdgeInsets.all(8.0),
+                child: buildViewEntrySummary(
+                  title: 'KMS',
+                  value: widget.arguments['totalKm'].toString(),
                 ),
               ),
               wSizedBox(10),
               Expanded(
                 flex: 1,
-                child: Chip(
-                  labelPadding: EdgeInsets.all(2.0),
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('KM. DIFF'),
-                      wSizedBox(20),
-                      Text(
-                        widget.arguments['kmDifference'].toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Color.fromARGB(255, 52, 58, 64),
-                  elevation: 6.0,
-                  shadowColor: Colors.grey[60],
-                  padding: EdgeInsets.all(8.0),
+                child: buildViewEntrySummary(
+                  title: 'KM. DIFF',
+                  value: widget.arguments['kmDifference'].toString(),
                 ),
               ),
             ],
@@ -105,49 +73,17 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
             children: [
               Expanded(
                 flex: 1,
-                child: Chip(
-                  labelPadding: EdgeInsets.all(2.0),
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('FUEL (LTR)'),
-                      wSizedBox(20),
-                      Text(
-                        widget.arguments['totalFuelInLtr'].toStringAsFixed(2),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Color.fromARGB(255, 52, 58, 64),
-                  elevation: 6.0,
-                  shadowColor: Colors.grey[60],
-                  padding: EdgeInsets.all(8.0),
+                child: buildViewEntrySummary(
+                  title: 'FUEL (LTR)',
+                  value: widget.arguments['totalFuelInLtr'].toStringAsFixed(2),
                 ),
               ),
               wSizedBox(10),
               Expanded(
                 flex: 1,
-                child: Chip(
-                  labelPadding: EdgeInsets.all(2.0),
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('AVG./LTR.'),
-                      wSizedBox(20),
-                      Text(
-                        widget.arguments['avgPerLitre'].toStringAsFixed(2),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  backgroundColor: Color.fromARGB(255, 52, 58, 64),
-                  elevation: 6.0,
-                  shadowColor: Colors.grey[60],
-                  padding: EdgeInsets.all(8.0),
+                child: buildViewEntrySummary(
+                  title: 'AVG./LTR',
+                  value: widget.arguments['avgPerLitre'].toStringAsFixed(2),
                 ),
               ),
             ],
@@ -157,31 +93,46 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
             children: [
               Expanded(
                 flex: 1,
-                child: Chip(
-                  labelPadding: EdgeInsets.all(2.0),
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('AMOUNT (INR)'),
-                      wSizedBox(20),
-                      Text(
-                        widget.arguments['totalFuelAmt'].toStringAsFixed(2),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                child: Container(
+                  child: buildViewEntrySummary(
+                    title: 'AMOUNT (INR)',
+                    value: widget.arguments['totalFuelAmt'].toStringAsFixed(2),
                   ),
-                  backgroundColor: Color.fromARGB(255, 52, 58, 64),
-                  elevation: 6.0,
-                  shadowColor: Colors.grey[60],
-                  padding: EdgeInsets.all(8.0),
                 ),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildViewEntrySummary({String title, String value}) {
+    return Chip(
+      labelPadding: EdgeInsets.all(2.0),
+      label: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              title,
+              // style: TextStyle(fontSize: 20),
+            ),
+            wSizedBox(20),
+            Text(
+              value,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Color.fromARGB(255, 52, 58, 64),
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
     );
   }
 
@@ -218,7 +169,8 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Date',
+                            vehicleEntrySearchResponse[index].vehicleId,
+                            // 'Date',
                             style: const TextStyle(color: Colors.white),
                           ),
                           Text(

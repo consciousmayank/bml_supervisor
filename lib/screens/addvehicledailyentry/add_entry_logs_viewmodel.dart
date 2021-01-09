@@ -1,14 +1,14 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AddEntryLogsViewModel2PointO extends GeneralisedBaseViewModel {
+class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   int _flagForSearch = 0; // [0-Search Via LastEntryDate, 1-Search Via Reg Num ]
 //  int _flagForSearch;
   int get flagForSearch => _flagForSearch;
