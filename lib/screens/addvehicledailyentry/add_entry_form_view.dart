@@ -347,58 +347,58 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
                   print('submit btn pressed');
                   print(
                       'in form page-selected client id: ${widget.arguments['selectedClientId']}');
-                  // print(
-                  //     'in form page-selected client: ${viewModel.selectedClient.title}');
-                  // if (isFuelMeterReadingCorrect()) {
-                  if (_formKey.currentState.validate()) {
+
+                  if (!viewModel.isFuelEntryAdded) {
+                    addVehicleEntry(viewModel);
+                  } else {
                     if (isFuelMeterReadingCorrect()) {
-                      viewModel.submitVehicleEntry(EntryLog(
-                        clientId: widget.arguments['selectedClientId'],
-                        vehicleId: widget.arguments['regNumArg'],
-                        entryDate: DateFormat('dd-MM-yyyy')
-                            .format(viewModel.entryDate)
-                            .toLowerCase(),
-                        startReading: startReadingHidden,
-                        endReading: int.parse(endReadingController.text.trim()),
-                        drivenKm: drivenKmHidden,
-                        fuelLtr: viewModel.isFuelEntryAdded
-                            ? double.parse(fuelReadingController.text.trim())
-                            : 0.00,
-                        fuelMeterReading: viewModel.isFuelEntryAdded
-                            ? int.parse(fuelMeterReadingController.text.trim())
-                            : 0,
-                        ratePerLtr: viewModel.isFuelEntryAdded
-                            ? double.parse(fuelRateController.text.trim())
-                            : 0.00,
-                        amountPaid: viewModel.isFuelEntryAdded
-                            ? double.parse(fuelAmountController.text.trim())
-                            : 0.00,
-                        trips: viewModel.undertakenTrips,
-                        loginTime: getTimeIn24Hrs(
-                            timeToBeConverted: viewModel.loginTime,
-                            context: context),
-                        logoutTime: getTimeIn24Hrs(
-                            timeToBeConverted: viewModel.logoutTime,
-                            context: context),
-                        remarks: remarksController.text.trim(),
-                        status: false,
-                        drivenKmGround:
-                            int.parse(distanceDrivenController.text.trim()),
-                        startReadingGround:
-                            int.parse(initialReadingController.text.trim()),
-                      ));
+                      addVehicleEntry(viewModel);
                     } else {
-                      viewModel.snackBarService
-                          .showSnackbar(message: "Wrong Reading");
+                      viewModel.snackBarService.showSnackbar(
+                          message: 'Please enter correct meter reading');
                     }
                   }
-                  // }
                 },
                 child: Text("Submit"),
               ),
             )
           : Container()
     ];
+  }
+
+  void addVehicleEntry(AddVehicleEntryViewModel viewModel) {
+    if (_formKey.currentState.validate()) {
+      viewModel.submitVehicleEntry(EntryLog(
+        clientId: widget.arguments['selectedClientId'],
+        vehicleId: widget.arguments['regNumArg'],
+        entryDate:
+            DateFormat('dd-MM-yyyy').format(viewModel.entryDate).toLowerCase(),
+        startReading: startReadingHidden,
+        endReading: int.parse(endReadingController.text.trim()),
+        drivenKm: drivenKmHidden,
+        fuelLtr: viewModel.isFuelEntryAdded
+            ? double.parse(fuelReadingController.text.trim())
+            : 0.00,
+        fuelMeterReading: viewModel.isFuelEntryAdded
+            ? int.parse(fuelMeterReadingController.text.trim())
+            : 0,
+        ratePerLtr: viewModel.isFuelEntryAdded
+            ? double.parse(fuelRateController.text.trim())
+            : 0.00,
+        amountPaid: viewModel.isFuelEntryAdded
+            ? double.parse(fuelAmountController.text.trim())
+            : 0.00,
+        trips: viewModel.undertakenTrips,
+        loginTime: getTimeIn24Hrs(
+            timeToBeConverted: viewModel.loginTime, context: context),
+        logoutTime: getTimeIn24Hrs(
+            timeToBeConverted: viewModel.logoutTime, context: context),
+        remarks: remarksController.text.trim(),
+        status: false,
+        drivenKmGround: int.parse(distanceDrivenController.text.trim()),
+        startReadingGround: int.parse(initialReadingController.text.trim()),
+      ));
+    }
   }
 
   void setNavigationArguments(AddVehicleEntryViewModel viewModel) {
