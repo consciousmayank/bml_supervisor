@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
@@ -7,22 +6,24 @@ import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
-import 'add_entry_logs_viewmodel_2.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class AddEntry2PointOFormView extends StatefulWidget {
+import 'add_entry_logs_viewmodel.dart';
+
+class AddVehicleEntryFormView extends StatefulWidget {
   final Map<String, dynamic> arguments;
-  AddEntry2PointOFormView({this.arguments});
+  AddVehicleEntryFormView({this.arguments});
   @override
-  _AddEntry2PointOFormViewState createState() =>
-      _AddEntry2PointOFormViewState();
+  _AddVehicleEntryFormViewState createState() =>
+      _AddVehicleEntryFormViewState();
 }
 
-class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
+class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode selectedRegNoFocusNode = FocusNode();
@@ -166,7 +167,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   Widget build(BuildContext context) {
     // final entryDate = widget.arguments['entryDateArg'];
     // print('after reveiving-entryDate' + entryDate.toString());
-    return ViewModelBuilder<AddEntryLogsViewModel2PointO>.reactive(
+    return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text("Add Entry Form"),
@@ -185,11 +186,11 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
                 ),
               ),
       ),
-      viewModelBuilder: () => AddEntryLogsViewModel2PointO(),
+      viewModelBuilder: () => AddVehicleEntryViewModel(),
     );
   }
 
-  formView({BuildContext context, AddEntryLogsViewModel2PointO viewModel}) {
+  formView({BuildContext context, AddVehicleEntryViewModel viewModel}) {
     if (viewModel.selectedVehicle == null &&
         viewModel.vehicleLog == null &&
         viewModel.entryDate == null) {
@@ -227,7 +228,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   }
 
   List<Widget> mobileFormView(
-      {BuildContext context, AddEntryLogsViewModel2PointO viewModel}) {
+      {BuildContext context, AddVehicleEntryViewModel viewModel}) {
     setNavigationArguments(viewModel);
 
     return [
@@ -400,13 +401,13 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     ];
   }
 
-  void setNavigationArguments(AddEntryLogsViewModel2PointO viewModel) {
+  void setNavigationArguments(AddVehicleEntryViewModel viewModel) {
     viewModel.vehicleLog = widget.arguments['vehicleLogArg'];
     viewModel.entryDate = widget.arguments['entryDateArg'];
     viewModel.flagForSearch = widget.arguments['flagForSearchArg'];
   }
 
-  Widget startingReadingView(AddEntryLogsViewModel2PointO viewModel) {
+  Widget startingReadingView(AddVehicleEntryViewModel viewModel) {
     startReadingHidden = viewModel.flagForSearch == 0
         ? viewModel.vehicleLog.endReading
         : viewModel.vehicleLog.startReading;
@@ -524,7 +525,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   loginTimeSelector(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -537,7 +538,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   logoutTimeSelector(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -547,7 +548,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     );
   }
 
-  tripView({BuildContext context, AddEntryLogsViewModel2PointO viewModel}) {
+  tripView({BuildContext context, AddVehicleEntryViewModel viewModel}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -599,7 +600,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Widget getRemarks(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return appTextFormField(
       textCapitalization: TextCapitalization.sentences,
       maxLines: 5,
@@ -619,7 +620,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Widget getFuelEntry(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return viewModel.isFuelEntryAdded
         ? appTextFormField(
             enabled: true,
@@ -653,7 +654,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Widget getFuelRate(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return viewModel.isFuelEntryAdded
         ? appTextFormField(
             enabled: true,
@@ -689,7 +690,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Widget getFuelAmount(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return viewModel.isFuelEntryAdded
         ? appTextFormField(
             showRupeesSymbol: true,
@@ -722,7 +723,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Widget getFuelMeterReading(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel}) {
+      @required AddVehicleEntryViewModel viewModel}) {
     return viewModel.isFuelEntryAdded
         ? appTextFormField(
             enabled: true,
@@ -753,7 +754,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
         : Container();
   }
 
-  loginTimeTextField(AddEntryLogsViewModel2PointO viewModel) {
+  loginTimeTextField(AddVehicleEntryViewModel viewModel) {
     return appTextFormField(
       enabled: false,
       controller: loginTimeController,
@@ -771,7 +772,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   }
 
   selectLoginTimeButton(
-      BuildContext context, AddEntryLogsViewModel2PointO viewModel) {
+      BuildContext context, AddVehicleEntryViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0, right: 4),
       child: appSuffixIconButton(
@@ -796,7 +797,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
     return format.format(dt);
   }
 
-  logoutTimeTextField(AddEntryLogsViewModel2PointO viewModel) {
+  logoutTimeTextField(AddVehicleEntryViewModel viewModel) {
     return appTextFormField(
       enabled: false,
       controller: logoutTimeController,
@@ -814,7 +815,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   }
 
   selectLogoutTimeButton(
-      BuildContext context, AddEntryLogsViewModel2PointO viewModel) {
+      BuildContext context, AddVehicleEntryViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0, right: 4),
       child: appSuffixIconButton(
@@ -842,7 +843,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
 
   Future<TimeOfDay> pickTime(
       {@required BuildContext context,
-      @required AddEntryLogsViewModel2PointO viewModel,
+      @required AddVehicleEntryViewModel viewModel,
       @required int hoursToAdd}) async {
     TimeOfDay t = await showTimePicker(
       initialTime: getCurrentTime(context, viewModel, hoursToAdd),
@@ -864,7 +865,7 @@ class _AddEntry2PointOFormViewState extends State<AddEntry2PointOFormView> {
   double comparableTimeOfDay(TimeOfDay myTime) =>
       myTime.hour + myTime.minute / 60.0;
 
-  getCurrentTime(BuildContext context, AddEntryLogsViewModel2PointO viewModel,
+  getCurrentTime(BuildContext context, AddVehicleEntryViewModel viewModel,
       int hoursToAdd) {
     return TimeOfDay.fromDateTime(DateTime(
             viewModel.entryDate.year,
