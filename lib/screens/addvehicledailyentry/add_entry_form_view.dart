@@ -344,10 +344,6 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               width: MediaQuery.of(context).size.width,
               child: RaisedButton(
                 onPressed: () {
-                  print('submit btn pressed');
-                  print(
-                      'in form page-selected client id: ${widget.arguments['selectedClientId']}');
-
                   if (!viewModel.isFuelEntryAdded) {
                     addVehicleEntry(viewModel);
                   } else {
@@ -412,18 +408,18 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         ? viewModel.vehicleLog.endReading
         : viewModel.vehicleLog.startReading;
 
-    if (viewModel.vehicleLog != null) {
-      // if (viewModel.vehicleLog.failed != null) {
-      if (viewModel.flagForSearch == 0) {
-        print('flag is zero');
-        initialReadingController = TextEditingController(
-            text: viewModel.vehicleLog.endReading.toString());
-      } else {
-        print('flag is one');
-        initialReadingController = TextEditingController(
-            text: viewModel.vehicleLog.startReading.toString());
-      }
-    }
+    // if (viewModel.vehicleLog != null) {
+    //   // if (viewModel.vehicleLog.failed != null) {
+    //   if (viewModel.flagForSearch == 0) {
+    //     print('flag is zero');
+    //     initialReadingController = TextEditingController(
+    //         text: viewModel.vehicleLog.endReading.toString());
+    //   } else {
+    //     print('flag is one');
+    //     initialReadingController = TextEditingController(
+    //         text: viewModel.vehicleLog.startReading.toString());
+    //   }
+    // }
 
     return appTextFormField(
       enabled: true,

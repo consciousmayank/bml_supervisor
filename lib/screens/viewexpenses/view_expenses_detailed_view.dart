@@ -37,113 +37,118 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
 
   searchResults(
       BuildContext context, List<ViewExpensesResponse> viewExpenseResponse) {
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          // ! Below code is imp, helps to show custom header in a ListView
-          if (index == 0) {
-            // return the header chip
-            return _buildHeader();
-          }
-          index -= 1;
+    return Scrollbar(
+      // isAlwaysShown: true,
+      child: ListView.builder(
+          itemBuilder: (context, index) {
+            // ! Below code is imp, helps to show custom header in a ListView
+            if (index == 0) {
+              // return the header chip
+              return _buildHeader();
+            }
+            index -= 1;
 
-          return InkWell(
-              onTap: () {
-                // showViewEntryDetailPreview(
-                //     context, vehicleEntrySearchResponse[index]);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ClipRRect(
-                  borderRadius: getBorderRadius(),
-                  child: Card(
-                    elevation: 4,
-                    shape: getCardShape(),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: ThemeConfiguration.primaryBackground,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5)),
+            return InkWell(
+                onTap: () {
+                  // showViewEntryDetailPreview(
+                  //     context, vehicleEntrySearchResponse[index]);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ClipRRect(
+                    borderRadius: getBorderRadius(),
+                    child: Card(
+                      elevation: 4,
+                      shape: getCardShape(),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: ThemeConfiguration.primaryBackground,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5)),
+                            ),
+                            height: 50.0,
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  viewExpenseResponse[index].vehicleId,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                Text(
+                                  viewExpenseResponse[index]
+                                      .entryDate
+                                      .toString(),
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ),
                           ),
-                          height: 50.0,
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                viewExpenseResponse[index].vehicleId,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                viewExpenseResponse[index].entryDate.toString(),
-                                style: const TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text("Expense Type : "),
-                                    flex: 1,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                        viewExpenseResponse[index].expenseType),
-                                  )
-                                ],
-                              ),
-                              hSizedBox(5),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text("Expense Amount : "),
-                                    flex: 1,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(viewExpenseResponse[index]
-                                        .expenseAmount
-                                        .toStringAsFixed(2)),
-                                  )
-                                ],
-                              ),
-                              hSizedBox(5),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text("Expense Description: "),
-                                    flex: 1,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                        viewExpenseResponse[index].expenseDesc),
-                                  )
-                                ],
-                              ),
-                              hSizedBox(5),
-                            ],
-                          ),
-                        )
-                      ],
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text("Expense Type : "),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(viewExpenseResponse[index]
+                                          .expenseType),
+                                    )
+                                  ],
+                                ),
+                                hSizedBox(5),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text("Expense Amount : "),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(viewExpenseResponse[index]
+                                          .expenseAmount
+                                          .toStringAsFixed(2)),
+                                    )
+                                  ],
+                                ),
+                                hSizedBox(5),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text("Expense Description: "),
+                                      flex: 1,
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(viewExpenseResponse[index]
+                                          .expenseDesc),
+                                    )
+                                  ],
+                                ),
+                                hSizedBox(5),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ));
-        },
-        // ! length + 1 is the compensation of including buildHeader()
-        itemCount: viewExpenseResponse.length + 1);
+                ));
+          },
+          // ! length + 1 is the compensation of including buildHeader()
+          itemCount: viewExpenseResponse.length + 1),
+    );
   }
 
   Widget _buildHeader() {
