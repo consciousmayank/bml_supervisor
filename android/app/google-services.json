@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "775844117431",
+    "project_id": "bml-supervisor",
+    "storage_bucket": "bml-supervisor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775844117431:android:7d6d03093dab2adb028632",
+        "android_client_info": {
+          "package_name": "com.mayank.bml_supervisor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775844117431-vu7rj8pd0pn8m0doqc4l586mgarep8ac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mayank.bml_supervisor",
+            "certificate_hash": "31194501d10cd4135147e8ae1078126426aa9b91"
+          }
+        },
+        {
+          "client_id": "775844117431-jdqns35l79n4fmdp5qdr5p0hrmjto0ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDbJJXgLZczWOw3URh8zdzzwswrcyJNCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775844117431-jdqns35l79n4fmdp5qdr5p0hrmjto0ha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
