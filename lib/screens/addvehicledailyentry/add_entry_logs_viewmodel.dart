@@ -190,8 +190,8 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     // setBusy(false);
   }
 
-  setAddEntryDate(String date) {
-    var dateAsList = date.split('-');
+  setAddEntryDate(String entryDate) {
+    var dateAsList = entryDate.split('-');
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');
     DateTime time = DateTime.parse(joinedReversedDate);
