@@ -19,7 +19,7 @@ class DioConfig {
   configureDio() async {
     alice.setNavigatorKey(locator<NavigationService>().navigatorKey);
     _dio.options
-      ..baseUrl = baseRestUrlProduction //baseRestUrl
+      ..baseUrl = baseRestUrl //baseRestUrlProduction //baseRestUrl
       ..contentType = "application/json";
     _dio.interceptors.add(alice.getDioInterceptor());
     _dio.interceptors

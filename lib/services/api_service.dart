@@ -186,22 +186,6 @@ class ApiService {
             await dioClient.getDio().get('/expenses/view/period/$duration');
       }
       //!end
-      // print('${GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber)}');
-      // if (registrationNumber != null) {
-      //   print('/vehicle/expenses/find/$registrationNumber/period/$duration');
-
-      //   response = await dioClient
-      //       .getDio()
-      //       .get('/vehicle/expenses/find/$registrationNumber/period/$duration');
-      // } else {
-      //   print('/expenses/view/period/$duration');
-
-      //   response =
-      //       await dioClient.getDio().get('/expenses/view/period/$duration');
-      // }
-      // response = await dioClient.getDio().get(
-      //       GET_EXPENSES_LIST(regNo, dateFrom, toDate, pageNumber),
-      //     );
     } on DioError catch (e) {
       return e.message;
     }
