@@ -9,6 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
+  bool _startEntryEdited = false;
+
+  bool get startEntryEdited => _startEntryEdited;
+
+  set startEntryEdited(bool value) {
+    _startEntryEdited = value;
+    notifyListeners();
+  }
+
   int _flagForSearch = 0; // [0-Search Via LastEntryDate, 1-Search Via Reg Num ]
 //  int _flagForSearch;
   int get flagForSearch => _flagForSearch;

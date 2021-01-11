@@ -408,18 +408,16 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         ? viewModel.vehicleLog.endReading
         : viewModel.vehicleLog.startReading;
 
-    // if (viewModel.vehicleLog != null) {
-    //   // if (viewModel.vehicleLog.failed != null) {
-    //   if (viewModel.flagForSearch == 0) {
-    //     print('flag is zero');
-    //     initialReadingController = TextEditingController(
-    //         text: viewModel.vehicleLog.endReading.toString());
-    //   } else {
-    //     print('flag is one');
-    //     initialReadingController = TextEditingController(
-    //         text: viewModel.vehicleLog.startReading.toString());
-    //   }
-    // }
+    if (!viewModel.startEntryEdited && viewModel.vehicleLog != null) {
+      // if (viewModel.vehicleLog.failed != null) {
+      if (viewModel.flagForSearch == 0) {
+        initialReadingController = TextEditingController(
+            text: viewModel.vehicleLog.endReading.toString());
+      } else {
+        initialReadingController = TextEditingController(
+            text: viewModel.vehicleLog.startReading.toString());
+      }
+    }
 
     return appTextFormField(
       enabled: true,
@@ -432,6 +430,11 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
       focusNode: initialReadingFocusNode,
       hintText: vehicleInitialReadingHint,
       keyboardType: TextInputType.number,
+      onTextChange: (String value) {
+        if (value != null) {
+          viewModel.startEntryEdited = true;
+        }
+      },
       onFieldSubmitted: (_) {
         if (viewModel.vehicleLog.failed != null) {
           if (int.parse(initialReadingController.text) <
