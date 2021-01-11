@@ -46,13 +46,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(allotConsignmentsPageRoute);
   }
 
-  // takeToViewConsignmentsPage() {
-  //   navigationService.navigateTo(viewConsignmentsPageRoute);
-  // }
-
-  //! For testing purpose it is navigating to searchPageRoute otherwise the above one is correct
   takeToViewConsignmentsPage() {
-    navigationService.navigateTo(searchPageRoute);
+    navigationService.navigateTo(viewConsignmentsPageRoute);
   }
 
   // takeToAddEntry2PointOPage() {

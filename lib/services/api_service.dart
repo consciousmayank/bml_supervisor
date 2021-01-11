@@ -6,6 +6,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
@@ -216,6 +217,18 @@ class ApiService {
     return response;
   }
 
+  Future getRoutesForClientId({GetClientsResponse selectedClient}) async {
+    Response response;
+    try {
+      response = await dioClient.getDio().get(
+            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}",
+          );
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
   Future getHubData(int hubId) async {
     Response response;
     try {
@@ -246,6 +259,16 @@ class ApiService {
     try {
       response =
           await dioClient.getDio().get("$GET_CONSIGNMENTS_LIST$routeId/$hubId");
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getHubs({int routeId}) async {
+    Response response;
+    try {
+      response = await dioClient.getDio().get("$GET_HUBS$routeId");
     } on DioError catch (e) {
       return e.message;
     }

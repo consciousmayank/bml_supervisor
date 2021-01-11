@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 // import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
+import 'package:bml_supervisor/screens/viewconsignment/view_consignements_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_detailed_view.dart';
@@ -73,10 +74,10 @@ class AppRouter {
           builder: (_) => ConsignmentAllotmentView(),
         );
 
-      // case addEntry2PointOLogPageRoute:
-      //   return MaterialPageRoute(
-      //     builder: (_) => AddEntryLogsView2PointO(),
-      //   );
+      case viewConsignmentsPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ViewConsignmentsView(),
+        );
 
       case addEntry2PointOFormViewPageRoute:
         Map<String, dynamic> args = settings.arguments;
