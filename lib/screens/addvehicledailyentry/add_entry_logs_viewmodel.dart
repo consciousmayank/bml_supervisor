@@ -26,6 +26,14 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  DateTime _datePickerEntryDate;
+  DateTime get datePickerEntryDate => _datePickerEntryDate;
+
+  set datePickerEntryDate(DateTime value) {
+    _datePickerEntryDate = value;
+    notifyListeners();
+  }
+
   // String _lastEntryDate = '';
   // String get lastEntryDate => _lastEntryDate;
   // set lastEntryDate(String lastEntryDate) {
@@ -165,18 +173,32 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     if (entryLog is String) {
       snackBarService.showSnackbar(message: entryLog);
     } else if (entryLog.data['status'].toString() == 'failed') {
+      //contains null
+      // print('last entry date: ${vehicleLog.entryDate}');
       // search with precise registratin num
       searchByRegistrationNumber(registrationNumber);
-      // search with wild card registration num
-      // search(registrationNumber);
     } else {
       print('search via last entry');
       vehicleLog = EntryLog.fromMap(entryLog.data);
-      // lastEntryDate = vehicleLog.entryDate;
+      //contains date
+      print('last entry date: ${vehicleLog.entryDate}');
+      setAddEntryDate(vehicleLog.entryDate);
+      // print('formatted date: ${DateTime.tryParse(vehicleLog.entryDate)}');
       setBusy(false);
       // takeToAddEntry2PointOFormViewPage();
     }
     // setBusy(false);
+  }
+
+  setAddEntryDate(String date) {
+    var dateAsList = date.split('-');
+    var reversedDateList = dateAsList.reversed;
+    var joinedReversedDate = reversedDateList.join('-');
+    DateTime time = DateTime.parse(joinedReversedDate);
+    datePickerEntryDate = time.add(Duration(days: 1));
+    // print('${time.add(Duration(days: 1))}');
+    // print('increased date: $time');
+    // print('formatted date: ${DateTime.parse(joinedReversedDate)}');
   }
 
   void searchByRegistrationNumber(String regNum) async {
@@ -184,6 +206,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
 
     var entryLog = await apiService.searchByRegistrationNumber(regNum);
+
     if (entryLog is String) {
       snackBarService.showSnackbar(message: entryLog);
     } else if (entryLog.data['status'].toString() == 'failed') {
@@ -192,7 +215,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     } else {
       SearchByRegNoResponse singleSearchResult =
           SearchByRegNoResponse.fromMap(entryLog.data);
-      print('init reading - ${singleSearchResult.initReading}');
+      // print(singleSearchResult.)
       vehicleLog = EntryLog(
           clientId: null,
           vehicleId: null,

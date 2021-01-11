@@ -74,7 +74,12 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           child: Text("Add Entry "),
           onPressed: () {
             // go to form page
-            viewModel.takeToAddEntry2PointOFormViewPage();
+            if (selectedDateController.text.length > 0) {
+              viewModel.takeToAddEntry2PointOFormViewPage();
+            } else {
+              viewModel.snackBarService
+                  .showSnackbar(message: "Please select date");
+            }
           },
         ),
       ),
@@ -141,7 +146,8 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       fieldHintText: 'Month/Date/Year',
       context: context,
       initialDate: DateTime.now(),
-      firstDate: new DateTime(1990),
+      firstDate: viewModel.datePickerEntryDate ??
+          DateTime(1990), //! assignThisIfNotNull ?? OtherWiseAssignThis
       lastDate: DateTime.now(),
     );
 
