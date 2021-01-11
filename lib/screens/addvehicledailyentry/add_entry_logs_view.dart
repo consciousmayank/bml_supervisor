@@ -87,9 +87,6 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClient = selectedValue;
-        // ! use print() it for debugging
-        // print('selected client id: ${viewModel.selectedClient.id}');
-        // print('selected client: ${viewModel.selectedClient.title}');
       },
       selectedClient:
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
@@ -144,13 +141,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       fieldHintText: 'Month/Date/Year',
       context: context,
       initialDate: DateTime.now(),
-      // firstDate: viewModel.flagForSearch == 0
-      //     ? viewModel.vehicleLog.entryDate
-      //     : DateTime(1990),
       firstDate: new DateTime(1990),
-      // firstDate: viewModel.lastEntryDate.length != 0
-      //     ? viewModel.lastEntryDate
-      //     : DateTime(1990),
       lastDate: DateTime.now(),
     );
 

@@ -138,126 +138,128 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
 
   searchResults(BuildContext context,
       List<ViewEntryResponse> vehicleEntrySearchResponse) {
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            // return the header
-            return _buildChip();
-          }
-          index -= 1;
+    return Scrollbar(
+      child: ListView.builder(
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // return the header
+              return _buildChip();
+            }
+            index -= 1;
 
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ClipRRect(
-              borderRadius: getBorderRadius(),
-              child: Card(
-                elevation: 4,
-                shape: getCardShape(),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: ThemeConfiguration.primaryBackground,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5)),
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ClipRRect(
+                borderRadius: getBorderRadius(),
+                child: Card(
+                  elevation: 4,
+                  shape: getCardShape(),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: ThemeConfiguration.primaryBackground,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5)),
+                        ),
+                        height: 50.0,
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              vehicleEntrySearchResponse[index].vehicleId,
+                              // 'Date',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              vehicleEntrySearchResponse[index]
+                                  .entryDate
+                                  .toString(),
+                              style: const TextStyle(color: Colors.white),
+                            )
+                          ],
+                        ),
                       ),
-                      height: 50.0,
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            vehicleEntrySearchResponse[index].vehicleId,
-                            // 'Date',
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            vehicleEntrySearchResponse[index]
-                                .entryDate
-                                .toString(),
-                            style: const TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text("Start Reading : "),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(vehicleEntrySearchResponse[index]
-                                    .startReading
-                                    .toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text("End Reading : "),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(vehicleEntrySearchResponse[index]
-                                    .endReading
-                                    .toString()),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text("Login Time : "),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(vehicleEntrySearchResponse[index]
-                                    .loginTime
-                                    .toString()),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              FlatButton(
-                                child: Text(
-                                  'More Info',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                  ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("Start Reading : "),
                                 ),
-                                onPressed: () {
-                                  showViewEntryDetailPreview(context,
-                                      vehicleEntrySearchResponse[index]);
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(vehicleEntrySearchResponse[index]
+                                      .startReading
+                                      .toString()),
+                                )
+                              ],
+                            ),
+                            hSizedBox(5),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("End Reading : "),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(vehicleEntrySearchResponse[index]
+                                      .endReading
+                                      .toString()),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("Login Time : "),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(vehicleEntrySearchResponse[index]
+                                      .loginTime
+                                      .toString()),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                FlatButton(
+                                  child: Text(
+                                    'More Info',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    showViewEntryDetailPreview(context,
+                                        vehicleEntrySearchResponse[index]);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        itemCount: vehicleEntrySearchResponse.length + 1);
+            );
+          },
+          itemCount: vehicleEntrySearchResponse.length + 1),
+    );
   }
 
   void showViewEntryDetailPreview(
