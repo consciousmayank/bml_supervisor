@@ -193,6 +193,8 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       'avgPerLitre': _avgPerLitre,
       'totalFuelAmt': _totalFuelAmt,
       'vehicleEntrySearchResponseList': vehicleEntrySearchResponse,
+      'selectedClient':
+          selectedClient == null ? 'All Clients' : selectedClient.title,
     });
     _totalFuelAmt = 0;
     _kmDifference = 0;
