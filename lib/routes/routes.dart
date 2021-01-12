@@ -3,7 +3,6 @@ import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
-// import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';

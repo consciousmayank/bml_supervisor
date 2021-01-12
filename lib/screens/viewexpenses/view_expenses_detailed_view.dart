@@ -20,7 +20,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
         widget.arguments['viewExpensesDetailedList'];
     return Scaffold(
       appBar: AppBar(
-        title: Text('View Expenses - Detailed List'),
+        title: Text(widget.arguments['selectedClient']),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
