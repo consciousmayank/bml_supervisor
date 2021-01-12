@@ -25,7 +25,7 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detailed View Entry 2.0'),
+        title: Text(widget.arguments['selectedClient']),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
