@@ -114,36 +114,13 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
         child: RaisedButton(
           child: Text("Get Expenses List"),
           onPressed: () {
-            //!
-            // if (viewModel.selectedClient == null) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Client');
-            // } else if (viewModel.selectedDuration.length == 0) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Duration');
-            // } else {
-            //   if (selectedRegNoController.text.length != 0) {
-            //     viewModel.vehicleRegNumber =
-            //         selectedRegNoController.text.toUpperCase();
-            //   }
-            //   viewModel.getExpensesList(
-            //       selectedRegNoController.text.toUpperCase(),
-            //       viewModel.selectedDuration);
-            // }
-            //!
             if (viewModel.selectedDuration.length != 0) {
-              // if (selectedRegNoController.text.length != 0) {
-              //   viewModel.vehicleRegNumber = selectedRegNoController.text;
-              // }
               viewModel.getExpensesList(
                 regNum: selectedRegNoController.text.trim().toUpperCase(),
                 selectedDuration: viewModel.selectedDuration,
                 clientId: viewModel.selectedClient != null
                     ? viewModel.selectedClient.id.toString()
                     : '',
-                // viewModel.selectedClient != null
-                //     ? viewModel.selectedClient.id.toString()
-                //     : null,
               );
             } else {
               viewModel.snackBarService
