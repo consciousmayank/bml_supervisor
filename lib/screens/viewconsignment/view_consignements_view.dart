@@ -47,25 +47,26 @@ class _ViewConsignmentsViewState extends State<ViewConsignmentsView> {
                 : viewModel.selectedClient,
           ),
           hSizedBox(10),
-          headerText("Routes"),
+          viewModel.selectedClient == null ? Container() : headerText("Routes"),
           viewModel.selectedClient == null
               ? Container()
               : SizedBox(
                   child: RoutesView(
                     selectedClient: viewModel.selectedClient,
-                    onRoutesClick: (clickedRoute) {
+                    onRoutesPageInView: (clickedRoute) {
                       FetchRoutesResponse route = clickedRoute;
                       print("${route.id}");
                       viewModel.selectedRoute = route;
                     },
                   ),
-                  height: 200,
+                  height: MediaQuery.of(context).size.height * 0.20,
                   width: double.infinity,
                 ),
-          headerText("Hubs"),
+          viewModel.selectedRoute == null ? Container() : headerText("Hubs"),
           viewModel.selectedRoute == null
               ? Container()
-              : Expanded(
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.20,
                   child: SingleConsignmentView(
                     selectedRoute: viewModel.selectedRoute,
                     key: UniqueKey(),

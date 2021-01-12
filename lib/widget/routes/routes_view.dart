@@ -8,8 +8,9 @@ import 'package:stacked/stacked.dart';
 
 class RoutesView extends StatefulWidget {
   final GetClientsResponse selectedClient;
-  final Function onRoutesClick;
-  RoutesView({@required this.selectedClient, @required this.onRoutesClick});
+  final Function onRoutesPageInView;
+  RoutesView(
+      {@required this.selectedClient, @required this.onRoutesPageInView});
 
   @override
   _RoutesViewState createState() => _RoutesViewState();
@@ -36,8 +37,8 @@ class _RoutesViewState extends State<RoutesView> {
               children: [
                 PageView.builder(
                   onPageChanged: (int changedPageIndex) {
-                    widget
-                        .onRoutesClick(viewModel.routesList[changedPageIndex]);
+                    widget.onRoutesPageInView(
+                        viewModel.routesList[changedPageIndex]);
                   },
                   controller: _controller,
                   itemBuilder: (BuildContext context, int index) {
