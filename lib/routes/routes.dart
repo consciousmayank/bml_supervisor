@@ -4,6 +4,7 @@ import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
+import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
@@ -81,6 +82,11 @@ class AppRouter {
         Map<String, dynamic> args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => AddVehicleEntryFormView(arguments: args),
+        );
+
+      case paymentsPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => PaymentsView(),
         );
 
       default:

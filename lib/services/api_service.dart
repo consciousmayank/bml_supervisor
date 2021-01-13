@@ -7,6 +7,7 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
+import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,34 @@ class ApiService {
       return e.message;
     }
     // print(response);
+    return response;
+  }
+
+  Future getPaymentHistory(int clientId) async {
+    print('in api service------ payment history');
+    Response response;
+    try {
+      response = await dioClient.getDio().get('/payment/client/$clientId');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('payment history in api_service=============');
+    print(response);
+    return response;
+  }
+
+  Future addNewPayment(SavePaymentRequest request) async {
+    String body = request.toJson();
+
+    print('add payment in api_service=======');
+    print(body);
+    Response response;
+    try {
+      response = await dioClient.getDio().post('/payment/add', data: body);
+    } on DioError catch (e) {
+      return e.toString();
+    }
+    print(response);
     return response;
   }
 

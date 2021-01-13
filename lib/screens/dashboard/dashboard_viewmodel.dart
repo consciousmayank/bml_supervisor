@@ -13,6 +13,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     Icons.title,
     Icons.access_alarm,
     Icons.access_time,
+    Icons.payment,
   ];
 
   List<String> optionsTitle = [
@@ -22,6 +23,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Expenses",
     "Allot Consignments",
     "View Consignments",
+    "Payments",
     // "Add Entry 2.0",
     // "View Entry 2.0",
   ];
@@ -46,20 +48,12 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(allotConsignmentsPageRoute);
   }
 
-  // takeToViewConsignmentsPage() {
-  //   navigationService.navigateTo(viewConsignmentsPageRoute);
-  // }
+  takeToPaymentsPage() {
+    navigationService.navigateTo(paymentsPageRoute);
+  }
 
-  //! For testing purpose it is navigating to searchPageRoute otherwise the above one is correct
+  //! For testing purpose it is navigating to searchPageRoute
   takeToViewConsignmentsPage() {
     navigationService.navigateTo(searchPageRoute);
   }
-
-  // takeToAddEntry2PointOPage() {
-  //   navigationService.navigateTo(addEntry2PointOLogPageRoute);
-  // }
-
-  // takeToViewEntry2PointOPage() {
-  //   navigationService.navigateTo(viewEntry2PointOLogPageRoute);
-  // }
 }

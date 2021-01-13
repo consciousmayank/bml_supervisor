@@ -26,7 +26,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<ViewEntryResponse> vehicleEntrySearchResponse = [];
+  List<ViewEntryResponse> vehicleEntrySearchResponseList = [];
 
   List<SearchByRegNoResponse> searchResponse = [];
   String _selectedDuration = "";
@@ -122,7 +122,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       {String regNum, String selectedDuration, String clientId}) async {
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     // int selectedClientValue = selectedClient == 'BOOK MY LOADING' ? 0 : 1;
-    vehicleEntrySearchResponse.clear();
+    vehicleEntrySearchResponseList.clear();
     _vehicleLog = null;
     notifyListeners();
     setBusy(true);
@@ -150,7 +150,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
             for (Map singleItem in list) {
               ViewEntryResponse singleSearchResult =
                   ViewEntryResponse.fromMap(singleItem);
-              vehicleEntrySearchResponse.add(singleSearchResult);
+              vehicleEntrySearchResponseList.add(singleSearchResult);
               _totalKmGround += singleSearchResult.drivenKmGround;
               _totalFuelInLtr += singleSearchResult.fuelLtr;
               _totalKm += singleSearchResult.drivenKm;
@@ -192,7 +192,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       'totalFuelInLtr': _totalFuelInLtr,
       'avgPerLitre': _avgPerLitre,
       'totalFuelAmt': _totalFuelAmt,
-      'vehicleEntrySearchResponseList': vehicleEntrySearchResponse,
+      'vehicleEntrySearchResponseList': vehicleEntrySearchResponseList,
       'selectedClient':
           selectedClient == null ? 'All Clients' : selectedClient.title,
     });

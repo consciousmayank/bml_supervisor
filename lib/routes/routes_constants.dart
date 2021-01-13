@@ -15,3 +15,4 @@ const String addEntry2PointOFormViewPageRoute = '/addEntry2PointOFormViewPage';
 const String viewEntry2PointOLogPageRoute = '/viewEntry2PointOLogPage';
 const String viewEntryDetailedView2PointOPageRoute =
     '/viewEntryDetailedView2Point0Page';
+const String paymentsPageRoute = '/paymentsPageRoute';

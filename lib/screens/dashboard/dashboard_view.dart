@@ -17,27 +17,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                 title: Text("Welcome, Rahul Rautela"),
                 centerTitle: true,
               ),
-              // bottomNavigationBar: BottomNavigationBar(
-              //   type: BottomNavigationBarType.fixed,
-              //   backgroundColor: ThemeConfiguration.primaryBackground,
-              //   selectedItemColor: Colors.white,
-              //   currentIndex: viewModel.currentIndex,
-              //   onTap: viewModel.setIndex,
-              //   items: [
-              //     BottomNavigationBarItem(
-              //       label: 'Entry',
-              //       icon: Icon(Icons.add),
-              //     ),
-              //     BottomNavigationBarItem(
-              //       label: 'Expenses',
-              //       icon: Icon(Icons.list),
-              //     ),
-              //   ],
-              // ),
-              // body: getViewForIndex(viewModel.currentIndex),
               body: GridView.count(
                 crossAxisCount: 2,
-                children: List.generate(6, (index) {
+                children: List.generate(7, (index) {
                   return getOptions(
                       context: context, position: index, viewModel: viewModel);
                 }),
@@ -95,6 +77,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         break;
       case 5:
         return viewModel.takeToViewConsignmentsPage();
+        break;
+      case 6:
+        return viewModel.takeToPaymentsPage();
         break;
       // case 6:
       //   return viewModel.takeToAddEntry2PointOPage();

@@ -124,6 +124,8 @@ const String entryLogsText = "Entry Logs";
 const String expensesText = "Expenses";
 const String entryStartReadingHint = "Enter Start Reading(Km)";
 const String entryEndReadingHint = "Enter End Reading(Km)";
+const String enterTotalKmHint = "Enter Total Km";
+const String enterTotalAmountHint = "Enter Total Payment";
 const String rupeeSymbol = "\u{20B9} ";
 
 const String certificateNumberHint = "Policy Number";
