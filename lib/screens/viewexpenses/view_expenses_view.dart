@@ -33,29 +33,15 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
         ),
         body: Padding(
           padding: getSidePadding(context: context),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ListView(
             children: [
-              Column(
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  selectClient(viewModel: viewModel),
-                  registrationSelector(context: context, viewModel: viewModel),
-                  // viewModel.selectedSearchVehicle == null
-                  //     ? Container()
-                  //     : dateSelector(context: context, viewModel: viewModel),
-                  // hSizedBox(20),
-                  selectDuration(viewModel: viewModel),
-                ],
-              ),
+              selectClient(viewModel: viewModel),
+              registrationSelector(context: context, viewModel: viewModel),
+              selectDuration(viewModel: viewModel),
+              hSizedBox(15),
               getExpenseListButton(
                 viewModel: viewModel,
               ),
-              // viewModel.selectedSearchVehicle == null
-              //     ? Container()
-              //     : searchButton(
-              //         viewModel: viewModel,
-              //       ),
             ],
           ),
         ),
@@ -103,10 +89,6 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
   }
 
   Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
-    // viewModel.selectedSearchVehicle != null
-    //     ? selectedRegNoController.text =
-    //         viewModel.selectedSearchVehicle.registrationNumber
-    //     : selectedRegNoController.text = "";
     return appTextFormField(
       enabled: true,
       controller: selectedRegNoController,
@@ -132,36 +114,13 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
         child: RaisedButton(
           child: Text("Get Expenses List"),
           onPressed: () {
-            //!
-            // if (viewModel.selectedClient == null) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Client');
-            // } else if (viewModel.selectedDuration.length == 0) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Duration');
-            // } else {
-            //   if (selectedRegNoController.text.length != 0) {
-            //     viewModel.vehicleRegNumber =
-            //         selectedRegNoController.text.toUpperCase();
-            //   }
-            //   viewModel.getExpensesList(
-            //       selectedRegNoController.text.toUpperCase(),
-            //       viewModel.selectedDuration);
-            // }
-            //!
             if (viewModel.selectedDuration.length != 0) {
-              // if (selectedRegNoController.text.length != 0) {
-              //   viewModel.vehicleRegNumber = selectedRegNoController.text;
-              // }
               viewModel.getExpensesList(
                 regNum: selectedRegNoController.text.trim().toUpperCase(),
                 selectedDuration: viewModel.selectedDuration,
                 clientId: viewModel.selectedClient != null
                     ? viewModel.selectedClient.id.toString()
                     : '',
-                // viewModel.selectedClient != null
-                //     ? viewModel.selectedClient.id.toString()
-                //     : null,
               );
             } else {
               viewModel.snackBarService

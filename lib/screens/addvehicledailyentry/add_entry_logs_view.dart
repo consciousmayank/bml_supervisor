@@ -39,20 +39,16 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
               )
             : Padding(
                 padding: getSidePadding(context: context),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: ListView(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        selectClient(viewModel: viewModel),
-                        registrationSelector(
-                            context: context, viewModel: viewModel),
-                        viewModel.vehicleLog == null
-                            ? Container()
-                            : dateSelector(
-                                context: context, viewModel: viewModel),
-                      ],
-                    ),
+                    selectClient(viewModel: viewModel),
+                    registrationSelector(
+                        context: context, viewModel: viewModel),
+                    viewModel.vehicleLog == null
+                        ? Container()
+                        : dateSelector(context: context, viewModel: viewModel),
+                    hSizedBox(15),
                     viewModel.vehicleLog == null
                         ? Container()
                         : addEntryButton(viewModel: viewModel),
@@ -74,7 +70,12 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           child: Text("Add Entry "),
           onPressed: () {
             // go to form page
-            viewModel.takeToAddEntry2PointOFormViewPage();
+            if (selectedDateController.text.length > 0) {
+              viewModel.takeToAddEntry2PointOFormViewPage();
+            } else {
+              viewModel.snackBarService
+                  .showSnackbar(message: "Please select date");
+            }
           },
         ),
       ),
@@ -141,7 +142,8 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       fieldHintText: 'Month/Date/Year',
       context: context,
       initialDate: DateTime.now(),
-      firstDate: new DateTime(1990),
+      firstDate: viewModel.datePickerEntryDate ??
+          DateTime(1990), //! assignThisIfNotNull ?? OtherWiseAssignThis
       lastDate: DateTime.now(),
     );
 

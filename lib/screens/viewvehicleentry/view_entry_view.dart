@@ -28,29 +28,17 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
         ),
         body: Padding(
           padding: getSidePadding(context: context),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  selectClient(viewModel: viewModel),
-                  registrationSelector(context: context, viewModel: viewModel),
-                  selectDuration(viewModel: viewModel),
-                ],
-              ),
+              selectClient(viewModel: viewModel),
+              registrationSelector(context: context, viewModel: viewModel),
+              selectDuration(viewModel: viewModel),
+              hSizedBox(15),
               searchEntryButton(viewModel: viewModel),
             ],
           ),
         ),
-        // Column(
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children: [
-        //     // dateSelector(context: context, viewModel: viewModel),
-        //     selectDuration(viewModel: viewModel),
-        //     registrationSelector(context: context, viewModel: viewModel),
-        //   ],
-        // ),
       ),
       viewModelBuilder: () => ViewVehicleEntryViewModel(),
     );
@@ -74,14 +62,9 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
         child: RaisedButton(
-          child: Text("Search Entry"),
+          child: Text("View Entry"),
           onPressed: () {
-            //!
             if (viewModel.selectedDuration.length != 0) {
-              // if (selectedRegNoController.text.length != 0) {
-              //   viewModel.selectedRegistrationNumber =
-              //       selectedRegNoController.text;
-              // }
               viewModel.vehicleEntrySearch(
                 regNum: selectedRegNoController.text.trim().toUpperCase(),
                 selectedDuration: viewModel.selectedDuration,
@@ -93,26 +76,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please select Duration');
             }
-            //!
-            // if (viewModel.selectedClient == null) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Client');
-            // } else if (viewModel.selectedDuration.length == 0) {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please select Duration');
-            // } else {
-            //   if (selectedRegNoController.text.length != 0) {
-            //     viewModel.selectedRegistrationNumber =
-            //         selectedRegNoController.text.toUpperCase();
-            //   }
-            //   viewModel.vehicleEntrySearch(
-            //     selectedRegNoController.text.toUpperCase(),
-            //     viewModel.selectedDuration,
-            //     viewModel.selectedClient != null
-            //         ? viewModel.selectedClient.id.toString()
-            //         : '',
-            //   );
-            // }
           },
         ),
       ),

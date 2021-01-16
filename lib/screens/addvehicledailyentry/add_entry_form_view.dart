@@ -369,7 +369,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         vehicleId: widget.arguments['regNumArg'],
         entryDate:
             DateFormat('dd-MM-yyyy').format(viewModel.entryDate).toLowerCase(),
-        startReading: startReadingHidden,
+        startReading: int.parse(initialReadingController.text.trim()),
         endReading: int.parse(endReadingController.text.trim()),
         drivenKm: drivenKmHidden,
         fuelLtr: viewModel.isFuelEntryAdded
