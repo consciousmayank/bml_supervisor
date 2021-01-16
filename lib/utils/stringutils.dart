@@ -57,6 +57,7 @@ const String vehicleFuelTypeHint = "Select Fuel Type";
 const String vehicleEmissionTypeHint = "Select Emmision Type";
 const String vehicleSeatingCapacityHint = "Select Vehicle Seating Capacity";
 const String drRegNoHint = "Registration No";
+const String consignmentTitleHint = "Enter Consignment Title";
 const String searchPageTitleHint = "Enter Registration Number";
 const String fuelMeterReadingError =
     "Fuel meter reading has to be between Start Reading and End Reading.";

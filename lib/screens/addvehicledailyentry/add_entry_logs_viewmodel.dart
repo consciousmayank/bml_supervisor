@@ -173,9 +173,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     if (entryLog is String) {
       snackBarService.showSnackbar(message: entryLog);
     } else if (entryLog.data['status'].toString() == 'failed') {
-      //contains null
-      // print('last entry date: ${vehicleLog.entryDate}');
-      // search with precise registratin num
       searchByRegistrationNumber(registrationNumber);
     } else {
       print('search via last entry');
