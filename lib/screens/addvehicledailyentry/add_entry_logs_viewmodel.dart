@@ -165,7 +165,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     if (entryLog is String) {
       snackBarService.showSnackbar(message: entryLog);
     } else if (entryLog.data['status'].toString() == 'failed') {
-      // search with precise registratin num
+      // search with precise registration number
       searchByRegistrationNumber(registrationNumber);
       // search with wild card registration num
       // search(registrationNumber);

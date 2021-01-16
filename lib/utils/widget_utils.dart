@@ -213,3 +213,7 @@ Text headerText(String title) {
 String getCurrentDate() {
   return DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
 }
+
+String getConvertedDate(DateTime date) {
+  return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
+}

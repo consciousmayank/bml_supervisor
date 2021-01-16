@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/add_consignment_request.dart';
+import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
@@ -205,7 +204,7 @@ class ApiService {
     return response;
   }
 
-  Future getRoutesForClient() async {
+  Future getRoutesForClient({int clientId}) async {
     Response response;
     try {
       response = await dioClient.getDio().get(
@@ -241,7 +240,19 @@ class ApiService {
     return response;
   }
 
-  Future addConsignmentDataToHub(AddConsignmentRequest request) async {
+  Future addConsignmentDataToHub(CreateConsignmentRequest request) async {
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future createConsignment(CreateConsignmentRequest request) async {
     Response response;
     try {
       response = await dioClient
@@ -269,6 +280,32 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get("$GET_HUBS$routeId");
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getConsignment(
+      {@required int routeId,
+      @required @required int clientId,
+      @required String entryDate}) async {
+    Response response;
+    try {
+      response = await dioClient.getDio().get("$GET_HUBS$routeId");
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getRoutesForSelectedClientAndDate(
+      {@required int clientId, @required String date}) async {
+    Response response;
+    try {
+      response = await dioClient.getDio().get(
+            GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
+          );
     } on DioError catch (e) {
       return e.message;
     }

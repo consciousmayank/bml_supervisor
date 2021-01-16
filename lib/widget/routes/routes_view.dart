@@ -9,6 +9,7 @@ import 'package:stacked/stacked.dart';
 class RoutesView extends StatefulWidget {
   final GetClientsResponse selectedClient;
   final Function onRoutesPageInView;
+
   RoutesView(
       {@required this.selectedClient, @required this.onRoutesPageInView});
 
@@ -17,9 +18,13 @@ class RoutesView extends StatefulWidget {
 }
 
 class _RoutesViewState extends State<RoutesView> {
-  PageController _controller = PageController(
-    initialPage: 0,
-  );
+  PageController _controller;
+
+  @override
+  void initState() {
+    _controller = PageController();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -32,57 +37,65 @@ class _RoutesViewState extends State<RoutesView> {
     return ViewModelBuilder<RoutesViewModel>.reactive(
       onModelReady: (viewModel) =>
           viewModel.getRoutesForClient(widget.selectedClient),
-      builder: (context, viewModel, child) => viewModel.routesList.length > 0
-          ? Stack(
-              children: [
-                PageView.builder(
-                  onPageChanged: (int changedPageIndex) {
-                    widget.onRoutesPageInView(
-                        viewModel.routesList[changedPageIndex]);
-                  },
-                  controller: _controller,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      elevation: 4,
-                      shape: getCardShape(),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(viewModel.routesList[index].title),
-                            Text(
-                                "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
-                            Text("Route # ${viewModel.routesList[index].id}"),
-                          ],
-                        ),
+      builder: (context, viewModel, child) {
+        return viewModel.isBusy
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : viewModel.routesList.length > 0
+                ? Stack(
+                    children: [
+                      PageView.builder(
+                        onPageChanged: (int changedPageIndex) {
+                          widget.onRoutesPageInView(
+                              viewModel.routesList[changedPageIndex]);
+                        },
+                        controller: _controller,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            elevation: 4,
+                            shape: getCardShape(),
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(viewModel.routesList[index].title),
+                                  Text(
+                                      "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
+                                  Text(
+                                      "Route # ${viewModel.routesList[index].id}"),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: viewModel.routesList.length,
                       ),
-                    );
-                  },
-                  itemCount: viewModel.routesList.length,
-                ),
-                Positioned(
-                  bottom: 5,
-                  left: 2,
-                  right: 2,
-                  child: DotsIndicator(
-                    onPageSelected: (int index) {
-                      print("aaaaaaa" + viewModel.routesList[index].title);
-                    },
-                    controller: _controller,
-                    itemCount: viewModel.routesList.length,
-                    color: ThemeConfiguration.primaryBackground,
-                  ),
-                )
-              ],
-            )
-          : Center(
-              child: Container(
-                child: Text("No Data"),
-              ),
-            ),
+                      Positioned(
+                        bottom: 5,
+                        left: 2,
+                        right: 2,
+                        child: DotsIndicator(
+                          onPageSelected: (int index) {
+                            print(
+                                "aaaaaaa" + viewModel.routesList[index].title);
+                          },
+                          controller: _controller,
+                          itemCount: viewModel.routesList.length,
+                          color: ThemeConfiguration.primaryBackground,
+                        ),
+                      )
+                    ],
+                  )
+                : Center(
+                    child: Container(
+                      child: Text("No Data"),
+                    ),
+                  );
+      },
       viewModelBuilder: () => RoutesViewModel(),
     );
   }

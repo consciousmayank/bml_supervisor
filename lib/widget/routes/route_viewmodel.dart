@@ -12,7 +12,7 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     _routesList = value;
   }
 
-  getRoutesForClient(GetClientsResponse selectedClient) async {
+  Future getRoutesForClient(GetClientsResponse selectedClient) async {
     setBusy(true);
     var routesApiResponse =
         await apiService.getRoutesForClientId(selectedClient: selectedClient);

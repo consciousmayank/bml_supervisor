@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/screens/viewconsignment/view_consignment_viewmodel.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/consignment/single_consignment_view.dart';
@@ -8,30 +7,32 @@ import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-class ViewConsignmentsView extends StatefulWidget {
+import 'view_routes_viewmodel.dart';
+
+class ViewRoutesView extends StatefulWidget {
   @override
-  _ViewConsignmentsViewState createState() => _ViewConsignmentsViewState();
+  _ViewRoutesViewState createState() => _ViewRoutesViewState();
 }
 
-class _ViewConsignmentsViewState extends State<ViewConsignmentsView> {
+class _ViewRoutesViewState extends State<ViewRoutesView> {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ViewConsignmentViewModel>.reactive(
+    return ViewModelBuilder<ViewRoutesViewModel>.reactive(
         onModelReady: (viewModel) => viewModel.getClientIds(),
         builder: (context, viewModel, child) => SafeArea(
               left: false,
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Consignments"),
+                  title: Text("Routes"),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),
             ),
-        viewModelBuilder: () => ViewConsignmentViewModel());
+        viewModelBuilder: () => ViewRoutesViewModel());
   }
 
-  Widget getBody({BuildContext context, ViewConsignmentViewModel viewModel}) {
+  Widget getBody({BuildContext context, ViewRoutesViewModel viewModel}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -65,8 +66,7 @@ class _ViewConsignmentsViewState extends State<ViewConsignmentsView> {
           viewModel.selectedRoute == null ? Container() : headerText("Hubs"),
           viewModel.selectedRoute == null
               ? Container()
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.20,
+              : Expanded(
                   child: SingleConsignmentView(
                     selectedRoute: viewModel.selectedRoute,
                     key: UniqueKey(),

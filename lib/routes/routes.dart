@@ -3,12 +3,12 @@ import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
-// import 'package:bml_supervisor/screens/entrylog/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
-import 'package:bml_supervisor/screens/viewconsignment/view_consignements_view.dart';
+import 'package:bml_supervisor/screens/viewconsignments/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
+import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_view.dart';
 import 'package:flutter/material.dart';
@@ -74,9 +74,14 @@ class AppRouter {
           builder: (_) => ConsignmentAllotmentView(),
         );
 
+      case viewRoutesPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => ViewRoutesView(),
+        );
+
       case viewConsignmentsPageRoute:
         return MaterialPageRoute(
-          builder: (_) => ViewConsignmentsView(),
+          builder: (_) => ViewConsignmentView(),
         );
 
       case addEntry2PointOFormViewPageRoute:

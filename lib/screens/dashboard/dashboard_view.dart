@@ -19,7 +19,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               ),
               body: GridView.count(
                 crossAxisCount: 2,
-                children: List.generate(6, (index) {
+                children: List.generate(7, (index) {
                   return getOptions(
                       context: context, position: index, viewModel: viewModel);
                 }),
@@ -76,7 +76,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         return viewModel.takeToAllotConsignmentsPage();
         break;
       case 5:
-        return viewModel.takeToViewConsignmentsPage();
+        return viewModel.takeToViewRoutesPage();
         break;
       // case 6:
       //   return viewModel.takeToAddEntry2PointOPage();
@@ -85,7 +85,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       //   return viewModel.takeToViewEntry2PointOPage();
       //   break;
       default:
-        return viewModel.takeToAddEntryPage();
+        return viewModel.takeToBlankPage();
     }
   }
 }

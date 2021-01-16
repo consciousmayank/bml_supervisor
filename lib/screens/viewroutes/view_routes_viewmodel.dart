@@ -3,7 +3,7 @@ import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:dio/dio.dart';
 
-class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
+class ViewRoutesViewModel extends GeneralisedBaseViewModel {
   FetchRoutesResponse _selectedRoute;
   GetClientsResponse _selectedClient;
 
