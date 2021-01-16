@@ -39,20 +39,16 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
               )
             : Padding(
                 padding: getSidePadding(context: context),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: ListView(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        selectClient(viewModel: viewModel),
-                        registrationSelector(
-                            context: context, viewModel: viewModel),
-                        viewModel.vehicleLog == null
-                            ? Container()
-                            : dateSelector(
-                                context: context, viewModel: viewModel),
-                      ],
-                    ),
+                    selectClient(viewModel: viewModel),
+                    registrationSelector(
+                        context: context, viewModel: viewModel),
+                    viewModel.vehicleLog == null
+                        ? Container()
+                        : dateSelector(context: context, viewModel: viewModel),
+                    hSizedBox(15),
                     viewModel.vehicleLog == null
                         ? Container()
                         : addEntryButton(viewModel: viewModel),

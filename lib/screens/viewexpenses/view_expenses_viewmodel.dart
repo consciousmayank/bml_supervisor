@@ -191,6 +191,8 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
       arguments: {
         'viewExpensesDetailedList': viewExpensesResponse,
         'totalExpenses': _totalExpenses,
+        'selectedClient':
+            selectedClient == null ? 'All Clients' : selectedClient.title
       },
     ).then((value) {
       vehicleRegNumber = null;
