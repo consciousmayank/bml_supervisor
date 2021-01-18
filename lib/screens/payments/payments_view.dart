@@ -1,18 +1,18 @@
-import 'package:bml_supervisor/models/save_payment_request.dart';
-import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
+import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
+import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:stacked/stacked.dart';
 
 class PaymentsView extends StatefulWidget {
   @override
@@ -247,8 +247,8 @@ class _PaymentsViewState extends State<PaymentsView> {
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50),
-            topRight: Radius.circular(50),
+            topLeft: Radius.circular(defaultBorder),
+            topRight: Radius.circular(defaultBorder),
           ),
         ),
         isScrollControlled: true,
@@ -258,9 +258,9 @@ class _PaymentsViewState extends State<PaymentsView> {
             height: MediaQuery.of(context).size.height * 0.7,
             child: Padding(
               padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 30,
+                left: 10,
+                right: 10,
+                top: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 10,
               ),
               child: Scrollbar(

@@ -203,7 +203,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                   .consignmentRequest.items[index].remarks ??
                               "";
                         },
-                        // physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -786,11 +786,15 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   getInputBorder({String hintText}) {
     return InputDecoration(
       alignLabelWithHint: true,
-      errorStyle: TextStyle(fontSize: 14),
-      helperStyle: TextStyle(fontSize: 14),
+      errorStyle: TextStyle(
+        fontSize: 14,
+      ),
+      helperStyle: TextStyle(
+        fontSize: 14,
+      ),
       helperText: ' ',
       labelText: hintText,
-      labelStyle: TextStyle(color: AppColors.primaryColorShade1, fontSize: 14),
+      labelStyle: TextStyle(color: AppColors.black, fontSize: 14),
       fillColor: AppColors.primaryColorShade5,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),

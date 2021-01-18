@@ -8,7 +8,4 @@ class AppColors {
   static const Color primaryColorShade4 = Color(0xFFA6E2DC);
   static const Color primaryColorShade5 = Color(0xFF68CFC6);
   static const Color black = Colors.black87;
-  static const Gradient appCanvasGradient = LinearGradient(
-    colors: [primaryColorShade5, primaryColorShade3, primaryColorShade1],
-  );
 }

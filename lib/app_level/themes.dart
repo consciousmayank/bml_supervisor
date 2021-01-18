@@ -41,7 +41,7 @@ class ThemeConfiguration {
   ThemeData getAppThemeComplete() {
     return ThemeData(
       appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(color: primaryBackground),
+        iconTheme: IconThemeData(color: AppColors.black),
         elevation: 0.8,
         color: AppColors.primaryColorShade4,
         textTheme: appTextTheme,
