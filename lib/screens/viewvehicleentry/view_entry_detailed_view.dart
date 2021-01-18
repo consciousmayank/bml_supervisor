@@ -171,7 +171,6 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
                           children: [
                             Text(
                               vehicleEntrySearchResponse[index].vehicleId,
-                              // 'Date',
                               style: const TextStyle(color: Colors.white),
                             ),
                             Text(

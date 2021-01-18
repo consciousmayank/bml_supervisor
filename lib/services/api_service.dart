@@ -7,6 +7,8 @@ import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
+import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -53,39 +55,125 @@ class ApiService {
     return response;
   }
 
-// Added by Vikas
-  Future<Response> vehicleEntrySearch({
-    String regNum,
-    String clientId,
-    int duration,
-  }) async {
+  Future getDashboardTilesStats(String clientId) async {
     Response response;
-    print('client id before api call: $clientId');
     try {
-      if (regNum.length != 0 && clientId.length != 0) {
-        print(
-            'view_entry_api=====$VIEW_ENTRY/vehicle/$regNum/client/$clientId/period/$duration');
-        response = await dioClient.getDio().get(
-            '$VIEW_ENTRY/vehicle/$regNum/client/$clientId/period/$duration');
-        regNum = '';
-      } else if (regNum.length != 0 && clientId.length == 0) {
-        print('api_service: $VIEW_ENTRY/vehicle/$regNum/period/$duration');
-        response = await dioClient
-            .getDio()
-            .get('$VIEW_ENTRY/vehicle/$regNum/period/$duration');
-        regNum = '';
-      } else if (regNum.length == 0 && clientId.length != 0) {
-        print('api_service: $VIEW_ENTRY/client/$clientId/period/$duration');
-        response = await dioClient
-            .getDio()
-            .get('$VIEW_ENTRY/client/$clientId/period/$duration');
-      } else {
-        print('api_service: $VIEW_ENTRY/period/$duration');
-        response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
-      }
+      response = await dioClient
+          .getDio()
+          .get('/statistics/dashboard/client/$clientId');
     } on DioError catch (e) {
-      throw e;
+      return e.message;
     }
+    print(response);
+    return response;
+  }
+
+  Future getRecentConsignments() async {
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .get('/vehicle/entrylog/consignment/view/client/1/period/1');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('recent consignemts in api_service******************');
+    print(response);
+    print('recent consignemts in api_service******************');
+
+    return response;
+  }
+
+  Future getBarGraphKmReport(int period) async {
+    print('in api_service start---- getBarGraphKmReport');
+    Response response;
+    try {
+      print('api called - /vehicle/entrylog/drivenKm/client/1/period/$period');
+      response = await dioClient
+          .getDio()
+          .get('/vehicle/entrylog/drivenKm/client/1/period/$period');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('get km response************');
+    print(response);
+    print('in api_service end---- getBarGraphKmReport');
+
+    return response;
+  }
+
+  Future getPaymentHistory(int clientId) async {
+    print('in api service------ payment history');
+    Response response;
+    try {
+      response = await dioClient.getDio().get('/payment/client/$clientId');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('payment history in api_service=============');
+    print(response);
+    return response;
+  }
+
+  Future addNewPayment(SavePaymentRequest request) async {
+    String body = request.toJson();
+
+    print('add payment in api_service=======');
+    print(body);
+    Response response;
+    try {
+      response = await dioClient.getDio().post('/payment/add', data: body);
+    } on DioError catch (e) {
+      return e.toString();
+    }
+    print(response);
+    return response;
+  }
+
+// Added by Vikas
+//! Not in use anymore, replaced by the POST version - vehicleEntrySearch2PointO()
+  // Future<Response> vehicleEntrySearch({
+  //   String regNum,
+  //   String clientId,
+  //   int duration,
+  // }) async {
+  //   Response response;
+  //   print('client id before api call: $clientId');
+  //   try {
+  //     if (regNum.length != 0 && clientId.length != 0) {
+  //       response = await dioClient.getDio().get(
+  //           '$VIEW_ENTRY/vehicle/$regNum/client/$clientId/period/$duration');
+  //       regNum = '';
+  //     } else if (regNum.length != 0 && clientId.length == 0) {
+  //       response = await dioClient
+  //           .getDio()
+  //           .get('$VIEW_ENTRY/vehicle/$regNum/period/$duration');
+  //       regNum = '';
+  //     } else if (regNum.length == 0 && clientId.length != 0) {
+  //       response = await dioClient
+  //           .getDio()
+  //           .get('$VIEW_ENTRY/client/$clientId/period/$duration');
+  //     } else {
+  //       response = await dioClient.getDio().get('$VIEW_ENTRY/period/$duration');
+  //     }
+  //   } on DioError catch (e) {
+  //     throw e;
+  //   }
+  //   return response;
+  // }
+
+  Future vehicleEntrySearch2PointO({ViewEntryRequest viewEntryRequest}) async {
+    String body = viewEntryRequest.toJson();
+    print('view entry with new api');
+    print(body);
+    Response response;
+    try {
+      response =
+          await dioClient.getDio().post('/vehicle/entrylog/view', data: body);
+    } on DioError catch (e) {
+      return e.toString();
+    }
+    print(response);
     return response;
   }
 
