@@ -1,4 +1,5 @@
-import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
@@ -53,22 +54,36 @@ class _RoutesViewState extends State<RoutesView> {
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
+                            color: AppColors.primaryColorShade5,
                             elevation: 4,
                             shape: getCardShape(),
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(viewModel.routesList[index].title),
-                                  Text(
-                                      "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
-                                  Text(
-                                      "Route # ${viewModel.routesList[index].id}"),
-                                ],
-                              ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Image.asset(
+                                    semiCircles,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(viewModel.routesList[index].title),
+                                      Text(
+                                          "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
+                                      Text(
+                                          "Route # ${viewModel.routesList[index].id}"),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           );
                         },
@@ -85,7 +100,7 @@ class _RoutesViewState extends State<RoutesView> {
                           },
                           controller: _controller,
                           itemCount: viewModel.routesList.length,
-                          color: ThemeConfiguration.primaryBackground,
+                          color: AppColors.primaryColorShade1,
                         ),
                       )
                     ],

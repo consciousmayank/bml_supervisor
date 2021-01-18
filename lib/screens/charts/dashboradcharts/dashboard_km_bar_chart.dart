@@ -22,8 +22,7 @@ class DashboardKmBarChart extends StatelessWidget {
     ];
 
     return Container(
-      height: 400,
-      padding: EdgeInsets.all(20),
+      height: 250,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

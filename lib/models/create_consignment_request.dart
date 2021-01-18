@@ -39,6 +39,16 @@ class CreateConsignmentRequest {
         items: items ?? this.items,
       );
 
+  double findGrandTotal() {
+    double grandTotal = 0;
+    this.items.forEach((element) {
+      print("grand total before :: ${grandTotal}");
+      grandTotal = grandTotal + element.payment;
+      print("grand total after  :: ${grandTotal}");
+    });
+    print("grand total after everything  :: ${grandTotal}");
+  }
+
   factory CreateConsignmentRequest.fromJson(String str) =>
       CreateConsignmentRequest.fromMap(json.decode(str));
 
@@ -88,10 +98,10 @@ class Item {
   final dynamic title;
   final int dropOff;
   final int collect;
-  final int payment;
+  final double payment;
   final int dropOffG;
   final int collectG;
-  final int paymentG;
+  final double paymentG;
   final int paymentMode;
   final String paymentId;
   final String remarks;
@@ -104,10 +114,10 @@ class Item {
     dynamic title,
     int dropOff,
     int collect,
-    int payment,
+    double payment,
     int dropOffG,
     int collectG,
-    int paymentG,
+    double paymentG,
     int paymentMode,
     String paymentId,
     String remarks,

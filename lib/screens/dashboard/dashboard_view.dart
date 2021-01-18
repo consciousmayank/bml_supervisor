@@ -1,7 +1,16 @@
+import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
+
 import 'dashboard_viewmodel.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
@@ -17,7 +26,25 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
-        onModelReady: (viewModel) => viewModel.getClients(),
+        onModelReady: (viewModel) async {
+          GetClientsResponse selectedClient =
+              await locator<MyPreferences>().getSelectedClient();
+          if (selectedClient == null) {
+            viewModel.getClients();
+          } else {
+            viewModel.clientsList.add(selectedClient);
+            viewModel.selectedClientForTiles = selectedClient;
+            viewModel.getDashboardTilesStats(
+                viewModel.selectedClientForTiles.id.toString());
+          }
+
+          String selectedDuration =
+              await locator<MyPreferences>().getSelectedDuration();
+          if (selectedDuration != null) {
+            viewModel.selectedDuration = selectedDuration.toString();
+            viewModel.getBarGraphKmReport(viewModel.selectedDuration);
+          }
+        },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
                 title: Text("Welcome, Rahul Rautela"),
@@ -32,7 +59,19 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                       )
                     : Column(
                         children: [
-                          selectClientForDashboardStats(viewModel: viewModel),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: selectClientForDashboardStats(
+                                    viewModel: viewModel),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                child: selectDuration(viewModel: viewModel),
+                                flex: 1,
+                              ),
+                            ],
+                          ),
                           viewModel.singleClientTileData != null
                               ? Row(
                                   children: [
@@ -90,85 +129,59 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                 )
                               : Container(),
                           hSizedBox(10),
-                          selectDuration(viewModel: viewModel),
-                          //!show Recent Consignment Table here...
-                          viewModel.recentConsignmentList != null
-                              ? Container(
-                                  height: 300,
-                                  child: Card(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('Date'),
-                                            Text('Driven Kilometer'),
-                                            Text('Trips'),
-                                            Text('Track'),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: ListView.builder(
-                                            itemBuilder: (context, index) {
-                                              return Row(
-                                                children: [
-                                                  Text('Demo'
-                                                      // viewModel
-                                                      //   .recentConsignmentList[
-                                                      //       index]
-                                                      //   .entryDate
-                                                      //   .toString()
-                                                      ),
-                                                  Text(viewModel
-                                                      .recentConsignmentList[
-                                                          index]
-                                                      .drivenKm
-                                                      .toString()),
-                                                  Text(viewModel
-                                                      .recentConsignmentList[
-                                                          index]
-                                                      .trips
-                                                      .toString()),
-                                                  Text(viewModel
-                                                              .recentConsignmentList[
-                                                                  index]
-                                                              .routeId ==
-                                                          1
-                                                      ? 'Consignmet Yes'
-                                                      : 'Consignment No'),
-                                                ],
-                                              );
-                                            },
-                                            itemCount: viewModel
-                                                .recentConsignmentList.length,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : Container(),
                           viewModel.kmReportListData.length > 0
                               ? DashboardKmBarChart(
                                   kmReportListData: viewModel.kmReportListData,
                                 )
                               : Container(),
                           hSizedBox(10),
-                          Container(
-                            height: 450,
-                            child: GridView.count(
-                              crossAxisCount: 2,
-                              children: List.generate(8, (index) {
-                                return getOptions(
-                                    context: context,
-                                    position: index,
-                                    viewModel: viewModel);
-                              }),
-                            ),
-                          ),
+                          viewModel.selectedClientForTiles == null
+                              ? Container()
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("Routes"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8, bottom: 8),
+                                      child: SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.20,
+                                        child: RoutesView(
+                                          selectedClient:
+                                              viewModel.selectedClientForTiles,
+                                          onRoutesPageInView: (clickedRoute) {
+                                            // FetchRoutesResponse route = clickedRoute;
+                                            // viewModel.selectedRoute = route;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                         ],
                       ),
+              ),
+              drawer: Container(
+                color: ThemeConfiguration.appScaffoldBackgroundColor,
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: Expanded(
+                  flex: 1,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return getOptions(
+                          context: context,
+                          position: index,
+                          viewModel: viewModel);
+                    },
+                    itemCount: 8,
+                  ),
+                ),
               ),
             ),
         viewModelBuilder: () => DashBoardScreenViewModel());
@@ -179,11 +192,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       optionList: selectDurationList,
       hint: "Select Duration",
       onOptionSelect: (selectedValue) {
+        print('1. duration selected');
         viewModel.selectedDuration = selectedValue;
         viewModel.getBarGraphKmReport(viewModel.selectedDuration);
-        //! calling recent consignment api
-        viewModel.getRecentConsignments();
-        print(viewModel.selectedDuration);
+        locator<MyPreferences>().saveSelectedDuration(selectedValue);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
           ? null
@@ -225,7 +237,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClientForTiles = selectedValue;
+        locator<MyPreferences>().saveSelectedClient(selectedValue);
         //* call client tiles data
+
         viewModel.getDashboardTilesStats(
             viewModel.selectedClientForTiles.id.toString());
       },
@@ -240,22 +254,29 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       int position,
       DashBoardScreenViewModel viewModel}) {
     return Container(
+      height: buttonHeight,
       child: InkWell(
         onTap: () => handleOptionClick(
             context: context, position: position, viewModel: viewModel),
         child: Card(
           elevation: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                viewModel.optionsIcons[position],
-                size: 48,
-              ),
-              Text(viewModel.optionsTitle[position]),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Icon(
+                  viewModel.optionsIcons[position],
+                ),
+                wSizedBox(20),
+                Expanded(
+                  child: Text(viewModel.optionsTitle[position]),
+                  flex: 1,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -266,6 +287,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       {BuildContext context,
       int position,
       DashBoardScreenViewModel viewModel}) {
+    Navigator.pop(context);
     switch (position) {
       case 0:
         return viewModel.takeToAddEntryPage();

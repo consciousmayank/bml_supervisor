@@ -56,7 +56,6 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
                     selectedClient: viewModel.selectedClient,
                     onRoutesPageInView: (clickedRoute) {
                       FetchRoutesResponse route = clickedRoute;
-                      print("${route.id}");
                       viewModel.selectedRoute = route;
                     },
                   ),
