@@ -15,7 +15,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     Icons.search,
     Icons.date_range,
     Icons.list,
-    Icons.title,
     Icons.access_alarm,
     Icons.access_time,
     Icons.payment,
@@ -79,6 +78,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "Add Expense",
     "View Expenses",
     "Allot Consignments",
+    "View Routes",
     "View Consignments",
     "Payments",
     // "Add Entry 2.0",
@@ -207,6 +207,10 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(addEntryLogPageRoute);
   }
 
+  takeToBlankPage() {
+    navigationService.navigateTo(blankPageRoute);
+  }
+
   takeToAddExpensePage() {
     navigationService.navigateTo(addExpensesPageRoute);
   }
@@ -226,9 +230,12 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   takeToPaymentsPage() {
     navigationService.navigateTo(paymentsPageRoute);
   }
+  takeToViewRoutesPage() {
+    navigationService.navigateTo(viewRoutesPageRoute);
+  }
 
   //! For testing purpose it is navigating to searchPageRoute
   takeToViewConsignmentsPage() {
-    navigationService.navigateTo(searchPageRoute);
+    navigationService.navigateTo(viewConsignmentsPageRoute);
   }
 }

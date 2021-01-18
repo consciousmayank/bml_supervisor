@@ -274,6 +274,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         return viewModel.takeToAllotConsignmentsPage();
         break;
       case 5:
+        return viewModel.takeToViewRoutesPage();
         return viewModel.takeToViewConsignmentsPage();
         break;
       case 6:
@@ -286,7 +287,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       //   return viewModel.takeToViewEntry2PointOPage();
       //   break;
       default:
-        return viewModel.takeToAddEntryPage();
+        return viewModel.takeToBlankPage();
     }
   }
 }

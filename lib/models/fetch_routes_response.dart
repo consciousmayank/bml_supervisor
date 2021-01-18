@@ -1,11 +1,11 @@
 // To parse this JSON data, do
 //
-//     final getRoutesResponse = getRoutesResponseFromMap(jsonString);
+//     final fetchRoutesResponse = fetchRoutesResponseFromMap(jsonString);
 
 import 'dart:convert';
 
-class GetRoutesResponse {
-  GetRoutesResponse({
+class FetchRoutesResponse {
+  FetchRoutesResponse({
     this.srcLocation,
     this.id,
     this.title,
@@ -17,26 +17,26 @@ class GetRoutesResponse {
   final String title;
   final String dstLocation;
 
-  GetRoutesResponse copyWith({
+  FetchRoutesResponse copyWith({
     String srcLocation,
     int id,
     String title,
     String dstLocation,
   }) =>
-      GetRoutesResponse(
+      FetchRoutesResponse(
         srcLocation: srcLocation ?? this.srcLocation,
         id: id ?? this.id,
         title: title ?? this.title,
         dstLocation: dstLocation ?? this.dstLocation,
       );
 
-  factory GetRoutesResponse.fromJson(String str) =>
-      GetRoutesResponse.fromMap(json.decode(str));
+  factory FetchRoutesResponse.fromJson(String str) =>
+      FetchRoutesResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory GetRoutesResponse.fromMap(Map<String, dynamic> json) =>
-      GetRoutesResponse(
+  factory FetchRoutesResponse.fromMap(Map<String, dynamic> json) =>
+      FetchRoutesResponse(
         srcLocation: json["srcLocation"],
         id: json["id"],
         title: json["title"],
