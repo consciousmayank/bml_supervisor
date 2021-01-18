@@ -100,14 +100,6 @@ class _PaymentsViewState extends State<PaymentsView> {
     );
   }
 
-  // List<Widget> showPaymentHistoryCard(BuildContext context,
-  //     List<PaymentHistoryResponse> paymentHistoryResponseList) {
-  //   return [
-  //     buildHeading(),
-  //     buildTransactionsTableData(context, paymentHistoryResponseList),
-  //   ];
-  // }
-
   Widget buildTransactionsTableData(BuildContext context,
       List<PaymentHistoryResponse> paymentHistoryResponseList) {
     return Scrollbar(

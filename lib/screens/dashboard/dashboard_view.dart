@@ -7,8 +7,6 @@ import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/models/km_report_response.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class DashBoardScreenView extends StatefulWidget {
   @override
@@ -35,7 +33,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                     : Column(
                         children: [
                           selectClientForDashboardStats(viewModel: viewModel),
-                          selectDuration(viewModel: viewModel),
                           viewModel.singleClientTileData != null
                               ? Row(
                                   children: [
@@ -93,6 +90,65 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                 )
                               : Container(),
                           hSizedBox(10),
+                          selectDuration(viewModel: viewModel),
+                          //!show Recent Consignment Table here...
+                          viewModel.recentConsignmentList != null
+                              ? Container(
+                                  height: 300,
+                                  child: Card(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text('Date'),
+                                            Text('Driven Kilometer'),
+                                            Text('Trips'),
+                                            Text('Track'),
+                                          ],
+                                        ),
+                                        Expanded(
+                                          child: ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return Row(
+                                                children: [
+                                                  Text('Demo'
+                                                      // viewModel
+                                                      //   .recentConsignmentList[
+                                                      //       index]
+                                                      //   .entryDate
+                                                      //   .toString()
+                                                      ),
+                                                  Text(viewModel
+                                                      .recentConsignmentList[
+                                                          index]
+                                                      .drivenKm
+                                                      .toString()),
+                                                  Text(viewModel
+                                                      .recentConsignmentList[
+                                                          index]
+                                                      .trips
+                                                      .toString()),
+                                                  Text(viewModel
+                                                              .recentConsignmentList[
+                                                                  index]
+                                                              .routeId ==
+                                                          1
+                                                      ? 'Consignmet Yes'
+                                                      : 'Consignment No'),
+                                                ],
+                                              );
+                                            },
+                                            itemCount: viewModel
+                                                .recentConsignmentList.length,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                           viewModel.kmReportListData.length > 0
                               ? DashboardKmBarChart(
                                   kmReportListData: viewModel.kmReportListData,
@@ -123,9 +179,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       optionList: selectDurationList,
       hint: "Select Duration",
       onOptionSelect: (selectedValue) {
-        print('1. duration selected');
         viewModel.selectedDuration = selectedValue;
         viewModel.getBarGraphKmReport(viewModel.selectedDuration);
+        //! calling recent consignment api
+        viewModel.getRecentConsignments();
         print(viewModel.selectedDuration);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
@@ -168,9 +225,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClientForTiles = selectedValue;
-
         //* call client tiles data
-
         viewModel.getDashboardTilesStats(
             viewModel.selectedClientForTiles.id.toString());
       },

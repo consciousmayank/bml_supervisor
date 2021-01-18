@@ -84,7 +84,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     // "View Entry 2.0",
   ];
 
-  List<RecentConginmentResponse> _recentConsignmentList = [];
+  List<RecentConginmentResponse> _recentConsignmentList;
 
   List<RecentConginmentResponse> get recentConsignmentList =>
       _recentConsignmentList;
