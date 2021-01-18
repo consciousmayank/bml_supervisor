@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'dimens.dart';
 
@@ -71,7 +72,7 @@ RoundedRectangleBorder getSelectedCardShape({@required Color color}) {
 }
 
 BorderRadiusGeometry getBorderRadius() {
-  return BorderRadius.circular(5);
+  return BorderRadius.circular(defaultBorder);
 }
 
 LinearProgressIndicator getLinearProgress() {
@@ -244,4 +245,18 @@ String getCurrentDate() {
 
 String getConvertedDate(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
+}
+
+launchMaps(double latitude, double longitude) async {
+  String googleUrl = 'comgooglemaps://?center=$latitude,$longitude}';
+  String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
+  if (await canLaunch("comgooglemaps://")) {
+    print('launching com googleUrl');
+    await launch(googleUrl);
+  } else if (await canLaunch(appleUrl)) {
+    print('launching apple url');
+    await launch(appleUrl);
+  } else {
+    throw 'Could not launch url';
+  }
 }

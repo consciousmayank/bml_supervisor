@@ -1,3 +1,5 @@
+import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
@@ -6,9 +8,11 @@ import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/routes_for_client_id_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
@@ -140,7 +144,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel.validatedRegistrationNumber == null
               ? Container()
               : SizedBox(
-                  height: 650,
+                  height: createConsignmentCardHeight,
                   child: Stack(
                     children: [
                       PageView.builder(
@@ -165,12 +169,23 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
                           if (index == viewModel.hubsList.length - 1) {
                             double grandTotal = 0;
-                            viewModel.consignmentRequest.items
-                                .forEach((element) {
-                              if (element.payment != null) {
-                                grandTotal = grandTotal + element.payment ?? 0;
+                            for (int i = 0;
+                                i <
+                                    viewModel.consignmentRequest.items.length -
+                                        1;
+                                i++) {
+                              if (viewModel
+                                      .consignmentRequest.items[i].payment !=
+                                  null) {
+                                grandTotal = grandTotal +
+                                        viewModel.consignmentRequest.items[i]
+                                            .payment ??
+                                    0;
                               }
-                            });
+                            }
+
+                            viewModel.consignmentRequest.items
+                                .forEach((element) {});
                             paymentController.text = grandTotal.toString();
                           } else {
                             paymentController.text = viewModel
@@ -188,265 +203,240 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                   .consignmentRequest.items[index].remarks ??
                               "";
                         },
-                        physics: NeverScrollableScrollPhysics(),
+                        // physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
+                            color: ThemeConfiguration.primaryBackground,
                             elevation: 4,
                             shape: getCardShape(),
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              // padding: EdgeInsets.all(8),
                               child: Form(
                                 key: viewModel.formKeyList[index],
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                child: Stack(
                                   children: [
-                                    Expanded(
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(viewModel
-                                                .hubsList[index].title),
-                                            Text(
-                                                "${viewModel.hubsList[index].contactPerson} - ${viewModel.hubsList[index].mobile}"),
-                                            Text(
-                                                "City - ${viewModel.hubsList[index].city}"),
-                                          ],
-                                        ),
-                                      ),
+                                    Image.asset(
+                                      semiCircles,
                                     ),
-                                    hubTitle(
-                                        context: context,
-                                        viewModel: viewModel,
-                                        index: index),
-                                    hSizedBox(20),
-                                    dropInput(
-                                        context: context, viewModel: viewModel),
-                                    hSizedBox(20),
-                                    collectInput(
-                                        context: context, viewModel: viewModel),
-                                    hSizedBox(20),
-                                    paymentInput(
-                                        context: context,
-                                        viewModel: viewModel,
-                                        enabled: index ==
-                                            viewModel.hubsList.length - 1),
-                                    hSizedBox(20),
-                                    remarksInput(
-                                        context: context, viewModel: viewModel),
-                                    hSizedBox(20),
+                                    // Container(
+                                    //     height: double.infinity,
+                                    //     width: double.infinity,
+                                    //     color: AppColors.primaryColorShade4
+                                    //         .withOpacity(0.5)),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Row(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           Expanded(
-                                            flex: 1,
-                                            child: index == 0
-                                                ? Container()
-                                                : SizedBox(
-                                                    height: buttonHeight,
-                                                    child: OutlineButton(
-                                                      shape:
-                                                          new RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            new BorderRadius
-                                                                .circular(30.0),
-                                                      ),
-                                                      borderSide: BorderSide(
-                                                          color: Colors.blue),
-                                                      child: Text("Previous"),
-                                                      onPressed: () {
-                                                        if (viewModel
-                                                            .formKeyList[index]
-                                                            .currentState
-                                                            .validate()) {
-                                                          FetchHubsResponse
-                                                              tempVar =
-                                                              viewModel
-                                                                      .hubsList[
-                                                                  index];
-                                                          viewModel.hubsList
-                                                              .removeAt(index);
-                                                          tempVar.copyWith(
-                                                              isSubmitted:
-                                                                  true);
-                                                          viewModel.hubsList
-                                                              .insert(index,
-                                                                  tempVar);
-
-                                                          viewModel.hubsList
-                                                              .forEach(
-                                                                  (element) {
-                                                            if (element
-                                                                    .sequence ==
-                                                                viewModel
-                                                                    .hubsList[
-                                                                        index]
-                                                                    .sequence) {
-                                                              Item item = viewModel
-                                                                  .consignmentRequest
-                                                                  .items[index];
-                                                              viewModel
-                                                                  .consignmentRequest
-                                                                  .items
-                                                                  .removeAt(
-                                                                      index);
-                                                              item =
-                                                                  item.copyWith(
-                                                                dropOff: int.parse(
-                                                                    dropController
-                                                                        .text),
-                                                                collect: int.parse(
-                                                                    collectController
-                                                                        .text),
-                                                                payment: int.parse(
-                                                                    paymentController
-                                                                        .text),
-                                                                title:
-                                                                    hubTitleController
-                                                                        .text
-                                                                        .trim(),
-                                                                remarks:
-                                                                    remarksController
-                                                                        .text
-                                                                        .trim(),
-                                                              );
-                                                              viewModel
-                                                                  .consignmentRequest
-                                                                  .items
-                                                                  .insert(index,
-                                                                      item);
-
-                                                              viewModel
-                                                                  .notifyListeners();
-                                                            }
-                                                          });
-
-                                                          _controller.animateToPage(
-                                                              index - 1,
-                                                              duration: Duration(
-                                                                  milliseconds:
-                                                                      200),
-                                                              curve: Curves
-                                                                  .easeInOut);
-                                                        }
-                                                      },
+                                            child: Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  InkWell(
+                                                    child: Image.asset(
+                                                      locationIcon,
+                                                      fit: BoxFit.cover,
+                                                      height:
+                                                          locationIconHeight,
+                                                      width: locationIconWidth,
                                                     ),
+                                                    onTap: () {
+                                                      launchMaps(
+                                                          viewModel
+                                                              .hubsList[index]
+                                                              .geoLatitude,
+                                                          viewModel
+                                                              .hubsList[index]
+                                                              .geoLongitude);
+                                                    },
                                                   ),
+                                                  Text("# ${index + 1}"),
+                                                  hSizedBox(10),
+                                                  Text(
+                                                    viewModel
+                                                        .hubsList[index].title
+                                                        .toUpperCase(),
+                                                    style: AppTextStyles
+                                                        .latoBold18Black,
+                                                  ),
+                                                  hSizedBox(10),
+                                                  Text(
+                                                    "${viewModel.hubsList[index].contactPerson}",
+                                                    style: AppTextStyles
+                                                        .latoMedium14Black,
+                                                  ),
+                                                  Text(
+                                                      viewModel
+                                                          .hubsList[index].city,
+                                                      style: AppTextStyles
+                                                          .latoMedium14Black),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                          wSizedBox(20),
-                                          Expanded(
-                                              flex: 1,
-                                              child:
-                                                  index ==
-                                                          viewModel.hubsList
-                                                                  .length -
-                                                              1
+                                          hubTitle(
+                                              context: context,
+                                              viewModel: viewModel,
+                                              index: index),
+                                          hSizedBox(5),
+                                          dropInput(
+                                              context: context,
+                                              viewModel: viewModel),
+                                          hSizedBox(5),
+                                          collectInput(
+                                              context: context,
+                                              viewModel: viewModel),
+                                          hSizedBox(5),
+                                          paymentInput(
+                                              context: context,
+                                              viewModel: viewModel,
+                                              enabled: index ==
+                                                  viewModel.hubsList.length -
+                                                      1),
+                                          remarksInput(
+                                              context: context,
+                                              viewModel: viewModel),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: index == 0
                                                       ? Container()
                                                       : SizedBox(
                                                           height: buttonHeight,
-                                                          child: OutlineButton(
-                                                            shape:
-                                                                new RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  new BorderRadius
-                                                                          .circular(
-                                                                      30.0),
-                                                            ),
-                                                            borderSide:
-                                                                BorderSide(
-                                                                    color: Colors
-                                                                        .blue),
-                                                            child: Text("Next"),
-                                                            onPressed: () {
-                                                              if (viewModel
-                                                                  .formKeyList[
-                                                                      index]
-                                                                  .currentState
-                                                                  .validate()) {
-                                                                FetchHubsResponse
-                                                                    tempVar =
-                                                                    viewModel
-                                                                            .hubsList[
-                                                                        index];
-                                                                viewModel
-                                                                    .hubsList
-                                                                    .removeAt(
-                                                                        index);
-                                                                tempVar.copyWith(
-                                                                    isSubmitted:
-                                                                        true);
-                                                                viewModel
-                                                                    .hubsList
-                                                                    .insert(
-                                                                        index,
-                                                                        tempVar);
-
-                                                                viewModel
-                                                                    .hubsList
-                                                                    .forEach(
-                                                                  (element) {
-                                                                    if (element
-                                                                            .sequence ==
-                                                                        viewModel
-                                                                            .hubsList[index]
-                                                                            .sequence) {
-                                                                      Item item = viewModel
-                                                                          .consignmentRequest
-                                                                          .items[index];
-                                                                      viewModel
-                                                                          .consignmentRequest
-                                                                          .items
-                                                                          .removeAt(
-                                                                              index);
-                                                                      item = item
-                                                                          .copyWith(
-                                                                        dropOff:
-                                                                            int.parse(dropController.text),
-                                                                        collect:
-                                                                            int.parse(collectController.text),
-                                                                        payment:
-                                                                            int.parse(paymentController.text),
-                                                                        title: hubTitleController
-                                                                            .text
-                                                                            .trim(),
-                                                                        remarks: remarksController
-                                                                            .text
-                                                                            .trim(),
-                                                                      );
-                                                                      viewModel
-                                                                          .consignmentRequest
-                                                                          .items
-                                                                          .insert(
-                                                                              index,
-                                                                              item);
-
-                                                                      viewModel
-                                                                          .notifyListeners();
-                                                                    }
-                                                                  },
-                                                                );
-                                                                _controller.animateToPage(
-                                                                    index + 1,
-                                                                    duration: Duration(
-                                                                        milliseconds:
-                                                                            200),
-                                                                    curve: Curves
-                                                                        .easeInOut);
-                                                              }
+                                                          child: AppButton(
+                                                            onTap: () {
+                                                              updateData(
+                                                                  viewModel:
+                                                                      viewModel,
+                                                                  index: index,
+                                                                  goForward:
+                                                                      false);
                                                             },
+                                                            background: AppColors
+                                                                .primaryColorShade5,
+                                                            buttonText:
+                                                                "Previous",
+                                                            borderColor: AppColors
+                                                                .primaryColorShade1,
                                                           ),
-                                                        )),
+                                                        ),
+                                                ),
+                                                wSizedBox(20),
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: SizedBox(
+                                                      height: buttonHeight,
+                                                      child: AppButton(
+                                                        buttonText: index ==
+                                                                viewModel
+                                                                        .hubsList
+                                                                        .length -
+                                                                    1
+                                                            ? "Finish"
+                                                            : "Next",
+                                                        onTap: index ==
+                                                                viewModel
+                                                                        .hubsList
+                                                                        .length -
+                                                                    1
+                                                            ? () {
+                                                                updateData(
+                                                                    viewModel:
+                                                                        viewModel,
+                                                                    index:
+                                                                        index);
+
+                                                                if (consignmentTitleController
+                                                                        .text
+                                                                        .trim()
+                                                                        .length ==
+                                                                    0) {
+                                                                  locator<SnackbarService>()
+                                                                      .showSnackbar(
+                                                                          message:
+                                                                              "Please Enter Consignment Title");
+                                                                  consignmentTitleFocusNode
+                                                                      .requestFocus();
+                                                                  _scrollController.animateTo(0,
+                                                                      duration: Duration(
+                                                                          milliseconds:
+                                                                              200),
+                                                                      curve: Curves
+                                                                          .easeInOut);
+                                                                } else {
+                                                                  locator<
+                                                                          DialogService>()
+                                                                      .showConfirmationDialog(
+                                                                    barrierDismissible:
+                                                                        false,
+                                                                    title:
+                                                                        'Create Consignment?',
+                                                                    description:
+                                                                        "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                                                                  )
+                                                                      .then(
+                                                                          (value) {
+                                                                    if (value !=
+                                                                        null) {
+                                                                      if (value
+                                                                          .confirmed) {
+                                                                        viewModel.createConsignment(
+                                                                            consignmentTitle:
+                                                                                consignmentTitleController.text);
+                                                                      }
+                                                                    }
+                                                                  });
+                                                                }
+                                                              }
+                                                            : () {
+                                                                updateData(
+                                                                    viewModel:
+                                                                        viewModel,
+                                                                    index:
+                                                                        index);
+                                                              },
+                                                        borderColor: AppColors
+                                                            .primaryColorShade1,
+                                                        background: AppColors
+                                                            .primaryColorShade5,
+                                                      ),
+                                                    )),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
+                                    ),
+                                    index == viewModel.hubsList.length - 1 ||
+                                            index == 0
+                                        ? Container()
+                                        : Positioned(
+                                            right: 10,
+                                            top: 10,
+                                            child: InkWell(
+                                              child: Text("Skip"),
+                                              onTap: () {
+                                                updateData(
+                                                    viewModel: viewModel,
+                                                    index: index,
+                                                    goForward: true,
+                                                    skip: true);
+                                              },
+                                            ),
+                                          )
                                   ],
                                 ),
                               ),
@@ -456,25 +446,22 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                         itemCount: viewModel.hubsList.length,
                       ),
                       Positioned(
-                        bottom: 5,
+                        bottom: 6,
                         left: 2,
                         right: 2,
                         child: DotsIndicator(
-                          onPageSelected: (int index) {
-                            print("aaaaaaa" + viewModel.hubsList[index].title);
-                          },
                           controller: _controller,
                           itemCount: viewModel.hubsList.length,
-                          color: ThemeConfiguration.primaryBackground,
+                          color: AppColors.primaryColorShade1,
                         ),
                       )
                     ],
                   ),
                 ),
 
-          viewModel.validatedRegistrationNumber == null
-              ? Container()
-              : createConsignmentButton(viewModel: viewModel)
+          // viewModel.validatedRegistrationNumber == null
+          //     ? Container()
+          //     : createConsignmentButton(viewModel: viewModel)
         ],
       ),
     );
@@ -525,36 +512,36 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  Widget submitConsignmentDetailsButton(
-      {ConsignmentAllotmentViewModel viewModel,
-      GlobalKey<FormState> formKey,
-      FetchHubsResponse hubDetail}) {
-    return SizedBox(
-      height: buttonHeight,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
-        child: OutlineButton(
-          shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(30.0),
-          ),
-          borderSide: BorderSide(color: Colors.blue),
-          child: Text(hubDetail.isSubmitted ? "Update" : "Submit"),
-          onPressed: () {
-            if (formKey.currentState.validate()) {
-              viewModel.hubsList.forEach((element) {
-                if (element.sequence == hubDetail.sequence) {
-                  element = element.copyWith(isSubmitted: true);
-                  viewModel.notifyListeners();
-                }
-              });
-              locator<SnackbarService>().showSnackbar(message: "Submitted");
-            }
-          },
-        ),
-      ),
-    );
-  }
+  // Widget submitConsignmentDetailsButton(
+  //     {ConsignmentAllotmentViewModel viewModel,
+  //     GlobalKey<FormState> formKey,
+  //     FetchHubsResponse hubDetail}) {
+  //   return SizedBox(
+  //     height: buttonHeight,
+  //     width: double.infinity,
+  //     child: Padding(
+  //       padding: const EdgeInsets.only(bottom: 4.0),
+  //       child: OutlineButton(
+  //         shape: new RoundedRectangleBorder(
+  //           borderRadius: new BorderRadius.circular(30.0),
+  //         ),
+  //         borderSide: BorderSide(color: Colors.black),
+  //         child: Text(hubDetail.isSubmitted ? "Update" : "Submit"),
+  //         onPressed: () {
+  //           if (formKey.currentState.validate()) {
+  //             viewModel.hubsList.forEach((element) {
+  //               if (element.sequence == hubDetail.sequence) {
+  //                 element = element.copyWith(isSubmitted: true);
+  //                 viewModel.notifyListeners();
+  //               }
+  //             });
+  //             locator<SnackbarService>().showSnackbar(message: "Submitted");
+  //           }
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   registrationSelector(
       {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
@@ -572,12 +559,14 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   registrationNumberTextField(ConsignmentAllotmentViewModel viewModel) {
     return appTextFormField(
-      enabled: true,
-      controller: selectedRegNoController,
-      focusNode: selectedRegNoFocusNode,
-      hintText: drRegNoHint,
-      keyboardType: TextInputType.text,
-    );
+        enabled: true,
+        controller: selectedRegNoController,
+        focusNode: selectedRegNoFocusNode,
+        hintText: drRegNoHint,
+        keyboardType: TextInputType.text,
+        onFieldSubmitted: (_) {
+          validateRegistrationNumber(viewModel: viewModel);
+        });
   }
 
   consignmentTextField({ConsignmentAllotmentViewModel viewModel}) {
@@ -592,22 +581,16 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   selectRegButton(
       BuildContext context, ConsignmentAllotmentViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {
-          if (viewModel.selectedClient == null) {
-            viewModel.snackBarService
-                .showSnackbar(message: 'Please provide Client');
-          } else if (selectedRegNoController.text.length == 0) {
-            viewModel.snackBarService
-                .showSnackbar(message: 'Please provide Reg no.');
-          } else {
-            viewModel.validateRegistrationNumber(
-                selectedRegNoController.text.trim().toUpperCase());
-          }
-        },
+    return SizedBox(
+      height: 58,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 6.0, right: 4),
+        child: appSuffixIconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            validateRegistrationNumber(viewModel: viewModel);
+          },
+        ),
       ),
     );
   }
@@ -636,18 +619,21 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   selectDateButton(
       BuildContext context, ConsignmentAllotmentViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Icon(Icons.calendar_today_outlined),
-        onPressed: (() async {
-          DateTime selectedDate = await selectDate();
-          if (selectedDate != null) {
-            selectedDateController.text =
-                DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.entryDate = selectedDate;
-          }
-        }),
+    return SizedBox(
+      height: 56,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
+        child: appSuffixIconButton(
+          icon: Icon(Icons.calendar_today_outlined),
+          onPressed: (() async {
+            DateTime selectedDate = await selectDate();
+            if (selectedDate != null) {
+              selectedDateController.text =
+                  DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+              viewModel.entryDate = selectedDate;
+            }
+          }),
+        ),
       ),
     );
   }
@@ -799,36 +785,91 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   getInputBorder({String hintText}) {
     return InputDecoration(
+      alignLabelWithHint: true,
+      errorStyle: TextStyle(fontSize: 14),
+      helperStyle: TextStyle(fontSize: 14),
+      helperText: ' ',
       labelText: hintText,
-      labelStyle: TextStyle(color: Colors.blueGrey, fontSize: 14),
-      fillColor: Colors.white,
+      labelStyle: TextStyle(color: AppColors.primaryColorShade1, fontSize: 14),
+      fillColor: AppColors.primaryColorShade5,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(
-          color: Colors.blue,
+          color: AppColors.primaryColorShade1,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(
-          color: Colors.blue,
-          width: 1.0,
+          color: AppColors.primaryColorShade1,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(
-          color: Colors.blue,
-          width: 1.0,
+          color: AppColors.primaryColorShade1,
         ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(
-          color: Colors.red,
+          color: AppColors.primaryColorShade1,
         ),
       ),
     );
+  }
+
+  void updateData(
+      {ConsignmentAllotmentViewModel viewModel,
+      int index,
+      bool goForward = true,
+      bool skip = false}) {
+    if (skip || viewModel.formKeyList[index].currentState.validate()) {
+      FetchHubsResponse tempVar = viewModel.hubsList[index];
+      viewModel.hubsList.removeAt(index);
+      tempVar.copyWith(isSubmitted: true);
+      viewModel.hubsList.insert(index, tempVar);
+
+      viewModel.hubsList.forEach((element) {
+        if (element.sequence == viewModel.hubsList[index].sequence) {
+          Item item = viewModel.consignmentRequest.items[index];
+          viewModel.consignmentRequest.items.removeAt(index);
+          item = item.copyWith(
+            dropOff: skip ? 0 : int.parse(dropController.text),
+            collect: skip ? 0 : int.parse(collectController.text),
+            payment: skip ? 0 : double.parse(paymentController.text),
+            title: skip ? " " : hubTitleController.text.trim(),
+            remarks: skip ? " " : remarksController.text.trim(),
+          );
+          viewModel.consignmentRequest.items.insert(index, item);
+
+          viewModel.notifyListeners();
+        }
+      });
+
+      if (goForward) {
+        if (index < viewModel.hubsList.length) {
+          _controller.nextPage(
+              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        }
+      } else {
+        if (index > 0) {
+          _controller.previousPage(
+              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        }
+      }
+    }
+  }
+
+  void validateRegistrationNumber({ConsignmentAllotmentViewModel viewModel}) {
+    if (viewModel.selectedClient == null) {
+      viewModel.snackBarService.showSnackbar(message: 'Please provide Client');
+    } else if (selectedRegNoController.text.length == 0) {
+      viewModel.snackBarService.showSnackbar(message: 'Please provide Reg no.');
+    } else {
+      viewModel.validateRegistrationNumber(
+          selectedRegNoController.text.trim().toUpperCase());
+    }
   }
 }
 

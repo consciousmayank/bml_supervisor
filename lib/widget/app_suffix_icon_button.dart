@@ -12,7 +12,9 @@ Widget appSuffixIconButton({
     color: ThemeConfiguration.primaryBackground,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-          topRight: Radius.circular(3.0), bottomRight: Radius.circular(3.0)),
+        topRight: Radius.circular(3.0),
+        bottomRight: Radius.circular(3.0),
+      ),
     ),
     child: icon,
     onPressed: onPressed,

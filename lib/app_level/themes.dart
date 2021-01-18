@@ -1,8 +1,9 @@
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ThemeConfiguration {
-  static const Color primaryBackground = Color.fromARGB(255, 52, 58, 64);
+  static const Color primaryBackground = AppColors.primaryColorShade5;
   static const Color secondaryBackground = Color.fromARGB(74, 255, 255, 255);
   static const Color ternaryBackground = Color.fromARGB(74, 255, 255, 255);
   static const Color primaryElement = Color.fromARGB(255, 255, 255, 255);
@@ -10,7 +11,7 @@ class ThemeConfiguration {
   static const Color accentElement = Color.fromARGB(255, 137, 138, 139);
   static const Color primaryText = Color.fromARGB(255, 255, 255, 255);
   static const Color secondaryText = Color.fromARGB(255, 223, 54, 41);
-  TextTheme appTextTheme = GoogleFonts.montserratTextTheme();
+  TextTheme appTextTheme = GoogleFonts.latoTextTheme();
 
   static BoxDecoration fieldDecortaion = BoxDecoration(
       borderRadius: BorderRadius.circular(5), color: Colors.grey[200]);
@@ -34,16 +35,15 @@ class ThemeConfiguration {
       const TextStyle(fontWeight: FontWeight.w700, color: Colors.white);
 
   //also bottom navigation color
-  static const Color appCanvasColor = Color.fromARGB(255, 144, 144, 144);
-  static const Color appScaffoldBackgroundColor =
-      Color.fromARGB(255, 248, 248, 248);
+  static const Color appCanvasColor = AppColors.primaryColorShade5;
+  static const Color appScaffoldBackgroundColor = AppColors.primaryColorShade2;
 
   ThemeData getAppThemeComplete() {
     return ThemeData(
       appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(color: primaryBackground),
         elevation: 0.8,
-        color: ThemeConfiguration.primaryText,
+        color: AppColors.primaryColorShade4,
         textTheme: appTextTheme,
       ),
       primaryIconTheme: IconThemeData(color: secondaryBackground),

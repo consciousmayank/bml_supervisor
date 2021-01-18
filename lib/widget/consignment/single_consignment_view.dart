@@ -1,4 +1,5 @@
-import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/consignment/single_consignment_viewmodel.dart';
@@ -23,6 +24,11 @@ class _SingleConsignmentViewState extends State<SingleConsignmentView> {
   );
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SingleConsignmentViewModel>.reactive(
         onModelReady: (viewModel) => viewModel.getHubs(widget.selectedRoute),
@@ -33,21 +39,31 @@ class _SingleConsignmentViewState extends State<SingleConsignmentView> {
                     controller: _controller,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
+                        color: AppColors.primaryColorShade5,
                         elevation: 4,
                         shape: getCardShape(),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(viewModel.hubsList[index].title),
-                              Text(
-                                  "${viewModel.hubsList[index].contactPerson} - ${viewModel.hubsList[index].mobile}"),
-                              Text("City - ${viewModel.hubsList[index].city}"),
-                            ],
-                          ),
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            Image.asset(
+                              semiCircles,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(viewModel.hubsList[index].title),
+                                  Text(
+                                      "${viewModel.hubsList[index].contactPerson} - ${viewModel.hubsList[index].mobile}"),
+                                  Text(
+                                      "City - ${viewModel.hubsList[index].city}"),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       );
                     },
@@ -58,12 +74,9 @@ class _SingleConsignmentViewState extends State<SingleConsignmentView> {
                     left: 2,
                     right: 2,
                     child: DotsIndicator(
-                      onPageSelected: (int index) {
-                        print("aaaaaaa" + viewModel.hubsList[index].title);
-                      },
                       controller: _controller,
                       itemCount: viewModel.hubsList.length,
-                      color: ThemeConfiguration.primaryBackground,
+                      color: AppColors.primaryColorShade1,
                     ),
                   )
                 ],

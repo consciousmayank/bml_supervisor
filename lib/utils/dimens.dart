@@ -2,6 +2,10 @@ const double buttonHeight = 54.00;
 const double buttonWidth = 200.00;
 const double searchWidgetsHeight = 100.00;
 const double topHeaderTextFontSize = 18.00;
+const double defaultBorder = 10.00;
+const double locationIconHeight = 52.00;
+const double locationIconWidth = 35.00;
+const double createConsignmentCardHeight = 650.00;
 
 const double horizontalPaddingValue = 16.00;
 const double verticlePaddingValue = 20.00;
