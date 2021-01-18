@@ -68,7 +68,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void addNewPayment(SavePaymentRequest savePaymentRequest) async {
+  Future addNewPayment(SavePaymentRequest savePaymentRequest) async {
     setBusy(true);
     var response = await apiService.addNewPayment(savePaymentRequest);
     if (response is String) {

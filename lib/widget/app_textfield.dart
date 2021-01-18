@@ -11,6 +11,7 @@ Widget appTextFormField(
     TextCapitalization textCapitalization = TextCapitalization.none,
     TextInputType keyboardType,
     Function onFieldSubmitted,
+    Function onEditingComplete,
     Function onTextChange,
     bool enabled = true,
     bool autoFocus = false,
@@ -33,6 +34,7 @@ Widget appTextFormField(
           padding: const EdgeInsets.only(top: 2, bottom: 2),
           child: TextFormField(
               textAlign: textAlignment,
+              onEditingComplete: onEditingComplete,
               maxLines: maxLines,
               onChanged: onTextChange,
               textCapitalization: textCapitalization,

@@ -20,12 +20,15 @@ class PaymentsView extends StatefulWidget {
 }
 
 class _PaymentsViewState extends State<PaymentsView> {
+  final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
   final FocusNode totalKmFocusNode = FocusNode();
   final TextEditingController totalKmController = TextEditingController();
 
   final FocusNode totalAmountFocusNode = FocusNode();
   final TextEditingController totalAmountController = TextEditingController();
+  final FocusNode remarksFocusNode = FocusNode();
+  final TextEditingController remarksController = TextEditingController();
 
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
@@ -45,79 +48,127 @@ class _PaymentsViewState extends State<PaymentsView> {
                 })
           ],
         ),
-        body: Padding(
-          padding: getSidePadding(context: context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              selectClientForTransactionList(viewModel: viewModel),
-              selectDuration(viewModel: viewModel),
-              hSizedBox(15),
-              // ! show heading and list when payment list has data
-              // viewModel.paymentHistoryResponseList.length > 0
-              //     ? Expanded(child: buildHeading())
-              //     : Container(),
-              // buildHeading(),
-              viewModel.paymentHistoryResponseList.length > 0
-                  ? buildHeading()
-                  : Container(),
-              viewModel.paymentHistoryResponseList.length > 0
-                  ? Expanded(
-                      child: buildTransactionsTableData(
-                          context, viewModel.paymentHistoryResponseList))
-                  : Container(),
-            ],
-          ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: getPaymentScreenSidePadding(),
+              child: selectClientForTransactionList(viewModel: viewModel),
+            ),
+            Padding(
+              padding: getPaymentScreenSidePadding(),
+              child: selectDuration(viewModel: viewModel),
+            ),
+            hSizedBox(15),
+            viewModel.paymentHistoryResponseList.length > 0
+                ? Expanded(
+                    child: Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: Column(
+                          // !Refer this if listview is troubling
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.max,
+                          children: [
+                            buildHeading(),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: Container(
+                                height: 1,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Expanded(
+                              child: buildTransactionsTableData(context,
+                                  viewModel.paymentHistoryResponseList),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
       viewModelBuilder: () => PaymentsViewModel(),
     );
   }
 
+  // List<Widget> showPaymentHistoryCard(BuildContext context,
+  //     List<PaymentHistoryResponse> paymentHistoryResponseList) {
+  //   return [
+  //     buildHeading(),
+  //     buildTransactionsTableData(context, paymentHistoryResponseList),
+  //   ];
+  // }
+
   Widget buildTransactionsTableData(BuildContext context,
       List<PaymentHistoryResponse> paymentHistoryResponseList) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Scrollbar(
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  paymentHistoryResponseList[index].entryDate,
+    return Scrollbar(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
                 ),
-                Text(
-                  paymentHistoryResponseList[index].kilometers.toString(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      paymentHistoryResponseList[index].entryDate,
+                    ),
+                    Text(
+                      paymentHistoryResponseList[index].kilometers.toString(),
+                    ),
+                    Text(
+                      paymentHistoryResponseList[index].amount.toString(),
+                    ),
+                  ],
                 ),
-                Text(
-                  paymentHistoryResponseList[index].amount.toString(),
-                ),
-              ],
-            );
-          },
-          itemCount: paymentHistoryResponseList.length,
-        ),
+              ),
+              index + 1 != paymentHistoryResponseList.length
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      child: Container(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                    )
+                  : Container(),
+              // Divider(
+              //   color: Colors.black,
+              // ),
+            ],
+          );
+        },
+        itemCount: paymentHistoryResponseList.length,
       ),
     );
   }
 
   Widget buildHeading() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 17,
+        vertical: 8,
+      ),
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            ('DATE'),
-          ),
-          Text(
-            ('KMs'),
-          ),
-          Text(
-            ('AMOUNT'),
-          ),
+          Text(('Date'), style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(('KMs'), style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(('Payment'), style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -191,35 +242,86 @@ class _PaymentsViewState extends State<PaymentsView> {
 
   void showAddNewPaymentBottomSheet(
       BuildContext context, PaymentsViewModel viewModel) {
+    final node = FocusScope.of(context);
     showModalBottomSheet(
-        // isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
+          ),
+        ),
+        isScrollControlled: true,
         context: context,
         builder: (_) {
-          return Padding(
-            padding: const EdgeInsets.all(4),
-            child: ClipRRect(
-              borderRadius: getBorderRadius(),
-              child: Card(
-                elevation: 4,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: Form(
-                    key: _formKey,
-                    child: ListView(children: [
-                      selectClientForNewTransaction(viewModel: viewModel),
-                      dateSelector(context: context, viewModel: viewModel),
-                      totalKmView(),
-                      // totalKmView(),
-                      totalPaymentView(),
-                      addNewPaymentButton(viewModel: viewModel),
-                    ]),
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 30,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+              ),
+              child: Scrollbar(
+                controller: _scrollController,
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    controller: _scrollController,
+                    children: [
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child:
+                            selectClientForNewTransaction(viewModel: viewModel),
+                      ),
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child: dateSelector(viewModel: viewModel),
+                      ),
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child: totalKmView(context: context, node: node),
+                      ),
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child: totalPaymentView(context: context, node: node),
+                      ),
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child: getRemarksView(node: node),
+                      ),
+                      hSizedBox(10),
+                      Padding(
+                        padding: getPaymentScreenSidePadding(),
+                        child: addNewPaymentButton(viewModel: viewModel),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           );
         });
+  }
+
+  Widget getRemarksView({dynamic node}) {
+    return appTextFormField(
+      onEditingComplete: () => node.unfocus(),
+      textCapitalization: TextCapitalization.sentences,
+      maxLines: 3,
+      enabled: true,
+      formatter: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 , -- /]')),
+      ],
+      controller: remarksController,
+      focusNode: remarksFocusNode,
+      hintText: "Remarks",
+      keyboardType: TextInputType.text,
+      onFieldSubmitted: (_) {
+        // remarksFocusNode.unfocus();
+      },
+    );
   }
 
   Widget addNewPaymentButton({PaymentsViewModel viewModel}) {
@@ -229,26 +331,39 @@ class _PaymentsViewState extends State<PaymentsView> {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
         child: RaisedButton(
-          child: Text("Add New Payment"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24.0),
+            // side: BorderSide(color: Colors.red),
+          ),
+          color: Color(0xff04BFAE),
+          child: Text("CREATE"),
           onPressed: () {
             //* hit add transaction api
             if (_formKey.currentState.validate()) {
               if (viewModel.selectedClientForNewTransaction != null) {
                 if (viewModel.emptyDateSelector) {
-                  viewModel.addNewPayment(
+                  viewModel
+                      .addNewPayment(
                     SavePaymentRequest(
                       clientId: viewModel.selectedClientForNewTransaction.id,
                       entryDate:
                           DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
-                      remarks: null,
+                      remarks: remarksController.text,
                       amount: double.parse(totalAmountController.text),
                       kilometers: double.parse(totalKmController.text),
                     ),
-                  );
-                  totalAmountController.clear();
-                  totalKmController.clear();
-                  viewModel.selectedClientForNewTransaction = null;
-                  selectedDateController.clear();
+                  )
+                      .then((value) {
+                    totalAmountController.clear();
+                    totalKmController.clear();
+                    viewModel.selectedClientForNewTransaction = null;
+                    selectedDateController.clear();
+                    remarksController.clear();
+                    //* call payment history api
+                    viewModel.getPaymentHistory(
+                        viewModel.selectedClientForTransactionList.id);
+                    // * update the payment history list with the newly added transaction
+                  });
                   Navigator.of(context).pop();
                 } else {
                   viewModel.snackBarService
@@ -265,22 +380,24 @@ class _PaymentsViewState extends State<PaymentsView> {
     );
   }
 
-  Widget totalKmView() {
+  Widget totalKmView({BuildContext context, dynamic node}) {
     return appTextFormField(
+      onEditingComplete: () => node.nextFocus(),
       enabled: true,
       formatter: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
         LengthLimitingTextInputFormatter(7)
       ],
       controller: totalKmController,
+      // autoFocus: true,
       focusNode: totalKmFocusNode,
+
       hintText: enterTotalKmHint,
       keyboardType: TextInputType.number,
       labelText: "Total Km",
       onFieldSubmitted: (_) {
         //! below code - on done, focus goes to next textField
-        // fieldFocusChange(
-        // context, endReadingFocusNode, vehicleLoadCapacityFocusNode);
+        // fieldFocusChange(context, totalKmFocusNode, totalAmountFocusNode);
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -294,8 +411,9 @@ class _PaymentsViewState extends State<PaymentsView> {
     );
   }
 
-  Widget totalPaymentView() {
+  Widget totalPaymentView({BuildContext context, dynamic node}) {
     return appTextFormField(
+      onEditingComplete: () => node.nextFocus(),
       enabled: true,
       formatter: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -307,9 +425,8 @@ class _PaymentsViewState extends State<PaymentsView> {
       keyboardType: TextInputType.number,
       labelText: "Total Amount",
       onFieldSubmitted: (_) {
-        //! below code - on done, focus goes to next textField
-        // fieldFocusChange(
-        // context, endReadingFocusNode, vehicleLoadCapacityFocusNode);
+        //* below code - on done, focus goes to next textField
+        // fieldFocusChange(context, totalAmountFocusNode, remarksFocusNode);
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -357,17 +474,23 @@ class _PaymentsViewState extends State<PaymentsView> {
 }
 
 Widget selectClientForNewTransaction({PaymentsViewModel viewModel}) {
-  return ClientsDropDown(
-    optionList: viewModel.clientsList,
-    hint: "Select Client",
-    onOptionSelect: (GetClientsResponse selectedValue) {
-      viewModel.selectedClientForNewTransaction = selectedValue;
-      print(
-          'new transaction: client-${viewModel.selectedClientForNewTransaction.title}');
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return ClientsDropDown(
+        optionList: viewModel.clientsList,
+        hint: "Select Client",
+        onOptionSelect: (GetClientsResponse selectedValue) {
+          setState(
+              () => viewModel.selectedClientForNewTransaction = selectedValue);
+
+          print(
+              'new transaction: client-${viewModel.selectedClientForNewTransaction.title}');
+        },
+        selectedValue: viewModel.selectedClientForNewTransaction == null
+            ? null
+            : viewModel.selectedClientForNewTransaction,
+      );
     },
-    selectedValue: viewModel.selectedClientForNewTransaction == null
-        ? null
-        : viewModel.selectedClientForNewTransaction,
   );
 }
 
@@ -378,12 +501,13 @@ class ClientsDropDown extends StatefulWidget {
   final Function onOptionSelect;
   final showUnderLine;
 
-  ClientsDropDown(
-      {@required this.optionList,
-      this.selectedValue,
-      @required this.hint,
-      @required this.onOptionSelect,
-      this.showUnderLine = true});
+  ClientsDropDown({
+    @required this.optionList,
+    this.selectedValue,
+    @required this.hint,
+    @required this.onOptionSelect,
+    this.showUnderLine = true,
+  });
 
   @override
   _ClientsDropDownState createState() => _ClientsDropDownState();

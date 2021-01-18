@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
@@ -121,29 +122,31 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   void vehicleEntrySearch(
       {String regNum, String selectedDuration, String clientId}) async {
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
-    // int selectedClientValue = selectedClient == 'BOOK MY LOADING' ? 0 : 1;
     vehicleEntrySearchResponseList.clear();
     _vehicleLog = null;
     notifyListeners();
     setBusy(true);
     try {
-      final res = await apiService.vehicleEntrySearch(
-        regNum: regNum,
-        duration: selectedDurationValue,
-        clientId: clientId,
+      // final res = await apiService.vehicleEntrySearch(
+      //   regNum: regNum,
+      //   duration: selectedDurationValue,
+      //   clientId: clientId,
+      // );
+      print('***************');
+      print('$regNum---$selectedDurationValue----$clientId');
+      final res = await apiService.vehicleEntrySearch2PointO(
+        viewEntryRequest: ViewEntryRequest(
+          clientId: clientId ?? "",
+          period: selectedDurationValue.toString(),
+          vehicleId: regNum ?? "",
+        ),
       );
 
       if (res.statusCode == 200) {
         print('status code 200');
-        // if status failed show snack bar
-        // else do your business
         if (res is String) {
-          print('res is string');
           snackBarService.showSnackbar(message: res.toString());
         } else if (res.data is List) {
-//data is returned
-
-          print('res has data');
           var list = res.data as List;
           print('list length' + list.length.toString());
           if (list.length > 0) {
@@ -158,13 +161,9 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
             }
             if (!(_totalKm == 0 && _totalKmGround == 0)) {
               _kmDifference = _totalKmGround - _totalKm;
-              // print('km Diff' + _kmDifference.toString());
             }
-            // print('total fuel in ltr: $_totalFuelInLtr');
-            // print('total fuel amt: $_totalFuelAmt');
             if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
               _avgPerLitre = _totalKm / _totalFuelInLtr;
-              // print('avg per litr: ${_avgPerLitre.toStringAsFixed(2)}');
             }
             takeToViewEntryDetailedPage2Point0();
           } else {

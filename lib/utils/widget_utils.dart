@@ -17,6 +17,34 @@ hSizedBox(double height) {
   );
 }
 
+getDashboardDistributerTileBgColor() {
+  return Color(dashboardDistributerTileBgColor);
+}
+
+getDashboardTotalKmTileBgColor() {
+  return Color(dashboardTotalKmTileBgColor);
+}
+
+getDashboardRoutesTileBgColor() {
+  return Color(dashboardRoutesTileBgColor);
+}
+
+getDashboardDueKmTileBgColor() {
+  return Color(dashboardDueKmTileBgColor);
+}
+
+getDashboardTileTextColor() {
+  return Colors.white;
+}
+
+getDashboradTilesVerticlePadding() {
+  return const EdgeInsets.symmetric(vertical: verticlePaddingValue);
+}
+
+getPaymentScreenSidePadding() {
+  return const EdgeInsets.symmetric(horizontal: horizontalPaddingValue);
+}
+
 wSizedBox(double width) {
   return SizedBox(
     width: width,
