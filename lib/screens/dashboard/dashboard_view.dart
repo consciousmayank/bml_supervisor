@@ -103,7 +103,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                             height: 450,
                             child: GridView.count(
                               crossAxisCount: 2,
-                              children: List.generate(7, (index) {
+                              children: List.generate(8, (index) {
                                 return getOptions(
                                     context: context,
                                     position: index,
@@ -118,47 +118,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         viewModelBuilder: () => DashBoardScreenViewModel());
   }
 
-  buildBarChart(DashBoardScreenViewModel viewModel) {
-    List<charts.Series<KilometerReportResponse, String>> series = [
-      charts.Series(
-        id: "kilometerReport",
-        data: viewModel.kmReportListData,
-        domainFn: (KilometerReportResponse series, _) => series.entryDate,
-        measureFn: (KilometerReportResponse series, _) =>
-            int.parse(series.drivenKm),
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-      )
-    ];
-    //!Build Bar Graph
-    return Container(
-      height: 400,
-      padding: EdgeInsets.all(20),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "kilometers Report",
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              Expanded(
-                child: charts.BarChart(
-                  series,
-                  animate: true,
-                  domainAxis: charts.OrdinalAxisSpec(
-                      renderSpec:
-                          charts.SmallTickRendererSpec(labelRotation: 60)),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget selectDuration({DashBoardScreenViewModel viewModel}) {
     return AppDropDown(
       optionList: selectDurationList,
@@ -166,11 +125,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       onOptionSelect: (selectedValue) {
         print('1. duration selected');
         viewModel.selectedDuration = selectedValue;
-        // viewModel.isShowBarChart = true;
         viewModel.getBarGraphKmReport(viewModel.selectedDuration);
         print(viewModel.selectedDuration);
-        //* call graph
-        // buildBarChart(viewModel);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
           ? null
@@ -217,8 +173,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
         viewModel.getDashboardTilesStats(
             viewModel.selectedClientForTiles.id.toString());
-
-        viewModel.getRecentConsignments();
       },
       selectedValue: viewModel.selectedClientForTiles == null
           ? null
@@ -275,9 +229,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         break;
       case 5:
         return viewModel.takeToViewRoutesPage();
-        return viewModel.takeToViewConsignmentsPage();
         break;
       case 6:
+        return viewModel.takeToViewConsignmentsPage();
+        break;
+      case 7:
         return viewModel.takeToPaymentsPage();
         break;
       // case 6:

@@ -16,7 +16,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     Icons.date_range,
     Icons.list,
     Icons.access_alarm,
-    Icons.access_time,
     Icons.payment,
   ];
 
@@ -230,6 +229,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   takeToPaymentsPage() {
     navigationService.navigateTo(paymentsPageRoute);
   }
+
   takeToViewRoutesPage() {
     navigationService.navigateTo(viewRoutesPageRoute);
   }
