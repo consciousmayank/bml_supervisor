@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,8 +12,7 @@ class MyPreferences {
     if (selectedClient == null) {
       await prefs.remove(selected_client);
     } else {
-      await prefs.setString(
-          selected_client, selectedClient.toJson().toString());
+      await prefs.setString(selected_client, json.encode(selectedClient));
     }
   }
 
@@ -36,6 +37,6 @@ class MyPreferences {
 
   Future<String> getSelectedDuration() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(selected_client) ?? "THIS MONTH";
+    return prefs.getString(selected_duration) ?? "THIS MONTH";
   }
 }
