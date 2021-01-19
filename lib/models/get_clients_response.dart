@@ -18,13 +18,13 @@ class GetClientsResponse {
   factory GetClientsResponse.fromJson(String str) =>
       GetClientsResponse.fromMap(json.decode(str));
 
-  factory GetClientsResponse.fromMap(Map<String, dynamic> json) =>
+  factory GetClientsResponse.fromMap(Map<dynamic, dynamic> json) =>
       GetClientsResponse(
         id: json["id"],
         title: json["title"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         "id": id,
         "title": title,
       };
