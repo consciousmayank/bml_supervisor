@@ -14,12 +14,6 @@ class ViewEntryDetailedView extends StatefulWidget {
 class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
   @override
   Widget build(BuildContext context) {
-    // final totalKm = widget.arguments['totalKm'].toString();
-    // final kmDifference = widget.arguments['kmDifference'].toString();
-    // final totalFuelInLtr = widget.arguments['totalFuelInLtr'].toString();
-    // final avgPerLitre = widget.arguments['avgPerLitre'].toString();
-    // final totalFuelAmt = widget.arguments['totalFuelAmt'].toString();
-
     final vehicleEntrySearchResponseList =
         widget.arguments['vehicleEntrySearchResponseList'];
 

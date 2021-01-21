@@ -12,25 +12,28 @@ class DashboardKmBarChart extends StatelessWidget {
         'bar chart class: no. of bars -------------${kmReportListData.length}');
     List<charts.Series<KilometerReportResponse, String>> series = [
       charts.Series(
-        id: "Subscribers",
-        data: kmReportListData,
-        domainFn: (KilometerReportResponse series, _) => series.entryDate,
-        measureFn: (KilometerReportResponse series, _) =>
-            int.parse(series.drivenKm),
-        colorFn: (KilometerReportResponse series, _) => series.barColor,
-      )
+          id: "Subscribers",
+          data: kmReportListData,
+          domainFn: (KilometerReportResponse series, _) =>
+              series.entryDate.substring(0, 2) + '-Jan',
+          measureFn: (KilometerReportResponse series, _) =>
+              int.parse(series.drivenKm),
+          colorFn: (KilometerReportResponse series, _) => series.barColor,
+          labelAccessorFn: (KilometerReportResponse series, _) =>
+              '${series.drivenKm.toString()}'),
     ];
 
     return Container(
       height: 250,
       child: Card(
+        elevation: 6,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "kilometers Report",
+                "Kilometers Report",
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               Expanded(
@@ -40,6 +43,7 @@ class DashboardKmBarChart extends StatelessWidget {
                   domainAxis: charts.OrdinalAxisSpec(
                     renderSpec: charts.SmallTickRendererSpec(labelRotation: 60),
                   ),
+                  barRendererDecorator: new charts.BarLabelDecorator<String>(),
                 ),
               )
             ],

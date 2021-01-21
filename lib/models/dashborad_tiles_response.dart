@@ -28,13 +28,13 @@ class DashboardTilesStatsResponse {
         hubCount: json["hubCount"],
         kmCount: json["kmCount"],
         routeCount: json["routeCount"],
-        dueCount: json["dueCount"],
+        dueCount: json["dueKmCount"],
       );
 
   Map<String, dynamic> toJson() => {
         "hubCount": hubCount,
         "kmCount": kmCount,
         "routeCount": routeCount,
-        "dueCount": dueCount,
+        "dueKmCount": dueCount,
       };
 }
