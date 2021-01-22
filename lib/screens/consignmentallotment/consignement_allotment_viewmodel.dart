@@ -118,7 +118,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   getHubs() async {
     _hubsList.clear();
 
-    var consignmentResponse = await apiService.getConsignment(
+    var consignmentResponse = await apiService.getHubsForRouteAndClientId(
         routeId: selectedRoute.id,
         clientId: selectedClient.id,
         entryDate: null);

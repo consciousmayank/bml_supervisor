@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
@@ -21,6 +22,8 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'consignment_dialog_params.dart';
+
 class ConsignmentAllotmentView extends StatefulWidget {
   @override
   _ConsignmentAllotmentViewState createState() =>
@@ -28,6 +31,7 @@ class ConsignmentAllotmentView extends StatefulWidget {
 }
 
 class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
+  bool isEditAllowed = true;
   ScrollController _scrollController = ScrollController();
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
@@ -169,7 +173,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
                           if (index == viewModel.hubsList.length - 1) {
                             double grandTotal = 0;
-                            for (int i = 0;
+                            for (int i = 1;
                                 i <
                                     viewModel.consignmentRequest.items.length -
                                         1;
@@ -203,7 +207,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                   .consignmentRequest.items[index].remarks ??
                               "";
                         },
-                        physics: NeverScrollableScrollPhysics(),
+                        // physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -379,13 +383,26 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                                                 } else {
                                                                   locator<
                                                                           DialogService>()
-                                                                      .showConfirmationDialog(
-                                                                    barrierDismissible:
-                                                                        false,
-                                                                    title:
-                                                                        'Create Consignment?',
-                                                                    description:
-                                                                        "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                                                                      .showCustomDialog(
+                                                                    variant:
+                                                                        DialogType
+                                                                            .CREATE_CONSIGNMENT,
+                                                                    // Which builder you'd like to call that was assigned in the builders function above.
+                                                                    customData:
+                                                                        ConsignmentDialogParams(
+                                                                      selectedClient:
+                                                                          viewModel
+                                                                              .selectedClient,
+                                                                      validatedRegistrationNumber:
+                                                                          viewModel
+                                                                              .validatedRegistrationNumber,
+                                                                      consignmentRequest:
+                                                                          viewModel
+                                                                              .consignmentRequest,
+                                                                      selectedRoute:
+                                                                          viewModel
+                                                                              .selectedRoute,
+                                                                    ),
                                                                   )
                                                                       .then(
                                                                           (value) {
@@ -774,6 +791,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       },
       keyboardType: TextInputType.number,
       validator: (value) {
+        if (!enabled) {
+          return null;
+        }
         if (value.isEmpty) {
           return textRequired;
         } else {
@@ -947,13 +967,6 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
                     isExpanded: true,
                     style: textFieldStyle(
                         fontSize: 15.0, textColor: Colors.black54),
-                    // hint: Padding(
-                    //   padding: const EdgeInsets.only(left: 20, right: 20),
-                    //   child: Text(
-                    //     widget.hint,
-                    //     style: TextStyle(color: Colors.black26),
-                    //   ),
-                    // ),
                     value: widget.selectedValue,
                     items: getDropDownItems(),
                     onChanged: (value) {
