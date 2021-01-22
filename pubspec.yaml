@@ -37,7 +37,7 @@ dependencies:
   responsive_builder: ^0.3.0
   shared_preferences: ^0.5.7
   stacked: ^1.7.5
-  stacked_services: ^0.5.0
+  stacked_services: ^0.6.2
   string_validator: ^0.1.4
   flutter_svg: ^0.19.1
   timeline_list: ^0.0.3

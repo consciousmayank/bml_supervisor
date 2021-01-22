@@ -1,8 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/RoutesForSelectedClientAndDateResponse.dart';
-import 'package:bml_supervisor/models/fetch_hubs_response.dart';
+import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_client_id_response.dart';
+import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
@@ -11,19 +10,27 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   SearchByRegNoResponse validatedRegistrationNumber;
   DateTime _entryDate;
   GetClientsResponse _selectedClient;
-  List<GetRoutesResponse> _routesList = [];
+  List<RoutesForSelectedClientAndDateResponse> _routesList = [];
+  List<ConsignmentDetailsResponse> _hubList = [];
 
-  GetRoutesResponse _selectedRoute;
+  List<ConsignmentDetailsResponse> get hubList => _hubList;
 
-  GetRoutesResponse get selectedRoute => _selectedRoute;
-
-  set selectedRoute(GetRoutesResponse value) {
-    _selectedRoute = value;
+  set hubList(List<ConsignmentDetailsResponse> value) {
+    _hubList = value;
   }
 
-  List<GetRoutesResponse> get routesList => _routesList;
+  RoutesForSelectedClientAndDateResponse _selectedRoute;
 
-  set routesList(List<GetRoutesResponse> value) {
+  RoutesForSelectedClientAndDateResponse get selectedRoute => _selectedRoute;
+
+  set selectedRoute(RoutesForSelectedClientAndDateResponse value) {
+    _selectedRoute = value;
+    notifyListeners();
+  }
+
+  List<RoutesForSelectedClientAndDateResponse> get routesList => _routesList;
+
+  set routesList(List<RoutesForSelectedClientAndDateResponse> value) {
     _routesList = value;
   }
 
@@ -37,9 +44,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   set entryDate(DateTime value) {
     _entryDate = value;
+    notifyListeners();
   }
-
-  List<FetchHubsResponse> _hubsList = [];
 
   List<GetClientsResponse> _clientsList = [];
 
@@ -63,6 +69,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   getRoutes(int clientId) async {
     setBusy(true);
     routesList = [];
+    hubList = [];
     var response = await apiService.getRoutesForSelectedClientAndDate(
       clientId: clientId,
       date: getDateString(entryDate),
@@ -72,26 +79,22 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       snackBarService.showSnackbar(message: response);
     } else {
       Response apiResponse = response;
-      var routesList = apiResponse.data as List;
 
-      routesList.forEach((element) {
-        RoutesForSelectedClientAndDateResponse routes =
-            RoutesForSelectedClientAndDateResponse.fromMap(element);
+      try {
+        var routesList = apiResponse.data as List;
 
-        this.routesList.add(GetRoutesResponse(
-              id: routes.routeId,
-              title: routes.routeName,
-            ));
-      });
+        routesList.forEach((element) {
+          RoutesForSelectedClientAndDateResponse routes =
+              RoutesForSelectedClientAndDateResponse.fromMap(element);
+
+          this.routesList.add(routes);
+        });
+      } catch (e) {
+        snackBarService.showSnackbar(message: apiResponse.data['message']);
+      }
     }
     setBusy(false);
     notifyListeners();
-  }
-
-  List<FetchHubsResponse> get hubsList => _hubsList;
-
-  set hubsList(List<FetchHubsResponse> value) {
-    _hubsList = value;
   }
 
   List<GetClientsResponse> get clientsList => _clientsList;
@@ -102,28 +105,29 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   void getConsignments() async {
     setBusy(true);
-    routesList = [];
-    var response = await apiService.getConsignment(
+    hubList = [];
+    var response = await apiService.getConsignmentsList(
       clientId: selectedClient.id,
       entryDate: getDateString(entryDate),
-      routeId: selectedRoute.id,
+      routeId: selectedRoute.routeId,
     );
 
     if (response is String) {
       snackBarService.showSnackbar(message: response);
     } else {
       Response apiResponse = response;
-      var routesList = apiResponse.data as List;
+      try {
+        var hubsList = apiResponse.data as List;
 
-      routesList.forEach((element) {
-        RoutesForSelectedClientAndDateResponse routes =
-            RoutesForSelectedClientAndDateResponse.fromMap(element);
+        hubsList.forEach((element) {
+          ConsignmentDetailsResponse singleHub =
+              ConsignmentDetailsResponse.fromMap(element);
 
-        this.routesList.add(GetRoutesResponse(
-              id: routes.routeId,
-              title: routes.routeName,
-            ));
-      });
+          this._hubList.add(singleHub);
+        });
+      } catch (e) {
+        snackBarService.showSnackbar(message: apiResponse.data['message']);
+      }
     }
     setBusy(false);
     notifyListeners();

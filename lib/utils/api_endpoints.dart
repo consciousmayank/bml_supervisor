@@ -21,3 +21,5 @@ const String GET_CLIENTS = "/client/list/";
 const String GET_HUBS = "/hub/route/";
 final GET_ROUTES_FOR_CLIENT_AND_DATE =
     (clientId, date) => "/route/consignment/client/$clientId/date/$date";
+final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
+    "/consignment/client/$clientId/route/$routeId/date/$date";

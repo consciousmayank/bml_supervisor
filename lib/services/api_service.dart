@@ -328,18 +328,6 @@ class ApiService {
     return response;
   }
 
-  Future addConsignmentDataToHub(CreateConsignmentRequest request) async {
-    Response response;
-    try {
-      response = await dioClient
-          .getDio()
-          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
   Future createConsignment(CreateConsignmentRequest request) async {
     Response response;
     try {
@@ -353,11 +341,13 @@ class ApiService {
   }
 
   Future getConsignmentsList(
-      {@required int routeId, @required String hubId}) async {
+      {@required int routeId,
+      @required int clientId,
+      @required String entryDate}) async {
     Response response;
     try {
-      response =
-          await dioClient.getDio().get("$GET_CONSIGNMENTS_LIST$routeId/$hubId");
+      response = await dioClient.getDio().get(
+          GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
     } on DioError catch (e) {
       return e.message;
     }
@@ -374,7 +364,7 @@ class ApiService {
     return response;
   }
 
-  Future getConsignment(
+  Future getHubsForRouteAndClientId(
       {@required int routeId,
       @required @required int clientId,
       @required String entryDate}) async {

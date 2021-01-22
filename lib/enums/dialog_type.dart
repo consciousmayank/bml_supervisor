@@ -1,1 +1,1 @@
-enum DialogType { base, form }
+enum DialogType { BASIC, CREATE_CONSIGNMENT }
