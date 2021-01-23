@@ -2,12 +2,14 @@ import 'dart:convert';
 
 class RoutesForSelectedClientAndDateResponse {
   RoutesForSelectedClientAndDateResponse({
+    this.vehicleId,
     this.routeId,
     this.routeName,
   });
 
   final int routeId;
   final String routeName;
+  final String vehicleId;
 
   RoutesForSelectedClientAndDateResponse copyWith({
     int routeId,
@@ -16,6 +18,7 @@ class RoutesForSelectedClientAndDateResponse {
       RoutesForSelectedClientAndDateResponse(
         routeId: routeId ?? this.routeId,
         routeName: routeName ?? this.routeName,
+        vehicleId: vehicleId ?? this.vehicleId,
       );
 
   factory RoutesForSelectedClientAndDateResponse.fromJson(String str) =>
@@ -28,10 +31,12 @@ class RoutesForSelectedClientAndDateResponse {
       RoutesForSelectedClientAndDateResponse(
         routeId: json["routeId"],
         routeName: json["routeName"],
+        vehicleId: json["vehicleId"],
       );
 
   Map<String, dynamic> toMap() => {
         "routeId": routeId,
         "routeName": routeName,
+        "vehicleId": vehicleId,
       };
 }

@@ -10,10 +10,12 @@ class GetClientsResponse {
   GetClientsResponse({
     this.id,
     this.title,
+    this.vehicleId,
   });
 
   int id;
   String title;
+  String vehicleId;
 
   factory GetClientsResponse.fromJson(String str) =>
       GetClientsResponse.fromMap(json.decode(str));
@@ -22,10 +24,12 @@ class GetClientsResponse {
       GetClientsResponse(
         id: json["id"],
         title: json["title"],
+        vehicleId: json["vehicleId"],
       );
 
   Map<dynamic, dynamic> toJson() => {
         "id": id,
         "title": title,
+        "vehicleId": vehicleId,
       };
 }

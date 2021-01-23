@@ -2,13 +2,34 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
+  RoutesForSelectedClientAndDateResponse _selectedRoute;
+
+  RoutesForSelectedClientAndDateResponse get selectedRoute => _selectedRoute;
+
+  set selectedRoute(RoutesForSelectedClientAndDateResponse value) {
+    _selectedRoute = value;
+    notifyListeners();
+  }
+
+  List<RoutesForSelectedClientAndDateResponse> _routesList = [];
+
+  List<RoutesForSelectedClientAndDateResponse> get routesList => _routesList;
+
+  set routesList(List<RoutesForSelectedClientAndDateResponse> value) {
+    _routesList = value;
+    notifyListeners();
+  }
+
   bool _startEntryEdited = false;
 
   bool get startEntryEdited => _startEntryEdited;
@@ -312,7 +333,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
 
   submitVehicleEntry(EntryLog entryLogRequest) async {
     setBusy(true);
-    print('submit vehicle entry method');
     try {
       var response = await apiService.submitVehicleEntry(entryLogRequest);
 
@@ -364,20 +384,60 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     }
     print('flag before sending' + flagForSearch.toString());
     print('navigation client id' + selectedClient.id.toString());
-    navigationService.navigateTo(
+    navigationService
+        .navigateTo(
       addEntry2PointOFormViewPageRoute,
-      arguments: {
-        'entryDateArg': entryDate,
-        'vehicleLogArg': vehicleLog,
-        'regNumArg': _registrationNumber,
-        'flagForSearchArg': flagForSearch,
-        'selectedClientId': selectedClient.id,
-      },
-    ).then((value) {
+      arguments: AddEntryArguments(
+          entryDate: entryDate,
+          vehicleLog: vehicleLog,
+          flagForSearch: flagForSearch,
+          registrationNumber: _registrationNumber,
+          selectedClientId: selectedClient.id,
+          selectedRoute: selectedRoute),
+      // arguments: {
+      //   'entryDateArg': entryDate,
+      //   'vehicleLogArg': vehicleLog,
+      //   'regNumArg': _registrationNumber,
+      //   'flagForSearchArg': flagForSearch,
+      //   'selectedClientId': selectedClient.id,
+      //   '': ''
+      // },
+    )
+        .then((value) {
       // _registrationNumber = '';
       flagForSearch = 0;
       selectedClient = null;
       vehicleLog = null;
     });
+  }
+
+  getRoutesForSelectedClientAndDate(int clientId) async {
+    setBusy(true);
+    routesList = [];
+    var response = await apiService.getRoutesForSelectedClientAndDate(
+      clientId: clientId,
+      date: getDateString(entryDate),
+    );
+
+    if (response is String) {
+      snackBarService.showSnackbar(message: response);
+    } else {
+      Response apiResponse = response;
+
+      try {
+        var routesList = apiResponse.data as List;
+
+        routesList.forEach((element) {
+          RoutesForSelectedClientAndDateResponse routes =
+              RoutesForSelectedClientAndDateResponse.fromMap(element);
+
+          this.routesList.add(routes);
+        });
+      } catch (e) {
+        snackBarService.showSnackbar(message: apiResponse.data['message']);
+      }
+    }
+    setBusy(false);
+    notifyListeners();
   }
 }

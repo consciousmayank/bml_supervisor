@@ -192,6 +192,7 @@ class ApiService {
   Future submitVehicleEntry(EntryLog entryLogRequest) async {
     Response response;
     final request = {
+      "routeId": entryLogRequest.routeId,
       "clientId": entryLogRequest.clientId,
       "vehicleId": entryLogRequest.vehicleId,
       "entryDate": entryLogRequest.entryDate,
@@ -211,7 +212,6 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
-    print('entry in api_service========$body');
 
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);

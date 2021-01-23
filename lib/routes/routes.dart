@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
@@ -94,7 +95,7 @@ class AppRouter {
         );
 
       case addEntry2PointOFormViewPageRoute:
-        Map<String, dynamic> args = settings.arguments;
+        AddEntryArguments args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => AddVehicleEntryFormView(arguments: args),
         );

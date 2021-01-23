@@ -2,8 +2,9 @@
 //
 //     final entryLog = entryLogFromMap(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 class EntryLog {
   EntryLog({
@@ -26,9 +27,11 @@ class EntryLog {
     @required this.startReadingGround,
     @required this.drivenKmGround,
     @required this.clientId,
+    @required this.routeId,
   });
 
   final int id;
+  final int routeId;
   final String vehicleId;
   final String entryDate;
   final int startReading;
@@ -50,6 +53,7 @@ class EntryLog {
 
   EntryLog copyWith({
     int id,
+    int routeId,
     String vehicleId,
     String entryDate,
     double startReading,
@@ -71,6 +75,7 @@ class EntryLog {
   }) =>
       EntryLog(
         id: id ?? this.id,
+        routeId: routeId ?? this.routeId,
         vehicleId: vehicleId ?? this.vehicleId,
         entryDate: entryDate ?? this.entryDate,
         startReading: startReading ?? this.startReading,
@@ -97,6 +102,7 @@ class EntryLog {
 
   factory EntryLog.fromMap(Map<String, dynamic> json) => EntryLog(
         id: json["id"],
+        routeId: json["routeId"],
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
         startReading: json["startReading"],
@@ -119,6 +125,7 @@ class EntryLog {
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
         "startReading": startReading,

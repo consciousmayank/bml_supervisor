@@ -247,6 +247,23 @@ String getConvertedDate(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
 }
 
+String convertFrom24HoursTime(String timeString) {
+  if (timeString.length == 0) {
+    return ' ';
+  }
+  String hours = timeString.split(':')[0];
+  String minutes = timeString.split(':')[1];
+
+  if (int.parse(hours) >= 12) {
+    int hour = 12 - int.parse(hours);
+    return '$hour:$minutes PM';
+  } else {
+    return '$hours:$minutes AM';
+  }
+}
+
+//DateFormat.yMd().add_jm()
+
 launchMaps(double latitude, double longitude) async {
   String googleUrl = 'comgooglemaps://?center=$latitude,$longitude}';
   String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';

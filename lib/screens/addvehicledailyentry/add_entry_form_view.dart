@@ -13,10 +13,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'add_entry_arguments.dart';
 import 'add_entry_logs_viewmodel.dart';
 
 class AddVehicleEntryFormView extends StatefulWidget {
-  final Map<String, dynamic> arguments;
+  final AddEntryArguments arguments;
   AddVehicleEntryFormView({this.arguments});
   @override
   _AddVehicleEntryFormViewState createState() =>
@@ -251,7 +252,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.arguments['regNumArg'],
+                  widget.arguments.registrationNumber,
                   style: const TextStyle(color: Colors.white),
                 ),
                 Text(
@@ -362,8 +363,9 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
   void addVehicleEntry(AddVehicleEntryViewModel viewModel) {
     if (_formKey.currentState.validate()) {
       viewModel.submitVehicleEntry(EntryLog(
-        clientId: widget.arguments['selectedClientId'],
-        vehicleId: widget.arguments['regNumArg'],
+        routeId: widget.arguments.selectedRoute.routeId,
+        clientId: widget.arguments.selectedClientId,
+        vehicleId: widget.arguments.registrationNumber,
         entryDate:
             DateFormat('dd-MM-yyyy').format(viewModel.entryDate).toLowerCase(),
         startReading: int.parse(initialReadingController.text.trim()),
@@ -395,9 +397,9 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
   }
 
   void setNavigationArguments(AddVehicleEntryViewModel viewModel) {
-    viewModel.vehicleLog = widget.arguments['vehicleLogArg'];
-    viewModel.entryDate = widget.arguments['entryDateArg'];
-    viewModel.flagForSearch = widget.arguments['flagForSearchArg'];
+    viewModel.vehicleLog = widget.arguments.vehicleLog;
+    viewModel.entryDate = widget.arguments.entryDate;
+    viewModel.flagForSearch = widget.arguments.flagForSearch;
   }
 
   Widget startingReadingView(AddVehicleEntryViewModel viewModel) {

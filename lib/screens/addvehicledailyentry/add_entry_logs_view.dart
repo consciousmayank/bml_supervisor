@@ -1,8 +1,13 @@
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
@@ -18,37 +23,19 @@ class AddVehicleEntryView extends StatefulWidget {
 }
 
 class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
-  final _formKey = GlobalKey<FormState>();
   final _controller = ScrollController();
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
 
-  // AddVehicleEntryViewModel tempViewModel = AddVehicleEntryViewModel();
-
-  // @override
-  // void initState() {
-  // selectedRegNoFocusNode.addListener(()async {
-  //   print('listener ran');
-  //   if(!selectedRegNoFocusNode.hasFocus){
-  //     //call reg num api
-  //     if(selectedRegNoController.text.length!=0){
-  //
-  //     }
-  //     AddVehicleEntryViewModel().getEntryLogForLastDate(
-  //         selectedRegNoController.text.trim().toUpperCase());
-  //   }
-  // });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
-      onModelReady: (viewModel) => viewModel.getClients(),
+      // onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text("Add Entry 2.0"),
+          title: Text("Add Entry"),
         ),
         body: viewModel.isBusy
             ? Center(
@@ -57,15 +44,40 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
             : Padding(
                 padding: getSidePadding(context: context),
                 child: ListView(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    selectClient(viewModel: viewModel),
-                    registrationSelector(
-                        context: context, viewModel: viewModel),
-                    viewModel.vehicleLog == null
+                    dateSelector(context: context, viewModel: viewModel),
+
+                    viewModel.clientsList.length == 0
                         ? Container()
-                        : dateSelector(context: context, viewModel: viewModel),
-                    hSizedBox(15),
+                        : selectClient(viewModel: viewModel),
+
+                    viewModel.routesList.length == 0
+                        ? Container()
+                        : RoutesDropDown(
+                            optionList: viewModel.routesList,
+                            hint: "Select Routes",
+                            onOptionSelect:
+                                (RoutesForSelectedClientAndDateResponse
+                                    selectedValue) {
+                              viewModel.selectedRoute = selectedValue;
+                              viewModel.vehicleLog = null;
+                            },
+                            selectedValue: viewModel.selectedRoute == null
+                                ? null
+                                : viewModel.selectedRoute,
+                          ),
+
+                    viewModel.selectedClient == null
+                        ? Container()
+                        : registrationSelector(
+                            context: context, viewModel: viewModel),
+
+                    viewModel.vehicleLog != null
+                        ? loadLastEntry(viewModel: viewModel)
+                        : Container(),
+                    //
+                    // // viewModel.vehicleLog .endReading == null ? :
+
                     viewModel.vehicleLog == null
                         ? Container()
                         : addEntryButton(viewModel: viewModel),
@@ -82,11 +94,12 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       height: buttonHeight,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
-          child: Text("Add Entry "),
-          onPressed: () {
-            // go to form page
+        padding: const EdgeInsets.only(top: 8),
+        child: AppButton(
+          background: AppColors.primaryColorShade5,
+          buttonText: "Submit",
+          borderColor: AppColors.primaryColorShade4,
+          onTap: () {
             if (selectedDateController.text.length > 0) {
               viewModel.takeToAddEntry2PointOFormViewPage();
             } else {
@@ -104,10 +117,11 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       optionList: viewModel.clientsList,
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClient = selectedValue;
-        selectedRegNoController.text = '';
+        viewModel.selectedRoute = null;
+        selectedRegNoController.clear();
         viewModel.vehicleLog = null;
-        selectedDateController.text = '';
+        viewModel.selectedClient = selectedValue;
+        viewModel.getRoutesForSelectedClientAndDate(selectedValue.id);
       },
       selectedClient:
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
@@ -132,10 +146,14 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
         onPressed: (() async {
           DateTime selectedDate = await selectDate(viewModel);
           if (selectedDate != null) {
+            viewModel.selectedClient = null;
+            viewModel.selectedRoute = null;
+            viewModel.vehicleLog = null;
+
             selectedDateController.text =
                 DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
             viewModel.entryDate = selectedDate;
-            // viewModel.getEntryForSelectedDate();
+            viewModel.getClients();
             viewModel.emptyDateSelector = true;
           }
         }),
@@ -188,20 +206,25 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       children: [
         Padding(
           padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
+          child: registrationNumberTextField(viewModel: viewModel),
         ),
-        selectRegButton(context, viewModel),
+        viewModel.selectedClient.id == 0
+            ? selectRegButton(context, viewModel)
+            : Container(),
       ],
     );
   }
 
-  registrationNumberTextField(AddVehicleEntryViewModel viewModel) {
-    // viewModel.selectedVehicle != null
-    //     ? selectedRegNoController.text =
-    //         viewModel.selectedVehicle.registrationNumber
-    //     : selectedRegNoController.text = "";
+  registrationNumberTextField({@required AddVehicleEntryViewModel viewModel}) {
+    if (viewModel.selectedClient.id != 0 && viewModel.selectedRoute != null) {
+      selectedRegNoController.text = viewModel.selectedRoute.vehicleId;
+      if (viewModel.vehicleLog == null) {
+        viewModel.getEntryLogForLastDate(selectedRegNoController.text);
+      }
+    }
+
     return appTextFormField(
-      enabled: true,
+      enabled: viewModel.selectedClient.id == 0,
       controller: selectedRegNoController,
       focusNode: selectedRegNoFocusNode,
       hintText: drRegNoHint,
@@ -238,6 +261,184 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           }
         },
       ),
+    );
+  }
+
+  Widget showLastEntry({EntryLog entryLog}) {
+    return ClipRRect(
+      borderRadius: getBorderRadius(),
+      child: Card(
+        elevation: 4,
+        shape: getCardShape(),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: ThemeConfiguration.primaryBackground,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+              ),
+              height: 50.0,
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    entryLog.vehicleId ?? "",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    entryLog.entryDate.toString() ?? "",
+                    style: const TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Start Reading : "),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(entryLog.startReading.toString() ?? ""),
+                      )
+                    ],
+                  ),
+                  hSizedBox(5),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("End Reading : "),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(entryLog.endReading.toString() ?? ""),
+                      )
+                    ],
+                  ),
+                  hSizedBox(5),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Login Time : "),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          entryLog.loginTime == null
+                              ? ""
+                              : convertFrom24HoursTime(
+                                  entryLog.loginTime.toString(),
+                                ),
+                        ),
+                      )
+                    ],
+                  ),
+                  hSizedBox(5),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Logout Time : "),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          entryLog.logoutTime != null
+                              ? convertFrom24HoursTime(
+                                  entryLog.logoutTime.toString(),
+                                )
+                              : "",
+                        ),
+                      )
+                    ],
+                  ),
+                  hSizedBox(5),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  showInitialReadingText({int startReading}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: AppTextStyles.latoMedium14Black,
+          children: <TextSpan>[
+            TextSpan(text: 'No Last Entry for '),
+            TextSpan(
+              text: '${selectedRegNoController.text.toUpperCase()} ',
+              style: AppTextStyles.latoBold14Black,
+            ),
+            TextSpan(
+              text: 'Initial Entry is ',
+              style: AppTextStyles.latoMedium14Black,
+            ),
+            TextSpan(
+              text: '$startReading',
+              style: AppTextStyles.latoBold14Black,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  showLastEntryText({AddVehicleEntryViewModel viewModel}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: AppTextStyles.latoMedium14Black,
+          children: <TextSpan>[
+            TextSpan(text: "Last Entry in the system for "),
+            TextSpan(
+              text: '${selectedRegNoController.text.toUpperCase()} ',
+              style: AppTextStyles.latoBold14Black,
+            ),
+            // TextSpan(
+            //   text: 'is ',
+            //   style: AppTextStyles.latoMedium14Black,
+            // ),
+            // TextSpan(
+            //   text: '${viewModel.vehicleLog.startReading}',
+            //   style: AppTextStyles.latoBold14Black,
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget loadLastEntry({AddVehicleEntryViewModel viewModel}) {
+    return Column(
+      children: [
+        viewModel.vehicleLog.endReading == null
+            ? showInitialReadingText(
+                startReading: viewModel.vehicleLog.startReading ?? 0)
+            : showLastEntryText(viewModel: viewModel),
+        viewModel.vehicleLog.endReading == null
+            ? Container()
+            : showLastEntry(entryLog: viewModel.vehicleLog)
+      ],
     );
   }
 }
@@ -313,6 +514,98 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
                     style: textFieldStyle(
                         fontSize: 15.0, textColor: Colors.black54),
                     value: widget.selectedClient,
+                    items: getDropDownItems(),
+                    onChanged: (value) {
+                      widget.onOptionSelect(value);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  TextStyle textFieldStyle({double fontSize, Color textColor}) {
+    return TextStyle(
+        color: textColor,
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal);
+  }
+}
+
+class RoutesDropDown extends StatefulWidget {
+  final List<RoutesForSelectedClientAndDateResponse> optionList;
+  final RoutesForSelectedClientAndDateResponse selectedValue;
+  final String hint;
+  final Function onOptionSelect;
+  final showUnderLine;
+
+  RoutesDropDown(
+      {@required this.optionList,
+      this.selectedValue,
+      @required this.hint,
+      @required this.onOptionSelect,
+      this.showUnderLine = true});
+
+  @override
+  _RoutesDropDownState createState() => _RoutesDropDownState();
+}
+
+class _RoutesDropDownState extends State<RoutesDropDown> {
+  List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>> dropdown = [];
+
+  List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>>
+      getDropDownItems() {
+    List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>> dropdown =
+        List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>>();
+
+    for (int i = 0; i < widget.optionList.length; i++) {
+      dropdown.add(DropdownMenuItem(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Text(
+            "${widget.optionList[i].routeName}  (${widget.optionList[i].routeId})",
+            style: TextStyle(
+              color: Colors.black54,
+            ),
+          ),
+        ),
+        value: widget.optionList[i],
+      ));
+    }
+    return dropdown;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.optionList.isEmpty
+        ? Container()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(widget.hint ?? ""),
+              ),
+              Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                  child: DropdownButton(
+                    icon: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: ThemeConfiguration.primaryBackground,
+                      ),
+                    ),
+                    underline: Container(),
+                    isExpanded: true,
+                    style: textFieldStyle(
+                        fontSize: 15.0, textColor: Colors.black54),
+                    value: widget.selectedValue,
                     items: getDropDownItems(),
                     onChanged: (value) {
                       widget.onOptionSelect(value);
