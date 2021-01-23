@@ -12,7 +12,9 @@ import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_view.dart';
+import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:flutter/material.dart';
+import 'package:bml_supervisor/models/recent_consignment_response.dart';
 
 class AppRouter {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -49,6 +51,12 @@ class AppRouter {
         Map<String, dynamic> args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => ViewEntryDetailedView(arguments: args),
+        );
+
+      case viewAllConsignmentsViewPageRoute:
+        List<RecentConginmentResponse> args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ViewAllConsignmentsView(recentConsignmentList: args),
         );
 
       case addExpensesPageRoute:

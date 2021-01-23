@@ -17,6 +17,7 @@ class RecentConginmentResponse {
     this.routeId,
     this.entryDate,
     this.trips,
+    this.drivenKmG,
   });
 
   int drivenKm;
@@ -24,10 +25,12 @@ class RecentConginmentResponse {
   int routeId;
   String entryDate;
   int trips;
+  int drivenKmG;
 
   factory RecentConginmentResponse.fromJson(Map<String, dynamic> json) =>
       RecentConginmentResponse(
         drivenKm: json["drivenKm"],
+        drivenKmG: json["drivenKmG"],
         vehicleId: json["vehicleId"],
         routeId: json["routeId"],
         entryDate: json["entryDate"],
@@ -36,6 +39,7 @@ class RecentConginmentResponse {
 
   Map<String, dynamic> toJson() => {
         "drivenKm": drivenKm,
+        "drivenKmG": drivenKmG,
         "vehicleId": vehicleId,
         "routeId": routeId,
         "entryDate": entryDate,

@@ -68,37 +68,54 @@ class ApiService {
     return response;
   }
 
-  Future getRecentConsignments() async {
+  Future getRoutesDrivenKm() async {
     Response response;
     try {
       response = await dioClient
           .getDio()
-          .get('/vehicle/entrylog/consignment/view/client/1/period/1');
+          .get('/vehicle/entrylog/route/drivenKm/client/1/period/2');
     } on DioError catch (e) {
       return e.message;
     }
-    print('recent consignemts in api_service******************');
-    print(response);
-    print('recent consignemts in api_service******************');
+    return response;
+  }
 
+  Future getRoutesDrivenKmPercentage() async {
+    Response response;
+    print('api called: getRoutesDrivenKmPercentage');
+    try {
+      response = await dioClient.getDio().get(
+          '/vehicle/entrylog/consignment/view/aggregate/client/1/period/2');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print('************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%************');
+    print(response);
+    print('************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%************');
+    return response;
+  }
+
+  Future getRecentConsignments(int period) async {
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .get('/vehicle/entrylog/consignment/view/client/1/period/$period');
+    } on DioError catch (e) {
+      return e.message;
+    }
     return response;
   }
 
   Future getBarGraphKmReport(int period) async {
-    print('in api_service start---- getBarGraphKmReport');
     Response response;
     try {
-      print('api called - /vehicle/entrylog/drivenKm/client/1/period/$period');
       response = await dioClient
           .getDio()
           .get('/vehicle/entrylog/drivenKm/client/1/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
-    print('get km response************');
-    print(response);
-    print('in api_service end---- getBarGraphKmReport');
-
     return response;
   }
 

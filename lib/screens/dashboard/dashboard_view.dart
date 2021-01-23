@@ -3,6 +3,8 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
+import 'package:bml_supervisor/screens/charts/dashboradcharts/linechart.dart';
+import 'package:bml_supervisor/screens/charts/dashboradcharts/pie_chart.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -10,8 +12,11 @@ import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
 import 'dashboard_viewmodel.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
 
 class DashBoardScreenView extends StatefulWidget {
   @override
@@ -124,13 +129,225 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ],
                                 )
                               : Container(),
-                          hSizedBox(10),
+                          // hSizedBox(3),
+                          //!Show recent consignment table here
+                          viewModel.recentConsignmentList.length > 0
+                              ? Card(
+                                  elevation: 6,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          // crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              ('Date'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              ('Km Driven'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              ('Trips'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              ('Track'),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        hSizedBox(5),
+                                        Container(
+                                          height: 1,
+                                          color: Colors.black,
+                                        ),
+                                        hSizedBox(5),
+                                        Container(
+                                          height: 140,
+                                          child: ListView.builder(
+                                            itemBuilder: (context, index) {
+                                              return Column(
+                                                children: [
+                                                  hSizedBox(5),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        viewModel
+                                                            .recentConsignmentList[
+                                                                index]
+                                                            .entryDate,
+                                                      ),
+                                                      Text(
+                                                        viewModel
+                                                            .recentConsignmentList[
+                                                                index]
+                                                            .drivenKmG
+                                                            .toString(),
+                                                      ),
+                                                      Text(
+                                                        viewModel
+                                                            .recentConsignmentList[
+                                                                index]
+                                                            .trips
+                                                            .toString(),
+                                                      ),
+                                                      viewModel
+                                                                  .recentConsignmentList[
+                                                                      index]
+                                                                  .routeId ==
+                                                              0
+                                                          ? Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          5),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    getDashboardDueKmTileBgColor(),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          16),
+                                                                ),
+                                                              ),
+                                                              child: Text(
+                                                                'Consignment',
+                                                              ),
+                                                            )
+                                                          : InkWell(
+                                                              onTap: () {
+                                                                // go to new page and build line graph
+                                                                //! Create material page route on the fly
+                                                                // Navigator.of(
+                                                                //         context)
+                                                                //     .push(MaterialPageRoute(
+                                                                //         builder:
+                                                                //             (_) {
+                                                                //   return PieChart(); // Line chart page;
+                                                                // }));
+                                                                //todoGo to view consignment page
+                                                                viewModel
+                                                                    .snackBarService
+                                                                    .showSnackbar(
+                                                                        message:
+                                                                            'Go to consignments details page');
+                                                              },
+                                                              splashColor:
+                                                                  Colors.amber,
+                                                              child: Container(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            5),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color:
+                                                                      getDashboardDistributerTileBgColor(),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            16),
+                                                                  ),
+                                                                ),
+                                                                child: Text(
+                                                                  'Consignment',
+                                                                ),
+                                                              ),
+                                                            )
+                                                    ],
+                                                  ),
+                                                  hSizedBox(5),
+                                                  index + 1 !=
+                                                          viewModel
+                                                              .recentConsignmentList
+                                                              .length
+                                                      ? Container(
+                                                          height: 1,
+                                                          color: Colors.black,
+                                                        )
+                                                      : Container(),
+                                                ],
+                                              );
+                                            },
+                                            itemCount: viewModel
+                                                        .recentConsignmentList
+                                                        .length <
+                                                    5
+                                                ? viewModel
+                                                    .recentConsignmentList
+                                                    .length
+                                                : 5,
+                                          ),
+                                        ),
+                                        viewModel.recentConsignmentList.length >
+                                                5
+                                            ? FlatButton(
+                                                child: Text(
+                                                  'View More',
+                                                  style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  //todo: got to show all consignments' page
+                                                  viewModel
+                                                      .takeToAllConsgnmentsPage();
+                                                  // showViewEntryDetailPreview(context,
+                                                  //     vehicleEntrySearchResponse[index]);
+                                                },
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          // hSizedBox(10),
                           viewModel.kmReportListData.length > 0
                               ? DashboardKmBarChart(
                                   kmReportListData: viewModel.kmReportListData,
                                 )
                               : Container(),
-                          hSizedBox(10),
+                          // hSizedBox(5),
+                          viewModel.data.length > 0
+                              ? SizedBox(
+                                  height: 350,
+                                  child: LineChart(
+                                      data: viewModel.data,
+                                      colorArray:
+                                          viewModel.dashboardChartsColorArray),
+                                )
+                              : Container(),
+                          viewModel.routesDrivenKmPercentageList.length > 0
+                              ? SizedBox(
+                                  height: 350,
+                                  child: PieChart(
+                                    routesDrivenKmPercentageList:
+                                        viewModel.routesDrivenKmPercentageList,
+                                    totalDrivenKmG: viewModel.totalDrivenKmG,
+                                  ),
+                                )
+                              : Container(),
                           viewModel.selectedClientForTiles == null
                               ? Container()
                               : Column(
@@ -159,7 +376,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
                         ],
                       ),
               ),
@@ -188,9 +405,14 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       optionList: selectDurationList,
       hint: "Select Duration",
       onOptionSelect: (selectedValue) {
-        print('1. duration selected');
         viewModel.selectedDuration = selectedValue;
         viewModel.getBarGraphKmReport(viewModel.selectedDuration);
+        //!call recent consignment api here
+        viewModel.getRecentConsignments(viewModel.selectedDuration);
+        //! call line graph data - getRoutesDrivenKm
+        viewModel.getRoutesDrivenKm();
+        //! call pie graph data - getRoutesDrivenKmPercentage
+        viewModel.getRoutesDrivenKmPercentage();
         locator<MyPreferences>().saveSelectedDuration(selectedValue);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
@@ -237,7 +459,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         //* call client tiles data
 
         viewModel.getDashboardTilesStats(
-            viewModel.selectedClientForTiles.id.toString());
+          viewModel.selectedClientForTiles.id.toString(),
+        );
       },
       selectedValue: viewModel.selectedClientForTiles == null
           ? null
@@ -309,12 +532,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       case 7:
         return viewModel.takeToPaymentsPage();
         break;
-      // case 6:
-      //   return viewModel.takeToAddEntry2PointOPage();
-      //   break;
-      // case 7:
-      //   return viewModel.takeToViewEntry2PointOPage();
-      //   break;
       default:
         return viewModel.takeToBlankPage();
     }

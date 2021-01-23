@@ -2,6 +2,8 @@ import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.da
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/km_report_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
+import 'package:bml_supervisor/models/routes_driven_km.dart';
+import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,19 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     Icons.payment,
   ];
 
+  int colorArrayIndex = 0;
+
+  List<Color> dashboardChartsColorArray = [
+    Color(0xff68cfc6),
+    Color(0xffd89cb8),
+    Color(0xfffcce5e),
+    Color(0xfffc8685),
+    Color(0xff28a745),
+    Color(0xffc3e6cb),
+    Color(0xffdc3545),
+    Color(0xff6c757d),
+  ];
+  List<List<RoutesDrivenKm>> data = List<List<RoutesDrivenKm>>();
   bool _isShowBarChart = false;
 
   bool get isShowBarChart => _isShowBarChart;
@@ -84,16 +99,11 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     // "View Entry 2.0",
   ];
 
-  List<RecentConginmentResponse> _recentConsignmentList = [];
-
-  List<RecentConginmentResponse> get recentConsignmentList =>
-      _recentConsignmentList;
-
-  set recentConsignmentList(
-      List<RecentConginmentResponse> recentConsignmentList) {
-    _recentConsignmentList = recentConsignmentList;
-    notifyListeners();
-  }
+  List<RecentConginmentResponse> recentConsignmentList = [];
+  List<RoutesDrivenKm> routesDrivenKmList = [];
+  List<RoutesDrivenKmPercentage> routesDrivenKmPercentageList = [];
+  List uniqueRoutes = [];
+  double totalDrivenKmG = 0.0;
 
   List<KilometerReportResponse> _kmReportListData = [];
 
@@ -113,7 +123,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
       if (res.statusCode == 200) {
         if (res is String) {
           snackBarService.showSnackbar(message: res.toString());
-        } else if (res.data is List) {
+        }
+        if (res.data is List) {
           var list = res.data as List;
           if (list.length > 0) {
             for (Map singleDay in list) {
@@ -121,13 +132,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
                   KilometerReportResponse.fromJson(singleDay);
               kmReportListData.add(singleDayReport);
             }
-            print('*******************');
-            print(
-                'No of bars in getBarGraphKmRepost view model call ---- ${kmReportListData.length}');
-            print('*******************');
           }
-        } else {
-          snackBarService.showSnackbar(message: 'No Data');
         }
       }
       notifyListeners();
@@ -173,15 +178,129 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     }
   }
 
-  getRecentConsignments() async {
-    recentConsignmentList.clear();
+  void getRoutesDrivenKm() async {
+    routesDrivenKmList.clear();
+
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+
     setBusy(true);
     notifyListeners();
     try {
-      var res = await apiService.getRecentConsignments();
-      if (res.statusCode == 200) {
-        // snackBarService.showSnackbar(message: res.toString());
-      } else if (res.data is List) {
+      var res = await apiService.getRoutesDrivenKm();
+      if (res.data is List) {
+        var list = res.data as List;
+        if (list.length > 0) {
+          for (Map value in list) {
+            RoutesDrivenKm routesDrivenKmResponse =
+                RoutesDrivenKm.fromJson(value);
+            routesDrivenKmList.add(routesDrivenKmResponse);
+          }
+          routesDrivenKmList.forEach((routesDrivenKmObject) {
+            if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
+              uniqueRoutes.add(routesDrivenKmObject.routeId);
+            }
+          });
+
+          uniqueRoutes.forEach(
+            (singleRouteElement) {
+              data.add(routesDrivenKmList
+                  .where((routeDrivenKmObject) =>
+                      routeDrivenKmObject.routeId == singleRouteElement)
+                  .toList());
+            },
+          );
+
+          // uniqueRoutes.forEach((singleRouteElement) {
+          //   List<RoutesDrivenKm> tempList = [];
+          //   routesDrivenKmList.forEach((singleRoutesDrivenKm) {
+          //     if (singleRoutesDrivenKm.routeId == singleRouteElement) {
+          //       tempList.add(singleRoutesDrivenKm);
+          //     } else {
+          //       tempList.add(RoutesDrivenKm(
+          //           drivenKm: 0,
+          //           entryDate: singleRoutesDrivenKm.entryDate,
+          //           routeId: singleRoutesDrivenKm.routeId,
+          //           vehicleId: singleRoutesDrivenKm.vehicleId,
+          //           drivenKmG: singleRoutesDrivenKm.drivenKm,
+          //           title: singleRoutesDrivenKm.title));
+          //     }
+          //   });
+
+          //   data.add(tempList);
+          // });
+
+          //! For printing line chart data, coming from api
+          // int i = 1;
+          // data.forEach((element) {
+          //   print('*****************Route R $i**********************');
+          //   element.forEach((element2) {
+          //     print("route id :: ${element2.routeId.toString()}");
+          //     print("driven km :: ${element2.drivenKm.toString()}");
+          //     print("Entrt Date :: ${element2.entryDate.toString()}");
+          //   });
+          //   print('*****************************************************');
+          //   i++;
+          // });
+        }
+      }
+    } on DioError catch (e) {
+      snackBarService.showSnackbar(message: e.message);
+      setBusy(false);
+    }
+    notifyListeners();
+    setBusy(false);
+  }
+
+  void getRoutesDrivenKmPercentage() async {
+    routesDrivenKmPercentageList.clear();
+    setBusy(true);
+    notifyListeners();
+    try {
+      var res = await apiService.getRoutesDrivenKmPercentage();
+      if (res.data is List) {
+        var list = res.data as List;
+        if (list.length > 0) {
+          for (Map value in list) {
+            RoutesDrivenKmPercentage routesDrivenKmPercentageResponse =
+                RoutesDrivenKmPercentage.fromJson(value);
+            routesDrivenKmPercentageResponse =
+                routesDrivenKmPercentageResponse.copyWith(
+              color: dashboardChartsColorArray[colorArrayIndex],
+            );
+            ++colorArrayIndex;
+            totalDrivenKmG += routesDrivenKmPercentageResponse.drivenKmG;
+            routesDrivenKmPercentageList.add(routesDrivenKmPercentageResponse);
+          }
+          routesDrivenKmPercentageList.forEach((element) {
+            print(element.color);
+            print(dashboardChartsColorArray[0]);
+          });
+          print('totalDrivenKmG: $totalDrivenKmG');
+        }
+      }
+    } on DioError catch (e) {
+      snackBarService.showSnackbar(message: e.message);
+      setBusy(false);
+    }
+    notifyListeners();
+    setBusy(false);
+  }
+
+  void takeToAllConsgnmentsPage() {
+    print('taking to takeToAllConsgnmentsPage');
+    navigationService.navigateTo(viewAllConsignmentsViewPageRoute,
+        arguments: recentConsignmentList);
+  }
+
+  getRecentConsignments(String selectedDuration) async {
+    recentConsignmentList.clear();
+    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+
+    setBusy(true);
+    notifyListeners();
+    try {
+      var res = await apiService.getRecentConsignments(selectedDurationValue);
+      if (res.data is List) {
         var list = res.data as List;
         if (list.length > 0) {
           for (Map singleConsignment in list) {
@@ -189,9 +308,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
                 RecentConginmentResponse.fromJson(singleConsignment);
             recentConsignmentList.add(singleConsignmentResponse);
           }
-          print('in dash view model==========$recentConsignmentList');
-        } else {
-          snackBarService.showSnackbar(message: 'No Consignments');
         }
       }
     } on DioError catch (e) {
