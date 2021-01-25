@@ -21,12 +21,14 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   int _flagForSearch = 0; // [0-Search Via LastEntryDate, 1-Search Via Reg Num ]
 //  int _flagForSearch;
   int get flagForSearch => _flagForSearch;
+
   set flagForSearch(int flagForSearch) {
     _flagForSearch = flagForSearch;
     notifyListeners();
   }
 
   DateTime _datePickerEntryDate;
+
   DateTime get datePickerEntryDate => _datePickerEntryDate;
 
   set datePickerEntryDate(DateTime value) {
@@ -42,6 +44,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   // }
 
   GetClientsResponse _selectedClient;
+
   GetClientsResponse get selectedClient => _selectedClient;
 
   set selectedClient(GetClientsResponse selectedClient) {
@@ -62,42 +65,54 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   List<SearchByRegNoResponse> searchResponse = [];
 
   SearchByRegNoResponse _selectedVehicle;
+
   SearchByRegNoResponse get selectedVehicle => _selectedVehicle;
+
   set selectedVehicle(SearchByRegNoResponse selectedVehicle) {
     _selectedVehicle = selectedVehicle;
     notifyListeners();
   }
 
   ApiResponse _entyLogSubmitResponse;
+
   ApiResponse get entyLogSubmitResponse => _entyLogSubmitResponse;
+
   set entyLogSubmitResponse(ApiResponse entyLogSubmitResponse) {
     _entyLogSubmitResponse = entyLogSubmitResponse;
     notifyListeners();
   }
 
   bool _isFuelEntryAdded = false;
+
   bool get isFuelEntryAdded => _isFuelEntryAdded;
+
   set isFuelEntryAdded(bool isFuelEntryAdded) {
     _isFuelEntryAdded = isFuelEntryAdded;
     notifyListeners();
   }
 
   int _undertakenTrips = 1;
+
   int get undertakenTrips => _undertakenTrips;
+
   set undertakenTrips(int undertakenTrips) {
     _undertakenTrips = undertakenTrips;
     notifyListeners();
   }
 
   DateTime _entryDate;
+
   DateTime get entryDate => _entryDate;
+
   set entryDate(DateTime registrationDate) {
     _entryDate = registrationDate;
     notifyListeners();
   }
 
   bool _emptyDateSelector = false;
+
   bool get emptyDateSelector => _emptyDateSelector;
+
   set emptyDateSelector(bool emptyDateSelector) {
     _emptyDateSelector = emptyDateSelector;
     notifyListeners();
@@ -180,11 +195,9 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
       //contains date
       print('last entry date: ${vehicleLog.entryDate}');
       setAddEntryDate(vehicleLog.entryDate);
-      // print('formatted date: ${DateTime.tryParse(vehicleLog.entryDate)}');
+      // setAddEntryDate('22-01-2021');
       setBusy(false);
-      // takeToAddEntry2PointOFormViewPage();
     }
-    // setBusy(false);
   }
 
   setAddEntryDate(String entryDate) {
@@ -192,10 +205,16 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');
     DateTime time = DateTime.parse(joinedReversedDate);
-    datePickerEntryDate = time.add(Duration(days: 1));
-    // print('${time.add(Duration(days: 1))}');
-    // print('increased date: $time');
-    // print('formatted date: ${DateTime.parse(joinedReversedDate)}');
+    if (DateTime.now().difference(time).inDays==0) {
+      print('same date entry');
+      print(datePickerEntryDate);
+      datePickerEntryDate = DateTime.now();
+    } else {
+      print('not same date entry');
+      print(time);
+      datePickerEntryDate = time.add(Duration(days: 1));
+      print(datePickerEntryDate);
+    }
   }
 
   void searchByRegistrationNumber(String regNum) async {

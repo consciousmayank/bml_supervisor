@@ -25,6 +25,23 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
 
+  // AddVehicleEntryViewModel tempViewModel = AddVehicleEntryViewModel();
+
+  // @override
+  // void initState() {
+  // selectedRegNoFocusNode.addListener(()async {
+  //   print('listener ran');
+  //   if(!selectedRegNoFocusNode.hasFocus){
+  //     //call reg num api
+  //     if(selectedRegNoController.text.length!=0){
+  //
+  //     }
+  //     AddVehicleEntryViewModel().getEntryLogForLastDate(
+  //         selectedRegNoController.text.trim().toUpperCase());
+  //   }
+  // });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
@@ -88,6 +105,9 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClient = selectedValue;
+        selectedRegNoController.text = '';
+        viewModel.vehicleLog = null;
+        selectedDateController.text = '';
       },
       selectedClient:
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
@@ -142,8 +162,8 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       fieldHintText: 'Month/Date/Year',
       context: context,
       initialDate: DateTime.now(),
-      firstDate: viewModel.datePickerEntryDate ??
-          DateTime(1990), //! assignThisIfNotNull ?? OtherWiseAssignThis
+      firstDate: viewModel.datePickerEntryDate ?? DateTime(1990),
+      //! assignThisIfNotNull ?? OtherWiseAssignThis
       lastDate: DateTime.now(),
     );
 
@@ -186,6 +206,10 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       focusNode: selectedRegNoFocusNode,
       hintText: drRegNoHint,
       keyboardType: TextInputType.text,
+      onTextChange: (_) {
+        selectedDateController.text = '';
+        viewModel.vehicleLog = null;
+      },
       validator: (value) {
         if (value.isEmpty) {
           return textRequired;

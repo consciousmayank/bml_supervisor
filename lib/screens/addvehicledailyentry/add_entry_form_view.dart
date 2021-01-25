@@ -70,9 +70,6 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
 
   @override
   void initState() {
-    // final entryDate = widget.arguments['entryDateArg'];
-    // final vehicleLogArg = widget.arguments['vehicleLogArg'];
-    // final searchResponseArg = widget.arguments['searchResponseArg'];
     endReadingFocusNode.addListener(endReadingListener);
     fuelReadingFocusNode.addListener(fuelEntryListener);
     fuelRateFocusNode.addListener(fuelRateListener);

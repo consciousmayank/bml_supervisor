@@ -51,11 +51,11 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    // print(response);
     return response;
   }
 
   Future getDashboardTilesStats(String clientId) async {
+    // dashboard client specific tiles data api
     Response response;
     try {
       response = await dioClient
@@ -68,51 +68,50 @@ class ApiService {
     return response;
   }
 
-  Future getRoutesDrivenKm() async {
+  Future getRoutesDrivenKm({int clientId, int period}) async {
+    // dashboard line chart api
     Response response;
     try {
       response = await dioClient
           .getDio()
-          .get('/vehicle/entrylog/route/drivenKm/client/1/period/2');
+          .get('/vehicle/entrylog/route/drivenKm/client/$clientId/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
     return response;
   }
 
-  Future getRoutesDrivenKmPercentage() async {
+  Future getRoutesDrivenKmPercentage({int clientId, int period}) async {
     Response response;
-    print('api called: getRoutesDrivenKmPercentage');
     try {
       response = await dioClient.getDio().get(
-          '/vehicle/entrylog/consignment/view/aggregate/client/1/period/2');
+          '/vehicle/entrylog/consignment/view/aggregate/client/$clientId/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
-    print('************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%************');
     print(response);
-    print('************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%************');
     return response;
   }
 
-  Future getRecentConsignments(int period) async {
+  Future getRecentConsignments({int clientId, int period}) async {
+    // dashboard recent consignment table
     Response response;
     try {
-      response = await dioClient
-          .getDio()
-          .get('/vehicle/entrylog/consignment/view/client/1/period/$period');
+      response = await dioClient.getDio().get(
+          '/vehicle/entrylog/consignment/view/client/$clientId/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
     return response;
   }
 
-  Future getBarGraphKmReport(int period) async {
+  Future getTotalDrivenKmStats({int client, int period}) async {
+    // dashboard bar graph
     Response response;
     try {
       response = await dioClient
           .getDio()
-          .get('/vehicle/entrylog/drivenKm/client/1/period/$period');
+          .get('/vehicle/entrylog/drivenKm/client/$client/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
@@ -120,22 +119,18 @@ class ApiService {
   }
 
   Future getPaymentHistory(int clientId) async {
-    print('in api service------ payment history');
     Response response;
     try {
       response = await dioClient.getDio().get('/payment/client/$clientId');
     } on DioError catch (e) {
       return e.message;
     }
-    print('payment history in api_service=============');
     print(response);
     return response;
   }
 
   Future addNewPayment(SavePaymentRequest request) async {
     String body = request.toJson();
-
-    print('add payment in api_service=======');
     print(body);
     Response response;
     try {

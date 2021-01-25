@@ -2,23 +2,24 @@ import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Widget appTextFormField(
-    {bool showRupeesSymbol = false,
-    TextEditingController controller,
-    FocusNode focusNode,
-    String hintText,
-    TextAlign textAlignment = TextAlign.start,
-    TextCapitalization textCapitalization = TextCapitalization.none,
-    TextInputType keyboardType,
-    Function onFieldSubmitted,
-    Function onEditingComplete,
-    Function onTextChange,
-    bool enabled = true,
-    bool autoFocus = false,
-    int maxLines = 1,
-    List<TextInputFormatter> formatter,
-    String labelText,
-    FormFieldValidator<String> validator}) {
+Widget appTextFormField({
+  bool showRupeesSymbol = false,
+  TextEditingController controller,
+  FocusNode focusNode,
+  String hintText,
+  TextAlign textAlignment = TextAlign.start,
+  TextCapitalization textCapitalization = TextCapitalization.none,
+  TextInputType keyboardType,
+  Function onFieldSubmitted,
+  Function onEditingComplete,
+  Function onTextChange,
+  bool enabled = true,
+  bool autoFocus = false,
+  int maxLines = 1,
+  List<TextInputFormatter> formatter,
+  String labelText,
+  FormFieldValidator<String> validator,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: MainAxisSize.min,

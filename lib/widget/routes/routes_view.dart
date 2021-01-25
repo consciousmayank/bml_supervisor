@@ -1,9 +1,13 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -11,8 +15,10 @@ class RoutesView extends StatefulWidget {
   final GetClientsResponse selectedClient;
   final Function onRoutesPageInView;
 
-  RoutesView(
-      {@required this.selectedClient, @required this.onRoutesPageInView});
+  RoutesView({
+    @required this.selectedClient,
+    @required this.onRoutesPageInView,
+  });
 
   @override
   _RoutesViewState createState() => _RoutesViewState();
@@ -58,31 +64,64 @@ class _RoutesViewState extends State<RoutesView> {
                             elevation: 4,
                             shape: getCardShape(),
                             child: Stack(
-                              alignment: Alignment.center,
                               children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Image.asset(
-                                    semiCircles,
-                                    fit: BoxFit.cover,
-                                  ),
+                                Image.asset(
+                                  semiCircles,
+                                  fit: BoxFit.cover,
                                 ),
-                                Container(
-                                  padding: EdgeInsets.all(8),
+                                Positioned(
+                                  top: 10,
+                                  left: 10,
+                                  right: 10,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(viewModel.routesList[index].title),
                                       Text(
                                           "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
+                                      hSizedBox(10),
+                                      Text(
+                                        viewModel.routesList[index].title,
+                                        style: AppTextStyles.latoBold18Black,
+                                      ),
+                                      hSizedBox(5),
                                       Text(
                                           "Route # ${viewModel.routesList[index].id}"),
+                                      hSizedBox(5),
+                                      Text(
+                                        "${viewModel.routesList[index].kilometers} Kms.",
+                                        style: AppTextStyles.latoBold16Black,
+                                      ),
+                                      hSizedBox(10),
                                     ],
                                   ),
-                                )
+                                ),
+                                Positioned(
+                                  bottom: 10,
+                                  left: 10,
+                                  right: 10,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: buttonHeight,
+                                        width: showRouteButtonWidth,
+                                        child: AppButton(
+                                          borderColor:
+                                              AppColors.primaryColorShade1,
+                                          background:
+                                              AppColors.primaryColorShade5,
+                                          onTap: () {},
+                                          buttonText: 'SHOW ROUTE',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           );
