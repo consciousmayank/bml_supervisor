@@ -1,10 +1,11 @@
+import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
-import 'package:bml_supervisor/screens/charts/dashboradcharts/linechart.dart';
-import 'package:bml_supervisor/screens/charts/dashboradcharts/pie_chart.dart';
+import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
+import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
+import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -13,10 +14,6 @@ import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'dashboard_viewmodel.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/screens/charts/dashboradcharts/dashboard_km_bar_chart.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/utils/stringutils.dart';
 
 class DashBoardScreenView extends StatefulWidget {
   @override
@@ -34,16 +31,27 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
             viewModel.getClients();
           } else {
             viewModel.clientsList.add(selectedClient);
-            viewModel.selectedClientForTiles = selectedClient;
+            viewModel.selectedClient = selectedClient;
             viewModel.getDashboardTilesStats(
-                viewModel.selectedClientForTiles.id.toString());
+              viewModel.selectedClient.id.toString(),
+            );
           }
 
           String selectedDuration =
               await locator<MyPreferences>().getSelectedDuration();
           if (selectedDuration != null) {
             viewModel.selectedDuration = selectedDuration.toString();
-            viewModel.getBarGraphKmReport(viewModel.selectedDuration);
+            // viewModel.getBarGraphKmReport(
+            //   clientId: viewModel.selectedClient.id,
+            //   selectedDuration: viewModel.selectedDuration,
+            // );
+          }
+
+          if (selectedDuration != null && selectedClient != null) {
+            viewModel.getRecentConsignments(
+              clientId: selectedClient.id,
+              period: selectedDuration,
+            );
           }
         },
         builder: (context, viewModel, child) => Scaffold(
@@ -176,6 +184,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         Container(
                                           height: 140,
                                           child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, index) {
                                               return Column(
                                                 children: [
@@ -311,7 +321,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                                 onPressed: () {
                                                   //todo: got to show all consignments' page
                                                   viewModel
-                                                      .takeToAllConsgnmentsPage();
+                                                      .takeToAllConsignmentsPage();
                                                   // showViewEntryDetailPreview(context,
                                                   //     vehicleEntrySearchResponse[index]);
                                                 },
@@ -322,33 +332,28 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
                                 )
                               : Container(),
-                          // hSizedBox(10),
-                          viewModel.kmReportListData.length > 0
-                              ? DashboardKmBarChart(
-                                  kmReportListData: viewModel.kmReportListData,
+                          viewModel.selectedClient != null &&
+                                  viewModel.selectedDuration != null
+                              ? BarChartView(
+                                  clientId: viewModel.selectedClient.id,
+                                  selectedDuration: viewModel.selectedDuration,
                                 )
                               : Container(),
-                          // hSizedBox(5),
-                          viewModel.data.length > 0
-                              ? SizedBox(
-                                  height: 350,
-                                  child: LineChart(
-                                      data: viewModel.data,
-                                      colorArray:
-                                          viewModel.dashboardChartsColorArray),
+                          viewModel.selectedClient != null &&
+                                  viewModel.selectedDuration != null
+                              ? LineChartView(
+                                  clientId: viewModel.selectedClient.id,
+                                  selectedDuration: viewModel.selectedDuration,
                                 )
                               : Container(),
-                          viewModel.routesDrivenKmPercentageList.length > 0
-                              ? SizedBox(
-                                  height: 350,
-                                  child: PieChart(
-                                    routesDrivenKmPercentageList:
-                                        viewModel.routesDrivenKmPercentageList,
-                                    totalDrivenKmG: viewModel.totalDrivenKmG,
-                                  ),
+                          viewModel.selectedClient != null &&
+                                  viewModel.selectedDuration != null
+                              ? PieChartView(
+                                  clientId: viewModel.selectedClient.id,
+                                  selectedDuration: viewModel.selectedDuration,
                                 )
                               : Container(),
-                          viewModel.selectedClientForTiles == null
+                          viewModel.selectedClient == null
                               ? Container()
                               : Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,10 +369,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                       child: SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.20,
+                                                0.30,
                                         child: RoutesView(
                                           selectedClient:
-                                              viewModel.selectedClientForTiles,
+                                              viewModel.selectedClient,
                                           onRoutesPageInView: (clickedRoute) {
                                             // FetchRoutesResponse route = clickedRoute;
                                             // viewModel.selectedRoute = route;
@@ -406,13 +411,12 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       hint: "Select Duration",
       onOptionSelect: (selectedValue) {
         viewModel.selectedDuration = selectedValue;
-        viewModel.getBarGraphKmReport(viewModel.selectedDuration);
         //!call recent consignment api here
-        viewModel.getRecentConsignments(viewModel.selectedDuration);
-        //! call line graph data - getRoutesDrivenKm
-        viewModel.getRoutesDrivenKm();
-        //! call pie graph data - getRoutesDrivenKmPercentage
-        viewModel.getRoutesDrivenKmPercentage();
+        viewModel.getRecentConsignments(
+          clientId: viewModel.selectedClient.id,
+          period: viewModel.selectedDuration,
+        );
+
         locator<MyPreferences>().saveSelectedDuration(selectedValue);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
@@ -421,11 +425,12 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
     );
   }
 
-  Widget buildDashboradTileCard(
-      {String title,
-      String value,
-      DashBoardScreenViewModel viewModel,
-      Color color}) {
+  Widget buildDashboradTileCard({
+    String title,
+    String value,
+    DashBoardScreenViewModel viewModel,
+    Color color,
+  }) {
     return Card(
       color: color,
       elevation: 6,
@@ -454,17 +459,20 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       optionList: viewModel.clientsList,
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClientForTiles = selectedValue;
+        viewModel.selectedClient = selectedValue;
         locator<MyPreferences>().saveSelectedClient(selectedValue);
         //* call client tiles data
-
         viewModel.getDashboardTilesStats(
-          viewModel.selectedClientForTiles.id.toString(),
+          viewModel.selectedClient.id.toString(),
+        );
+        // call recent consignment api
+        viewModel.getRecentConsignments(
+          clientId: viewModel.selectedClient.id,
+          period: viewModel.selectedDuration,
         );
       },
-      selectedValue: viewModel.selectedClientForTiles == null
-          ? null
-          : viewModel.selectedClientForTiles,
+      selectedValue:
+          viewModel.selectedClient == null ? null : viewModel.selectedClient,
     );
   }
 
