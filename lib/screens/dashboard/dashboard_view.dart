@@ -299,7 +299,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
     );
   }
-
   Widget getOptions(
       {BuildContext context,
       int position,

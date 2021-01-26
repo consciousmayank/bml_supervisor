@@ -38,10 +38,10 @@ class _BarChartViewState extends State<BarChartView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          "Kilometers Report",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
+                        // Text(
+                        //   "Kilometers Report",
+                        //   style: Theme.of(context).textTheme.bodyText1,
+                        // ),
                         Expanded(
                           child: viewModel.kmReportListData.length > 0
                               ? charts.BarChart(
@@ -58,6 +58,9 @@ class _BarChartViewState extends State<BarChartView> {
                                   barRendererDecorator:
                                       new charts.BarLabelDecorator<String>(),
                                   behaviors: [
+                                    charts.SeriesLegend(
+                                      position: charts.BehaviorPosition.top,
+                                    ),
                                     charts.SlidingViewport(),
                                     charts.PanAndZoomBehavior(),
                                   ],

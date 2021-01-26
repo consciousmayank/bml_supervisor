@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'dart:ui';
+
 RoutesDrivenKm routesDrivenKmFromJson(String str) =>
     RoutesDrivenKm.fromJson(json.decode(str));
 
@@ -17,6 +19,7 @@ class RoutesDrivenKm {
     this.drivenKmG,
     this.title,
     this.entryDate,
+    this.color = const Color(0xff68cfc6),
   });
 
   int drivenKm;
@@ -25,6 +28,26 @@ class RoutesDrivenKm {
   int drivenKmG;
   String title;
   String entryDate;
+  final Color color;
+
+  RoutesDrivenKm copyWith({
+    int drivenKm,
+    int routeId,
+    String vehicleId,
+    int drivenKmG,
+    String title,
+    String entryDate,
+    Color color,
+  }) =>
+      RoutesDrivenKm(
+        drivenKm: drivenKm ?? this.drivenKm,
+        routeId: routeId ?? this.routeId,
+        vehicleId: vehicleId ?? this.vehicleId,
+        drivenKmG: drivenKmG ?? this.drivenKmG,
+        title: title ?? this.title,
+        entryDate: title ?? this.title,
+        color: color ?? this.color,
+      );
 
   factory RoutesDrivenKm.fromJson(Map<String, dynamic> json) => RoutesDrivenKm(
         drivenKm: json["drivenKm"],
