@@ -4,7 +4,7 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
-import 'package:bml_supervisor/screens/viewconsignments/view_consignment_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';

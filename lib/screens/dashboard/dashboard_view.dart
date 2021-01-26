@@ -1,4 +1,3 @@
-import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
@@ -6,6 +5,7 @@ import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
+import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -13,6 +13,7 @@ import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
 import 'dashboard_viewmodel.dart';
 
 class DashBoardScreenView extends StatefulWidget {
@@ -139,199 +140,22 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               : Container(),
                           // hSizedBox(3),
                           //!Show recent consignment table here
-                          viewModel.recentConsignmentList.length > 0
-                              ? Card(
-                                  elevation: 6,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          // crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              ('Date'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              ('Km Driven'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              ('Trips'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              ('Track'),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        hSizedBox(5),
-                                        Container(
-                                          height: 1,
-                                          color: Colors.black,
-                                        ),
-                                        hSizedBox(5),
-                                        Container(
-                                          height: 140,
-                                          child: ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return Column(
-                                                children: [
-                                                  hSizedBox(5),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        viewModel
-                                                            .recentConsignmentList[
-                                                                index]
-                                                            .entryDate,
-                                                      ),
-                                                      Text(
-                                                        viewModel
-                                                            .recentConsignmentList[
-                                                                index]
-                                                            .drivenKmG
-                                                            .toString(),
-                                                      ),
-                                                      Text(
-                                                        viewModel
-                                                            .recentConsignmentList[
-                                                                index]
-                                                            .trips
-                                                            .toString(),
-                                                      ),
-                                                      viewModel
-                                                                  .recentConsignmentList[
-                                                                      index]
-                                                                  .routeId ==
-                                                              0
-                                                          ? Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          5),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color:
-                                                                    getDashboardDueKmTileBgColor(),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          16),
-                                                                ),
-                                                              ),
-                                                              child: Text(
-                                                                'Consignment',
-                                                              ),
-                                                            )
-                                                          : InkWell(
-                                                              onTap: () {
-                                                                // go to new page and build line graph
-                                                                //! Create material page route on the fly
-                                                                // Navigator.of(
-                                                                //         context)
-                                                                //     .push(MaterialPageRoute(
-                                                                //         builder:
-                                                                //             (_) {
-                                                                //   return PieChart(); // Line chart page;
-                                                                // }));
-                                                                //todoGo to view consignment page
-                                                                viewModel
-                                                                    .snackBarService
-                                                                    .showSnackbar(
-                                                                        message:
-                                                                            'Go to consignments details page');
-                                                              },
-                                                              splashColor:
-                                                                  Colors.amber,
-                                                              child: Container(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            5),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color:
-                                                                      getDashboardDistributerTileBgColor(),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .all(
-                                                                    Radius
-                                                                        .circular(
-                                                                            16),
-                                                                  ),
-                                                                ),
-                                                                child: Text(
-                                                                  'Consignment',
-                                                                ),
-                                                              ),
-                                                            )
-                                                    ],
-                                                  ),
-                                                  hSizedBox(5),
-                                                  index + 1 !=
-                                                          viewModel
-                                                              .recentConsignmentList
-                                                              .length
-                                                      ? Container(
-                                                          height: 1,
-                                                          color: Colors.black,
-                                                        )
-                                                      : Container(),
-                                                ],
-                                              );
-                                            },
-                                            itemCount: viewModel
-                                                        .recentConsignmentList
-                                                        .length <
-                                                    5
-                                                ? viewModel
-                                                    .recentConsignmentList
-                                                    .length
-                                                : 5,
-                                          ),
-                                        ),
-                                        viewModel.recentConsignmentList.length >
-                                                5
-                                            ? FlatButton(
-                                                child: Text(
-                                                  'View More',
-                                                  style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                  ),
-                                                ),
-                                                onPressed: () {
-                                                  //todo: got to show all consignments' page
-                                                  viewModel
-                                                      .takeToAllConsignmentsPage();
-                                                  // showViewEntryDetailPreview(context,
-                                                  //     vehicleEntrySearchResponse[index]);
-                                                },
-                                              )
-                                            : Container(),
-                                      ],
+
+                          viewModel.selectedClient != null &&
+                                  viewModel.selectedDuration != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Card(
+                                    elevation: defaultElevation,
+                                    child: ConsignmentListView(
+                                      isFulPageView: false,
+                                      duration: viewModel.selectedDuration,
+                                      clientId: viewModel.selectedClient.id,
                                     ),
                                   ),
                                 )
                               : Container(),
+
                           viewModel.selectedClient != null &&
                                   viewModel.selectedDuration != null
                               ? BarChartView(

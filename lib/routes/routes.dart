@@ -1,21 +1,23 @@
+import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
-import 'package:bml_supervisor/screens/consignmentallotment/consignement_allotment_view.dart';
+import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
+import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
+import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
+import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
-import 'package:bml_supervisor/screens/viewconsignments/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_view.dart';
-import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:flutter/material.dart';
-import 'package:bml_supervisor/models/recent_consignment_response.dart';
 
 class AppRouter {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -103,6 +105,16 @@ class AppRouter {
       case paymentsPageRoute:
         return MaterialPageRoute(
           builder: (_) => PaymentsView(),
+        );
+
+      case consignmentsListPageRoute:
+        ConsignmentListArguments args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ConsignmentListView(
+            duration: args.duration,
+            clientId: args.clientId,
+            isFulPageView: args.isFulPageView,
+          ),
         );
 
       default:

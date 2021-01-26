@@ -11,6 +11,8 @@ const double createConsignmentCardHeight = 650.00;
 const double horizontalPaddingValue = 16.00;
 const double verticlePaddingValue = 20.00;
 
+const double defaultElevation = 4.0;
+
 const dashboardDistributerTileBgColor = 0xff04BFAE;
 const dashboardTotalKmTileBgColor = 0xffFFB300;
 const dashboardRoutesTileBgColor = 0xffD89CB8;

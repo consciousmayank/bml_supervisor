@@ -1,8 +1,6 @@
-import 'package:bml_supervisor/models/routes_driven_km.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class LineChartView extends StatefulWidget {
@@ -35,8 +33,8 @@ class _LineChartViewState extends State<LineChartView> {
       builder: (context, viewModel, child) {
         return viewModel.routesDrivenKmList.length > 0
             ? SizedBox(
-          height: 300,
-              child: Card(
+                height: 300,
+                child: Card(
                   elevation: 6,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -54,7 +52,8 @@ class _LineChartViewState extends State<LineChartView> {
                             behaviors: [
                               new charts.ChartTitle(
                                 'Date',
-                                behaviorPosition: charts.BehaviorPosition.bottom,
+                                behaviorPosition:
+                                    charts.BehaviorPosition.bottom,
                                 titleOutsideJustification:
                                     charts.OutsideJustification.middleDrawArea,
                               ),
@@ -64,6 +63,8 @@ class _LineChartViewState extends State<LineChartView> {
                                 titleOutsideJustification:
                                     charts.OutsideJustification.middleDrawArea,
                               ),
+                              charts.SlidingViewport(),
+                              charts.PanAndZoomBehavior(),
                             ],
                           ),
                         )
@@ -71,7 +72,7 @@ class _LineChartViewState extends State<LineChartView> {
                     ),
                   ),
                 ),
-            )
+              )
             : Container();
       },
       viewModelBuilder: () => LineChartViewModel(),

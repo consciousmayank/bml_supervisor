@@ -34,4 +34,8 @@ class AppTextStyles {
 
   static const TextStyle latoBold16Black = TextStyle(
       fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.black);
+
+  static const TextStyle underLinedText = TextStyle(
+    decoration: TextDecoration.underline,
+  );
 }

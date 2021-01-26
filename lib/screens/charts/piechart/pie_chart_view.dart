@@ -1,7 +1,6 @@
-import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class PieChartView extends StatefulWidget {
@@ -35,8 +34,8 @@ class _PieChartViewState extends State<PieChartView> {
         builder: (context, viewModel, child) {
           return viewModel.routesDrivenKmPercentageList.length > 0
               ? SizedBox(
-            height: 250,
-                child: Card(
+                  height: MediaQuery.of(context).size.width,
+                  child: Card(
                     elevation: 6,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -56,12 +55,9 @@ class _PieChartViewState extends State<PieChartView> {
                               animationDuration: Duration(milliseconds: 200),
                               behaviors: [
                                 new charts.DatumLegend(
-                                  outsideJustification:
-                                      charts.OutsideJustification.middleDrawArea,
+                                  outsideJustification: charts
+                                      .OutsideJustification.middleDrawArea,
                                   horizontalFirst: true,
-                                  // desiredMaxRows: 3,
-                                  cellPadding: new EdgeInsets.only(
-                                      right: 4.0, bottom: 4.0),
                                   entryTextStyle: charts.TextStyleSpec(
                                       color: charts
                                           .MaterialPalette.purple.shadeDefault,
@@ -70,10 +66,11 @@ class _PieChartViewState extends State<PieChartView> {
                                 )
                               ],
                               defaultRenderer: new charts.ArcRendererConfig(
-                                arcWidth: 50,
+                                arcWidth: 80,
                                 arcRendererDecorators: [
                                   new charts.ArcLabelDecorator(
-                                    labelPosition: charts.ArcLabelPosition.inside,
+                                    labelPosition:
+                                        charts.ArcLabelPosition.inside,
                                   )
                                 ],
                               ),
@@ -83,7 +80,7 @@ class _PieChartViewState extends State<PieChartView> {
                       ),
                     ),
                   ),
-              )
+                )
               : Container();
         },
         viewModelBuilder: () => PieChartViewModel());

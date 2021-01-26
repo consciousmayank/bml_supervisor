@@ -1,14 +1,15 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/routes_driven_km.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class LineChartViewModel extends GeneralisedBaseViewModel {
   List<RoutesDrivenKm> routesDrivenKmList = [];
   List uniqueRoutes = [];
+  List uniqueDates = [];
   List<List<RoutesDrivenKm>> data = List<List<RoutesDrivenKm>>();
-  List<charts.Series<RoutesDrivenKm, int>> seriesLineData=[];
+  List<charts.Series<RoutesDrivenKm, int>> seriesLineData = [];
 
   List<Color> lineChartColorArray = [
     Color(0xff68cfc6),
@@ -51,6 +52,10 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
               if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
                 uniqueRoutes.add(routesDrivenKmObject.routeId);
               }
+
+              if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
+                uniqueDates.add(routesDrivenKmObject.entryDate);
+              }
             },
           );
 
@@ -63,39 +68,6 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
             },
           );
 
-          // uniqueRoutes.forEach((singleRouteElement) {
-          //   List<RoutesDrivenKm> tempList = [];
-          //   routesDrivenKmList.forEach((singleRoutesDrivenKm) {
-          //     if (singleRoutesDrivenKm.routeId == singleRouteElement) {
-          //       tempList.add(singleRoutesDrivenKm);
-          //     } else {
-          //       tempList.add(RoutesDrivenKm(
-          //           drivenKm: 0,
-          //           entryDate: singleRoutesDrivenKm.entryDate,
-          //           routeId: singleRoutesDrivenKm.routeId,
-          //           vehicleId: singleRoutesDrivenKm.vehicleId,
-          //           drivenKmG: singleRoutesDrivenKm.drivenKm,
-          //           title: singleRoutesDrivenKm.title));
-          //     }
-          //   });
-
-          //   data.add(tempList);
-          // });
-
-          // ! For printing line chart data, coming from api
-          // int i = 1;
-          // data.forEach((element) {
-          //   print('*****************Route R $i**********************');
-          //   element.forEach((element2) {
-          //     print("route id :: ${element2.routeId.toString()}");
-          //     print("driven km :: ${element2.drivenKm.toString()}");
-          //     print("Entrt Date :: ${element2.entryDate.toString()}");
-          //   });
-          //   print('*****************************************************');
-          //   i++;
-          // });
-          print(' line chart data length in view model ${data.length}');
-          print('data length in line chart ${data.length}');
           var route_1 = data[0];
           var route_2 = data[1];
           var route_3 = data[2];
