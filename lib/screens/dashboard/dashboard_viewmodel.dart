@@ -111,7 +111,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     } else {
       singleClientTileData =
           DashboardTilesStatsResponse.fromJson(tilesData.data);
-      print('single Client Tile data-----${singleClientTileData.hubCount}');
       setBusy(false);
       notifyListeners();
     }

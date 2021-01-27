@@ -8,7 +8,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
   List<RoutesDrivenKmPercentage> routesDrivenKmPercentageList = [];
   List<charts.Series<RoutesDrivenKmPercentage, String>> seriesPieData=[];
 
-  List<Color> dashboardChartsColorArray = [
+  List<Color> pieChartsColorArray = [
     Color(0xff2f6497),
     Color(0xffee6868),
     Color(0xff698caf),
@@ -39,7 +39,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
                 RoutesDrivenKmPercentage.fromJson(value);
             routesDrivenKmPercentageResponse =
                 routesDrivenKmPercentageResponse.copyWith(
-              color: dashboardChartsColorArray[colorArrayIndex],
+              color: pieChartsColorArray[colorArrayIndex],
             );
             ++colorArrayIndex;
             totalDrivenKmG += routesDrivenKmPercentageResponse.drivenKmG;
@@ -59,7 +59,6 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
                       .toString(),
             ),
           );
-          print('totalDrivenKmG: $totalDrivenKmG');
         }
       }
     } on DioError catch (e) {

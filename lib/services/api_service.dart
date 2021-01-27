@@ -20,7 +20,6 @@ class ApiService {
   Future<Response> search({String registrationNumber}) async {
     Response response;
     try {
-      print('$SEARCH_BY_REG_NO$registrationNumber');
       response =
           await dioClient.getDio().get('$SEARCH_BY_REG_NO$registrationNumber');
     } on DioError catch (e) {
@@ -64,7 +63,6 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    print(response);
     return response;
   }
 
@@ -89,7 +87,6 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    print(response);
     return response;
   }
 
@@ -125,20 +122,17 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    print(response);
     return response;
   }
 
   Future addNewPayment(SavePaymentRequest request) async {
     String body = request.toJson();
-    print(body);
     Response response;
     try {
       response = await dioClient.getDio().post('/payment/add', data: body);
     } on DioError catch (e) {
       return e.toString();
     }
-    print(response);
     return response;
   }
 
@@ -176,8 +170,6 @@ class ApiService {
 
   Future vehicleEntrySearch2PointO({ViewEntryRequest viewEntryRequest}) async {
     String body = viewEntryRequest.toJson();
-    print('view entry with new api');
-    print(body);
     Response response;
     try {
       response =
@@ -185,7 +177,6 @@ class ApiService {
     } on DioError catch (e) {
       return e.toString();
     }
-    print(response);
     return response;
   }
 
@@ -212,7 +203,6 @@ class ApiService {
       "status": entryLogRequest.status
     };
     String body = json.encode(request);
-
     try {
       response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
     } on DioError catch (e) {
@@ -240,15 +230,12 @@ class ApiService {
 
   Future addExpense({SaveExpenseRequest request}) async {
     String body = request.toJson();
-    print('add expense in api_servie=========: ' + body);
-
     Response response;
     try {
       response = await dioClient.getDio().post(ADD_EXPENSE, data: body);
     } on DioError catch (e) {
       return e.toString();
     }
-    print(response);
     return response;
   }
 
@@ -259,7 +246,6 @@ class ApiService {
   }) async {
     Response response;
     // print('reg num is api' + regNo);
-    print('api_service: regNu-$registrationNumber clientId-$clientId');
     try {
       //!start
       if (registrationNumber.length != 0 && clientId.length != 0) {
@@ -289,14 +275,12 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    print('expense list: ' + response.toString());
     return response;
   }
 
   Future getClientsList() async {
     Response response;
     try {
-      print('calling this api: $GET_CLIENTS');
       response = await dioClient.getDio().get('$GET_CLIENTS');
     } on DioError catch (e) {
       return e.message;
