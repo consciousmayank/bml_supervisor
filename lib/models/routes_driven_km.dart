@@ -6,6 +6,8 @@ import 'dart:convert';
 
 import 'dart:ui';
 
+import 'package:bml_supervisor/utils/widget_utils.dart';
+
 RoutesDrivenKm routesDrivenKmFromJson(String str) =>
     RoutesDrivenKm.fromJson(json.decode(str));
 
@@ -29,6 +31,17 @@ class RoutesDrivenKm {
   String title;
   String entryDate;
   final Color color;
+  DateTime _entryDateTime;
+
+
+  DateTime get entryDateTime{
+
+    var dateAsList = entryDate.split('-');
+    var reversedDateList = dateAsList.reversed;
+    var joinedReversedDate = reversedDateList.join('-');
+    DateTime time = DateTime.parse(joinedReversedDate);
+    return time;
+  }
 
   RoutesDrivenKm copyWith({
     int drivenKm,
