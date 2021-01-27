@@ -28,14 +28,23 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         onModelReady: (viewModel) async {
           GetClientsResponse selectedClient =
               await locator<MyPreferences>().getSelectedClient();
+
+          PreferencesSavedUser savedUser =
+              await viewModel.preferences.getUserLoggedIn();
+
+          viewModel.getSavedUser();
           if (selectedClient == null) {
             viewModel.getClients();
           } else {
-            viewModel.clientsList.add(selectedClient);
-            viewModel.selectedClient = selectedClient;
-            viewModel.getDashboardTilesStats(
-              viewModel.selectedClient.id.toString(),
-            );
+            if (savedUser.role == 'role'.toUpperCase()) {
+              viewModel.getClientDashboardStats(savedUser);
+            } else {
+              viewModel.clientsList.add(selectedClient);
+              viewModel.selectedClient = selectedClient;
+              viewModel.getDashboardTilesStats(
+                viewModel.selectedClient.id.toString(),
+              );
+            }
           }
 
           String selectedDuration =

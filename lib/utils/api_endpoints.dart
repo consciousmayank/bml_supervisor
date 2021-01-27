@@ -1,4 +1,5 @@
-const String LOGIN = "/rest/V1/integration/customer/token";
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
+
 const String REGISTER_VEHICLE = "/vehicle/add";
 const String SUMBIT_ENTRY = "/vehicle/entrylog/add";
 const String SEARCH_BY_REG_NO = "/vehicle/list/";
@@ -23,3 +24,9 @@ final GET_ROUTES_FOR_CLIENT_AND_DATE =
     (clientId, date) => "/route/consignment/client/$clientId/date/$date";
 final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
     "/consignment/client/$clientId/route/$routeId/date/$date";
+final LOGIN = (username) => "/user/$username";
+final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
+    ? '/client/${user.userName}/dashboard/statistics'
+    : user.role == 'ADMIN'
+        ? '/admin/${user.userName}/dashboard/statistics'
+        : '/manager/${user.userName}/dashboard/statistics';

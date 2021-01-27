@@ -72,9 +72,8 @@ class ApiService {
     // dashboard line chart api
     Response response;
     try {
-      response = await dioClient
-          .getDio()
-          .get('/vehicle/entrylog/route/drivenKm/client/$clientId/period/$period');
+      response = await dioClient.getDio().get(
+          '/vehicle/entrylog/route/drivenKm/client/$clientId/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
@@ -399,6 +398,32 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
+    return response;
+  }
+
+  Future login(
+      {@required String base64string, @required String userName}) async {
+    Map<String, String> authHeader = {"Authorization": "Basic $base64string"};
+    Response response;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(LOGIN(userName), options: Options(headers: authHeader));
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getClientDashboardStats(PreferencesSavedUser user) async {
+    // dashboard client specific tiles data api
+    Response response;
+    try {
+      response = await dioClient.getDio().get(GET_DASHBOARD_STATS(user));
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print(response);
     return response;
   }
 }

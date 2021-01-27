@@ -49,7 +49,7 @@ class AppButton extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(1.0),
           child: Material(
-            elevation: 2,
+            elevation: defaultElevation,
             borderRadius: BorderRadius.circular(
               borderRadius,
             ),

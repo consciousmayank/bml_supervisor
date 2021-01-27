@@ -38,4 +38,7 @@ class AppTextStyles {
   static const TextStyle underLinedText = TextStyle(
     decoration: TextDecoration.underline,
   );
+
+  static const TextStyle latoMediumItalics20 = TextStyle(
+      fontStyle: FontStyle.italic, fontSize: 20, color: AppColors.white);
 }

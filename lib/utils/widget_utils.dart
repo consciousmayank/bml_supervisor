@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -276,4 +278,9 @@ launchMaps(double latitude, double longitude) async {
   } else {
     throw 'Could not launch url';
   }
+}
+
+String getBase64String({@required String value}) {
+  var bytes = utf8.encode(value);
+  return base64.encode(bytes);
 }

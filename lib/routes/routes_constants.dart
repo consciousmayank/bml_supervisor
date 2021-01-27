@@ -1,6 +1,7 @@
 /// This file contains all the routing constants used within the app
 
 const String searchPageRoute = '/search';
+const String dashBoardPageRoute = '/dashBoardPageRoute';
 const String mainViewRoute = '/';
 const String addExpensesPageRoute = '/addExpensesPage';
 const String blankPageRoute = '/blankPage';

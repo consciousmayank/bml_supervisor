@@ -1,15 +1,26 @@
 import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
-import 'package:bml_supervisor/models/km_report_response.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:bml_supervisor/models/routes_driven_km.dart';
-import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
+  PreferencesSavedUser _savedUser;
+
+  PreferencesSavedUser get savedUser => _savedUser;
+
+  set savedUser(PreferencesSavedUser value) {
+    _savedUser = value;
+    notifyListeners();
+  }
+
+  void getSavedUser() async {
+    savedUser = await preferences.getUserLoggedIn();
+  }
+
   List<IconData> optionsIcons = [
     Icons.phone,
     Icons.clear,
@@ -187,5 +198,19 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   //! For testing purpose it is navigating to searchPageRoute
   takeToViewConsignmentsPage() {
     navigationService.navigateTo(viewConsignmentsPageRoute);
+  }
+
+  void getClientDashboardStats(PreferencesSavedUser savedUser) async {
+    setBusy(true);
+    var tilesData = await apiService.getClientDashboardStats(savedUser);
+    if (tilesData is String) {
+      snackBarService.showSnackbar(message: tilesData);
+    } else {
+      singleClientTileData =
+          DashboardTilesStatsResponse.fromJson(tilesData.data);
+      print('single Client Tile data-----${singleClientTileData.hubCount}');
+      setBusy(false);
+      notifyListeners();
+    }
   }
 }

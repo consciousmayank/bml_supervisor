@@ -17,10 +17,15 @@ class DioConfig {
   }
 
   configureDio() async {
-    alice.setNavigatorKey(locator<NavigationService>().navigatorKey);
+    String credentials = await preferences.getCredentials();
+
+    alice.setNavigatorKey(StackedService.navigatorKey);
+
     _dio.options
       // ..baseUrl = baseRestUrlProduction
       ..baseUrl = baseRestUrl
+      ..headers =
+          credentials.isEmpty ? {} : {"Authorization": "Basic $credentials"}
       ..contentType = "application/json";
     _dio.interceptors.add(alice.getDioInterceptor());
     _dio.interceptors

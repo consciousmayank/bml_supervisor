@@ -7,3 +7,5 @@ final String assetSearch = 'assets/images/search.svg';
 final String assetView = 'assets/images/view.svg';
 final String semiCircles = _imagePath + 'semi_circles_icon.png';
 final String locationIcon = _imagePath + 'location_icon.png';
+final String bmlIcon = _imagePath + 'bml_icon_login.png';
+final String loginIconIcon = _imagePath + 'login_icon.png';
