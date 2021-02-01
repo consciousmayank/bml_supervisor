@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
@@ -95,8 +94,9 @@ class ApiService {
     // dashboard recent consignment table
     Response response;
     try {
-      response = await dioClient.getDio().get(
-          '/vehicle/entrylog/consignment/view/client/$clientId/period/$period');
+      response = await dioClient
+          .getDio()
+          .get('/vehicle/entrylog/consignment/view/client/$clientId');
     } on DioError catch (e) {
       return e.message;
     }
