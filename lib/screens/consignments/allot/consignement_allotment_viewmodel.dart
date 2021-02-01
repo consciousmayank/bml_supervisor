@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
@@ -15,7 +14,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   DateTime _entryDate;
   String _enteredTitle; //final _formKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> _formKeyList = [];
-
+  double grandTotal = 0;
   List<GlobalKey<FormState>> get formKeyList => _formKeyList;
 
   set formKeyList(List<GlobalKey<FormState>> value) {
@@ -35,6 +34,8 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   set hubsList(List<FetchHubsResponse> value) {
     _hubsList = value;
+    grandTotal = 0;
+    notifyListeners();
   }
 
   set entryDate(DateTime selectedDate) {
@@ -79,6 +80,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   getRoutes(int clientId) async {
     setBusy(true);
     routesList = [];
+    hubsList = [];
     var response = await apiService.getRoutesForClient(clientId: clientId);
 
     if (response is String) {
@@ -116,8 +118,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   getHubs() async {
-    _hubsList.clear();
-
+    hubsList = [];
     var consignmentResponse = await apiService.getHubsForRouteAndClientId(
         routeId: selectedRoute.id,
         clientId: selectedClient.id,
@@ -188,25 +189,25 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       );
     });
 
-    var createConsignmentResponse =
-        await apiService.createConsignment(consignmentRequest);
-    if (createConsignmentResponse is String) {
-      snackBarService.showSnackbar(message: createConsignmentResponse);
-    } else {
-      Response apiResponse = createConsignmentResponse;
-      ApiResponse response = ApiResponse.fromMap(apiResponse.data);
-      if (response.status == 'failed') {
-        setBusy(false);
-        snackBarService.showSnackbar(message: "${response.message}");
-      } else {
-        dialogService
-            .showConfirmationDialog(
-                title: response.message,
-                description:
-                    "You can edit the consignment, in View Consignment.")
-            .then((value) => navigationService.back());
-        setBusy(false);
-      }
-    }
+    // var createConsignmentResponse =
+    //     await apiService.createConsignment(consignmentRequest);
+    // if (createConsignmentResponse is String) {
+    //   snackBarService.showSnackbar(message: createConsignmentResponse);
+    // } else {
+    //   Response apiResponse = createConsignmentResponse;
+    //   ApiResponse response = ApiResponse.fromMap(apiResponse.data);
+    //   if (response.status == 'failed') {
+    //     setBusy(false);
+    //     snackBarService.showSnackbar(message: "${response.message}");
+    //   } else {
+    //     dialogService
+    //         .showConfirmationDialog(
+    //             title: response.message,
+    //             description:
+    //                 "You can edit the consignment, in View Consignment.")
+    //         .then((value) => navigationService.back());
+    //     setBusy(false);
+    //   }
+    // }
   }
 }

@@ -215,11 +215,15 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
             children: mobileFormView(context: context, viewModel: viewModel),
           ),
         ),
-        desktop: ListView(
-          controller: _controller,
+        desktop: Expanded(
+          child: ListView(
+            controller: _controller,
+          ),
         ),
-        tablet: ListView(
-          controller: _controller,
+        tablet: Expanded(
+          child: ListView(
+            controller: _controller,
+          ),
         ),
       ),
     );

@@ -155,24 +155,24 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                         onPageChanged: (index) {
                           hubTitleController.text =
                               viewModel.consignmentRequest.items[index].title ??
-                                  "";
+                                  "NA";
                           dropController.text = viewModel.consignmentRequest
                                       .items[index].dropOff !=
                                   null
                               ? dropController.text = viewModel
                                   .consignmentRequest.items[index].dropOff
                                   .toString()
-                              : "";
+                              : "0";
                           collectController.text = viewModel.consignmentRequest
                                       .items[index].collect !=
                                   null
                               ? viewModel
                                   .consignmentRequest.items[index].collect
                                   .toString()
-                              : "";
+                              : "0";
 
                           if (index == viewModel.hubsList.length - 1) {
-                            double grandTotal = 0;
+                            // viewModel.grandTotal = 0;
                             for (int i = 1;
                                 i <
                                     viewModel.consignmentRequest.items.length -
@@ -181,7 +181,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                               if (viewModel
                                       .consignmentRequest.items[i].payment !=
                                   null) {
-                                grandTotal = grandTotal +
+                                viewModel.grandTotal = viewModel.grandTotal +
                                         viewModel.consignmentRequest.items[i]
                                             .payment ??
                                     0;
@@ -190,7 +190,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
                             viewModel.consignmentRequest.items
                                 .forEach((element) {});
-                            paymentController.text = grandTotal.toString();
+                            paymentController.text =
+                                viewModel.grandTotal.toString();
                           } else {
                             paymentController.text = viewModel
                                         .consignmentRequest
@@ -200,14 +201,14 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                 ? viewModel
                                     .consignmentRequest.items[index].payment
                                     .toString()
-                                : "";
+                                : "0.0";
                           }
 
                           remarksController.text = viewModel
                                   .consignmentRequest.items[index].remarks ??
                               "";
                         },
-                        // physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -294,22 +295,29 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                               index: index),
                                           hSizedBox(5),
                                           dropInput(
-                                              context: context,
-                                              viewModel: viewModel),
+                                            context: context,
+                                            viewModel: viewModel,
+                                            index: index,
+                                          ),
                                           hSizedBox(5),
                                           collectInput(
-                                              context: context,
-                                              viewModel: viewModel),
+                                            context: context,
+                                            viewModel: viewModel,
+                                            index: index,
+                                          ),
                                           hSizedBox(5),
                                           paymentInput(
-                                              context: context,
-                                              viewModel: viewModel,
-                                              enabled: index ==
-                                                  viewModel.hubsList.length -
-                                                      1),
+                                            context: context,
+                                            viewModel: viewModel,
+                                            enabled: index ==
+                                                viewModel.hubsList.length - 1,
+                                            index: index,
+                                          ),
                                           remarksInput(
-                                              context: context,
-                                              viewModel: viewModel),
+                                            context: context,
+                                            viewModel: viewModel,
+                                            index: index,
+                                          ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
@@ -685,6 +693,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       {BuildContext context,
       ConsignmentAllotmentViewModel viewModel,
       int index}) {
+    hubTitleController.text =
+        viewModel?.consignmentRequest?.items[index]?.title?.toString();
+
     return TextFormField(
       decoration: getInputBorder(hintText: "Enter HubTitle"),
       enabled: true,
@@ -708,7 +719,12 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget remarksInput(
-      {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
+      {BuildContext context,
+      ConsignmentAllotmentViewModel viewModel,
+      int index}) {
+    remarksController.text =
+        viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
+
     return TextFormField(
       decoration: getInputBorder(hintText: "Enter Remarks"),
       enabled: true,
@@ -723,7 +739,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget dropInput(
-      {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
+      {BuildContext context,
+      ConsignmentAllotmentViewModel viewModel,
+      int index}) {
+    dropController.text =
+        viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
     return TextFormField(
       decoration: getInputBorder(hintText: "Enter Crates to drop"),
       enabled: true,
@@ -748,7 +768,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget collectInput(
-      {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
+      {BuildContext context,
+      ConsignmentAllotmentViewModel viewModel,
+      int index}) {
+    collectController.text =
+        viewModel?.consignmentRequest?.items[index]?.collect?.toString();
     return TextFormField(
       decoration: getInputBorder(hintText: "Enter Crates to collect"),
       enabled: true,
@@ -776,10 +800,14 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     BuildContext context,
     ConsignmentAllotmentViewModel viewModel,
     bool enabled,
+    int index,
   }) {
+    paymentController.text =
+        viewModel?.consignmentRequest?.items[index]?.payment?.toString();
+
     return TextFormField(
       decoration: getInputBorder(hintText: "Enter Payment"),
-      enabled: !enabled,
+      enabled: true,
       controller: paymentController,
       focusNode: paymentFocusNode,
       onFieldSubmitted: (_) {
@@ -862,7 +890,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
             dropOff: skip ? 0 : int.parse(dropController.text),
             collect: skip ? 0 : int.parse(collectController.text),
             payment: skip ? 0 : double.parse(paymentController.text),
-            title: skip ? " " : hubTitleController.text.trim(),
+            title: skip ? "NA" : hubTitleController.text.trim(),
             remarks: skip ? " " : remarksController.text.trim(),
           );
           viewModel.consignmentRequest.items.insert(index, item);
