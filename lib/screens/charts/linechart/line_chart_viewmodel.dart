@@ -216,7 +216,6 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
           )
       );
 
-
     });
 
     return bezierLineList;

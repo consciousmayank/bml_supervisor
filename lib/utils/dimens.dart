@@ -8,7 +8,6 @@ const double locationIconHeight = 52.00;
 const double locationIconWidth = 35.00;
 const double createConsignmentCardHeight = 650.00;
 
-const double horizontalPaddingValue = 16.00;
 const double verticlePaddingValue = 20.00;
 
 const double defaultElevation = 4.0;

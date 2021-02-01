@@ -139,7 +139,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               : Container(),
                           // hSizedBox(3),
                           //!Show recent consignment table here
-
                           viewModel.selectedClient != null &&
                                   viewModel.selectedDuration != null
                               ? ClipRRect(

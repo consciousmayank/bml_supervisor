@@ -3,6 +3,7 @@ import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -32,6 +33,7 @@ class _PaymentsViewState extends State<PaymentsView> {
 
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder.reactive(
@@ -55,21 +57,46 @@ class _PaymentsViewState extends State<PaymentsView> {
               padding: getPaymentScreenSidePadding(),
               child: selectClientForTransactionList(viewModel: viewModel),
             ),
-            Padding(
-              padding: getPaymentScreenSidePadding(),
-              child: selectDuration(viewModel: viewModel),
-            ),
-            hSizedBox(15),
+            // Padding(
+            //   padding: getPaymentScreenSidePadding(),
+            //   child: selectDuration(viewModel: viewModel),
+            // ),
+            // hSizedBox(15),
+            viewModel.paymentHistoryResponseList.length > 0
+                ?  Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: buildChip(
+                              title: 'Total Amt',
+                              value: viewModel.totalAmt.toString(),
+                            ),
+                          ),
+                          wSizedBox(5),
+                          Expanded(
+                            flex: 1,
+                            child: buildChip(
+                              title: 'Payments',
+                              value: viewModel.noOfPayments.toString(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+
+                : Container(),
             viewModel.paymentHistoryResponseList.length > 0
                 ? Expanded(
                     child: Padding(
                       padding: getPaymentScreenSidePadding(),
                       child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
+                        shape: getCardShape(),
                         child: Column(
                           // !Refer this if listview is troubling
+
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.start,
                           // mainAxisSize: MainAxisSize.max,
@@ -97,6 +124,32 @@ class _PaymentsViewState extends State<PaymentsView> {
         ),
       ),
       viewModelBuilder: () => PaymentsViewModel(),
+    );
+  }
+
+  Widget buildChip({String title, String value}) {
+    return Card(
+      shape: getCardShape(),
+      elevation: defaultElevation,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              title,
+              style: AppTextStyles.latoMedium12Black
+            ),
+            wSizedBox(10),
+            Text(
+              value,
+              style: AppTextStyles.latoBold16Black
+            ),
+          ],
+        ),
+      ),
     );
   }
 
