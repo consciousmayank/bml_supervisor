@@ -10,7 +10,7 @@ class CreateConsignmentRequest {
     this.routeId,
     this.vehicleId,
     this.entryDate,
-    this.title,
+    this.title='NA',
     this.items,
   });
 
@@ -79,7 +79,7 @@ class Item {
     this.id,
     this.hubId,
     this.sequence,
-    this.title,
+    this.title='NA',
     this.dropOff,
     this.collect,
     this.payment,
@@ -87,8 +87,8 @@ class Item {
     this.collectG,
     this.paymentG,
     this.paymentMode,
-    this.paymentId,
-    this.remarks,
+    this.paymentId='NA',
+    this.remarks='NA',
     this.flag,
   });
 

@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class AppDropDown extends StatefulWidget {
@@ -7,12 +8,14 @@ class AppDropDown extends StatefulWidget {
   final String hint;
   final Function onOptionSelect;
   final showUnderLine;
-  AppDropDown(
-      {@required this.optionList,
-      this.selectedValue = '',
-      @required this.hint,
-      @required this.onOptionSelect,
-      this.showUnderLine = true});
+
+  AppDropDown({
+    @required this.optionList,
+    this.selectedValue = '',
+    @required this.hint,
+    @required this.onOptionSelect,
+    this.showUnderLine = true,
+  });
 
   @override
   _AppDropDownState createState() => _AppDropDownState();

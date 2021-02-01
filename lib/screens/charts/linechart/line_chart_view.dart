@@ -42,10 +42,9 @@ class _LineChartViewState extends State<LineChartView> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: BezierChart(
-
                       fromDate: viewModel.uniqueDates.first,
                       bezierChartScale: BezierChartScale.WEEKLY,
-                      toDate: viewModel.uniqueDates.last,
+                      toDate: viewModel.uniqueDates.first == viewModel.uniqueDates.last ? viewModel.uniqueDates.first.add(Duration(days: 1)) : viewModel.uniqueDates.last,
                       onIndicatorVisible: (val) {
                         print("Indicator Visible :$val");
                       },
@@ -70,7 +69,7 @@ class _LineChartViewState extends State<LineChartView> {
                         bubbleIndicatorValueFormat:
                         NumberFormat("###,##0.00", "en_US"),
                         verticalIndicatorStrokeWidth: 1.0,
-                        verticalIndicatorColor: Colors.white30,
+                        verticalIndicatorColor: Colors.black,
                         showVerticalIndicator: true,
                         verticalIndicatorFixedPosition: false,
                         backgroundColor: Colors.transparent,
