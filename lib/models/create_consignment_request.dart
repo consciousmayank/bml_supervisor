@@ -10,7 +10,7 @@ class CreateConsignmentRequest {
     this.routeId,
     this.vehicleId,
     this.entryDate,
-    this.title,
+    this.title = 'NA',
     this.items,
   });
 

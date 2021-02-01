@@ -6,6 +6,24 @@ import 'package:dio/dio.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
+  double _totalAmt = 0.0;
+
+  double get totalAmt => _totalAmt;
+
+  set totalAmt(double value) {
+    _totalAmt = value;
+    notifyListeners();
+  }
+
+  int _noOfPayments = 0;
+
+  int get noOfPayments => _noOfPayments;
+
+  set noOfPayments(int value) {
+    _noOfPayments = value;
+    notifyListeners();
+  }
+
   List<GetClientsResponse> _clientsList = [];
 
   List<GetClientsResponse> get clientsList => _clientsList;
@@ -27,20 +45,25 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   List<PaymentHistoryResponse> paymentHistoryResponseList = [];
 
   DateTime _entryDate;
+
   DateTime get entryDate => _entryDate;
+
   set entryDate(DateTime registrationDate) {
     _entryDate = registrationDate;
     notifyListeners();
   }
 
   bool _emptyDateSelector = false;
+
   bool get emptyDateSelector => _emptyDateSelector;
+
   set emptyDateSelector(bool emptyDateSelector) {
     _emptyDateSelector = emptyDateSelector;
     notifyListeners();
   }
 
   String _selectedDuration = "";
+
   String get selectedDuration => _selectedDuration;
 
   set selectedDuration(String selectedDuration) {
@@ -49,6 +72,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   }
 
   GetClientsResponse _selectedClientForTransactionList;
+
   GetClientsResponse get selectedClientForTransactionList =>
       _selectedClientForTransactionList;
 
@@ -59,6 +83,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   }
 
   GetClientsResponse _selectedClientForNewTransaction;
+
   GetClientsResponse get selectedClientForNewTransaction =>
       _selectedClientForNewTransaction;
 
@@ -120,6 +145,8 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   }
 
   getPaymentHistory(int clientId) async {
+    totalAmt = 0.0;
+    noOfPayments = 0;
     paymentHistoryResponseList.clear();
     notifyListeners();
     setBusy(true);
@@ -135,6 +162,8 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
               PaymentHistoryResponse singlePaymentResponse =
                   PaymentHistoryResponse.fromJson(singlePayment);
               paymentHistoryResponseList.add(singlePaymentResponse);
+              totalAmt += singlePaymentResponse.amount;
+              noOfPayments++;
             }
             print('in view model:=========$paymentHistoryResponseList');
           }

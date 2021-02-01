@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
@@ -70,9 +72,8 @@ class ApiService {
     // dashboard line chart api
     Response response;
     try {
-      response = await dioClient
-          .getDio()
-          .get('/vehicle/entrylog/route/drivenKm/client/$clientId/period/$period');
+      response = await dioClient.getDio().get(
+          '/vehicle/entrylog/route/drivenKm/client/$clientId/period/$period');
     } on DioError catch (e) {
       return e.message;
     }
@@ -336,6 +337,29 @@ class ApiService {
     return response;
   }
 
+  Future updateConsignment(
+      {int consignmentId, ReviewConsignmentRequest putRequest}) async {
+    Response response;
+    print('in api service');
+    print(putRequest.assessBy);
+    putRequest.reviewedItems.forEach((element) {
+      print('dropOff: ${element.dropOff}');
+      print('collect: ${element.collect}');
+      print('payment: ${element.payment}');
+    });
+    print('api call /api/consignment/$consignmentId');
+    try {
+      response = await dioClient.getDio().put(
+            '/consignment/$consignmentId',
+            data: putRequest.toMap(),
+          );
+    } on DioError catch (e) {
+      return e.message;
+    }
+    print(response);
+    return response;
+  }
+
   Future getConsignmentsList(
       {@required int routeId,
       @required int clientId,
@@ -344,6 +368,31 @@ class ApiService {
     try {
       response = await dioClient.getDio().get(
           GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getConsignmentListWithDate({String entryDate}) async {
+    Response response;
+    print('api call - /client/consignment/list/date/$entryDate');
+    try {
+      response = await dioClient
+          .getDio()
+          .get('/client/consignment/list/date/$entryDate');
+    } on DioError catch (e) {
+      return e.message;
+    }
+    return response;
+  }
+
+  Future getConsignmentWithId({String consignmentId}) async {
+    Response response;
+    print('api call - /client/consignment/$consignmentId');
+    try {
+      response =
+          await dioClient.getDio().get('/client/consignment/$consignmentId');
     } on DioError catch (e) {
       return e.message;
     }
@@ -360,10 +409,11 @@ class ApiService {
     return response;
   }
 
-  Future getHubsForRouteAndClientId(
-      {@required int routeId,
-      @required @required int clientId,
-      @required String entryDate}) async {
+  Future getHubsForRouteAndClientId({
+    @required int routeId,
+    @required @required int clientId,
+    @required String entryDate,
+  }) async {
     Response response;
     try {
       response = await dioClient.getDio().get("$GET_HUBS$routeId");
@@ -373,8 +423,10 @@ class ApiService {
     return response;
   }
 
-  Future getRoutesForSelectedClientAndDate(
-      {@required int clientId, @required String date}) async {
+  Future getRoutesForSelectedClientAndDate({
+    @required int clientId,
+    @required String date,
+  }) async {
     Response response;
     try {
       response = await dioClient.getDio().get(

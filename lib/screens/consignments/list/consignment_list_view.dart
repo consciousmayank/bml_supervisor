@@ -71,12 +71,18 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         ? Container()
         : SizedBox(
             child: makeConsignmentList(context: context, viewModel: viewModel),
-            height: widget.isFulPageView ? double.infinity : 400,
+            height: widget.isFulPageView
+                ? double.infinity
+                : viewModel.recentConsignmentList.length <= 7
+                    ? 400
+                    : 400,
           );
   }
 
-  Widget makeConsignmentList(
-      {BuildContext context, ConsignmentListViewModel viewModel}) {
+  Widget makeConsignmentList({
+    BuildContext context,
+    ConsignmentListViewModel viewModel,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [

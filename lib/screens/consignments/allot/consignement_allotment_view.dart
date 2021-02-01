@@ -894,7 +894,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
             remarks: skip ? " " : remarksController.text.trim(),
           );
           viewModel.consignmentRequest.items.insert(index, item);
-
           viewModel.notifyListeners();
         }
       });
