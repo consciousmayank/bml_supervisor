@@ -115,7 +115,9 @@ class _RoutesViewState extends State<RoutesView> {
                                               AppColors.primaryColorShade1,
                                           background:
                                               AppColors.primaryColorShade5,
-                                          onTap: () {},
+                                          onTap: () {
+
+                                          },
                                           buttonText: 'SHOW ROUTE',
                                         ),
                                       ),

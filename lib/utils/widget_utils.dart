@@ -45,7 +45,7 @@ getDashboradTilesVerticlePadding() {
 }
 
 getPaymentScreenSidePadding() {
-  return const EdgeInsets.symmetric(horizontal: horizontalPaddingValue);
+  return const EdgeInsets.symmetric(horizontal: 8, vertical: 8);
 }
 
 wSizedBox(double width) {

@@ -4,6 +4,10 @@
 
 import 'dart:convert';
 
+import 'dart:ui';
+
+import 'package:bml_supervisor/utils/widget_utils.dart';
+
 RoutesDrivenKm routesDrivenKmFromJson(String str) =>
     RoutesDrivenKm.fromJson(json.decode(str));
 
@@ -17,6 +21,7 @@ class RoutesDrivenKm {
     this.drivenKmG,
     this.title,
     this.entryDate,
+    this.color = const Color(0xff68cfc6),
   });
 
   int drivenKm;
@@ -25,6 +30,37 @@ class RoutesDrivenKm {
   int drivenKmG;
   String title;
   String entryDate;
+  final Color color;
+  DateTime _entryDateTime;
+
+
+  DateTime get entryDateTime{
+
+    var dateAsList = entryDate.split('-');
+    var reversedDateList = dateAsList.reversed;
+    var joinedReversedDate = reversedDateList.join('-');
+    DateTime time = DateTime.parse(joinedReversedDate);
+    return time;
+  }
+
+  RoutesDrivenKm copyWith({
+    int drivenKm,
+    int routeId,
+    String vehicleId,
+    int drivenKmG,
+    String title,
+    String entryDate,
+    Color color,
+  }) =>
+      RoutesDrivenKm(
+        drivenKm: drivenKm ?? this.drivenKm,
+        routeId: routeId ?? this.routeId,
+        vehicleId: vehicleId ?? this.vehicleId,
+        drivenKmG: drivenKmG ?? this.drivenKmG,
+        title: title ?? this.title,
+        entryDate: title ?? this.title,
+        color: color ?? this.color,
+      );
 
   factory RoutesDrivenKm.fromJson(Map<String, dynamic> json) => RoutesDrivenKm(
         drivenKm: json["drivenKm"],

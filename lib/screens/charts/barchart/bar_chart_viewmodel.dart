@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class BarChartViewModel extends GeneralisedBaseViewModel {
+  double totalKmG = 0.0;
   List<charts.Series<KilometerReportResponse, String>> _seriesBarData;
-
 
   List<charts.Series<KilometerReportResponse, String>> get seriesBarData =>
       _seriesBarData;
@@ -43,20 +43,21 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
               KilometerReportResponse singleDayReport =
                   KilometerReportResponse.fromJson(singleDay);
               kmReportListData.add(singleDayReport);
+              totalKmG += double.parse(singleDayReport.drivenKm);
             }
             // add response list to chart data
             seriesBarData = [
               charts.Series(
-                  id: "Km Report",
-                  data: kmReportListData,
-                  domainFn: (KilometerReportResponse series, _) =>
-                      series.entryDate,
-                  measureFn: (KilometerReportResponse series, _) =>
-                      int.parse(series.drivenKm),
-                  colorFn: (KilometerReportResponse series, _) =>
-                      series.barColor,
-                  labelAccessorFn: (KilometerReportResponse series, _) =>
-                      '${series.drivenKm.toString()}'),
+                id: 'Total Kms: ' + totalKmG.toString(),
+                data: kmReportListData,
+                domainFn: (KilometerReportResponse series, _) =>
+                    series.entryDate,
+                measureFn: (KilometerReportResponse series, _) =>
+                    int.parse(series.drivenKm),
+                colorFn: (KilometerReportResponse series, _) => series.barColor,
+                labelAccessorFn: (KilometerReportResponse series, _) =>
+                    '${series.drivenKm.toString()}',
+              ),
             ];
             notifyListeners();
           }

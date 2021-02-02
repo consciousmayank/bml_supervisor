@@ -1,6 +1,5 @@
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/km_report_response.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_viewmodel.dart';
+import 'package:bml_supervisor/widget/dashboard_loading.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -27,49 +26,56 @@ class _BarChartViewState extends State<BarChartView> {
         selectedDuration: widget.selectedDuration,
       ),
       builder: (context, viewModel, child) {
-        return viewModel.kmReportListData.length > 0
-            ? Container(
-                height: 250,
-                // width: 200,
-                child: Card(
-                  elevation: 6,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Kilometers Report",
-                          style: Theme.of(context).textTheme.bodyText1,
+        return viewModel.isBusy
+            ? DashBoardLoadingWidget()
+            : viewModel.kmReportListData.length > 0
+                ? Container(
+                    height: 250,
+                    // width: 200,
+                    child: Card(
+                      elevation: 6,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // Text(
+                            //   "Kilometers Report",
+                            //   style: Theme.of(context).textTheme.bodyText1,
+                            // ),
+                            Expanded(
+                              child: viewModel.kmReportListData.length > 0
+                                  ? charts.BarChart(
+                                      viewModel.seriesBarData,
+                                      animate: true,
+                                      domainAxis: charts.OrdinalAxisSpec(
+                                        renderSpec:
+                                            charts.SmallTickRendererSpec(
+                                                labelRotation: 60),
+                                        viewport: charts.OrdinalViewport(
+                                          viewModel
+                                              .kmReportListData[0].entryDate,
+                                          7,
+                                        ),
+                                      ),
+                                      barRendererDecorator: new charts
+                                          .BarLabelDecorator<String>(),
+                                      behaviors: [
+                                        charts.SeriesLegend(
+                                          position: charts.BehaviorPosition.top,
+                                        ),
+                                        charts.SlidingViewport(),
+                                        charts.PanAndZoomBehavior(),
+                                      ],
+                                    )
+                                  : Container(),
+                            )
+                          ],
                         ),
-                        Expanded(
-                          child: viewModel.kmReportListData.length > 0
-                              ? charts.BarChart(
-                                  viewModel.seriesBarData,
-                                  animate: true,
-                                  domainAxis: charts.OrdinalAxisSpec(
-                                    renderSpec: charts.SmallTickRendererSpec(
-                                        labelRotation: 60),
-                                    viewport: charts.OrdinalViewport(
-                                      viewModel.kmReportListData[0].entryDate,
-                                      7,
-                                    ),
-                                  ),
-                                  barRendererDecorator:
-                                      new charts.BarLabelDecorator<String>(),
-                                  behaviors: [
-                                    charts.SlidingViewport(),
-                                    charts.PanAndZoomBehavior(),
-                                  ],
-                                )
-                              : Container(),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              )
-            : Container();
+                  )
+                : Container();
       },
       viewModelBuilder: () => BarChartViewModel(),
     );

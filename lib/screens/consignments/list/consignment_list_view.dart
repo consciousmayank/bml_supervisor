@@ -40,13 +40,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         child: getRootWidget(
           context: context,
           viewModel: viewModel,
-          child: viewModel.isBusy
-              ? Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : getBody(context: context, viewModel: viewModel),
+          child: getBody(context: context, viewModel: viewModel),
         ),
       ),
       viewModelBuilder: () => ConsignmentListViewModel(),
@@ -80,13 +74,15 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
             height: widget.isFulPageView
                 ? double.infinity
                 : viewModel.recentConsignmentList.length <= 7
-                    ? 135 * 3
+                    ? 400
                     : 400,
           );
   }
 
-  Widget makeConsignmentList(
-      {BuildContext context, ConsignmentListViewModel viewModel}) {
+  Widget makeConsignmentList({
+    BuildContext context,
+    ConsignmentListViewModel viewModel,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -232,8 +228,8 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         // isScrollControlled: true,
         context: context,
         builder: (_) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.65,
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.75,
             child: ConsignmentDetailsView(
               clientId: widget.clientId,
               routeId: clickedConsignmentDetails.routeId,

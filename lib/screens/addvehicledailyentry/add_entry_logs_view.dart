@@ -565,7 +565,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].routeName}  (${widget.optionList[i].routeId})",
+            "${widget.optionList[i].routeName}  (${widget.optionList[i].routeId}/${widget.optionList[i].vehicleId})",
             style: TextStyle(
               color: Colors.black54,
             ),

@@ -10,13 +10,42 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
-  CreateConsignmentRequest consignmentRequest;
-  SearchByRegNoResponse validatedRegistrationNumber;
+  bool _isHubTitleEdited = false,
+      _isDropCratesEdited = false,
+      _isCollectCratesEdited = false,
+      _isPaymentEdited = false,
+      _isRemarksEdited = false;
+
+  bool get isHubTitleEdited => _isHubTitleEdited;
+
+  set isHubTitleEdited(bool value) {
+    _isHubTitleEdited = value;
+    notifyListeners();
+  }
+
+  CreateConsignmentRequest _consignmentRequest;
+  SearchByRegNoResponse _validatedRegistrationNumber;
   DateTime _entryDate;
   String _enteredTitle; //final _formKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> _formKeyList = [];
 
+  // double grandTotal = 0;
   List<GlobalKey<FormState>> get formKeyList => _formKeyList;
+
+  CreateConsignmentRequest get consignmentRequest => _consignmentRequest;
+
+  set consignmentRequest(CreateConsignmentRequest value) {
+    _consignmentRequest = value;
+    notifyListeners();
+  }
+
+  SearchByRegNoResponse get validatedRegistrationNumber =>
+      _validatedRegistrationNumber;
+
+  set validatedRegistrationNumber(SearchByRegNoResponse value) {
+    _validatedRegistrationNumber = value;
+    notifyListeners();
+  }
 
   set formKeyList(List<GlobalKey<FormState>> value) {
     _formKeyList = value;
@@ -35,10 +64,13 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   set hubsList(List<FetchHubsResponse> value) {
     _hubsList = value;
+    notifyListeners();
   }
 
   set entryDate(DateTime selectedDate) {
     _entryDate = selectedDate;
+    validatedRegistrationNumber = null;
+    consignmentRequest = null;
     notifyListeners();
   }
 
@@ -77,8 +109,13 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   getRoutes(int clientId) async {
+    entryDate = null;
+    validatedRegistrationNumber = null;
+    consignmentRequest = null;
+
     setBusy(true);
     routesList = [];
+    hubsList = [];
     var response = await apiService.getRoutesForClient(clientId: clientId);
 
     if (response is String) {
@@ -99,6 +136,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   getClientIds() async {
+    setBusy(true);
     var clientIdsResponse = await apiService.getClientsList();
     if (clientIdsResponse is String) {
       snackBarService.showSnackbar(message: clientIdsResponse);
@@ -111,13 +149,13 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
             GetClientsResponse.fromMap(element);
         _clientsList.add(getClientsResponse);
       });
+      setBusy(false);
       notifyListeners();
     }
   }
 
   getHubs() async {
-    _hubsList.clear();
-
+    hubsList = [];
     var consignmentResponse = await apiService.getHubsForRouteAndClientId(
         routeId: selectedRoute.id,
         clientId: selectedClient.id,
@@ -137,6 +175,8 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   void validateRegistrationNumber(String regNum) async {
+    consignmentRequest = null;
+
     setBusy(true);
 
     var entryLog = await apiService.searchByRegistrationNumber(regNum);
@@ -208,5 +248,38 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
         setBusy(false);
       }
     }
+  }
+
+  get isDropCratesEdited => _isDropCratesEdited;
+
+  set isDropCratesEdited(value) {
+    _isDropCratesEdited = value;
+    notifyListeners();
+  }
+
+  get isCollectCratesEdited => _isCollectCratesEdited;
+
+  set isCollectCratesEdited(value) {
+    _isCollectCratesEdited = value;
+    notifyListeners();
+  }
+
+  get isPaymentEdited => _isPaymentEdited;
+
+  set isPaymentEdited(value) {
+    _isPaymentEdited = value;
+    notifyListeners();
+  }
+
+  get isRemarksEdited => _isRemarksEdited;
+
+  set isRemarksEdited(value) {
+    _isRemarksEdited = value;
+    notifyListeners();
+  }
+
+  void resetControllerBoolValue() {
+    _isHubTitleEdited = _isDropCratesEdited =
+        _isCollectCratesEdited = _isPaymentEdited = _isRemarksEdited = false;
   }
 }

@@ -215,11 +215,15 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
             children: mobileFormView(context: context, viewModel: viewModel),
           ),
         ),
-        desktop: ListView(
-          controller: _controller,
+        desktop: Expanded(
+          child: ListView(
+            controller: _controller,
+          ),
         ),
-        tablet: ListView(
-          controller: _controller,
+        tablet: Expanded(
+          child: ListView(
+            controller: _controller,
+          ),
         ),
       ),
     );
@@ -821,19 +825,19 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         onPressed: () async {
           TimeOfDay logoutTime = await pickTime(
               context: context, viewModel: viewModel, hoursToAdd: 8);
-          if (comparableTimeOfDay(logoutTime) != null &&
-              (comparableTimeOfDay(logoutTime) >=
-                  comparableTimeOfDay(viewModel.loginTime))) {
-            logoutTimeController.text = "${formatTimeOfDay(logoutTime)}";
-            viewModel.logoutTime = logoutTime;
-          } else {
-            await locator<DialogService>()
-                .showConfirmationDialog(
-                    title: 'Logout Time Error', description: logoutTimeError)
-                .then((value) {
-              logoutTimeController.clear();
-            });
-          }
+          // if (comparableTimeOfDay(logoutTime) != null &&
+          //     (comparableTimeOfDay(logoutTime) >=
+          //         comparableTimeOfDay(viewModel.loginTime))) {
+          logoutTimeController.text = "${formatTimeOfDay(logoutTime)}";
+          viewModel.logoutTime = logoutTime;
+          // } else {
+          //   await locator<DialogService>()
+          //       .showConfirmationDialog(
+          //           title: 'Logout Time Error', description: logoutTimeError)
+          //       .then((value) {
+          //     logoutTimeController.clear();
+          //   });
+          // }
         },
       ),
     );

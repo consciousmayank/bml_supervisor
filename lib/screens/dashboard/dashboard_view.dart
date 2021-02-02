@@ -13,7 +13,6 @@ import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
 import 'dashboard_viewmodel.dart';
 
 class DashBoardScreenView extends StatefulWidget {
@@ -149,7 +148,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               : Container(),
                           // hSizedBox(3),
                           //!Show recent consignment table here
-
                           viewModel.selectedClient != null &&
                                   viewModel.selectedDuration != null
                               ? ClipRRect(
@@ -308,7 +306,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
     );
   }
-
   Widget getOptions(
       {BuildContext context,
       int position,
