@@ -11,6 +11,5 @@ class AppColors {
 
   static const Color white = Colors.white;
 
-  static const Color white = Colors.white;
   static const Color loginTextFormFieldHintColor = Color(0xFF008074);
 }
