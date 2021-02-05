@@ -6,6 +6,9 @@ import 'dart:convert';
 
 class CreateConsignmentRequest {
   CreateConsignmentRequest({
+    this.dropOff,
+    this.collect,
+    this.payment,
     this.clientId,
     this.routeId,
     this.vehicleId,
@@ -19,6 +22,9 @@ class CreateConsignmentRequest {
   final dynamic vehicleId;
   final String entryDate;
   final String title;
+  final int dropOff;
+  final int collect;
+  final double payment;
   final List<Item> items;
 
   CreateConsignmentRequest copyWith({
@@ -29,6 +35,9 @@ class CreateConsignmentRequest {
     String entryDate,
     String title,
     List<Item> items,
+    final int dropOff,
+    final int collect,
+    final double payment,
   }) =>
       CreateConsignmentRequest(
         clientId: clientId ?? this.clientId,
@@ -37,17 +46,10 @@ class CreateConsignmentRequest {
         entryDate: entryDate ?? this.entryDate,
         title: title ?? this.title,
         items: items ?? this.items,
+        collect: collect ?? this.collect,
+        payment: payment ?? this.payment,
+        dropOff: dropOff ?? this.dropOff,
       );
-
-  double findGrandTotal() {
-    double grandTotal = 0;
-    this.items.forEach((element) {
-      print("grand total before :: ${grandTotal}");
-      grandTotal = grandTotal + element.payment;
-      print("grand total after  :: ${grandTotal}");
-    });
-    print("grand total after everything  :: ${grandTotal}");
-  }
 
   factory CreateConsignmentRequest.fromJson(String str) =>
       CreateConsignmentRequest.fromMap(json.decode(str));
@@ -61,6 +63,9 @@ class CreateConsignmentRequest {
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
         title: json["title"],
+        dropOff: json['dropOff'],
+        collect: json['collect'],
+        payment: json['payment'],
         items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
       );
 
@@ -69,6 +74,9 @@ class CreateConsignmentRequest {
         "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
+        "payment": payment,
+        "collect": collect,
+        "dropOff": dropOff,
         "title": title,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };

@@ -206,6 +206,9 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
         ),
       );
     });
+    // final int dropOff;
+    // final int collect;
+    // final double payment;
 
     consignmentRequest = CreateConsignmentRequest(
         vehicleId: validatedRegistrationNumber.registrationNumber,
@@ -217,7 +220,13 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   void createConsignment({String consignmentTitle}) async {
-    consignmentRequest = consignmentRequest.copyWith(title: consignmentTitle);
+    consignmentRequest = consignmentRequest.copyWith(
+      dropOff: consignmentRequest.items.last.dropOff,
+      collect: consignmentRequest.items.first.collect,
+      payment: consignmentRequest.items.last.payment,
+      title: consignmentTitle,
+    );
+
     List<Item> tempItems = consignmentRequest.items;
 
     tempItems.forEach((element) {

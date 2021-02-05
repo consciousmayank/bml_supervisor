@@ -36,20 +36,23 @@ class _PaymentsViewState extends State<PaymentsView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder.reactive(
+    return ViewModelBuilder<PaymentsViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text('Payments'),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  //* open bottom sheet to add the transaction
-                  showAddNewPaymentBottomSheet(context, viewModel);
-                })
-          ],
         ),
+        floatingActionButton: viewModel.paymentHistoryResponseList.length > 0
+            ? FloatingActionButton.extended(
+                elevation: defaultElevation,
+                onPressed: viewModel.paymentHistoryResponseList.length > 0
+                    ? () {
+                        showAddNewPaymentBottomSheet(context, viewModel);
+                      }
+                    : null,
+                label: Text('Add Payment'),
+              )
+            : Container(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -63,30 +66,29 @@ class _PaymentsViewState extends State<PaymentsView> {
             // ),
             // hSizedBox(15),
             viewModel.paymentHistoryResponseList.length > 0
-                ?  Padding(
-                      padding: getPaymentScreenSidePadding(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: buildChip(
-                              title: 'Total Amt',
-                              value: viewModel.totalAmt.toString(),
-                            ),
+                ? Padding(
+                    padding: getPaymentScreenSidePadding(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: buildChip(
+                            title: 'Total Amt',
+                            value: viewModel.totalAmt.toString(),
                           ),
-                          wSizedBox(5),
-                          Expanded(
-                            flex: 1,
-                            child: buildChip(
-                              title: 'Payments',
-                              value: viewModel.noOfPayments.toString(),
-                            ),
+                        ),
+                        wSizedBox(5),
+                        Expanded(
+                          flex: 1,
+                          child: buildChip(
+                            title: 'Payments',
+                            value: viewModel.noOfPayments.toString(),
                           ),
-                        ],
-                      ),
-                    )
-
+                        ),
+                      ],
+                    ),
+                  )
                 : Container(),
             viewModel.paymentHistoryResponseList.length > 0
                 ? Expanded(
@@ -111,8 +113,11 @@ class _PaymentsViewState extends State<PaymentsView> {
                               ),
                             ),
                             Expanded(
-                              child: buildTransactionsTableData(context,
-                                  viewModel.paymentHistoryResponseList),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 60),
+                                child: buildTransactionsTableData(context,
+                                    viewModel.paymentHistoryResponseList),
+                              ),
                             ),
                           ],
                         ),
@@ -138,15 +143,9 @@ class _PaymentsViewState extends State<PaymentsView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              title,
-              style: AppTextStyles.latoMedium12Black
-            ),
+            Text(title, style: AppTextStyles.latoMedium12Black),
             wSizedBox(10),
-            Text(
-              value,
-              style: AppTextStyles.latoBold16Black
-            ),
+            Text(value, style: AppTextStyles.latoBold16Black),
           ],
         ),
       ),
@@ -429,16 +428,15 @@ class _PaymentsViewState extends State<PaymentsView> {
     return appTextFormField(
       onEditingComplete: () => node.nextFocus(),
       enabled: true,
-      formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(7)
+      formatter: [
+        twoDigitDecimalPointFormatter(),
       ],
       controller: totalKmController,
       // autoFocus: true,
       focusNode: totalKmFocusNode,
 
       hintText: enterTotalKmHint,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
       labelText: "Total Km",
       onFieldSubmitted: (_) {
         //! below code - on done, focus goes to next textField

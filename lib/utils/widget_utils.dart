@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -277,3 +278,6 @@ launchMaps(double latitude, double longitude) async {
     throw 'Could not launch url';
   }
 }
+
+FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
+    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));

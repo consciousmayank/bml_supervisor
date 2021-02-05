@@ -116,10 +116,13 @@ class ApiService {
     return response;
   }
 
-  Future getPaymentHistory(int clientId) async {
+  Future getPaymentHistory(
+      {@required int clientId, @required int pageNumber}) async {
     Response response;
     try {
-      response = await dioClient.getDio().get('/payment/client/$clientId');
+      response = await dioClient
+          .getDio()
+          .get(GET_PAYMENT_HISTORY(clientId, pageNumber));
     } on DioError catch (e) {
       return e.message;
     }
