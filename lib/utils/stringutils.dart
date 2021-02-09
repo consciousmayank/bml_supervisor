@@ -99,13 +99,14 @@ const List<String> dailyReportsPageTabs = [
 ];
 
 const List<String> expenseTypes = [
-  'Breakdown',
-  'Challan',
-  'Parking',
-  'Spare Part',
-  'Toll',
-  'Union',
-  'Others'
+  'BREAKDOWN',
+  'CHALLAN',
+  'PARKING',
+  'SPARE PART',
+  'TOLL',
+  'UNION',
+  'ROAD TAX',
+  'OTHERS',
 ];
 
 const List<String> selectDurationList = [

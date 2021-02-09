@@ -200,10 +200,14 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       print("Element Flag :: ${element.flag}");
       items.add(
         Item(
-          hubId: element.id,
-          sequence: element.sequence,
-          flag: element.flag,
-        ),
+            hubId: element.id,
+            sequence: element.sequence,
+            flag: element.flag,
+            hubCity: element.city,
+            hubContactPerson: element.contactPerson,
+            hubGeoLatitude: element.geoLongitude,
+            hubGeoLongitude: element.geoLongitude,
+            hubTitle: element.title),
       );
     });
     // final int dropOff;
@@ -216,6 +220,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
         routeId: selectedRoute.id,
         entryDate: getConvertedDate(entryDate),
         title: enteredTitle,
+        routeTitle: selectedRoute.title,
         items: items);
   }
 
