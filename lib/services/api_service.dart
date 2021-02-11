@@ -296,7 +296,7 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID$clientId",
+            "$GET_ROUTES_FOR_CLIENT_ID$clientId/page/1",
           );
     } on DioError catch (e) {
       return e.message;
@@ -308,7 +308,7 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}",
+            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}/page/1",
           );
     } on DioError catch (e) {
       return e.message;

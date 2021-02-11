@@ -1,2 +1,1 @@
-Added new fields to be sent while creating new consignement. Which are routeTitle, hubTitle,
- hubCity, hubContactPerson, hubGeoLatitude, hubGeoLongitude. Added new field ROADTAX in expenses list.
+Updated get Routes Api, and  sending proper latitudes too.

@@ -205,7 +205,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
             flag: element.flag,
             hubCity: element.city,
             hubContactPerson: element.contactPerson,
-            hubGeoLatitude: element.geoLongitude,
+            hubGeoLatitude: element.geoLatitude,
             hubGeoLongitude: element.geoLongitude,
             hubTitle: element.title),
       );
