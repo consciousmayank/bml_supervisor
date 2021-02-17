@@ -1,17 +1,13 @@
-import 'dart:convert';
-
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
-import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -233,36 +229,6 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void getConsignments() async {
-    setBusy(true);
-    hubList = [];
-    var response = await apiService.getConsignmentsList(
-      clientId: selectedClient.id,
-      entryDate: getDateString(entryDate),
-      routeId: selectedRoute.routeId,
-    );
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      try {
-        var hubsList = apiResponse.data as List;
-
-        hubsList.forEach((element) {
-          ConsignmentDetailsResponse singleHub =
-              ConsignmentDetailsResponse.fromMap(element);
-
-          this._hubList.add(singleHub);
-        });
-      } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
-      }
-    }
-    setBusy(false);
-    notifyListeners();
-  }
-
   void updateConsignment() async {
     // hit the update Consignment api
     //Todo: accessBy should be initialized by Username
@@ -273,8 +239,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(
         paymentId: 'NA',
-        remarks: element.remarks.length == 0 ? 'NA' :element.remarks,
-        title: element.title.length==0?'NA':element.title,
+        remarks: element.remarks.length == 0 ? 'NA' : element.remarks,
+        title: element.title.length == 0 ? 'NA' : element.title,
       );
     });
     var updateConsignmentResponse = await apiService.updateConsignment(

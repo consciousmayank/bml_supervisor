@@ -363,19 +363,19 @@ class ApiService {
     return response;
   }
 
-  Future getConsignmentsList(
-      {@required int routeId,
-      @required int clientId,
-      @required String entryDate}) async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get(
-          GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
+  // Future getConsignmentsList(
+  //     {@required int routeId,
+  //     @required int clientId,
+  //     @required String entryDate}) async {
+  //   Response response;
+  //   try {
+  //     response = await dioClient.getDio().get(
+  //         GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
+  //   } on DioError catch (e) {
+  //     return e.message;
+  //   }
+  //   return response;
+  // }
 
   Future getConsignmentListWithDate({String entryDate}) async {
     Response response;

@@ -1,44 +1,31 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/consignment_details.dart';
-import 'package:flutter/material.dart';
+import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 
 class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
-  List<ConsignmentDetailsResponse> _consignmentList = [];
+  ConsignmentDetailResponseNew _consignmentDetailResponseNew;
 
-  List<ConsignmentDetailsResponse> get consignmentList => _consignmentList;
+  ConsignmentDetailResponseNew get consignmentDetailResponseNew =>
+      _consignmentDetailResponseNew;
 
-  set consignmentList(List<ConsignmentDetailsResponse> value) {
-    _consignmentList = value;
+  set consignmentDetailResponseNew(ConsignmentDetailResponseNew value) {
+    _consignmentDetailResponseNew = value;
   }
 
-  void getConsignments({
-    @required int routeId,
-    @required int clientId,
-    @required String entryDate,
-  }) async {
+  void getConsignmentWithId(String consignmentId) async {
     setBusy(true);
-    _consignmentList = [];
-    var response = await apiService.getConsignmentsList(
-      clientId: clientId,
-      entryDate: entryDate,
-      routeId: routeId,
-    );
-
+    var response =
+        await apiService.getConsignmentWithId(consignmentId: consignmentId);
     if (response is String) {
       snackBarService.showSnackbar(message: response);
+    } else if (response.data['status'].toString() == 'failed') {
+      // setBusy(false);
+      snackBarService.showSnackbar(message: response.data['message']);
     } else {
-      var apiResponse = response;
       try {
-        var hubsList = apiResponse.data as List;
-
-        hubsList.forEach((element) {
-          ConsignmentDetailsResponse singleHub =
-              ConsignmentDetailsResponse.fromMap(element);
-
-          this.consignmentList.add(singleHub);
-        });
+        consignmentDetailResponseNew =
+            ConsignmentDetailResponseNew.fromJson(response.data);
       } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
+        snackBarService.showSnackbar(message: e.toString());
       }
     }
     setBusy(false);

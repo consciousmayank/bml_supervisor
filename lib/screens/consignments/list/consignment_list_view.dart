@@ -231,9 +231,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
           return SizedBox(
             height: MediaQuery.of(context).size.height * 0.75,
             child: ConsignmentDetailsView(
-              clientId: widget.clientId,
-              routeId: clickedConsignmentDetails.routeId,
-              entryDate: clickedConsignmentDetails.entryDate,
+              consignmentId: clickedConsignmentDetails.consgId,
             ),
           );
         });
