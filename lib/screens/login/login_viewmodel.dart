@@ -1,9 +1,11 @@
+import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/login_response.dart';
+import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
 
 class LoginViewModel extends GeneralisedBaseViewModel {
   bool _hidePassword = true;
@@ -16,30 +18,33 @@ class LoginViewModel extends GeneralisedBaseViewModel {
   }
 
   void login({String userName, String password}) async {
-    var response = await apiService.login(
+    setBusy(true);
+
+    ParentApiResponse loginResponse = await apiService.login(
       userName: userName,
       base64string: getBase64String(value: '$userName:$password'),
     );
 
-    PreferencesSavedUser preferencesSavedUser;
-    try {
-      Response apiResponse = response;
-      if (apiResponse.statusCode == 200) {
-        preferencesSavedUser = PreferencesSavedUser(
-            isUserLoggedIn: true,
-            userRole: LoginResponse.fromMap(apiResponse.data).userRole,
-            userName: userName);
-        preferences.setLoggedInUser(preferencesSavedUser);
-        takeToDashBoard();
-      } else {
-        preferences.setLoggedInUser(null);
-      }
-    } catch (e) {
-      preferences.setLoggedInUser(null);
+    if (loginResponse.error == null) {
+      //positive
+      PreferencesSavedUser preferencesSavedUser;
+      preferencesSavedUser = PreferencesSavedUser(
+          isUserLoggedIn: true,
+          userRole: LoginResponse.fromMap(loginResponse.response.data).userRole,
+          userName: userName);
+      preferences.setLoggedInUser(preferencesSavedUser);
+      preferences.saveCredentials(
+        getBase64String(value: '$userName:$password'),
+      );
+      locator<DioConfig>().configureDio();
+      takeToDashBoard();
+    } else {
+      //negative
+      snackBarService.showSnackbar(message: loginResponse.getErrorReason());
     }
   }
 
   void takeToDashBoard() {
-    navigationService.navigateTo(dashBoardPageRoute);
+    navigationService.replaceWith(dashBoardPageRoute);
   }
 }

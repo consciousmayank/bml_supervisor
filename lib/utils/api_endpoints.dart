@@ -26,9 +26,15 @@ final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
     "/consignment/client/$clientId/route/$routeId/date/$date";
 final GET_PAYMENT_HISTORY =
     (clientId, pageNumber) => "/payment/client/$clientId/page/$pageNumber";
-final LOGIN = (username) => "/user/$username";
+
 final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
     ? '/client/${user.userName}/dashboard/statistics'
     : user.role == 'ADMIN'
         ? '/admin/${user.userName}/dashboard/statistics'
         : '/manager/${user.userName}/dashboard/statistics';
+
+/////////////////////////Post Security/////////////////////////
+final LOGIN = '/user/auth';
+final GET_DASHBOARD_TILES = '/statistics/dashboard/client/';
+
+////////////////////////////////////////////////////////////////

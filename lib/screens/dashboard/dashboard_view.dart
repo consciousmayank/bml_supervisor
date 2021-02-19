@@ -13,6 +13,7 @@ import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
 import 'dashboard_viewmodel.dart';
 
 class DashBoardScreenView extends StatefulWidget {
@@ -25,43 +26,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
-          GetClientsResponse selectedClient =
-              await locator<MyPreferences>().getSelectedClient();
-
           PreferencesSavedUser savedUser =
               await viewModel.preferences.getUserLoggedIn();
-
-          viewModel.getSavedUser();
-          if (selectedClient == null) {
-            viewModel.getClients();
-          } else {
-            if (savedUser.role == 'role'.toUpperCase()) {
-              viewModel.getClientDashboardStats(savedUser);
-            } else {
-              viewModel.clientsList.add(selectedClient);
-              viewModel.selectedClient = selectedClient;
-              viewModel.getDashboardTilesStats(
-                viewModel.selectedClient.id.toString(),
-              );
-            }
-          }
-
-          String selectedDuration =
-              await locator<MyPreferences>().getSelectedDuration();
-          if (selectedDuration != null) {
-            viewModel.selectedDuration = selectedDuration.toString();
-            // viewModel.getBarGraphKmReport(
-            //   clientId: viewModel.selectedClient.id,
-            //   selectedDuration: viewModel.selectedDuration,
-            // );
-          }
-
-          if (selectedDuration != null && selectedClient != null) {
-            viewModel.getRecentConsignments(
-              clientId: selectedClient.id,
-              period: selectedDuration,
-            );
-          }
+          viewModel.getDashboardTilesStats();
         },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
@@ -293,9 +260,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         viewModel.selectedClient = selectedValue;
         locator<MyPreferences>().saveSelectedClient(selectedValue);
         //* call client tiles data
-        viewModel.getDashboardTilesStats(
-          viewModel.selectedClient.id.toString(),
-        );
+        viewModel.getDashboardTilesStats();
         // call recent consignment api
         viewModel.getRecentConsignments(
           clientId: viewModel.selectedClient.id,
@@ -306,6 +271,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
     );
   }
+
   Widget getOptions(
       {BuildContext context,
       int position,

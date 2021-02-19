@@ -9,3 +9,4 @@ final String semiCircles = _imagePath + 'semi_circles_icon.png';
 final String locationIcon = _imagePath + 'location_icon.png';
 final String bmlIcon = _imagePath + 'bml_icon_login.png';
 final String loginIconIcon = _imagePath + 'login_icon.png';
+final String verticalSemiCircles = _imagePath + 'vertical_semi_circles.png';

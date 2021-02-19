@@ -6,6 +6,7 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
@@ -17,6 +18,37 @@ import 'package:flutter/material.dart';
 class ApiService {
   final dioClient = locator<DioConfig>();
   final preferences = locator<MyPreferences>();
+
+  /////////////////////////Post Security/////////////////////////
+
+  Future<ParentApiResponse> login(
+      {@required String base64string, @required String userName}) async {
+    Map<String, String> authHeader = {"Authorization": "Basic $base64string"};
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(LOGIN, options: Options(headers: authHeader));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getDashboardTilesStats() async {
+    // dashboard client specific tiles data api
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_DASHBOARD_TILES);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
     Response response;
@@ -48,19 +80,6 @@ class ApiService {
     try {
       response =
           await dioClient.getDio().get('/vehicle/find/$registrationNumber');
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future getDashboardTilesStats(String clientId) async {
-    // dashboard client specific tiles data api
-    Response response;
-    try {
-      response = await dioClient
-          .getDio()
-          .get('/statistics/dashboard/client/$clientId');
     } on DioError catch (e) {
       return e.message;
     }
@@ -435,20 +454,6 @@ class ApiService {
       response = await dioClient.getDio().get(
             GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
           );
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future login(
-      {@required String base64string, @required String userName}) async {
-    Map<String, String> authHeader = {"Authorization": "Basic $base64string"};
-    Response response;
-    try {
-      response = await dioClient
-          .getDio()
-          .get(LOGIN(userName), options: Options(headers: authHeader));
     } on DioError catch (e) {
       return e.message;
     }

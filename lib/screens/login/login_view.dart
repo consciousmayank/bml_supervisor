@@ -28,92 +28,106 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
-        onModelReady: (viewModel) {
-          viewModel.preferences.getUserLoggedIn().then((value) {
-            if (value != null && value.isUserLoggedIn) {
-              viewModel.takeToDashBoard();
-            }
-          });
+      builder: (context, viewModel, child) => WillPopScope(
+        onWillPop: () {
+          if (!viewModel.isBusy) {
+            viewModel.navigationService.back();
+            return Future.value(true);
+          } else {
+            return Future.value(false);
+          }
         },
-        builder: (context, viewModel, child) => Scaffold(
-              backgroundColor: AppColors.primaryColorShade5,
-              body: getBody(context: context, viewModel: viewModel),
-            ),
-        viewModelBuilder: () => LoginViewModel());
+        child: Scaffold(
+          backgroundColor: AppColors.primaryColorShade5,
+          body: Stack(
+            children: [
+              Positioned(
+                right: 1,
+                top: 1,
+                bottom: 1,
+                child: Image.asset(
+                  verticalSemiCircles,
+                ),
+              ),
+              getBody(context: context, viewModel: viewModel)
+            ],
+          ),
+        ),
+      ),
+      viewModelBuilder: () => LoginViewModel(),
+    );
   }
 
   Widget getBody({BuildContext context, LoginViewModel viewModel}) {
     return ListView(
       children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            padding: const EdgeInsets.only(top: 30, bottom: 60),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(
-                  bmlIcon,
-                  height: 50,
-                  width: 50,
-                ),
-                Text(
-                  "BookMyLoading",
-                  style: AppTextStyles.latoMediumItalics20,
-                )
-              ],
-            ),
+        Container(
+          padding: const EdgeInsets.only(top: 30, bottom: 60),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                bmlIcon,
+                height: 50,
+                width: 50,
+              ),
+              Text(
+                "BookMyLoading",
+                style: AppTextStyles.latoMediumItalics20,
+              )
+            ],
           ),
         ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 50, right: 50),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Image.asset(
-                    loginIconIcon,
-                    height: 143,
-                  ),
-                  hSizedBox(20),
-                  userNameTextField(),
-                  hSizedBox(20),
-                  passwordTextField(viewModel: viewModel),
-                  hSizedBox(20),
-                  SizedBox(
-                    height: buttonHeight,
-                    child: AppButton(
-                        borderRadius: curvedBorder,
-                        borderColor: AppColors.primaryColorShade1,
-                        onTap: () {
-                          if (_formKey.currentState.validate()) {
-                            viewModel.login(
-                                userName: userNameController.text,
-                                password: passwordController.text);
-                          }
-                        },
-                        background: AppColors.primaryColorShade5,
-                        buttonText: 'Log In'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: InkWell(
-                      onTap: () {
-                        viewModel.snackBarService.showSnackbar(
-                            message: "Forgot Password Coming soon.");
-                      },
-                      child: Text(
-                        "Forgot Password ?",
-                        style: AppTextStyles.underLinedText,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50, right: 50),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Image.asset(
+                  loginIconIcon,
+                  height: 143,
+                ),
+                hSizedBox(20),
+                userNameTextField(),
+                hSizedBox(20),
+                passwordTextField(viewModel: viewModel),
+                hSizedBox(20),
+                SizedBox(
+                  height: buttonHeight,
+                  child: viewModel.isBusy
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : AppButton(
+                          borderRadius: defaultBorder,
+                          borderColor: AppColors.primaryColorShade1,
+                          onTap: () {
+                            if (_formKey.currentState.validate()) {
+                              viewModel.login(
+                                  userName: userNameController.text,
+                                  password: passwordController.text);
+                            }
+                          },
+                          background: AppColors.primaryColorShade5,
+                          buttonText: 'Log In'),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(32.0),
+                //   child: InkWell(
+                //     onTap: () {
+                //       viewModel.snackBarService.showSnackbar(
+                //           message: "Forgot Password Coming soon.");
+                //     },
+                //     child: Text(
+                //       "Forgot Password ?",
+                //       style: AppTextStyles.underLinedText,
+                //     ),
+                //   ),
+                // )
+              ],
             ),
           ),
         )
@@ -136,7 +150,7 @@ class _LoginViewState extends State<LoginView> {
         },
         validator: (value) {
           if (value.isEmpty) {
-            return textRequired;
+            return userNameRequired;
           } else {
             return null;
           }
@@ -148,9 +162,6 @@ class _LoginViewState extends State<LoginView> {
       children: [
         loginTextFormField(
             obscureText: viewModel.hidePassword,
-            // formatter: <TextInputFormatter>[
-            //   LengthLimitingTextInputFormatter(4)
-            // ],
             controller: passwordController,
             focusNode: passwordFocusNode,
             hintText: "Password",
@@ -160,7 +171,7 @@ class _LoginViewState extends State<LoginView> {
             },
             validator: (value) {
               if (value.isEmpty) {
-                return textRequired;
+                return passwordRequired;
               }
               /*else if (value.length < 8) {
                 return 'Password too short.';
@@ -170,9 +181,8 @@ class _LoginViewState extends State<LoginView> {
               }
             }),
         Positioned(
-          right: 20,
+          right: 4,
           top: 3,
-          bottom: 3,
           child: IconButton(
             icon: Icon(Icons.remove_red_eye_rounded),
             color: viewModel.hidePassword ? Colors.black : Colors.blueGrey,

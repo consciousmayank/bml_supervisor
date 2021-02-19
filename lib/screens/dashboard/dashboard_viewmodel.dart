@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.da
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
@@ -114,17 +115,21 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     notifyListeners();
   }
 
-  void getDashboardTilesStats(String clientId) async {
+  void getDashboardTilesStats() async {
     setBusy(true);
-    var tilesData = await apiService.getDashboardTilesStats(clientId);
-    if (tilesData is String) {
-      snackBarService.showSnackbar(message: tilesData);
+    ParentApiResponse dashboardTilesData =
+        await apiService.getDashboardTilesStats();
+    if (dashboardTilesData.error == null) {
+      //positive
+      singleClientTileData = DashboardTilesStatsResponse.fromJson(
+          dashboardTilesData.response.data);
     } else {
-      singleClientTileData =
-          DashboardTilesStatsResponse.fromJson(tilesData.data);
-      setBusy(false);
-      notifyListeners();
+      //negative
+      snackBarService.showSnackbar(
+          message: dashboardTilesData.getErrorReason());
     }
+    setBusy(false);
+    notifyListeners();
   }
 
   void takeToAllConsignmentsPage() {

@@ -1,9 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-double curvedBorder = 40;
 
 Widget loginTextFormField({
   bool obscureText = false,
@@ -23,11 +21,8 @@ Widget loginTextFormField({
   String labelText,
   FormFieldValidator<String> validator,
 }) {
-  return Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(curvedBorder),
-    ),
-    elevation: defaultElevation,
+  return ClipRRect(
+    borderRadius: getBorderRadius(),
     child: TextFormField(
         obscureText: obscureText,
         textAlign: textAlignment,
@@ -50,37 +45,34 @@ Widget loginTextFormField({
 InputDecoration textFieldDecoration(String hintLabel) {
   return InputDecoration(
     alignLabelWithHint: true,
-    errorStyle: TextStyle(
-      fontSize: 14,
-    ),
+    errorStyle: TextStyle(fontSize: 14, color: AppColors.white),
     helperStyle: TextStyle(
       fontSize: 14,
     ),
     // helperText: ' ',
     hintText: hintLabel,
-    hintStyle:
-        TextStyle(color: AppColors.loginTextFormFieldHintColor, fontSize: 14),
+    hintStyle: TextStyle(color: Colors.white, fontSize: 14),
     fillColor: AppColors.white,
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(curvedBorder),
+      borderRadius: getBorderRadius(),
       borderSide: BorderSide(
         color: AppColors.primaryColorShade1,
       ),
     ),
     disabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(curvedBorder),
+      borderRadius: getBorderRadius(),
       borderSide: BorderSide(
         color: AppColors.primaryColorShade1,
       ),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(curvedBorder),
+      borderRadius: getBorderRadius(),
       borderSide: BorderSide(
         color: AppColors.primaryColorShade1,
       ),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(curvedBorder),
+      borderRadius: getBorderRadius(),
       borderSide: BorderSide(
         color: AppColors.primaryColorShade1,
       ),

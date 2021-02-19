@@ -144,6 +144,8 @@ const String issueDateHint = "Issue Date";
 const String expiryDateHint = "Expiry Date";
 const String appTitle = "BookMyLoading";
 const String vehicleExpensesTitle = "Vehicle Expenses";
+const String userNameRequired = "UserName cannot be empty";
+const String passwordRequired = "Password cannot be empty";
 const List<String> insuranceTypeList = ["First", "Third"];
 const List<String> searchApiParams = [
   'Registration Number',

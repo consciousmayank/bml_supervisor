@@ -13,6 +13,7 @@ import 'package:bml_supervisor/screens/expenses/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
+import 'package:bml_supervisor/screens/splash_screen.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
@@ -24,9 +25,15 @@ class AppRouter {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case mainViewRoute:
+      case mainViewRoute:
+        return MaterialPageRoute(
+          // builder: (_) => LoginView(),
+          builder: (_) => SplashScreen(),
+        );
+
+      case logInPageRoute:
         return MaterialPageRoute(
           builder: (_) => LoginView(),
-          // builder: (_) => DashBoardScreenView(),
         );
 
       case dashBoardPageRoute:
