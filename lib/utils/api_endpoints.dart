@@ -24,6 +24,8 @@ final GET_ROUTES_FOR_CLIENT_AND_DATE =
     (clientId, date) => "/route/consignment/client/$clientId/date/$date";
 final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
     "/consignment/client/$clientId/route/$routeId/date/$date";
+final GET_PAYMENT_HISTORY =
+    (clientId, pageNumber) => "/payment/client/$clientId/page/$pageNumber";
 final LOGIN = (username) => "/user/$username";
 final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
     ? '/client/${user.userName}/dashboard/statistics'

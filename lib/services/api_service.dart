@@ -116,10 +116,13 @@ class ApiService {
     return response;
   }
 
-  Future getPaymentHistory(int clientId) async {
+  Future getPaymentHistory(
+      {@required int clientId, @required int pageNumber}) async {
     Response response;
     try {
-      response = await dioClient.getDio().get('/payment/client/$clientId');
+      response = await dioClient
+          .getDio()
+          .get(GET_PAYMENT_HISTORY(clientId, pageNumber));
     } on DioError catch (e) {
       return e.message;
     }
@@ -293,7 +296,7 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID$clientId",
+            "$GET_ROUTES_FOR_CLIENT_ID$clientId/page/1",
           );
     } on DioError catch (e) {
       return e.message;
@@ -305,7 +308,7 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}",
+            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}/page/1",
           );
     } on DioError catch (e) {
       return e.message;
@@ -360,19 +363,19 @@ class ApiService {
     return response;
   }
 
-  Future getConsignmentsList(
-      {@required int routeId,
-      @required int clientId,
-      @required String entryDate}) async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get(
-          GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
+  // Future getConsignmentsList(
+  //     {@required int routeId,
+  //     @required int clientId,
+  //     @required String entryDate}) async {
+  //   Response response;
+  //   try {
+  //     response = await dioClient.getDio().get(
+  //         GET_CONSIGNMENT_FOR_CLIENT_AND_DATE(clientId, routeId, entryDate));
+  //   } on DioError catch (e) {
+  //     return e.message;
+  //   }
+  //   return response;
+  // }
 
   Future getConsignmentListWithDate({String entryDate}) async {
     Response response;

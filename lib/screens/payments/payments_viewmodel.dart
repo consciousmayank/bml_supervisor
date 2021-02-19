@@ -1,13 +1,13 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:dio/dio.dart';
-import 'package:bml_supervisor/models/ApiResponse.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
   double _totalAmt = 0.0;
-
+  int _page = 1;
   double get totalAmt => _totalAmt;
 
   set totalAmt(double value) {
@@ -151,7 +151,8 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
     setBusy(true);
     try {
-      final res = await apiService.getPaymentHistory(clientId);
+      final res = await apiService.getPaymentHistory(
+          clientId: clientId, pageNumber: _page);
       if (res.statusCode == 200) {
         if (res is String) {
           snackBarService.showSnackbar(message: res.toString());

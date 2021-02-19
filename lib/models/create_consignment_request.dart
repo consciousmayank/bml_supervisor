@@ -6,11 +6,15 @@ import 'dart:convert';
 
 class CreateConsignmentRequest {
   CreateConsignmentRequest({
+    this.dropOff,
+    this.collect,
+    this.payment,
     this.clientId,
     this.routeId,
     this.vehicleId,
     this.entryDate,
     this.title = 'NA',
+    this.routeTitle,
     this.items,
   });
 
@@ -19,6 +23,10 @@ class CreateConsignmentRequest {
   final dynamic vehicleId;
   final String entryDate;
   final String title;
+  final String routeTitle;
+  final int dropOff;
+  final int collect;
+  final double payment;
   final List<Item> items;
 
   CreateConsignmentRequest copyWith({
@@ -28,7 +36,11 @@ class CreateConsignmentRequest {
     dynamic vehicleId,
     String entryDate,
     String title,
+    String routeTitle,
     List<Item> items,
+    final int dropOff,
+    final int collect,
+    final double payment,
   }) =>
       CreateConsignmentRequest(
         clientId: clientId ?? this.clientId,
@@ -36,18 +48,12 @@ class CreateConsignmentRequest {
         vehicleId: vehicleId ?? this.vehicleId,
         entryDate: entryDate ?? this.entryDate,
         title: title ?? this.title,
+        routeTitle: routeTitle ?? this.routeTitle,
         items: items ?? this.items,
+        collect: collect ?? this.collect,
+        payment: payment ?? this.payment,
+        dropOff: dropOff ?? this.dropOff,
       );
-
-  double findGrandTotal() {
-    double grandTotal = 0;
-    this.items.forEach((element) {
-      print("grand total before :: ${grandTotal}");
-      grandTotal = grandTotal + element.payment;
-      print("grand total after  :: ${grandTotal}");
-    });
-    print("grand total after everything  :: ${grandTotal}");
-  }
 
   factory CreateConsignmentRequest.fromJson(String str) =>
       CreateConsignmentRequest.fromMap(json.decode(str));
@@ -61,6 +67,10 @@ class CreateConsignmentRequest {
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
         title: json["title"],
+        routeTitle: json["routeTitle"],
+        dropOff: json['dropOff'],
+        collect: json['collect'],
+        payment: json['payment'],
         items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
       );
 
@@ -69,13 +79,22 @@ class CreateConsignmentRequest {
         "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
+        "payment": payment,
+        "collect": collect,
+        "dropOff": dropOff,
         "title": title,
+        "routeTitle": routeTitle,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }
 
 class Item {
   Item({
+    this.hubTitle,
+    this.hubCity,
+    this.hubContactPerson,
+    this.hubGeoLatitude,
+    this.hubGeoLongitude,
     this.id,
     this.hubId,
     this.sequence,
@@ -106,6 +125,11 @@ class Item {
   final String paymentId;
   final String remarks;
   final String flag;
+  final String hubTitle;
+  final String hubCity;
+  final String hubContactPerson;
+  final double hubGeoLatitude;
+  final double hubGeoLongitude;
 
   Item copyWith({
     int id,
@@ -122,6 +146,11 @@ class Item {
     String paymentId,
     String remarks,
     String flag,
+    String hubTitle,
+    String hubCity,
+    String hubContactPerson,
+    double hubGeoLatitude,
+    double hubGeoLongitude,
   }) =>
       Item(
         id: id ?? this.id,
@@ -137,7 +166,11 @@ class Item {
         paymentMode: paymentMode ?? this.paymentMode,
         paymentId: paymentId ?? this.paymentId,
         remarks: remarks ?? this.remarks,
-        flag: flag ?? this.flag,
+        hubTitle: hubTitle ?? this.hubTitle,
+        hubCity: hubCity ?? this.hubCity,
+        hubContactPerson: hubContactPerson ?? this.hubContactPerson,
+        hubGeoLatitude: hubGeoLatitude ?? this.hubGeoLatitude,
+        hubGeoLongitude: hubGeoLongitude ?? this.hubGeoLongitude,
       );
 
   factory Item.fromJson(String str) => Item.fromMap(json.decode(str));
@@ -159,6 +192,11 @@ class Item {
         paymentId: json["paymentId"],
         remarks: json["remarks"],
         flag: json["flag"],
+        hubTitle: json["hubTitle"],
+        hubCity: json["hubCity"],
+        hubContactPerson: json["hubContactPerson"],
+        hubGeoLatitude: json["hubGeoLatitude"],
+        hubGeoLongitude: json["hubGeoLongitude"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -176,5 +214,10 @@ class Item {
         "paymentId": paymentId,
         "remarks": remarks,
         "flag": flag,
+        "hubTitle": hubTitle,
+        "hubCity": hubCity,
+        "hubContactPerson": hubContactPerson,
+        "hubGeoLatitude": hubGeoLatitude,
+        "hubGeoLongitude": hubGeoLongitude,
       };
 }

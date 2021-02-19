@@ -10,16 +10,17 @@ import 'package:stacked/stacked.dart';
 import 'consignment_detials_viewmodel.dart';
 
 class ConsignmentDetailsView extends StatefulWidget {
-  final int routeId;
-  final int clientId;
-  final String entryDate;
+  final int consignmentId;
 
-  const ConsignmentDetailsView(
-      {Key key,
-      @required this.routeId,
-      @required this.clientId,
-      @required this.entryDate})
-      : super(key: key);
+  // final int clientId;
+  // final String entryDate;
+
+  const ConsignmentDetailsView({
+    Key key,
+    @required this.consignmentId,
+    // @required this.clientId,
+    // @required this.entryDate
+  }) : super(key: key);
 
   @override
   _ConsignmentDetailsViewState createState() => _ConsignmentDetailsViewState();
@@ -33,10 +34,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentDetailsViewModel>.reactive(
-      onModelReady: (viewModel) => viewModel.getConsignments(
-        routeId: widget.routeId,
-        clientId: widget.clientId,
-        entryDate: widget.entryDate,
+      onModelReady: (viewModel) => viewModel.getConsignmentWithId(
+        widget.consignmentId.toString(),
       ),
       builder: (context, viewModel, child) => SafeArea(
         top: true,
@@ -103,7 +102,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    "${viewModel.consignmentList[index].hubTitle}",
+                                    "${viewModel.consignmentDetailResponseNew.items[index].title}",
                                     style: AppTextStyles.latoBold18Black,
                                   ),
                                   InkWell(
@@ -115,26 +114,29 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                                     ),
                                     onTap: () {
                                       launchMaps(
-                                          viewModel.consignmentList[index]
-                                              .geoLatitude,
-                                          viewModel.consignmentList[index]
-                                              .geoLongitude);
+                                          viewModel.consignmentDetailResponseNew
+                                              .items[index].hubGeoLatitude,
+                                          viewModel.consignmentDetailResponseNew
+                                              .items[index].hubGeoLongitude);
                                     },
                                   ),
                                   Text("# ${index + 1}"),
                                   hSizedBox(10),
                                   Text(
-                                    viewModel
-                                        .consignmentList[index].contactPerson
+                                    viewModel.consignmentDetailResponseNew
+                                        .items[index].hubContactPerson
                                         .toUpperCase(),
                                     style: AppTextStyles.latoBold18Black,
                                   ),
                                   hSizedBox(10),
-                                  Text(viewModel.consignmentList[index].city,
-                                      style: AppTextStyles.latoMedium14Black),
                                   Text(
-                                      viewModel.consignmentList[index].locality,
+                                      viewModel.consignmentDetailResponseNew
+                                          .items[index].hubCity,
                                       style: AppTextStyles.latoMedium14Black),
+                                  // Text(
+                                  //     viewModel.consignmentDetailResponseNew
+                                  //         .items[index].hub,
+                                  //     style: AppTextStyles.latoMedium14Black),
                                 ],
                               ),
                             ),
@@ -142,19 +144,19 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                           rowMaker(
                             label: "Collect",
                             value:
-                                "${viewModel.consignmentList[index].colletG}/${viewModel.consignmentList[index].collect}",
+                                "${viewModel.consignmentDetailResponseNew.items[index].collect}",
                           ),
                           wSizedBox(10),
                           rowMaker(
                             label: "Drop",
                             value:
-                                "${viewModel.consignmentList[index].dropOffG}/${viewModel.consignmentList[index].dropOff}",
+                                "${viewModel.consignmentDetailResponseNew.items[index].dropOff}",
                           ),
                           wSizedBox(10),
                           rowMaker(
                             label: "Payment",
                             value:
-                                "${viewModel.consignmentList[index].paymentG}/${viewModel.consignmentList[index].payment}",
+                                "${viewModel.consignmentDetailResponseNew.items[index].payment}",
                           ),
                           wSizedBox(10),
                         ],
@@ -164,14 +166,14 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                 ),
               );
             },
-            itemCount: viewModel.consignmentList.length,
+            itemCount: viewModel.consignmentDetailResponseNew.items.length,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DotsIndicator(
             controller: _controller,
-            itemCount: viewModel.consignmentList.length,
+            itemCount: viewModel.consignmentDetailResponseNew.items.length,
             color: AppColors.primaryColorShade5,
           ),
         )
