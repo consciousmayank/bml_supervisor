@@ -281,3 +281,6 @@ launchMaps(double latitude, double longitude) async {
 
 FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
+bool isCollectionNullOrEmpty(Iterable iterable) {
+  return iterable == null || iterable.length == 0;
+}
