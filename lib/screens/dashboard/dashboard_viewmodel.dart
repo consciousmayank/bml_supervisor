@@ -1,14 +1,17 @@
 import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
+  DashBoardApisImpl _dashboardapi = locator<DashBoardApisImpl>();
+
   PreferencesSavedUser _savedUser;
 
   PreferencesSavedUser get savedUser => _savedUser;
@@ -19,7 +22,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   }
 
   void getSavedUser() async {
-    savedUser = await preferences.getUserLoggedIn();
+    preferences.getUserLoggedIn().then((value) => savedUser = value);
   }
 
   List<IconData> optionsIcons = [
@@ -98,36 +101,15 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     clientsList = [];
     //* get bar graph data too when populating the client dropdown
 
-    var response = await apiService.getClientsList();
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-    }
+    List<GetClientsResponse> responseList = await _dashboardapi.getClientList();
+    this.clientsList = copyList(responseList);
     setBusy(false);
     notifyListeners();
   }
 
   void getDashboardTilesStats() async {
     setBusy(true);
-    ParentApiResponse dashboardTilesData =
-        await apiService.getDashboardTilesStats();
-    if (dashboardTilesData.error == null) {
-      //positive
-      singleClientTileData = DashboardTilesStatsResponse.fromJson(
-          dashboardTilesData.response.data);
-    } else {
-      //negative
-      snackBarService.showSnackbar(
-          message: dashboardTilesData.getErrorReason());
-    }
+    singleClientTileData = await _dashboardapi.getDashboardTilesStats();
     setBusy(false);
     notifyListeners();
   }
@@ -142,29 +124,29 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     recentConsignmentList.clear();
     int selectedPeriodValue = period == 'THIS MONTH' ? 1 : 2;
 
-    setBusy(true);
-    notifyListeners();
-    try {
-      var res = await apiService.getRecentConsignments(
-        clientId: clientId,
-        period: selectedPeriodValue,
-      );
-      if (res.data is List) {
-        var list = res.data as List;
-        if (list.length > 0) {
-          for (Map singleConsignment in list) {
-            RecentConginmentResponse singleConsignmentResponse =
-                RecentConginmentResponse.fromJson(singleConsignment);
-            recentConsignmentList.add(singleConsignmentResponse);
-          }
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
-    notifyListeners();
-    setBusy(false);
+    // setBusy(true);
+    // notifyListeners();
+    // try {
+    //   var res = await apiService.getRecentConsignments(
+    //     clientId: clientId,
+    //     period: selectedPeriodValue,
+    //   );
+    //   if (res.data is List) {
+    //     var list = res.data as List;
+    //     if (list.length > 0) {
+    //       for (Map singleConsignment in list) {
+    //         RecentConginmentResponse singleConsignmentResponse =
+    //             RecentConginmentResponse.fromJson(singleConsignment);
+    //         recentConsignmentList.add(singleConsignmentResponse);
+    //       }
+    //     }
+    //   }
+    // } on DioError catch (e) {
+    //   snackBarService.showSnackbar(message: e.message);
+    //   setBusy(false);
+    // }
+    // notifyListeners();
+    // setBusy(false);
   }
 
   takeToAddEntryPage() {
@@ -206,15 +188,15 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
 
   void getClientDashboardStats(PreferencesSavedUser savedUser) async {
     setBusy(true);
-    var tilesData = await apiService.getClientDashboardStats(savedUser);
-    if (tilesData is String) {
-      snackBarService.showSnackbar(message: tilesData);
-    } else {
-      singleClientTileData =
-          DashboardTilesStatsResponse.fromJson(tilesData.data);
-      print('single Client Tile data-----${singleClientTileData.hubCount}');
-      setBusy(false);
-      notifyListeners();
-    }
+    // var tilesData = await apiService.getClientDashboardStats(savedUser);
+    // if (tilesData is String) {
+    //   snackBarService.showSnackbar(message: tilesData);
+    // } else {
+    //   singleClientTileData =
+    //       DashboardTilesStatsResponse.fromJson(tilesData.data);
+    //   print('single Client Tile data-----${singleClientTileData.hubCount}');
+    //   setBusy(false);
+    //   notifyListeners();
+    // }
   }
 }

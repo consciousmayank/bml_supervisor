@@ -288,3 +288,19 @@ String getBase64String({@required String value}) {
   var bytes = utf8.encode(value);
   return base64.encode(bytes);
 }
+
+Map<String, String> getAuthHeader({@required String base64String}) {
+  return {"Authorization": "Basic $base64String"};
+}
+
+int collectionLength(Iterable iterable) {
+  return iterable == null ? 0 : iterable.length;
+}
+
+List<T> copyList<T>(List<T> items) {
+  var newItems = List<T>();
+  if (items != null) {
+    newItems.addAll(items);
+  }
+  return newItems;
+}

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPreferences {
@@ -11,65 +11,69 @@ class MyPreferences {
   final String loggedInUserCredentials = "logged_in_user_credentials";
   final String loggedInUser = "logged_in_user";
 
+  static SharedPreferences _sharedPrefs;
+
+  factory MyPreferences() => MyPreferences._internal();
+
+  MyPreferences._internal();
+
+  Future<void> init() async {
+    _sharedPrefs ??= await SharedPreferences.getInstance();
+  }
+
   void saveSelectedClient(GetClientsResponse selectedClient) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (selectedClient == null) {
-      await prefs.remove(selected_client);
+      await _sharedPrefs.remove(selected_client);
     } else {
-      await prefs.setString(selected_client, json.encode(selectedClient));
+      await _sharedPrefs.setString(
+          selected_client, json.encode(selectedClient));
     }
   }
 
   Future<GetClientsResponse> getSelectedClient() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String savedResponseString = prefs.getString(selected_client);
+    String savedResponseString = _sharedPrefs.getString(selected_client);
     if (savedResponseString == null) {
-      return GetClientsResponse(id: 1, title: "Golden Harvest");
+      return GetClientsResponse(
+          clientId: "goldenharvest", title: "Golden Harvest");
     } else {
       return GetClientsResponse.fromJson(savedResponseString);
     }
   }
 
   void saveSelectedDuration(String selectedDuration) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (selectedDuration == null) {
-      await prefs.remove(selected_duration);
+      await _sharedPrefs.remove(selected_duration);
     } else {
-      await prefs.setString(selected_duration, selectedDuration);
+      await _sharedPrefs.setString(selected_duration, selectedDuration);
     }
   }
 
   Future<String> getSelectedDuration() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(selected_duration) ?? "THIS MONTH";
+    return _sharedPrefs.getString(selected_duration) ?? "THIS MONTH";
   }
 
   void saveCredentials(String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (value == null) {
-      await prefs.remove(loggedInUserCredentials);
+      await _sharedPrefs.remove(loggedInUserCredentials);
     } else {
-      await prefs.setString(loggedInUserCredentials, value);
+      await _sharedPrefs.setString(loggedInUserCredentials, value);
     }
   }
 
-  Future<String> getCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(loggedInUserCredentials) ?? "";
+  String getCredentials() {
+    return _sharedPrefs.getString(loggedInUserCredentials) ?? "";
   }
 
   void setLoggedInUser(PreferencesSavedUser user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (user == null) {
-      await prefs.remove(loggedInUser);
+      await _sharedPrefs.remove(loggedInUser);
     } else {
-      await prefs.setString(loggedInUser, json.encode(user));
+      await _sharedPrefs.setString(loggedInUser, json.encode(user));
     }
   }
 
   Future<PreferencesSavedUser> getUserLoggedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String savedResponseString = prefs.getString(loggedInUser);
+    String savedResponseString = _sharedPrefs.getString(loggedInUser);
     if (savedResponseString == null) {
       return null;
     } else {

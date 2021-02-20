@@ -1,16 +1,11 @@
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
-import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
-import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
-import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -26,16 +21,18 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
-          PreferencesSavedUser savedUser =
-              await viewModel.preferences.getUserLoggedIn();
-          viewModel.getDashboardTilesStats();
+          viewModel.getClients();
+          viewModel.getSavedUser();
         },
-        builder: (context, viewModel, child) => Scaffold(
-              appBar: AppBar(
-                title: Text("Welcome, Rahul Rautela"),
-                centerTitle: true,
-              ),
-              body: SingleChildScrollView(
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: viewModel.savedUser != null
+                  ? Text('Welcome, ${viewModel.savedUser.userName}')
+                  : Text('DashBoard'),
+              centerTitle: true,
+            ),
+            body: SingleChildScrollView(
                 child: viewModel.isBusy
                     ? Container(
                         child: Center(
@@ -57,149 +54,147 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               ),
                             ],
                           ),
-                          viewModel.singleClientTileData != null
-                              ? Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: buildDashboradTileCard(
-                                          title: 'DISTRIBUTERS',
-                                          value: viewModel
-                                              .singleClientTileData.hubCount
-                                              .toString(),
-                                          viewModel: viewModel,
-                                          color:
-                                              getDashboardDistributerTileBgColor()),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: buildDashboradTileCard(
-                                        title: 'TOTAL KILOMETER',
-                                        value: viewModel
-                                            .singleClientTileData.kmCount
-                                            .toString(),
-                                        viewModel: viewModel,
-                                        color: getDashboardTotalKmTileBgColor(),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                          viewModel.singleClientTileData != null
-                              ? Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: buildDashboradTileCard(
-                                        title: 'ROUTES',
-                                        value: viewModel
-                                            .singleClientTileData.routeCount
-                                            .toString(),
-                                        viewModel: viewModel,
-                                        color: getDashboardRoutesTileBgColor(),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: buildDashboradTileCard(
-                                        title: 'DUE (KM)',
-                                        value: viewModel
-                                            .singleClientTileData.dueCount
-                                            .toString(),
-                                        viewModel: viewModel,
-                                        color: getDashboardDueKmTileBgColor(),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                          // hSizedBox(3),
-                          //!Show recent consignment table here
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Card(
-                                    elevation: defaultElevation,
-                                    child: ConsignmentListView(
-                                      isFulPageView: false,
-                                      duration: viewModel.selectedDuration,
-                                      clientId: viewModel.selectedClient.id,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? BarChartView(
-                                  clientId: viewModel.selectedClient.id,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? LineChartView(
-                                  clientId: viewModel.selectedClient.id,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? PieChartView(
-                                  clientId: viewModel.selectedClient.id,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient == null
-                              ? Container()
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text("Routes"),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8, bottom: 8),
-                                      child: SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.30,
-                                        child: RoutesView(
-                                          selectedClient:
-                                              viewModel.selectedClient,
-                                          onRoutesPageInView: (clickedRoute) {
-                                            // FetchRoutesResponse route = clickedRoute;
-                                            // viewModel.selectedRoute = route;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          // viewModel.singleClientTileData != null
+                          //     ? Row(
+                          //         children: [
+                          //           Expanded(
+                          //             flex: 1,
+                          //             child: buildDashboradTileCard(
+                          //                 title: 'DISTRIBUTERS',
+                          //                 value: viewModel
+                          //                     .singleClientTileData.hubCount
+                          //                     .toString(),
+                          //                 viewModel: viewModel,
+                          //                 color:
+                          //                     getDashboardDistributerTileBgColor()),
+                          //           ),
+                          //           Expanded(
+                          //             flex: 1,
+                          //             child: buildDashboradTileCard(
+                          //               title: 'TOTAL KILOMETER',
+                          //               value: viewModel
+                          //                   .singleClientTileData.kmCount
+                          //                   .toString(),
+                          //               viewModel: viewModel,
+                          //               color: getDashboardTotalKmTileBgColor(),
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       )
+                          //     : Container(),
+                          // viewModel.singleClientTileData != null
+                          //     ? Row(
+                          //         children: [
+                          //           Expanded(
+                          //             flex: 1,
+                          //             child: buildDashboradTileCard(
+                          //               title: 'ROUTES',
+                          //               value: viewModel
+                          //                   .singleClientTileData.routeCount
+                          //                   .toString(),
+                          //               viewModel: viewModel,
+                          //               color: getDashboardRoutesTileBgColor(),
+                          //             ),
+                          //           ),
+                          //           Expanded(
+                          //             flex: 1,
+                          //             child: buildDashboradTileCard(
+                          //               title: 'DUE (KM)',
+                          //               value: viewModel
+                          //                   .singleClientTileData.dueCount
+                          //                   .toString(),
+                          //               viewModel: viewModel,
+                          //               color: getDashboardDueKmTileBgColor(),
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       )
+                          //     : Container(),
+                          // viewModel.selectedClient != null &&
+                          //         viewModel.selectedDuration != null
+                          //     ? ClipRRect(
+                          //         borderRadius: BorderRadius.circular(20),
+                          //         child: Card(
+                          //           elevation: defaultElevation,
+                          //           child: ConsignmentListView(
+                          //             isFulPageView: false,
+                          //             duration: viewModel.selectedDuration,
+                          //             clientId: viewModel.selectedClient.id,
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : Container(),
+                          //
+                          // viewModel.selectedClient != null &&
+                          //         viewModel.selectedDuration != null
+                          //     ? BarChartView(
+                          //         clientId: viewModel.selectedClient.id,
+                          //         selectedDuration: viewModel.selectedDuration,
+                          //       )
+                          //     : Container(),
+                          // viewModel.selectedClient != null &&
+                          //         viewModel.selectedDuration != null
+                          //     ? LineChartView(
+                          //         clientId: viewModel.selectedClient.id,
+                          //         selectedDuration: viewModel.selectedDuration,
+                          //       )
+                          //     : Container(),
+                          // viewModel.selectedClient != null &&
+                          //         viewModel.selectedDuration != null
+                          //     ? PieChartView(
+                          //         clientId: viewModel.selectedClient.id,
+                          //         selectedDuration: viewModel.selectedDuration,
+                          //       )
+                          //     : Container(),
+                          // viewModel.selectedClient == null
+                          //     ? Container()
+                          //     : Column(
+                          //         crossAxisAlignment: CrossAxisAlignment.start,
+                          //         mainAxisSize: MainAxisSize.max,
+                          //         children: [
+                          //           Padding(
+                          //             padding: const EdgeInsets.all(8.0),
+                          //             child: Text("Routes"),
+                          //           ),
+                          //           Padding(
+                          //             padding: const EdgeInsets.only(
+                          //                 top: 8, bottom: 8),
+                          //             child: SizedBox(
+                          //               height:
+                          //                   MediaQuery.of(context).size.height *
+                          //                       0.30,
+                          //               child: RoutesView(
+                          //                 selectedClient:
+                          //                     viewModel.selectedClient,
+                          //                 onRoutesPageInView: (clickedRoute) {
+                          //                   // FetchRoutesResponse route = clickedRoute;
+                          //                   // viewModel.selectedRoute = route;
+                          //                 },
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
                         ],
-                      ),
-              ),
-              drawer: Container(
-                color: ThemeConfiguration.appScaffoldBackgroundColor,
-                width: MediaQuery.of(context).size.width * 0.65,
-                child: Expanded(
-                  flex: 1,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return getOptions(
-                          context: context,
-                          position: index,
-                          viewModel: viewModel);
-                    },
-                    itemCount: 8,
-                  ),
+                      )),
+            drawer: Container(
+              color: ThemeConfiguration.appScaffoldBackgroundColor,
+              width: MediaQuery.of(context).size.width * 0.65,
+              child: Expanded(
+                flex: 1,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return getOptions(
+                        context: context,
+                        position: index,
+                        viewModel: viewModel);
+                  },
+                  itemCount: 8,
                 ),
               ),
             ),
+          );
+        },
         viewModelBuilder: () => DashBoardScreenViewModel());
   }
 
@@ -210,10 +205,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       onOptionSelect: (selectedValue) {
         viewModel.selectedDuration = selectedValue;
         //!call recent consignment api here
-        viewModel.getRecentConsignments(
-          clientId: viewModel.selectedClient.id,
-          period: viewModel.selectedDuration,
-        );
+        // viewModel.getRecentConsignments(
+        //   clientId: viewModel.selectedClient.clientId,
+        //   period: viewModel.selectedDuration,
+        // );
 
         locator<MyPreferences>().saveSelectedDuration(selectedValue);
       },
@@ -262,10 +257,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         //* call client tiles data
         viewModel.getDashboardTilesStats();
         // call recent consignment api
-        viewModel.getRecentConsignments(
-          clientId: viewModel.selectedClient.id,
-          period: viewModel.selectedDuration,
-        );
+        // viewModel.getRecentConsignments(
+        //   clientId: viewModel.selectedClient.clientId,
+        //   period: viewModel.selectedDuration,
+        // );
       },
       selectedValue:
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
@@ -373,7 +368,7 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}",
+            "${widget.optionList[i].clientId}",
             style: TextStyle(
               color: Colors.black54,
             ),

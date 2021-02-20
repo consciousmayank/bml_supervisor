@@ -12,17 +12,21 @@ class ParentApiResponse {
   ParentApiResponse({this.error, this.response});
 
   String getErrorReason() {
-    switch (this.error.response.statusCode) {
-      case 401:
-        return badCredentials;
-        break;
-      case 404:
-        return noDataFound;
-      case 500:
-        return serverBusy;
-        break;
-      default:
-        return defaultError;
+    if (this.error.response == null) {
+      return this.error.message;
+    } else {
+      switch (this.error.response.statusCode) {
+        case 401:
+          return badCredentials;
+          break;
+        case 404:
+          return noDataFound;
+        case 500:
+          return serverBusy;
+          break;
+        default:
+          return defaultError;
+      }
     }
   }
 }

@@ -12,6 +12,7 @@ import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -21,21 +22,20 @@ class ApiService {
 
   /////////////////////////Post Security/////////////////////////
 
-  Future<ParentApiResponse> login(
-      {@required String base64string, @required String userName}) async {
-    Map<String, String> authHeader = {"Authorization": "Basic $base64string"};
+  ///Authorization, get the user role, first name, last name
+  Future<ParentApiResponse> login({@required String base64string}) async {
+    dioClient.addHeaders(getAuthHeader(base64String: base64string));
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .post(LOGIN, options: Options(headers: authHeader));
+      response = await dioClient.getDio().post(LOGIN);
     } on DioError catch (e) {
       error = e;
     }
     return ParentApiResponse(error: error, response: response);
   }
 
+  ///Get dashboard Tiles Data.
   Future<ParentApiResponse> getDashboardTilesStats() async {
     // dashboard client specific tiles data api
     Response response;
@@ -48,6 +48,17 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  ///Get the list of clients which logged in user/manager are allotted/can handle
+  Future<ParentApiResponse> getClientsList() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_CLIENTS);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
@@ -295,16 +306,6 @@ class ApiService {
             await dioClient.getDio().get('/expenses/view/period/$duration');
       }
       //!end
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future getClientsList() async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get('$GET_CLIENTS');
     } on DioError catch (e) {
       return e.message;
     }

@@ -1,14 +1,12 @@
 import 'package:alice/alice.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'configuration.dart';
-import 'locator.dart';
 
 class DioConfig {
-  MyPreferences preferences = locator.get<MyPreferences>();
   Alice alice = Alice(showNotification: true);
   final _dio = Dio();
 
@@ -16,23 +14,28 @@ class DioConfig {
     configureDio();
   }
 
-  configureDio() async {
-    String credentials = await preferences.getCredentials();
+  configureDio() {
+    String credentials = MyPreferences().getCredentials();
 
     alice.setNavigatorKey(StackedService.navigatorKey);
 
     _dio.options
-      // ..baseUrl = baseRestUrlProduction
-      ..baseUrl = baseRestUrl
+      ..baseUrl = baseSecureUrl
+      // ..baseUrl = baseSecureUrlBmlApp
       ..headers =
-          credentials.isEmpty ? {} : {"Authorization": "Basic $credentials"}
+          credentials.isEmpty ? {} : getAuthHeader(base64String: credentials)
       ..contentType = "application/json";
+
     _dio.interceptors.add(alice.getDioInterceptor());
-    _dio.interceptors
-        .add(DioCacheManager(CacheConfig(baseUrl: baseRestUrl)).interceptor);
   }
 
   Dio getDio() {
     return _dio;
+  }
+
+  void addHeaders(Map<String, String> authHeader) {
+    BaseOptions options = _dio.options;
+    options.headers = authHeader;
+    _dio..options = options;
   }
 }

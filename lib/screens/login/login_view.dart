@@ -28,6 +28,9 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
+      onModelReady: (viewModel) {
+        viewModel.login(userName: 'rahul', password: 'bml@121');
+      },
       builder: (context, viewModel, child) => WillPopScope(
         onWillPop: () {
           if (!viewModel.isBusy) {

@@ -1,11 +1,11 @@
 // Added by Vikas
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 
 class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   double _totalExpenses = 0.0;
@@ -104,25 +104,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     // add Book my loading at 0
     // pupulate the clients dropdown
     var response = await apiService.getClientsList();
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-      this.clientsList.insert(
-          0,
-          GetClientsResponse(
-            id: 0,
-            title: 'Book My Loading',
-          ));
-    }
 
     setBusy(false);
     notifyListeners();

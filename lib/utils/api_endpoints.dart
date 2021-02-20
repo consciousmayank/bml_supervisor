@@ -18,7 +18,7 @@ const String GET_ROUTES_FOR_CLIENT_ID_new = "/route/client/";
 const String GET_HUB_DATA = "/hub/find/";
 const String ADD_CONSIGNMENT_DATA_TO_HUB = "/consignment/add";
 const String GET_CONSIGNMENTS_LIST = "/consignment/find/";
-const String GET_CLIENTS = "/client/list/";
+
 const String GET_HUBS = "/hub/route/";
 final GET_ROUTES_FOR_CLIENT_AND_DATE =
     (clientId, date) => "/route/consignment/client/$clientId/date/$date";
@@ -36,5 +36,5 @@ final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
 /////////////////////////Post Security/////////////////////////
 final LOGIN = '/user/auth';
 final GET_DASHBOARD_TILES = '/statistics/dashboard/client/';
-
+const String GET_CLIENTS = "/manager/client/list";
 ////////////////////////////////////////////////////////////////

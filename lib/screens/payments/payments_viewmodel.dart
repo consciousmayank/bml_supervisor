@@ -115,33 +115,8 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     print('selected client: $selectedClientForTransactionList');
     var response = await apiService.getClientsList();
 
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-      this.clientsList.insert(
-          0,
-          GetClientsResponse(
-            id: 0,
-            title: 'Book My Loading',
-          ));
-    }
-
     setBusy(false);
     notifyListeners();
-    print('Number of clients: ${clientsList.length}');
-    clientsList.forEach((element) {
-      print(element.id);
-      print(element.title);
-    });
-    // print(clientsList);
   }
 
   getPaymentHistory(int clientId) async {

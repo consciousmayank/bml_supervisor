@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:dio/dio.dart';
 
 class ViewRoutesViewModel extends GeneralisedBaseViewModel {
   FetchRoutesResponse _selectedRoute;
@@ -32,18 +31,5 @@ class ViewRoutesViewModel extends GeneralisedBaseViewModel {
 
   getClientIds() async {
     var clientIdsResponse = await apiService.getClientsList();
-    if (clientIdsResponse is String) {
-      snackBarService.showSnackbar(message: clientIdsResponse);
-    } else {
-      Response apiResponse = clientIdsResponse;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        _clientsList.add(getClientsResponse);
-      });
-      notifyListeners();
-    }
   }
 }

@@ -115,19 +115,6 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   getClientIds() async {
     var clientIdsResponse = await apiService.getClientsList();
-    if (clientIdsResponse is String) {
-      snackBarService.showSnackbar(message: clientIdsResponse);
-    } else {
-      Response apiResponse = clientIdsResponse;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        _clientsList.add(getClientsResponse);
-      });
-      notifyListeners();
-    }
   }
 
   getRoutes(int clientId) async {

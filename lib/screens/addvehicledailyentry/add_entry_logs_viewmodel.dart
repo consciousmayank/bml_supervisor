@@ -166,39 +166,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   getClients() async {
     setBusy(true);
     clientsList = [];
-    // call client api
-    // get the data as list
-    // add Book my loading at 0
-    // pupulate the clients dropdown
-    var response = await apiService.getClientsList();
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-      this.clientsList.insert(
-          0,
-          GetClientsResponse(
-            id: 0,
-            title: 'Book My Loading',
-          ));
-    }
-
-    setBusy(false);
-    notifyListeners();
-    print('Number of clients: ${clientsList.length}');
-    clientsList.forEach((element) {
-      print(element.id);
-      print(element.title);
-    });
-    // print(clientsList);
   }
 
   void getEntryLogForLastDate(String registrationNumber) async {
@@ -226,7 +193,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');
     DateTime time = DateTime.parse(joinedReversedDate);
-    if (DateTime.now().difference(time).inDays==0) {
+    if (DateTime.now().difference(time).inDays == 0) {
       print('same date entry');
       print(datePickerEntryDate);
       datePickerEntryDate = DateTime.now();
@@ -275,60 +242,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
       // vehicleLog = EntryLog.fromMap(entryLog.data);
       setBusy(false);
     }
-  }
-
-  void search(String text) async {
-    searchResponse.clear();
-    selectedVehicle = null;
-    notifyListeners();
-    setBusy(true);
-    try {
-      final res = await apiService.search(registrationNumber: text);
-      if (res.statusCode == 200) {
-        var list = res.data as List;
-        if (list.length == 1) {
-          //for (Map singleItem in list) {
-          SearchByRegNoResponse singleSearchResult =
-              SearchByRegNoResponse.fromMap(list.first);
-          searchResponse.add(singleSearchResult);
-          //}
-
-          setBusy(false);
-          vehicleLog = EntryLog(
-              clientId: null,
-              vehicleId: null,
-              entryDate: null,
-              startReading: searchResponse.first.initReading,
-              endReading: null,
-              drivenKm: null,
-              fuelLtr: null,
-              fuelMeterReading: null,
-              ratePerLtr: null,
-              amountPaid: null,
-              trips: null,
-              loginTime: null,
-              logoutTime: null,
-              remarks: null,
-              startReadingGround: null,
-              drivenKmGround: null);
-          print('search via reg num');
-          print('making flag 1');
-          flagForSearch = 1;
-          print('start reading: ${vehicleLog.startReading}');
-          // takeToAddEntry2PointOFormViewPage();
-        } else if (list.length > 1) {
-          snackBarService.showSnackbar(
-              message: "Please enter complete Registration Number");
-        } else {
-          snackBarService.showSnackbar(
-              message: "No Results found for \"$text\"");
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
-    setBusy(false);
   }
 
   submitVehicleEntry(EntryLog entryLogRequest) async {
