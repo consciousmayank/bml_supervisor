@@ -1,8 +1,8 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -121,7 +121,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
         selectedRegNoController.clear();
         viewModel.vehicleLog = null;
         viewModel.selectedClient = selectedValue;
-        viewModel.getRoutesForSelectedClientAndDate(selectedValue.id);
+        viewModel.getRoutesForSelectedClientAndDate(selectedValue.clientId);
       },
       selectedClient:
           viewModel.selectedClient == null ? null : viewModel.selectedClient,
@@ -208,7 +208,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           padding: const EdgeInsets.all(2.0),
           child: registrationNumberTextField(viewModel: viewModel),
         ),
-        viewModel.selectedClient.id == 0
+        int.parse(viewModel.selectedClient.clientId) == 0
             ? selectRegButton(context, viewModel)
             : Container(),
       ],
@@ -216,7 +216,8 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
   }
 
   registrationNumberTextField({@required AddVehicleEntryViewModel viewModel}) {
-    if (viewModel.selectedClient.id != 0 && viewModel.selectedRoute != null) {
+    if (int.parse(viewModel.selectedClient.clientId) != 0 &&
+        viewModel.selectedRoute != null) {
       selectedRegNoController.text = viewModel.selectedRoute.vehicleId;
       if (viewModel.vehicleLog == null) {
         viewModel.getEntryLogForLastDate(selectedRegNoController.text);
@@ -224,7 +225,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
     }
 
     return appTextFormField(
-      enabled: viewModel.selectedClient.id == 0,
+      enabled: int.parse(viewModel.selectedClient.clientId) == 0,
       controller: selectedRegNoController,
       focusNode: selectedRegNoFocusNode,
       hintText: drRegNoHint,
@@ -473,7 +474,7 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}",
+            "${widget.optionList[i].clientId}",
             style: TextStyle(
               color: Colors.black54,
             ),

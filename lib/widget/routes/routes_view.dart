@@ -1,12 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -43,7 +43,7 @@ class _RoutesViewState extends State<RoutesView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<RoutesViewModel>.reactive(
       onModelReady: (viewModel) =>
-          viewModel.getRoutesForClient(widget.selectedClient),
+          viewModel.getRoutesForClient(widget.selectedClient.clientId),
       builder: (context, viewModel, child) {
         return viewModel.isBusy
             ? Center(
@@ -83,12 +83,12 @@ class _RoutesViewState extends State<RoutesView> {
                                           "${viewModel.routesList[index].srcLocation} - ${viewModel.routesList[index].dstLocation}"),
                                       hSizedBox(10),
                                       Text(
-                                        viewModel.routesList[index].title,
+                                        viewModel.routesList[index].routeTitle,
                                         style: AppTextStyles.latoBold18Black,
                                       ),
                                       hSizedBox(5),
                                       Text(
-                                          "Route # ${viewModel.routesList[index].id}"),
+                                          "Route # ${viewModel.routesList[index].routeId}"),
                                       hSizedBox(5),
                                       Text(
                                         "${viewModel.routesList[index].kilometers} Kms.",
@@ -115,9 +115,7 @@ class _RoutesViewState extends State<RoutesView> {
                                               AppColors.primaryColorShade1,
                                           background:
                                               AppColors.primaryColorShade5,
-                                          onTap: () {
-
-                                          },
+                                          onTap: () {},
                                           buttonText: 'SHOW ROUTE',
                                         ),
                                       ),
@@ -135,10 +133,7 @@ class _RoutesViewState extends State<RoutesView> {
                         left: 2,
                         right: 2,
                         child: DotsIndicator(
-                          onPageSelected: (int index) {
-                            print(
-                                "aaaaaaa" + viewModel.routesList[index].title);
-                          },
+                          onPageSelected: (int index) {},
                           controller: _controller,
                           itemCount: viewModel.routesList.length,
                           color: AppColors.primaryColorShade1,

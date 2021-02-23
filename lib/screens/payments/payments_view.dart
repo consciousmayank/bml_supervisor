@@ -1,7 +1,7 @@
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -389,7 +389,8 @@ class _PaymentsViewState extends State<PaymentsView> {
                   viewModel
                       .addNewPayment(
                     SavePaymentRequest(
-                      clientId: viewModel.selectedClientForNewTransaction.id,
+                      clientId:
+                          viewModel.selectedClientForNewTransaction.clientId,
                       entryDate:
                           DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
                       remarks: remarksController.text,
@@ -405,7 +406,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                     remarksController.clear();
                     //* call payment history api
                     viewModel.getPaymentHistory(
-                        viewModel.selectedClientForTransactionList.id);
+                        viewModel.selectedClientForTransactionList.clientId);
                     // * update the payment history list with the newly added transaction
                   });
                   Navigator.of(context).pop();
@@ -506,8 +507,8 @@ class _PaymentsViewState extends State<PaymentsView> {
         print(
             'transaction list: client - ${viewModel.selectedClientForTransactionList.title}');
         //* call client specific payment history
-        viewModel
-            .getPaymentHistory(viewModel.selectedClientForTransactionList.id);
+        viewModel.getPaymentHistory(
+            viewModel.selectedClientForTransactionList.clientId);
       },
       selectedValue: viewModel.selectedClientForTransactionList == null
           ? null

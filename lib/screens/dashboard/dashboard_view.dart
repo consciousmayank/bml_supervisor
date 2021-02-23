@@ -1,4 +1,3 @@
-import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
@@ -210,7 +209,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         //   period: viewModel.selectedDuration,
         // );
 
-        locator<MyPreferences>().saveSelectedDuration(selectedValue);
+        MyPreferences().saveSelectedDuration(selectedValue);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
           ? null
@@ -253,9 +252,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClient = selectedValue;
-        locator<MyPreferences>().saveSelectedClient(selectedValue);
+        MyPreferences().saveSelectedClient(selectedValue);
+
         //* call client tiles data
-        viewModel.getDashboardTilesStats();
+        // viewModel.getDashboardTilesStats();
         // call recent consignment api
         // viewModel.getRecentConsignments(
         //   clientId: viewModel.selectedClient.clientId,

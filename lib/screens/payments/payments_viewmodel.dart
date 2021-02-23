@@ -1,8 +1,8 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:dio/dio.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
@@ -119,7 +119,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getPaymentHistory(int clientId) async {
+  getPaymentHistory(String clientId) async {
     totalAmt = 0.0;
     noOfPayments = 0;
     paymentHistoryResponseList.clear();

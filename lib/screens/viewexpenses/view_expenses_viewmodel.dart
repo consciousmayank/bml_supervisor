@@ -1,8 +1,8 @@
 // Added by Vikas
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:dio/dio.dart';
@@ -107,12 +107,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
     setBusy(false);
     notifyListeners();
-    print('Number of clients: ${clientsList.length}');
-    clientsList.forEach((element) {
-      print(element.id);
-      print(element.title);
-    });
-    // print(clientsList);
   }
 
   void getExpensesList(

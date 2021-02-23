@@ -1,16 +1,16 @@
 // Added by Vikas
 // Subject to change
 
+import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/viewexpenses/view_expenses_viewmodel.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 
 class ViewExpensesView extends StatefulWidget {
   @override
@@ -119,7 +119,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 regNum: selectedRegNoController.text.trim().toUpperCase(),
                 selectedDuration: viewModel.selectedDuration,
                 clientId: viewModel.selectedClient != null
-                    ? viewModel.selectedClient.id.toString()
+                    ? viewModel.selectedClient.clientId
                     : '',
               );
             } else {

@@ -3,10 +3,11 @@
 //     final savePaymentRequest = savePaymentRequestFromJson(jsonString);
 
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 class SavePaymentRequest {
-  int clientId;
+  String clientId;
   String entryDate;
   String remarks;
   double amount;

@@ -21,16 +21,15 @@ class MyPreferences {
     _sharedPrefs ??= await SharedPreferences.getInstance();
   }
 
-  void saveSelectedClient(GetClientsResponse selectedClient) async {
+  void saveSelectedClient(GetClientsResponse selectedClient) {
     if (selectedClient == null) {
-      await _sharedPrefs.remove(selected_client);
+      _sharedPrefs.remove(selected_client);
     } else {
-      await _sharedPrefs.setString(
-          selected_client, json.encode(selectedClient));
+      _sharedPrefs.setString(selected_client, json.encode(selectedClient));
     }
   }
 
-  Future<GetClientsResponse> getSelectedClient() async {
+  GetClientsResponse getSelectedClient() {
     String savedResponseString = _sharedPrefs.getString(selected_client);
     if (savedResponseString == null) {
       return GetClientsResponse(
@@ -40,23 +39,23 @@ class MyPreferences {
     }
   }
 
-  void saveSelectedDuration(String selectedDuration) async {
+  void saveSelectedDuration(String selectedDuration) {
     if (selectedDuration == null) {
-      await _sharedPrefs.remove(selected_duration);
+      _sharedPrefs.remove(selected_duration);
     } else {
-      await _sharedPrefs.setString(selected_duration, selectedDuration);
+      _sharedPrefs.setString(selected_duration, selectedDuration);
     }
   }
 
-  Future<String> getSelectedDuration() async {
+  String getSelectedDuration() {
     return _sharedPrefs.getString(selected_duration) ?? "THIS MONTH";
   }
 
-  void saveCredentials(String value) async {
+  void saveCredentials(String value) {
     if (value == null) {
-      await _sharedPrefs.remove(loggedInUserCredentials);
+      _sharedPrefs.remove(loggedInUserCredentials);
     } else {
-      await _sharedPrefs.setString(loggedInUserCredentials, value);
+      _sharedPrefs.setString(loggedInUserCredentials, value);
     }
   }
 
@@ -64,15 +63,15 @@ class MyPreferences {
     return _sharedPrefs.getString(loggedInUserCredentials) ?? "";
   }
 
-  void setLoggedInUser(PreferencesSavedUser user) async {
+  void setLoggedInUser(PreferencesSavedUser user) {
     if (user == null) {
-      await _sharedPrefs.remove(loggedInUser);
+      _sharedPrefs.remove(loggedInUser);
     } else {
-      await _sharedPrefs.setString(loggedInUser, json.encode(user));
+      _sharedPrefs.setString(loggedInUser, json.encode(user));
     }
   }
 
-  Future<PreferencesSavedUser> getUserLoggedIn() async {
+  PreferencesSavedUser getUserLoggedIn() {
     String savedResponseString = _sharedPrefs.getString(loggedInUser);
     if (savedResponseString == null) {
       return null;

@@ -59,8 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
         if (_controller.isActive) {
           print('Animation started playing');
         } else {
-          locator<MyPreferences>().getUserLoggedIn().then((value) {
-            if (value != null && value.isUserLoggedIn) {
+          Future.delayed(Duration(seconds: 3), () {
+            PreferencesSavedUser user = MyPreferences().getUserLoggedIn();
+            if (user != null && user.isUserLoggedIn) {
               locator<NavigationService>().replaceWith(dashBoardPageRoute);
             } else {
               locator<NavigationService>().replaceWith(logInPageRoute);

@@ -1,9 +1,9 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -296,7 +296,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
       print('selectedvehicle is null- search via last entry');
     }
     print('flag before sending' + flagForSearch.toString());
-    print('navigation client id' + selectedClient.id.toString());
     navigationService
         .navigateTo(
       addEntry2PointOFormViewPageRoute,
@@ -305,7 +304,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
           vehicleLog: vehicleLog,
           flagForSearch: flagForSearch,
           registrationNumber: _registrationNumber,
-          selectedClientId: selectedClient.id,
+          selectedClientId: int.parse(selectedClient.clientId),
           selectedRoute: selectedRoute),
       // arguments: {
       //   'entryDateArg': entryDate,
@@ -324,7 +323,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     });
   }
 
-  getRoutesForSelectedClientAndDate(int clientId) async {
+  getRoutesForSelectedClientAndDate(String clientId) async {
     setBusy(true);
     routesList = [];
     var response = await apiService.getRoutesForSelectedClientAndDate(

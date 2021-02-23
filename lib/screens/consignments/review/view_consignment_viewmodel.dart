@@ -3,11 +3,11 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,7 +117,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     var clientIdsResponse = await apiService.getClientsList();
   }
 
-  getRoutes(int clientId) async {
+  getRoutes(String clientId) async {
     setBusy(true);
     routesList = [];
     hubList = [];

@@ -1,5 +1,5 @@
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:flutter/material.dart';
 
 class ClientsDropDown extends StatefulWidget {

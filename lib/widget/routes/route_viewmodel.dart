@@ -1,30 +1,25 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class RoutesViewModel extends GeneralisedBaseViewModel {
   List<FetchRoutesResponse> _routesList = [];
-
+  DashBoardApisImpl _dashBoardApis = locator<DashBoardApisImpl>();
   List<FetchRoutesResponse> get routesList => _routesList;
 
   set routesList(List<FetchRoutesResponse> value) {
     _routesList = value;
   }
 
-  Future getRoutesForClient(GetClientsResponse selectedClient) async {
+  Future getRoutesForClient(String selectedClient) async {
     setBusy(true);
-    var routesApiResponse =
-        await apiService.getRoutesForClientId(selectedClient: selectedClient);
-    if (routesApiResponse is String) {
-      snackBarService.showSnackbar(message: routesApiResponse);
-    } else {
-      Response apiResponse = routesApiResponse;
-      List routesList = apiResponse.data as List;
-      routesList.forEach((element) {
-        _routesList.add(FetchRoutesResponse.fromMap(element));
-      });
-    }
+    setBusy(true);
+    routesList = [];
+    List<FetchRoutesResponse> response =
+        await _dashBoardApis.getRoutes(clientId: selectedClient);
+    this.routesList = copyList(response);
     setBusy(false);
     notifyListeners();
   }

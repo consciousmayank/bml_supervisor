@@ -10,7 +10,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
-  DashBoardApisImpl _dashboardapi = locator<DashBoardApisImpl>();
+  DashBoardApisImpl _dashboardApi = locator<DashBoardApisImpl>();
 
   PreferencesSavedUser _savedUser;
 
@@ -21,8 +21,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     notifyListeners();
   }
 
-  void getSavedUser() async {
-    preferences.getUserLoggedIn().then((value) => savedUser = value);
+  void getSavedUser() {
+    savedUser = MyPreferences().getUserLoggedIn();
   }
 
   List<IconData> optionsIcons = [
@@ -101,7 +101,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     clientsList = [];
     //* get bar graph data too when populating the client dropdown
 
-    List<GetClientsResponse> responseList = await _dashboardapi.getClientList();
+    List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
     this.clientsList = copyList(responseList);
     setBusy(false);
     notifyListeners();
@@ -109,7 +109,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
 
   void getDashboardTilesStats() async {
     setBusy(true);
-    singleClientTileData = await _dashboardapi.getDashboardTilesStats();
+    singleClientTileData = await _dashboardApi.getDashboardTilesStats();
     setBusy(false);
     notifyListeners();
   }

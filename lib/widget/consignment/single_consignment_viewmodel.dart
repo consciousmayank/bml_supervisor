@@ -13,7 +13,7 @@ class SingleConsignmentViewModel extends GeneralisedBaseViewModel {
   }
 
   getHubs(FetchRoutesResponse selectedRoute) async {
-    var hubsResponse = await apiService.getHubs(routeId: selectedRoute.id);
+    var hubsResponse = await apiService.getHubs(routeId: selectedRoute.routeId);
 
     if (hubsResponse is String) {
       snackBarService.showSnackbar(message: hubsResponse);

@@ -1,15 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/review_consignment_request.dart'
-as reviewConsignment;
-import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/models/review_consignment_request.dart'
+    as reviewConsignment;
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -20,7 +17,6 @@ import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 
 class ViewConsignmentView extends StatefulWidget {
   @override
@@ -661,7 +657,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
             viewModel.selectedRoute = null;
             viewModel.entryDate = selectedDate;
             if (viewModel.selectedClient != null) {
-              viewModel.getRoutes(viewModel.selectedClient.id);
+              viewModel.getRoutes(viewModel.selectedClient.clientId);
             }
           }
         }),
@@ -768,8 +764,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           '${viewModel.reviewConsignmentRequest.reviewedItems[index].payment}');
 
       if (goForward) {
-        if (index <
-            viewModel.consignmentDetailResponseNew.items.length) {
+        if (index < viewModel.consignmentDetailResponseNew.items.length) {
           _controller.nextPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }

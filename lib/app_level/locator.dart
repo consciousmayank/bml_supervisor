@@ -1,4 +1,4 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/screens/consignments/allot/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/login/login_apis.dart';
 import 'package:bml_supervisor/services/api_service.dart';
@@ -16,9 +16,10 @@ void declareDependencies() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => DialogService());
-  locator.registerLazySingleton(() => MyPreferences());
+  // locator.registerLazySingleton(() => MyPreferences());
   locator.registerLazySingleton(() => DioConfig());
   locator.registerLazySingleton(() => DashBoardApisImpl());
+  locator.registerLazySingleton(() => ConsignmentApisImpl());
   locator.registerLazySingleton(() => LoginApisImpl());
   locator.registerLazySingleton(() => ApiService());
 

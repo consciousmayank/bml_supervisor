@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+
 import 'expenses_viewmodel.dart';
 
 class ExpensesMobileView extends StatefulWidget {
@@ -289,7 +290,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
               if (viewModel.selectedClient != null) {
                 viewModel.searchByRegistrationNumber(
                   SaveExpenseRequest(
-                      clientId: viewModel.selectedClient.id,
+                      clientId: viewModel.selectedClient.clientId,
                       vehicleId:
                           selectedRegNoController.text.trim().toUpperCase(),
                       // viewModel.selectedSearchVehicle.registrationNumber,

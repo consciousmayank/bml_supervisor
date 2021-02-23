@@ -5,8 +5,8 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_client_id_response.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -68,7 +68,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentAllotmentViewModel>.reactive(
       onModelReady: (viewModel) {
-        viewModel.getClientIds();
+        viewModel.getClients();
       },
       builder: (context, viewModel, child) => SafeArea(
           left: false,
@@ -103,7 +103,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
             hint: "Select Client",
             onOptionSelect: (GetClientsResponse selectedValue) {
               viewModel.selectedClient = selectedValue;
-              viewModel.getRoutes(selectedValue.id);
+              viewModel.getRoutes(selectedValue.clientId);
 
               viewModel.selectedRoute = null;
               viewModel.entryDate = null;
@@ -118,7 +118,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           RoutesDropDown(
             optionList: viewModel.routesList,
             hint: "Select Routes",
-            onOptionSelect: (GetRoutesResponse selectedValue) {
+            onOptionSelect: (FetchRoutesResponse selectedValue) {
               viewModel.selectedRoute = selectedValue;
 
               viewModel.entryDate = null;
@@ -921,8 +921,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 }
 
 class RoutesDropDown extends StatefulWidget {
-  final List<GetRoutesResponse> optionList;
-  final GetRoutesResponse selectedValue;
+  final List<FetchRoutesResponse> optionList;
+  final FetchRoutesResponse selectedValue;
   final String hint;
   final Function onOptionSelect;
   final showUnderLine;
@@ -939,18 +939,18 @@ class RoutesDropDown extends StatefulWidget {
 }
 
 class _RoutesDropDownState extends State<RoutesDropDown> {
-  List<DropdownMenuItem<GetRoutesResponse>> dropdown = [];
+  List<DropdownMenuItem<FetchRoutesResponse>> dropdown = [];
 
-  List<DropdownMenuItem<GetRoutesResponse>> getDropDownItems() {
-    List<DropdownMenuItem<GetRoutesResponse>> dropdown =
-        List<DropdownMenuItem<GetRoutesResponse>>();
+  List<DropdownMenuItem<FetchRoutesResponse>> getDropDownItems() {
+    List<DropdownMenuItem<FetchRoutesResponse>> dropdown =
+        List<DropdownMenuItem<FetchRoutesResponse>>();
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}  (${widget.optionList[i].id})",
+            "${widget.optionList[i].routeTitle}  (${widget.optionList[i].routeId})",
             style: TextStyle(
               color: Colors.black54,
             ),

@@ -5,7 +5,6 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
@@ -18,7 +17,7 @@ import 'package:flutter/material.dart';
 
 class ApiService {
   final dioClient = locator<DioConfig>();
-  final preferences = locator<MyPreferences>();
+  final preferences = MyPreferences();
 
   /////////////////////////Post Security/////////////////////////
 
@@ -59,6 +58,67 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
+
+  ///Get All the routes for the selected client
+  Future<ParentApiResponse> getRoutesForClientId(
+      {@required String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            "$GET_ROUTES_FOR_CLIENT_ID_new$clientId/page/1",
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ///Get all the hubs for selected RouteId
+  Future<ParentApiResponse> getHubsList({
+    @required int routeId,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_HUBS(routeId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ///Get vehicle details to show in
+  ///1. Allot Consignment
+  ///
+  /// By sending registrationNumber
+  Future<ParentApiResponse> getVehicleDetails(String registrationNumber) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().get('/vehicle/view/$registrationNumber');
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ///Create a new Consignment
+  Future<ParentApiResponse> createConsignment(
+      {@required CreateConsignmentRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
@@ -147,7 +207,7 @@ class ApiService {
   }
 
   Future getPaymentHistory(
-      {@required int clientId, @required int pageNumber}) async {
+      {@required String clientId, @required int pageNumber}) async {
     Response response;
     try {
       response = await dioClient
@@ -312,29 +372,17 @@ class ApiService {
     return response;
   }
 
-  Future getRoutesForClient({int clientId}) async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID$clientId/page/1",
-          );
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future getRoutesForClientId({GetClientsResponse selectedClient}) async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID_new${selectedClient.id}/page/1",
-          );
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
+  // Future getRoutesForClient({int clientId}) async {
+  //   Response response;
+  //   try {
+  //     response = await dioClient.getDio().get(
+  //           "$GET_ROUTES_FOR_CLIENT_ID$clientId/page/1",
+  //         );
+  //   } on DioError catch (e) {
+  //     return e.message;
+  //   }
+  //   return response;
+  // }
 
   Future getHubData(int hubId) async {
     Response response;
@@ -342,18 +390,6 @@ class ApiService {
       response = await dioClient.getDio().get(
             "$GET_HUB_DATA$hubId",
           );
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future createConsignment(CreateConsignmentRequest request) async {
-    Response response;
-    try {
-      response = await dioClient
-          .getDio()
-          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
     } on DioError catch (e) {
       return e.message;
     }
@@ -434,8 +470,6 @@ class ApiService {
 
   Future getHubsForRouteAndClientId({
     @required int routeId,
-    @required @required int clientId,
-    @required String entryDate,
   }) async {
     Response response;
     try {
@@ -447,7 +481,7 @@ class ApiService {
   }
 
   Future getRoutesForSelectedClientAndDate({
-    @required int clientId,
+    @required String clientId,
     @required String date,
   }) async {
     Response response;

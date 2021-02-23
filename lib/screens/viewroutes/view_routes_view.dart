@@ -1,5 +1,5 @@
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/consignment/single_consignment_view.dart';

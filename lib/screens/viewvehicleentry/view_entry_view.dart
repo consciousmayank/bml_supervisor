@@ -1,5 +1,5 @@
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -69,7 +69,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                 regNum: selectedRegNoController.text.trim().toUpperCase(),
                 selectedDuration: viewModel.selectedDuration,
                 clientId: viewModel.selectedClient != null
-                    ? viewModel.selectedClient.id.toString()
+                    ? viewModel.selectedClient.clientId
                     : '',
               );
             } else {
