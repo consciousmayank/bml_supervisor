@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/login/login_apis.dart';
@@ -20,6 +21,7 @@ void declareDependencies() {
   locator.registerLazySingleton(() => DioConfig());
   locator.registerLazySingleton(() => DashBoardApisImpl());
   locator.registerLazySingleton(() => ConsignmentApisImpl());
+  locator.registerLazySingleton(() => DailyEntryApisImpl());
   locator.registerLazySingleton(() => LoginApisImpl());
   locator.registerLazySingleton(() => ApiService());
 

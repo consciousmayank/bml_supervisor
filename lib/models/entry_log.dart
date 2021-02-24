@@ -49,7 +49,7 @@ class EntryLog {
   final String remarks;
   final bool status;
   final String failed;
-  final int clientId;
+  final String clientId;
 
   EntryLog copyWith({
     int id,
@@ -71,7 +71,7 @@ class EntryLog {
     int startReadingHidden,
     int drivenKmHidden,
     String failed,
-    int clientId,
+    String clientId,
   }) =>
       EntryLog(
         id: id ?? this.id,

@@ -208,24 +208,25 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           padding: const EdgeInsets.all(2.0),
           child: registrationNumberTextField(viewModel: viewModel),
         ),
-        int.parse(viewModel.selectedClient.clientId) == 0
-            ? selectRegButton(context, viewModel)
-            : Container(),
+        // int.parse(viewModel.selectedClient.clientId) == 0
+        //     ? selectRegButton(context, viewModel)
+        //     : Container(),
       ],
     );
   }
 
   registrationNumberTextField({@required AddVehicleEntryViewModel viewModel}) {
-    if (int.parse(viewModel.selectedClient.clientId) != 0 &&
-        viewModel.selectedRoute != null) {
+    if (viewModel.selectedRoute != null) {
       selectedRegNoController.text = viewModel.selectedRoute.vehicleId;
-      if (viewModel.vehicleLog == null) {
-        viewModel.getEntryLogForLastDate(selectedRegNoController.text);
-      }
+
+      // if (viewModel.vehicleLog == null) {
+      //   viewModel.getEntryLogForLastDate(selectedRegNoController.text);
+      // }
     }
 
     return appTextFormField(
-      enabled: int.parse(viewModel.selectedClient.clientId) == 0,
+      // enabled: int.parse(viewModel.selectedClient.clientId) == 0,
+      enabled: false,
       controller: selectedRegNoController,
       focusNode: selectedRegNoFocusNode,
       hintText: drRegNoHint,

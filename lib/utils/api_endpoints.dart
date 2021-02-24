@@ -1,9 +1,12 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 
 const String REGISTER_VEHICLE = "/vehicle/add";
-const String SUMBIT_ENTRY = "/vehicle/entrylog/add";
+const String SUMBIT_ENTRY = "/dailyKilometer/add";
 const String SEARCH_BY_REG_NO = "/vehicle/list/";
-const String FIND_LAST_ENTRY_BY_DATE = "/vehicle/entrylog/lastEntry/";
+
+final FIND_LAST_ENTRY_BY_DATE =
+    (vehicleId) => "/dailyKilometer/recent/entry/vehicle/$vehicleId";
+
 const String ADD_PUCC_FORM = "/vehicle/pucc/add/";
 const String ADD_INSURANCE_FORM = "/vehicle/insurance/add/";
 final GET_ENTRIES_BTW_DATES = (vehicleId, dateFrom, dateTo, page) =>

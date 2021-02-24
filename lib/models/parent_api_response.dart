@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:dio/dio.dart';
 
 class ParentApiResponse {
@@ -32,6 +33,9 @@ class ParentApiResponse {
         case 500:
           return serverBusy;
           break;
+        case 400:
+          ApiResponse response = ApiResponse.fromMap(this.error.response.data);
+          return response.message;
         default:
           return defaultError;
       }

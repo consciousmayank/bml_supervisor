@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -8,12 +9,14 @@ import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
-  // CreateConsignmentRequest consignmentRequest;
+  DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
+
   // SearchByRegNoResponse validatedRegistrationNumber;
   ReviewConsignmentRequest reviewConsignmentRequest =
       ReviewConsignmentRequest();
@@ -121,29 +124,12 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     routesList = [];
     hubList = [];
-    var response = await apiService.getRoutesForSelectedClientAndDate(
+    List<RoutesForSelectedClientAndDateResponse> response =
+        await _dailyEntryApis.getRoutesForSelectedClientAndDate(
       clientId: clientId,
       date: getDateString(entryDate),
     );
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-
-      try {
-        var routesList = apiResponse.data as List;
-
-        routesList.forEach((element) {
-          RoutesForSelectedClientAndDateResponse routes =
-              RoutesForSelectedClientAndDateResponse.fromMap(element);
-
-          this.routesList.add(routes);
-        });
-      } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
-      }
-    }
+    this.routesList = copyList(response);
     setBusy(false);
     notifyListeners();
   }

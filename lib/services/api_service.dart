@@ -119,6 +119,70 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getRoutesForSelectedClientAndDate({
+    @required String clientId,
+    @required String date,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getLatestDailyEntry(
+      {@required String registrationNumber}) async {
+    Response _response;
+    DioError _error;
+    try {
+      _response = await dioClient
+          .getDio()
+          .get(FIND_LAST_ENTRY_BY_DATE(registrationNumber));
+    } on DioError catch (e) {
+      _error = e;
+    }
+    return ParentApiResponse(error: _error, response: _response);
+  }
+
+  Future<ParentApiResponse> submitVehicleEntry({
+    @required EntryLog entryLogRequest,
+  }) async {
+    Response response;
+    DioError error;
+    final request = {
+      "routeId": entryLogRequest.routeId,
+      "clientId": entryLogRequest.clientId,
+      "vehicleId": entryLogRequest.vehicleId,
+      "entryDate": entryLogRequest.entryDate,
+      "startReading": entryLogRequest.startReading,
+      "endReading": entryLogRequest.endReading,
+      "drivenKm": entryLogRequest.drivenKm,
+      "fuelLtr": entryLogRequest.fuelLtr,
+      "fuelMeterReading": entryLogRequest.fuelMeterReading,
+      "ratePerLtr": entryLogRequest.ratePerLtr,
+      "amountPaid": entryLogRequest.amountPaid,
+      "drivenKmG": entryLogRequest.drivenKmGround,
+      "startReadingG": entryLogRequest.startReadingGround,
+      "trips": entryLogRequest.trips,
+      "loginTime": "${entryLogRequest.loginTime}:00",
+      "logoutTime": "${entryLogRequest.logoutTime}:00",
+      "remarks": entryLogRequest.remarks,
+      "status": entryLogRequest.status
+    };
+    String body = json.encode(request);
+    try {
+      response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
@@ -128,18 +192,6 @@ class ApiService {
           await dioClient.getDio().get('$SEARCH_BY_REG_NO$registrationNumber');
     } on DioError catch (e) {
       throw e;
-    }
-    return response;
-  }
-
-  Future getEntryLogForDate(String registrationNumber, String date) async {
-    Response response;
-    try {
-      response = await dioClient
-          .getDio()
-          .get('$FIND_LAST_ENTRY_BY_DATE$registrationNumber');
-    } on DioError catch (e) {
-      return e.message;
     }
     return response;
   }
@@ -270,37 +322,6 @@ class ApiService {
           await dioClient.getDio().post('/vehicle/entrylog/view', data: body);
     } on DioError catch (e) {
       return e.toString();
-    }
-    return response;
-  }
-
-  Future submitVehicleEntry(EntryLog entryLogRequest) async {
-    Response response;
-    final request = {
-      "routeId": entryLogRequest.routeId,
-      "clientId": entryLogRequest.clientId,
-      "vehicleId": entryLogRequest.vehicleId,
-      "entryDate": entryLogRequest.entryDate,
-      "startReading": entryLogRequest.startReading,
-      "endReading": entryLogRequest.endReading,
-      "drivenKm": entryLogRequest.drivenKm,
-      "fuelLtr": entryLogRequest.fuelLtr,
-      "fuelMeterReading": entryLogRequest.fuelMeterReading,
-      "ratePerLtr": entryLogRequest.ratePerLtr,
-      "amountPaid": entryLogRequest.amountPaid,
-      "drivenKmG": entryLogRequest.drivenKmGround,
-      "startReadingG": entryLogRequest.startReadingGround,
-      "trips": entryLogRequest.trips,
-      "loginTime": "${entryLogRequest.loginTime}:00",
-      "logoutTime": "${entryLogRequest.logoutTime}:00",
-      "remarks": entryLogRequest.remarks,
-      "status": entryLogRequest.status
-    };
-    String body = json.encode(request);
-    try {
-      response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
-    } on DioError catch (e) {
-      return e.message;
     }
     return response;
   }
@@ -474,21 +495,6 @@ class ApiService {
     Response response;
     try {
       response = await dioClient.getDio().get("$GET_HUBS$routeId");
-    } on DioError catch (e) {
-      return e.message;
-    }
-    return response;
-  }
-
-  Future getRoutesForSelectedClientAndDate({
-    @required String clientId,
-    @required String date,
-  }) async {
-    Response response;
-    try {
-      response = await dioClient.getDio().get(
-            GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
-          );
     } on DioError catch (e) {
       return e.message;
     }

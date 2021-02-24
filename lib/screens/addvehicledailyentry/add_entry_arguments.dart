@@ -6,7 +6,7 @@ class AddEntryArguments {
   final DateTime entryDate;
   final EntryLog vehicleLog;
   final int flagForSearch;
-  final int selectedClientId;
+  final String selectedClientId;
   final RoutesForSelectedClientAndDateResponse selectedRoute;
   final String registrationNumber;
 
