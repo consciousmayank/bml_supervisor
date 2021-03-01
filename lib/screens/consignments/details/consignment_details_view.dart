@@ -114,10 +114,14 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                                     ),
                                     onTap: () {
                                       launchMaps(
-                                          viewModel.consignmentDetailResponseNew
-                                              .items[index].hubGeoLatitude,
-                                          viewModel.consignmentDetailResponseNew
-                                              .items[index].hubGeoLongitude);
+                                          latitude: viewModel
+                                              .consignmentDetailResponseNew
+                                              .items[index]
+                                              .hubGeoLatitude,
+                                          longitude: viewModel
+                                              .consignmentDetailResponseNew
+                                              .items[index]
+                                              .hubGeoLongitude);
                                     },
                                   ),
                                   Text("# ${index + 1}"),

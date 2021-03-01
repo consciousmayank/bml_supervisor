@@ -16,3 +16,5 @@ const dashboardDistributerTileBgColor = 0xff04BFAE;
 const dashboardTotalKmTileBgColor = 0xffFFB300;
 const dashboardRoutesTileBgColor = 0xffD89CB8;
 const dashboardDueKmTileBgColor = 0xffF26665;
+const double distributorIconHeight = 17;
+const double distributorIconWidth = 21;

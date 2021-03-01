@@ -1,13 +1,20 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/payments/payments_apis.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();
+
   double _totalAmt = 0.0;
   int _page = 1;
+
   double get totalAmt => _totalAmt;
 
   set totalAmt(double value) {
@@ -30,15 +37,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   set clientsList(List<GetClientsResponse> value) {
     _clientsList = value;
-    notifyListeners();
-  }
-
-  ApiResponse _savePaymentResponse;
-
-  ApiResponse get savePaymentResponse => _savePaymentResponse;
-
-  set savePaymentResponse(ApiResponse savePaymentResponse) {
-    _savePaymentResponse = savePaymentResponse;
     notifyListeners();
   }
 
@@ -95,17 +93,9 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   Future addNewPayment(SavePaymentRequest savePaymentRequest) async {
     setBusy(true);
-    var response = await apiService.addNewPayment(savePaymentRequest);
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else if (response is Response) {
-      savePaymentResponse = ApiResponse.fromMap(response.data);
-      if (savePaymentResponse.status == "success") {
-        snackBarService.showSnackbar(message: "Payment Added Successfully.");
-      } else {
-        snackBarService.showSnackbar(message: savePaymentResponse.message);
-      }
-    }
+    ApiResponse response = await _paymentsApis.addNewPayment(
+        savePaymentRequest: savePaymentRequest);
+    snackBarService.showSnackbar(message: response.message);
     setBusy(false);
   }
 
@@ -113,7 +103,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     clientsList = [];
     print('selected client: $selectedClientForTransactionList');
-    var response = await apiService.getClientsList();
+    _clientsList = copyList(await _dashBoardApis.getClientList());
 
     setBusy(false);
     notifyListeners();
@@ -125,32 +115,14 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     paymentHistoryResponseList.clear();
     notifyListeners();
     setBusy(true);
-    try {
-      final res = await apiService.getPaymentHistory(
-          clientId: clientId, pageNumber: _page);
-      if (res.statusCode == 200) {
-        if (res is String) {
-          snackBarService.showSnackbar(message: res.toString());
-        } else if (res.data is List) {
-          var list = res.data as List;
-          if (list.length > 0) {
-            for (Map singlePayment in list) {
-              PaymentHistoryResponse singlePaymentResponse =
-                  PaymentHistoryResponse.fromJson(singlePayment);
-              paymentHistoryResponseList.add(singlePaymentResponse);
-              totalAmt += singlePaymentResponse.amount;
-              noOfPayments++;
-            }
-            print('in view model:=========$paymentHistoryResponseList');
-          }
-        } else {
-          snackBarService.showSnackbar(message: 'No Payments');
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
+    var response = await _paymentsApis.getPaymentHistory(clientId: clientId);
+    paymentHistoryResponseList = copyList(response);
+
+    paymentHistoryResponseList.forEach((element) {
+      totalAmt += element.amount;
+      noOfPayments++;
+    });
+
     notifyListeners();
     setBusy(false);
   }

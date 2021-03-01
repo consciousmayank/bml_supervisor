@@ -32,7 +32,7 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}",
+            "${widget.optionList[i].clientId}",
             style: TextStyle(
               color: Colors.black54,
             ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class PieChartView extends StatefulWidget {
-  final int clientId;
+  final String clientId;
   final String selectedDuration;
 
   PieChartView({
@@ -18,13 +18,6 @@ class PieChartView extends StatefulWidget {
 }
 
 class _PieChartViewState extends State<PieChartView> {
-  // @override
-  // void initState() {
-  //  // TODO: implement initState
-  //   _seriesPieData = List<charts.Series<RoutesDrivenKmPercentage, String>>();
-  //   _generateData();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PieChartViewModel>.reactive(

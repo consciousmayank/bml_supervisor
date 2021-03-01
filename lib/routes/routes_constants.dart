@@ -22,3 +22,4 @@ const String paymentsPageRoute = '/paymentsPageRoute';
 const String viewAllConsignmentsViewPageRoute = '/viewAllConsignmentsViewPage';
 const String consignmentsListPageRoute = '/consignmentsListPageRoute';
 const String logInPageRoute = '/logInPageRoute';
+const String hubsViewPageRoute = '/hubsViewPageRoute';

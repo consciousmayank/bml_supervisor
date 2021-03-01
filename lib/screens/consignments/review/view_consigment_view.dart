@@ -5,14 +5,15 @@ import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -213,6 +214,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                           setDataInTextFormFields(
                               position: index, viewModel: viewModel);
                         },
+                        // physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -244,25 +246,29 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Text("# ${index + 1}"),
-                                                // hSizedBox(10),
-                                                // Text(
-                                                //   viewModel.consignmentDetailResponseNew.items[index]
-                                                //       .contactPerson
-                                                //       .toUpperCase(),
-                                                //   style: AppTextStyles
-                                                //       .latoBold18Black,
-                                                // ),
                                                 hSizedBox(10),
-                                                // Text(
-                                                //   "${viewModel.consignmentDetailResponseNew.items[index].contactPerson}",
-                                                //   style: AppTextStyles
-                                                //       .latoMedium14Black,
-                                                // ),
-                                                // Text(
-                                                //     viewModel
-                                                //         .consignmentDetailResponseNew.items[index].city,
-                                                //     style: AppTextStyles
-                                                //         .latoMedium14Black),
+                                                Text(
+                                                  viewModel
+                                                      .consignmentDetailResponseNew
+                                                      .items[index]
+                                                      .hubContactPerson
+                                                      .toUpperCase(),
+                                                  style: AppTextStyles
+                                                      .latoBold18Black,
+                                                ),
+                                                hSizedBox(10),
+                                                Text(
+                                                  "${viewModel.consignmentDetailResponseNew.items[index].hubContactPerson}",
+                                                  style: AppTextStyles
+                                                      .latoMedium14Black,
+                                                ),
+                                                Text(
+                                                    viewModel
+                                                        .consignmentDetailResponseNew
+                                                        .items[index]
+                                                        .hubCity,
+                                                    style: AppTextStyles
+                                                        .latoMedium14Black),
                                               ],
                                             ),
                                           ),

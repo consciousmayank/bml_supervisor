@@ -20,6 +20,10 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     List<FetchRoutesResponse> response =
         await _dashBoardApis.getRoutes(clientId: selectedClient);
     this.routesList = copyList(response);
+    this._routesList.addAll(response);
+    this._routesList.addAll(response);
+    this._routesList.addAll(response);
+    this._routesList.addAll(response);
     setBusy(false);
     notifyListeners();
   }

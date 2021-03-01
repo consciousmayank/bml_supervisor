@@ -3,10 +3,7 @@
 //     final routesDrivenKm = routesDrivenKmFromJson(jsonString);
 
 import 'dart:convert';
-
 import 'dart:ui';
-
-import 'package:bml_supervisor/utils/widget_utils.dart';
 
 RoutesDrivenKm routesDrivenKmFromJson(String str) =>
     RoutesDrivenKm.fromJson(json.decode(str));
@@ -33,9 +30,17 @@ class RoutesDrivenKm {
   final Color color;
   DateTime _entryDateTime;
 
+  // {
+  // "drivenKm": 36,
+  // "routeId": 7,
+  // "entryDate": "01-02-2021",
+  // "routeTitle": "DDN - LOC",
+  // "vehicleId": "UK07CB4764",
+  // "drivenKmG": 31,
+  // "title": "LOCAL ROUTE"
+  // }
 
-  DateTime get entryDateTime{
-
+  DateTime get entryDateTime {
     var dateAsList = entryDate.split('-');
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');

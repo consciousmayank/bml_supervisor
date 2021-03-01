@@ -265,22 +265,6 @@ String convertFrom24HoursTime(String timeString) {
   }
 }
 
-//DateFormat.yMd().add_jm()
-
-launchMaps(double latitude, double longitude) async {
-  String googleUrl = 'comgooglemaps://?center=$latitude,$longitude}';
-  String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-  if (await canLaunch("comgooglemaps://")) {
-    print('launching com googleUrl');
-    await launch(googleUrl);
-  } else if (await canLaunch(appleUrl)) {
-    print('launching apple url');
-    await launch(appleUrl);
-  } else {
-    throw 'Could not launch url';
-  }
-}
-
 FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
 
@@ -303,4 +287,15 @@ List<T> copyList<T>(List<T> items) {
     newItems.addAll(items);
   }
   return newItems;
+}
+
+launchMaps({@required double latitude, @required double longitude}) async {
+  String googleUrl =
+      'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+  // String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
+  if (await canLaunch(googleUrl)) {
+    await launch(googleUrl);
+  } else {
+    throw 'Could not launch url';
+  }
 }

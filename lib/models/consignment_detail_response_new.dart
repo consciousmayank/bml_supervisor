@@ -29,7 +29,7 @@ class ConsignmentDetailResponseNew {
   });
 
   int id;
-  int clientId;
+  String clientId;
   String createBy;
   String assessBy;
   int routeId;
@@ -46,7 +46,7 @@ class ConsignmentDetailResponseNew {
 
   ConsignmentDetailResponseNew copyWith(
           {int id,
-          int clientId,
+          String clientId,
           String createBy,
           String assessBy,
           int routeId,

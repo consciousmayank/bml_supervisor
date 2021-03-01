@@ -4,6 +4,8 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/models/view_entry_request.dart';
+import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -16,6 +18,8 @@ abstract class DailyEntryApis {
 
   Future<EntryLog> getLatestDailyEntry({@required String registrationNumber});
   Future<bool> submitVehicleEntry({@required EntryLog entryLogRequest});
+  Future<List<ViewEntryResponse>> getDailyEntries(
+      {@required ViewEntryRequest viewEntryRequest});
 }
 
 //entryLog = await apiService.getLatestDailyEntry(registrationNumber: registrationNumber);
@@ -100,5 +104,23 @@ class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
     }
 
     return submitSuccessful;
+  }
+
+  @override
+  Future<List<ViewEntryResponse>> getDailyEntries(
+      {ViewEntryRequest viewEntryRequest}) async {
+    List<ViewEntryResponse> apiResponseList = [];
+    final ParentApiResponse response =
+        await apiService.getDailyEntries(viewEntryRequest: viewEntryRequest);
+    if (filterResponse(response) != null) {
+      var list = response.response.data as List;
+      for (Map singleItem in list) {
+        ViewEntryResponse singleSearchResult =
+            ViewEntryResponse.fromMap(singleItem);
+        apiResponseList.add(singleSearchResult);
+      }
+    }
+
+    return apiResponseList;
   }
 }

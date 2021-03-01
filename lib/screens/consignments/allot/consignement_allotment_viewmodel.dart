@@ -6,14 +6,14 @@ import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/consignments/allot/consignment_api.dart';
+import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
-  ConsignmentApisImpl _consignmentApis = locator<ConsignmentApisImpl>();
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   bool _isHubTitleEdited = false,
       _isDropCratesEdited = false,
       _isCollectCratesEdited = false,

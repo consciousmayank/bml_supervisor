@@ -7,6 +7,7 @@ class ParentApiResponse {
   final String serverBusy = 'Server is busy. Please try again';
   final String defaultError = 'Something went wrong.';
   final String emptyResult = 'No Records Found.';
+  final String notAuthorised = 'You are not authorised.';
 
   final DioError error;
   final Response response;
@@ -27,6 +28,9 @@ class ParentApiResponse {
           break;
         case 401:
           return badCredentials;
+          break;
+        case 403:
+          return notAuthorised;
           break;
         case 404:
           return noResourceFound;

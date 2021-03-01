@@ -12,7 +12,8 @@ abstract class DashBoardApis {
   Future<List<GetClientsResponse>> getClientList();
   Future<List<FetchRoutesResponse>> getRoutes({@required String clientId});
   Future<List<FetchHubsResponse>> getHubs({@required int routeId});
-  Future<DashboardTilesStatsResponse> getDashboardTilesStats();
+  Future<DashboardTilesStatsResponse> getDashboardTilesStats(
+      {@required String clientId});
 }
 
 class DashBoardApisImpl implements DashBoardApis {
@@ -39,9 +40,10 @@ class DashBoardApisImpl implements DashBoardApis {
   }
 
   @override
-  Future<DashboardTilesStatsResponse> getDashboardTilesStats() async {
+  Future<DashboardTilesStatsResponse> getDashboardTilesStats(
+      {@required String clientId}) async {
     ParentApiResponse dashboardTilesData =
-        await apiService.getDashboardTilesStats();
+        await apiService.getDashboardTilesStats(clientId: clientId);
     if (dashboardTilesData.error == null) {
       //positive
       return DashboardTilesStatsResponse.fromJson(

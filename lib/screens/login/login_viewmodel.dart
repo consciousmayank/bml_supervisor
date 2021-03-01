@@ -7,7 +7,7 @@ import 'package:bml_supervisor/screens/login/login_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class LoginViewModel extends GeneralisedBaseViewModel {
-  LoginApisImpl _loginApi = locator<LoginApisImpl>();
+  LoginApis _loginApi = locator<LoginApisImpl>();
 
   bool _hidePassword = true;
 

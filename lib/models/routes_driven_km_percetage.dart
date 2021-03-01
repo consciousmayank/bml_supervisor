@@ -3,6 +3,7 @@
 //     final routesDrivenKmPercentage = routesDrivenKmPercentageFromJson(jsonString);
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 RoutesDrivenKmPercentage routesDrivenKmPercentageFromJson(String str) =>
@@ -20,6 +21,14 @@ class RoutesDrivenKmPercentage {
     this.trips,
     this.color = const Color(0xff68cfc6),
   });
+
+  /*{
+        "routeTitle": "DDN - LOC",
+        "drivenKm": 910,
+        "routeId": 7,
+        "drivenKmG": 767,
+        "trips": 21
+    }*/
 
   int drivenKm;
   int routeId;

@@ -7,7 +7,6 @@ import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -16,6 +15,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -276,8 +276,10 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                   ),
                                   onTap: () {
                                     launchMaps(
-                                        viewModel.hubsList[index].geoLatitude,
-                                        viewModel.hubsList[index].geoLongitude);
+                                        latitude: viewModel
+                                            .hubsList[index].geoLatitude,
+                                        longitude: viewModel
+                                            .hubsList[index].geoLongitude);
                                   },
                                 ),
                                 Text("# ${index + 1}"),

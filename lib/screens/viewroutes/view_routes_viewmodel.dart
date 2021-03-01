@@ -1,9 +1,14 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class ViewRoutesViewModel extends GeneralisedBaseViewModel {
-  FetchRoutesResponse _selectedRoute;
+  DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
   GetClientsResponse _selectedClient;
 
   List<GetClientsResponse> _clientsList = [];
@@ -22,14 +27,18 @@ class ViewRoutesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  FetchRoutesResponse get selectedRoute => _selectedRoute;
-
-  set selectedRoute(FetchRoutesResponse value) {
-    _selectedRoute = value;
+  getClientIds() async {
+    setBusy(true);
+    var res = await _dashboardApi.getClientList();
+    _clientsList = copyList(res);
     notifyListeners();
+    setBusy(false);
   }
 
-  getClientIds() async {
-    var clientIdsResponse = await apiService.getClientsList();
+  takeToHubsView({FetchRoutesResponse clickedRoute}) {
+    navigationService.navigateTo(hubsViewPageRoute,
+        arguments: ViewRoutesArguments(
+          clickedRoute: clickedRoute,
+        ));
   }
 }

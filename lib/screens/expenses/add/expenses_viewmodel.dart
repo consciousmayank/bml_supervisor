@@ -1,14 +1,19 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
-  // DateTime _fromDate;
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
+
   bool _isRegNumCorrect = false;
 
   bool get isRegNumCorrect => _isRegNumCorrect;
@@ -142,67 +147,19 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     // get the data as list
     // add Book my loading at 0
     // pupulate the clients dropdown
-    var response = await apiService.getClientsList();
-
+    var response = await _dashBoardApis.getClientList();
+    _clientsList = copyList(response);
     setBusy(false);
     notifyListeners();
   }
 
-  // Future getExpensesList(
-  //     {bool showLoader, bool increasePageNumber = false}) async {
-  //   if (!increasePageNumber) {
-  //     pageNumber = 1;
-  //   }
-  //   var response = await apiService.getExpensesList(
-  //       regNo: selectedSearchVehicle.registrationNumber,
-  //       dateFrom: getLastSevenDaysExpenses
-  //           ? getDateString(fromDate)
-  //           : getDateString(entryDate),
-  //       pageNumber: pageNumber,
-  //       toDate: getDateString(entryDate));
-  //
-  //   if (response is String) {
-  //     snackBarService.showSnackbar(message: response);
-  //   } else {
-  //     if (!increasePageNumber) {
-  //       expensesList.clear();
-  //     }
-  //     try {
-  //       (response.data as List).forEach((element) async {
-  //         expensesList.add(ExpenseResponse.fromMap(element));
-  //       });
-  //     } catch (e) {
-  //       callGetEntriesApi = false;
-  //     }
-  //   }
-  //   notifyListeners();
-  //   pageNumber++;
-  // }
-
   void saveExpense(SaveExpenseRequest saveExpenseRequest) async {
-    // call reg num api
-    // if num exists call below code
-    // else show wrong num message
-
-    // searchByRegistrationNumber(saveExpenseRequest.vehicleId);
-    // if (_isRegNumCorrect) {
     isExpenseListLoading = true;
-    var response = await apiService.addExpense(request: saveExpenseRequest);
+    ApiResponse response =
+        await _expensesApi.addExpense(saveExpenseRequest: saveExpenseRequest);
 
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else if (response is Response) {
-      saveExpenseResponse = ApiResponse.fromMap(response.data);
-
-      if (saveExpenseResponse.status == "success") {
-        snackBarService.showSnackbar(message: "Expense Added Successfully.");
-      } else {
-        snackBarService.showSnackbar(message: saveExpenseResponse.message);
-      }
-    }
-
+    snackBarService.showSnackbar(message: response.message);
     isExpenseListLoading = false;
-    // }
   }
 
   void searchByRegistrationNumber(

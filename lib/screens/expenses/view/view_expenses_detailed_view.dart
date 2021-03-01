@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:flutter/material.dart';
 
 class ViewExpensesDetailedView extends StatefulWidget {
   // final List<ViewExpensesResponse> viewExpensesDetailedList;
@@ -80,9 +80,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 Text(
-                                  viewExpenseResponse[index]
-                                      .entryDate
-                                      .toString(),
+                                  viewExpenseResponse[index].eDate.toString(),
                                   style: const TextStyle(color: Colors.white),
                                 )
                               ],
@@ -102,8 +100,8 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                                     ),
                                     Expanded(
                                       flex: 1,
-                                      child: Text(viewExpenseResponse[index]
-                                          .expenseType),
+                                      child: Text(
+                                          viewExpenseResponse[index].eType),
                                     )
                                   ],
                                 ),
@@ -117,26 +115,11 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                                     Expanded(
                                       flex: 1,
                                       child: Text(viewExpenseResponse[index]
-                                          .expenseAmount
+                                          .eAmount
                                           .toStringAsFixed(2)),
                                     )
                                   ],
                                 ),
-                                hSizedBox(5),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text("Expense Description: "),
-                                      flex: 1,
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(viewExpenseResponse[index]
-                                          .expenseDesc),
-                                    )
-                                  ],
-                                ),
-                                hSizedBox(5),
                               ],
                             ),
                           )

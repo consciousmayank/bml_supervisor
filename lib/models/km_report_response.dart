@@ -3,6 +3,7 @@
 //     final kilometerReportResponse = kilometerReportFromJson(jsonString);
 
 import 'dart:convert';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class KilometerReportResponse {
   });
 
   String entryDate;
-  String drivenKm;
+  int drivenKm;
   charts.Color barColor = charts.ColorUtil.fromDartColor(Color(0xff04BFAE));
 
   factory KilometerReportResponse.fromJson(Map<String, dynamic> json) =>

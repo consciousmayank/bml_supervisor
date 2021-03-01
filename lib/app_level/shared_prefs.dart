@@ -32,8 +32,7 @@ class MyPreferences {
   GetClientsResponse getSelectedClient() {
     String savedResponseString = _sharedPrefs.getString(selected_client);
     if (savedResponseString == null) {
-      return GetClientsResponse(
-          clientId: "goldenharvest", title: "Golden Harvest");
+      return null;
     } else {
       return GetClientsResponse.fromJson(savedResponseString);
     }

@@ -1,12 +1,17 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
+  DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
+  DashBoardApis _dashBoardApi = locator<DashBoardApisImpl>();
   int _totalKm = 0;
 
   int _totalKmGround = 0;
@@ -88,8 +93,8 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     // get the data as list
     // add Book my loading at 0
     // pupulate the clients dropdown
-    var response = await apiService.getClientsList();
-
+    List<GetClientsResponse> response = await _dashBoardApi.getClientList();
+    _clientsList = copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -101,58 +106,30 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     _vehicleLog = null;
     notifyListeners();
     setBusy(true);
-    try {
-      // final res = await apiService.vehicleEntrySearch(
-      //   regNum: regNum,
-      //   duration: selectedDurationValue,
-      //   clientId: clientId,
-      // );
-      print('***************');
-      print('$regNum---$selectedDurationValue----$clientId');
-      final res = await apiService.vehicleEntrySearch2PointO(
-        viewEntryRequest: ViewEntryRequest(
-          clientId: clientId ?? "",
-          period: selectedDurationValue.toString(),
-          vehicleId: regNum ?? "",
-        ),
-      );
 
-      if (res.statusCode == 200) {
-        print('status code 200');
-        if (res is String) {
-          snackBarService.showSnackbar(message: res.toString());
-        } else if (res.data is List) {
-          var list = res.data as List;
-          print('list length' + list.length.toString());
-          if (list.length > 0) {
-            for (Map singleItem in list) {
-              ViewEntryResponse singleSearchResult =
-                  ViewEntryResponse.fromMap(singleItem);
-              vehicleEntrySearchResponseList.add(singleSearchResult);
-              _totalKmGround += singleSearchResult.drivenKmGround;
-              _totalFuelInLtr += singleSearchResult.fuelLtr;
-              _totalKm += singleSearchResult.drivenKm;
-              _totalFuelAmt += singleSearchResult.amountPaid;
-            }
-            if (!(_totalKm == 0 && _totalKmGround == 0)) {
-              _kmDifference = _totalKmGround - _totalKm;
-            }
-            if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
-              _avgPerLitre = _totalKm / _totalFuelInLtr;
-            }
-            takeToViewEntryDetailedPage2Point0();
-          } else {
-            snackBarService.showSnackbar(message: "No Results found");
-          }
-        } else if (res.data['status'].toString() == 'failed') {
-          print('res status is falied');
-          snackBarService.showSnackbar(message: 'No Result');
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
+    final List<ViewEntryResponse> res = await _dailyEntryApis.getDailyEntries(
+      viewEntryRequest: ViewEntryRequest(
+        clientId: clientId ?? "",
+        period: selectedDurationValue.toString(),
+        vehicleId: regNum ?? "",
+      ),
+    );
+
+    vehicleEntrySearchResponseList = copyList(res);
+    vehicleEntrySearchResponseList.forEach((element) {
+      _totalKmGround += element.drivenKmGround;
+      _totalFuelInLtr += element.fuelLtr;
+      _totalKm += element.drivenKm;
+      _totalFuelAmt += element.amountPaid;
+    });
+    if (!(_totalKm == 0 && _totalKmGround == 0)) {
+      _kmDifference = _totalKmGround - _totalKm;
     }
+    if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
+      _avgPerLitre = _totalKm / _totalFuelInLtr;
+    }
+    takeToViewEntryDetailedPage2Point0();
+
     notifyListeners();
     setBusy(false);
   }
@@ -168,7 +145,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       'totalFuelAmt': _totalFuelAmt,
       'vehicleEntrySearchResponseList': vehicleEntrySearchResponseList,
       'selectedClient':
-          selectedClient == null ? 'All Clients' : selectedClient.title,
+          selectedClient == null ? 'All Clients' : selectedClient.clientId,
     });
     _totalFuelAmt = 0;
     _kmDifference = 0;

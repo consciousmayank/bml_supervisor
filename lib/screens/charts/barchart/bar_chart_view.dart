@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class BarChartView extends StatefulWidget {
-  final int clientId;
+  final String clientId;
   final String selectedDuration;
 
   BarChartView({

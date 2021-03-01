@@ -1,13 +1,19 @@
 // Added by Vikas
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+
+import '../expenses_api.dart';
 
 class ViewExpensesViewModel extends GeneralisedBaseViewModel {
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
   double _totalExpenses = 0.0;
   List<ViewExpensesResponse> viewExpensesResponse = [];
   SearchByRegNoResponse _selectedSearchVehicle;
@@ -103,8 +109,8 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     // get the data as list
     // add Book my loading at 0
     // pupulate the clients dropdown
-    var response = await apiService.getClientsList();
-
+    var response = await _dashBoardApis.getClientList();
+    _clientsList = copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -113,46 +119,18 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
       {String regNum, String selectedDuration, String clientId}) async {
     viewExpensesResponse.clear();
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
-    print(
-        '**selected client: $clientId selected duration: $selectedDuration, selected reg num $vehicleRegNumber');
-    // final uptoDate =
-    //     DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
     notifyListeners();
     setBusy(true);
-    try {
-      final res = await apiService.getExpensesList(
-        registrationNumber: regNum,
-        clientId: clientId,
-        duration: selectedDurationValue.toString(),
-      );
-
-      if (res.data is! List) {
-        print('data is not list');
-        snackBarService.showSnackbar(message: "No Results found for $regNum");
-      } else {
-        if (res.statusCode == 200) {
-          var list = res.data as List;
-          if (list.length > 0) {
-            for (Map singleItem in list) {
-              ViewExpensesResponse singleSearchResult =
-                  ViewExpensesResponse.fromMap(singleItem);
-              viewExpensesResponse.add(singleSearchResult);
-              _totalExpenses += singleSearchResult.expenseAmount;
-            }
-            print('total expenses before sending' + _totalExpenses.toString());
-
-            takeToViewExpenseDetailedPage();
-          } else {
-            snackBarService.showSnackbar(
-                message: "No Results found for \"$regNum\"");
-          }
-        }
-      }
-      // }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
+    final res = await _expensesApi.getExpensesList(
+      registrationNumber: regNum,
+      clientId: clientId,
+      duration: selectedDurationValue.toString(),
+    );
+    viewExpensesResponse = copyList(res);
+    viewExpensesResponse.forEach((element) {
+      _totalExpenses += element.eAmount;
+    });
+    takeToViewExpenseDetailedPage();
     notifyListeners();
     setBusy(false);
   }
@@ -167,7 +145,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         'viewExpensesDetailedList': viewExpensesResponse,
         'totalExpenses': _totalExpenses,
         'selectedClient':
-            selectedClient == null ? 'All Clients' : selectedClient.title
+            selectedClient == null ? 'All Clients' : selectedClient.clientId
       },
     ).then((value) {
       vehicleRegNumber = null;

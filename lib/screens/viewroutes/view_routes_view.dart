@@ -2,7 +2,6 @@ import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
-import 'package:bml_supervisor/widget/consignment/single_consignment_view.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -51,26 +50,16 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
           viewModel.selectedClient == null ? Container() : headerText("Routes"),
           viewModel.selectedClient == null
               ? Container()
-              : SizedBox(
+              : Expanded(
                   child: RoutesView(
+                    isInDashBoard: false,
                     selectedClient: viewModel.selectedClient,
                     onRoutesPageInView: (clickedRoute) {
                       FetchRoutesResponse route = clickedRoute;
-                      viewModel.selectedRoute = route;
+                      viewModel.takeToHubsView(clickedRoute: route);
                     },
                   ),
-                  height: MediaQuery.of(context).size.height * 0.20,
-                  width: double.infinity,
                 ),
-          viewModel.selectedRoute == null ? Container() : headerText("Hubs"),
-          viewModel.selectedRoute == null
-              ? Container()
-              : Expanded(
-                  child: SingleConsignmentView(
-                    selectedRoute: viewModel.selectedRoute,
-                    key: UniqueKey(),
-                  ),
-                )
         ],
       ),
     );

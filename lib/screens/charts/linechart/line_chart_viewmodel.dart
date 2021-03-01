@@ -1,11 +1,14 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/routes_driven_km.dart';
+import 'package:bml_supervisor/screens/charts/charts_api.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LineChartViewModel extends GeneralisedBaseViewModel {
+  ChartsApi _chartsApi = locator<ChartsApiImpl>();
   List<RoutesDrivenKm> routesDrivenKmList = [];
   List uniqueRoutes = [];
   List<DateTime> uniqueDates = [];
@@ -25,7 +28,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
   ];
 
   void getRoutesDrivenKm({
-    int clientId,
+    String clientId,
     String selectedDuration,
   }) async {
     //line chart/graph api
@@ -35,48 +38,36 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
 
     setBusy(true);
     notifyListeners();
-    try {
-      var res = await apiService.getRoutesDrivenKm(
-        clientId: clientId,
-        period: selectedDurationValue,
-      );
-      if (res.data is List) {
-        var list = res.data as List;
-        int colorArrayIndex = 0;
-        if (list.length > 0) {
-          for (Map value in list) {
-            RoutesDrivenKm routesDrivenKmResponse =
-                RoutesDrivenKm.fromJson(value);
-            routesDrivenKmList.add(routesDrivenKmResponse);
-          }
-          // add distinct routes and dates to uniqueRoutes and uniqueDates
-          routesDrivenKmList.forEach(
-            (routesDrivenKmObject) {
-              if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
-                uniqueRoutes.add(routesDrivenKmObject.routeId);
-              }
-              if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
-                uniqueDates.add(routesDrivenKmObject.entryDateTime);
-              }
-            },
-          );
+    List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
+      clientId: clientId,
+      period: selectedDurationValue,
+    );
 
-          uniqueRoutes.forEach(
-            (singleRouteElement) {
-              data.add(
-                routesDrivenKmList
-                    .where((routeDrivenKmObject) =>
-                        routeDrivenKmObject.routeId == singleRouteElement)
-                    .toList(),
-              );
-            },
-          );
+    routesDrivenKmList = copyList(res);
+
+    // add distinct routes and dates to uniqueRoutes and uniqueDates
+    routesDrivenKmList.forEach(
+      (routesDrivenKmObject) {
+        if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
+          uniqueRoutes.add(routesDrivenKmObject.routeId);
         }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
+        if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
+          uniqueDates.add(routesDrivenKmObject.entryDateTime);
+        }
+      },
+    );
+
+    uniqueRoutes.forEach(
+      (singleRouteElement) {
+        data.add(
+          routesDrivenKmList
+              .where((routeDrivenKmObject) =>
+                  routeDrivenKmObject.routeId == singleRouteElement)
+              .toList(),
+        );
+      },
+    );
+
     notifyListeners();
     setBusy(false);
   }

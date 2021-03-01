@@ -10,7 +10,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
-  DashBoardApisImpl _dashboardApi = locator<DashBoardApisImpl>();
+  DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
 
   PreferencesSavedUser _savedUser;
 
@@ -88,7 +88,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Expenses",
     "Allot Consignments",
     "View Routes",
-    "View Consignments",
+    "Review Consignments",
     "Payments",
     // "Add Entry 2.0",
     // "View Entry 2.0",
@@ -103,13 +103,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
 
     List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
     this.clientsList = copyList(responseList);
-    setBusy(false);
-    notifyListeners();
-  }
-
-  void getDashboardTilesStats() async {
-    setBusy(true);
-    singleClientTileData = await _dashboardApi.getDashboardTilesStats();
     setBusy(false);
     notifyListeners();
   }
@@ -186,17 +179,12 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(viewConsignmentsPageRoute);
   }
 
-  void getClientDashboardStats(PreferencesSavedUser savedUser) async {
+  void getClientDashboardStats() async {
     setBusy(true);
-    // var tilesData = await apiService.getClientDashboardStats(savedUser);
-    // if (tilesData is String) {
-    //   snackBarService.showSnackbar(message: tilesData);
-    // } else {
-    //   singleClientTileData =
-    //       DashboardTilesStatsResponse.fromJson(tilesData.data);
-    //   print('single Client Tile data-----${singleClientTileData.hubCount}');
-    //   setBusy(false);
-    //   notifyListeners();
-    // }
+
+    singleClientTileData = await _dashboardApi.getDashboardTilesStats(
+        clientId: selectedClient.clientId);
+    setBusy(false);
+    notifyListeners();
   }
 }

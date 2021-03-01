@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 class LineChartView extends StatefulWidget {
-  final int clientId;
+  final String clientId;
   final String selectedDuration;
 
   LineChartView({

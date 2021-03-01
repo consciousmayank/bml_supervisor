@@ -39,6 +39,25 @@ class AppTextStyles {
     decoration: TextDecoration.underline,
   );
 
+  static const TextStyle whiteRegular = TextStyle(
+    color: AppColors.white,
+  );
+
   static const TextStyle latoMediumItalics20 = TextStyle(
       fontStyle: FontStyle.italic, fontSize: 20, color: AppColors.white);
+
+  static const TextStyle appBarTitleStyle = TextStyle(
+    fontWeight: FontWeight.normal,
+    fontSize: 14,
+    color: AppColors.white,
+  );
+  static const TextStyle latoMedium16Primary5 = TextStyle(
+      fontWeight: FontWeight.normal,
+      fontSize: 16,
+      color: AppColors.primaryColorShade5);
+  static const TextStyle latoBold18PrimaryShade5 = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: AppColors.primaryColorShade5,
+  );
 }
