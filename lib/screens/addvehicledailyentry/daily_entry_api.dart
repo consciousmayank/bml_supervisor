@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
+import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
@@ -20,6 +21,7 @@ abstract class DailyEntryApis {
   Future<bool> submitVehicleEntry({@required EntryLog entryLogRequest});
   Future<List<ViewEntryResponse>> getDailyEntries(
       {@required ViewEntryRequest viewEntryRequest});
+  Future<List<GetDailyKilometerInfo>> getDailyKmInfo({@required String date});
 }
 
 //entryLog = await apiService.getLatestDailyEntry(registrationNumber: registrationNumber);
@@ -122,5 +124,21 @@ class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
     }
 
     return apiResponseList;
+  }
+
+  @override
+  Future<List<GetDailyKilometerInfo>> getDailyKmInfo({String date}) async {
+    List<GetDailyKilometerInfo> _responseList = [];
+    final ParentApiResponse response =
+        await apiService.getDailyKmInfo(date: date);
+    if (filterResponse(response) != null) {
+      var list = response.response.data as List;
+      for (Map singleItem in list) {
+        GetDailyKilometerInfo singleInfoObject =
+            GetDailyKilometerInfo.fromMap(singleItem);
+        _responseList.add(singleInfoObject);
+      }
+    }
+    return _responseList;
   }
 }

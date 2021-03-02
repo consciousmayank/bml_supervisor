@@ -36,7 +36,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           child: ListView(
             children: [
               selectClient(viewModel: viewModel),
-              // registrationSelector(context: context, viewModel: viewModel),
+              registrationSelector(context: context, viewModel: viewModel),
               selectDuration(viewModel: viewModel),
               hSizedBox(15),
               getExpenseListButton(

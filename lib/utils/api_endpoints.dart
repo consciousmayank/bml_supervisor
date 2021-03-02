@@ -27,8 +27,7 @@ const String ADD_PUCC_FORM = "/vehicle/pucc/add/";
 const String ADD_INSURANCE_FORM = "/vehicle/insurance/add/";
 final GET_ENTRIES_BTW_DATES = (vehicleId, dateFrom, dateTo, page) =>
     '/vehicle/entrylog/find/$vehicleId/$dateFrom/$dateTo/$page/';
-final GET_EXPENSES_LIST = (vehicleId, dateFrom, dateTo, page) =>
-    '/vehicle/expenses/find/$vehicleId/$dateFrom/$dateTo/$page';
+final GET_EXPENSES_LIST = '/expense/view';
 const String ADD_EXPENSE = "/expense/add";
 const String VIEW_ENTRY = "/vehicle/entrylog/view";
 //new Apis
@@ -63,4 +62,6 @@ final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
 
 const String GET_CLIENTS = "/manager/client/list";
 const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
+final GET_DAILY_KM_INFO = (date) => "//dailyKilometer/info/$date";
+
 ///////////////////////////////////////////////////////////////

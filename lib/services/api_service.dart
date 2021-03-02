@@ -11,7 +11,6 @@ import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,6 @@ class ApiService {
 
   ///Authorization, get the user role, first name, last name
   Future<ParentApiResponse> login({@required String base64string}) async {
-    dioClient.addHeaders(getAuthHeader(base64String: base64string));
     Response response;
     DioError error;
     try {
@@ -323,25 +321,22 @@ class ApiService {
     Response response;
     DioError error;
     try {
-      //expense/list/client/goldenharvest/period/1
-      // if (registrationNumber.length != 0 && clientId.length != 0) {
-      //   response = await dioClient.getDio().get(
-      //       '/expenses/view/vehicle/$registrationNumber/client/$clientId/period/$duration');
-      //   registrationNumber = '';
-      // } else if (registrationNumber.length != 0 && clientId.length == 0) {
-      //   response = await dioClient
-      //       .getDio()
-      //       .get('/expenses/view/vehicle/$registrationNumber/period/$duration');
-      //   registrationNumber = '';
-      // } else if (registrationNumber.length == 0 && clientId.length != 0) {
-      response = await dioClient
-          .getDio()
-          .get(GET_EXPENSES_FOR_CLIENT_AND_PERIOD(clientId, duration));
-      // } else {
-      //   response =
-      //       await dioClient.getDio().get('/expenses/view/period/$duration');
-      // }
-      //!end
+      var request = new Map();
+      if (registrationNumber != null) {
+        request['vehicleId'] = registrationNumber;
+      }
+      if (duration != null) {
+        request['period'] = duration;
+      }
+      if (clientId != null) {
+        request['clientId'] = clientId;
+      }
+
+      String body = json.encode(request);
+      response = await dioClient.getDio().post(
+            GET_EXPENSES_LIST,
+            data: body,
+          );
     } on DioError catch (e) {
       error = e;
     }
@@ -355,6 +350,17 @@ class ApiService {
     DioError error;
     try {
       response = await dioClient.getDio().post(ADD_EXPENSE, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getDailyKmInfo({@required String date}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_DAILY_KM_INFO(date));
     } on DioError catch (e) {
       error = e;
     }

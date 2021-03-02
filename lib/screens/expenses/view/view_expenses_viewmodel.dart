@@ -108,7 +108,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     // call client api
     // get the data as list
     // add Book my loading at 0
-    // pupulate the clients dropdown
+    // populate the clients dropdown
     var response = await _dashBoardApis.getClientList();
     _clientsList = copyList(response);
     setBusy(false);
@@ -117,6 +117,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   void getExpensesList(
       {String regNum, String selectedDuration, String clientId}) async {
+    setBusy(true);
     viewExpensesResponse.clear();
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();

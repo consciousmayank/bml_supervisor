@@ -157,6 +157,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       List<PaymentHistoryResponse> paymentHistoryResponseList) {
     return Scrollbar(
       child: ListView.builder(
+        shrinkWrap: true,
         itemBuilder: (context, index) {
           return Column(
             children: [

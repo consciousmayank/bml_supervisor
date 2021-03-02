@@ -8,6 +8,8 @@ class ParentApiResponse {
   final String defaultError = 'Something went wrong.';
   final String emptyResult = 'No Records Found.';
   final String notAuthorised = 'You are not authorised.';
+  final String noInternet =
+      'You are not connected to Internet. Please Try Again.';
 
   final DioError error;
   final Response response;
@@ -23,6 +25,9 @@ class ParentApiResponse {
       return this.error.message;
     } else {
       switch (this.error.response.statusCode) {
+        case 100:
+          return noInternet;
+          break;
         case 204:
           return emptyResult;
           break;

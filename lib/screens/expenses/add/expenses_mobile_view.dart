@@ -1,14 +1,13 @@
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
+import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +42,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ExpensesViewModel>.reactive(
-      onModelReady: (viewModel) => viewModel.getClients(),
+      // onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text("Add Expenses"),
@@ -62,12 +61,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   }
 
   body(BuildContext context, ExpensesViewModel viewModel) {
-    // if (viewModel.selectedSearchVehicle != null) {
-    //   selectedRegNoController = TextEditingController(
-    //       text: viewModel.selectedSearchVehicle.registrationNumber);
-    // } else {
-    //   selectedRegNoController = TextEditingController();
-    // }
+    if (viewModel.clearData) clearData(viewModel: viewModel);
 
     return AbsorbPointer(
       absorbing: viewModel.isExpenseListLoading,
@@ -111,39 +105,39 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
           //   child: headerText("Vehicle Expenses"),
           // ),
           // Text('tet text'),
-          selectClient(viewModel: viewModel),
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: appTextFormField(
-                  // enabled: false,
-                  controller: selectedRegNoController,
-                  focusNode: selectedRegNoFocusNode,
-                  hintText: drRegNoHint,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return textRequired;
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 5.0, right: 4),
-              //   child: appSuffixIconButton(
-              //     icon: Icon(Icons.search),
-              //     onPressed: () {
-              //       viewModel.entryDate = null;
-              //       viewModel.takeToSearch();
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+          // selectClient(viewModel: viewModel),
+          // Stack(
+          //   alignment: Alignment.bottomRight,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.all(2.0),
+          //       child: appTextFormField(
+          //         // enabled: false,
+          //         controller: selectedRegNoController,
+          //         focusNode: selectedRegNoFocusNode,
+          //         hintText: drRegNoHint,
+          //         keyboardType: TextInputType.text,
+          //         validator: (value) {
+          //           if (value.isEmpty) {
+          //             return textRequired;
+          //           } else {
+          //             return null;
+          //           }
+          //         },
+          //       ),
+          //     ),
+          //     // Padding(
+          //     //   padding: const EdgeInsets.only(bottom: 5.0, right: 4),
+          //     //   child: appSuffixIconButton(
+          //     //     icon: Icon(Icons.search),
+          //     //     onPressed: () {
+          //     //       viewModel.entryDate = null;
+          //     //       viewModel.takeToSearch();
+          //     //     },
+          //     //   ),
+          //     // ),
+          //   ],
+          // ),
           // viewModel.selectedSearchVehicle == null
           //     ? Container()
           //     :
@@ -167,64 +161,85 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                     if (selectedDate != null) {
                       selectedDateController.text = getDateString(selectedDate);
                       viewModel.entryDate = selectedDate;
-                      viewModel.showSubmitForm = true;
+                      viewModel.getInfo();
                     }
                   }),
                 ),
               ),
             ],
           ),
-          // viewModel.entryDate == null
-          //     ? Container()
-          //     :
-          AppDropDown(
-            showUnderLine: true,
-            selectedValue:
-                viewModel.expenseType != null ? viewModel.expenseType : null,
-            hint: "Select Expense",
-            onOptionSelect: (selectedValue) {
-              viewModel.expenseType = selectedValue;
-              // if (viewModel.selectedSearchVehicle != null &&
-              //     viewModel.entryDate != null) {
-              //   viewModel.getExpensesList();
-              // }
-            },
-            optionList: expenseTypes,
-          ),
+          viewModel.dailyKmInfoList.length > 0
+              ? DailyKmInfoDropDown(
+                  showUnderLine: false,
+                  selectedInfo: viewModel.selectedDailyKmInfo == null
+                      ? null
+                      : viewModel.selectedDailyKmInfo,
+                  optionList: viewModel.dailyKmInfoList,
+                  hint: "Select Client-Vehicle",
+                  onOptionSelect: (GetDailyKilometerInfo selectedValue) {
+                    viewModel.showSubmitForm = true;
+                    viewModel.selectedDailyKmInfo = selectedValue;
+                  },
+                )
+              : Container(),
+
+          viewModel.showSubmitForm
+              ? AppDropDown(
+                  showUnderLine: true,
+                  selectedValue: viewModel.expenseType != null
+                      ? viewModel.expenseType
+                      : null,
+                  hint: "Select Expense",
+                  onOptionSelect: (selectedValue) {
+                    viewModel.expenseType = selectedValue;
+                    // if (viewModel.selectedSearchVehicle != null &&
+                    //     viewModel.entryDate != null) {
+                    //   viewModel.getExpensesList();
+                    // }
+                  },
+                  optionList: expenseTypes,
+                )
+              : Container(),
           hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :
-          getAmount(context: context, viewModel: viewModel),
+          viewModel.showSubmitForm
+              ? getAmount(context: context, viewModel: viewModel)
+              : Container(),
           hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :
-          getDescription(context: context, viewModel: viewModel),
+          viewModel.showSubmitForm
+              ? getDescription(context: context, viewModel: viewModel)
+              : Container(),
           hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :
-          saveExpenseButton(context: context, viewModel: viewModel),
+          viewModel.showSubmitForm
+              ? saveExpenseButton(context: context, viewModel: viewModel)
+              : Container(),
         ],
       ),
     );
   }
 
-  Widget selectClient({ExpensesViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClient = selectedValue;
-        // ! use print() it for debugging
-        // print('selected client id: ${viewModel.selectedClient.id}');
-        // print('selected client: ${viewModel.selectedClient.title}');
-      },
-      selectedClient:
-          viewModel.selectedClient == null ? null : viewModel.selectedClient,
-    );
-  }
+  // Widget selectClient({ExpensesViewModel viewModel}) {
+  //   return ClientsDropDown(
+  //     optionList: viewModel.clientsList,
+  //     hint: "Select Client",
+  //     onOptionSelect: (GetClientsResponse selectedValue) {
+  //       viewModel.selectedClient = selectedValue;
+  //       // ! use print() it for debugging
+  //       // print('selected client id: ${viewModel.selectedClient.id}');
+  //       // print('selected client: ${viewModel.selectedClient.title}');
+  //     },
+  //     selectedClient:
+  //         viewModel.selectedClient == null ? null : viewModel.selectedClient,
+  //   );
+  // }
 
   getAmount({BuildContext context, ExpensesViewModel viewModel}) {
     return appTextFormField(
@@ -288,12 +303,11 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
             // ignore: todo
             //TODO: Refactor the if(s) and else(s)
             if (viewModel.expenseType != null) {
-              if (viewModel.selectedClient != null) {
+              if (viewModel.selectedDailyKmInfo != null) {
                 viewModel.searchByRegistrationNumber(
                   SaveExpenseRequest(
-                      clientId: viewModel.selectedClient.clientId,
-                      vehicleId:
-                          selectedRegNoController.text.trim().toUpperCase(),
+                      clientId: viewModel.selectedDailyKmInfo.clientId,
+                      vehicleId: viewModel.selectedDailyKmInfo.vehicleId,
                       // viewModel.selectedSearchVehicle.registrationNumber,
                       entryDate:
                           DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
@@ -310,7 +324,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                 }
               } else {
                 viewModel.snackBarService
-                    .showSnackbar(message: "Please Select Client");
+                    .showSnackbar(message: "Please Select Client-Vehicle");
               }
             } else {
               viewModel.snackBarService
@@ -340,5 +354,104 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
         singleColumn("Description: ", singleEntry.expenseDesc),
       ]),
     );
+  }
+
+  void clearData({ExpensesViewModel viewModel}) {
+    selectedRegNoController.clear();
+    selectedDateController.clear();
+    amountController.clear();
+    descriptionController.clear();
+    viewModel.clearData = false;
+  }
+}
+
+class DailyKmInfoDropDown extends StatefulWidget {
+  final List<GetDailyKilometerInfo> optionList;
+  final GetDailyKilometerInfo selectedInfo;
+  final String hint;
+  final Function onOptionSelect;
+  final showUnderLine;
+
+  DailyKmInfoDropDown(
+      {@required this.optionList,
+      this.selectedInfo,
+      @required this.hint,
+      @required this.onOptionSelect,
+      this.showUnderLine = true});
+
+  @override
+  _ClientsDropDownState createState() => _ClientsDropDownState();
+}
+
+class _ClientsDropDownState extends State<DailyKmInfoDropDown> {
+  List<DropdownMenuItem<GetDailyKilometerInfo>> dropdown = [];
+
+  List<DropdownMenuItem<GetDailyKilometerInfo>> getDropDownItems() {
+    List<DropdownMenuItem<GetDailyKilometerInfo>> dropdown =
+        List<DropdownMenuItem<GetDailyKilometerInfo>>();
+
+    for (int i = 0; i < widget.optionList.length; i++) {
+      dropdown.add(DropdownMenuItem(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Text(
+            "${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}",
+            style: TextStyle(
+              color: Colors.black54,
+            ),
+          ),
+        ),
+        value: widget.optionList[i],
+      ));
+    }
+    return dropdown;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.optionList.isEmpty
+        ? Container()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(widget.hint ?? ""),
+              ),
+              Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                  child: DropdownButton(
+                    icon: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: ThemeConfiguration.primaryBackground,
+                      ),
+                    ),
+                    underline: Container(),
+                    isExpanded: true,
+                    style: textFieldStyle(
+                        fontSize: 15.0, textColor: Colors.black54),
+                    value: widget.selectedInfo,
+                    items: getDropDownItems(),
+                    onChanged: (value) {
+                      widget.onOptionSelect(value);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  TextStyle textFieldStyle({double fontSize, Color textColor}) {
+    return TextStyle(
+        color: textColor,
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal);
   }
 }

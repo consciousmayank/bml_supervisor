@@ -2,10 +2,12 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
+import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -13,6 +15,30 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 class ExpensesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
+  DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
+  bool _clearData = false;
+  List<GetDailyKilometerInfo> _dailyKmInfoList = [];
+
+  List<GetDailyKilometerInfo> get dailyKmInfoList => _dailyKmInfoList;
+
+  set dailyKmInfoList(List<GetDailyKilometerInfo> value) {
+    _dailyKmInfoList = value;
+    notifyListeners();
+  }
+
+  GetDailyKilometerInfo _selectedDailyKmInfo;
+
+  GetDailyKilometerInfo get selectedDailyKmInfo => _selectedDailyKmInfo;
+
+  set selectedDailyKmInfo(GetDailyKilometerInfo value) {
+    _selectedDailyKmInfo = value;
+  }
+
+  bool get clearData => _clearData;
+
+  set clearData(bool value) {
+    _clearData = value;
+  }
 
   bool _isRegNumCorrect = false;
 
@@ -129,6 +155,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   }
 
   GetClientsResponse _selectedClient;
+
   GetClientsResponse get selectedClient => _selectedClient;
 
   set selectedClient(GetClientsResponse selectedClient) {
@@ -143,10 +170,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   getClients() async {
     setBusy(true);
     clientsList = [];
-    // call client api
-    // get the data as list
-    // add Book my loading at 0
-    // pupulate the clients dropdown
     var response = await _dashBoardApis.getClientList();
     _clientsList = copyList(response);
     setBusy(false);
@@ -158,6 +181,14 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     ApiResponse response =
         await _expensesApi.addExpense(saveExpenseRequest: saveExpenseRequest);
 
+    if (response.isSuccessful()) {
+      entryDate = null;
+      selectedDailyKmInfo = null;
+      expenseType = null;
+      clearData = true;
+      showSubmitForm = false;
+      dailyKmInfoList.clear();
+    }
     snackBarService.showSnackbar(message: response.message);
     isExpenseListLoading = false;
   }
@@ -186,5 +217,14 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       setBusy(false);
     }
     // return isRegNumCorrect;
+  }
+
+  void getInfo() async {
+    setBusy(true);
+    var response = await _dailyEntryApis.getDailyKmInfo(
+      date: getDateString(entryDate),
+    );
+    dailyKmInfoList = copyList(response);
+    setBusy(false);
   }
 }
