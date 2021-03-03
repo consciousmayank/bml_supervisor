@@ -103,6 +103,8 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
 
     List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
     this.clientsList = copyList(responseList);
+
+    this.selectedClient = clientsList.first;
     setBusy(false);
     notifyListeners();
   }
@@ -111,35 +113,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     print('taking to takeToAllConsignmentsPage');
     navigationService.navigateTo(viewAllConsignmentsViewPageRoute,
         arguments: recentConsignmentList);
-  }
-
-  getRecentConsignments({int clientId, String period}) async {
-    recentConsignmentList.clear();
-    int selectedPeriodValue = period == 'THIS MONTH' ? 1 : 2;
-
-    // setBusy(true);
-    // notifyListeners();
-    // try {
-    //   var res = await apiService.getRecentConsignments(
-    //     clientId: clientId,
-    //     period: selectedPeriodValue,
-    //   );
-    //   if (res.data is List) {
-    //     var list = res.data as List;
-    //     if (list.length > 0) {
-    //       for (Map singleConsignment in list) {
-    //         RecentConginmentResponse singleConsignmentResponse =
-    //             RecentConginmentResponse.fromJson(singleConsignment);
-    //         recentConsignmentList.add(singleConsignmentResponse);
-    //       }
-    //     }
-    //   }
-    // } on DioError catch (e) {
-    //   snackBarService.showSnackbar(message: e.message);
-    //   setBusy(false);
-    // }
-    // notifyListeners();
-    // setBusy(false);
   }
 
   takeToAddEntryPage() {

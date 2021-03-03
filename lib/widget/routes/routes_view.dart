@@ -127,7 +127,7 @@ class _RoutesViewState extends State<RoutesView> {
           widget.isInDashBoard
               ? InkWell(
                   onTap: () {
-                    // viewModel.takeToViewRoutesPage();
+                    viewModel.takeToViewRoutesPage();
                   },
                   child: Container(
                     decoration: BoxDecoration(

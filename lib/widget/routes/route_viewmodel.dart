@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
@@ -26,5 +27,9 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     this._routesList.addAll(response);
     setBusy(false);
     notifyListeners();
+  }
+
+  takeToViewRoutesPage() {
+    navigationService.navigateTo(viewRoutesPageRoute);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
@@ -26,16 +25,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
-          GetClientsResponse savedSelectedClient =
-              MyPreferences().getSelectedClient();
           viewModel.selectedDuration = MyPreferences().getSelectedDuration();
-
           viewModel.getClients();
           viewModel.getSavedUser();
-          // if (savedSelectedClient != null) {
-          //   viewModel.selectedClient = savedSelectedClient;
-          //   viewModel.getClientDashboardStats();
-          // }
         },
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -126,21 +118,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
                           viewModel.selectedClient != null &&
                                   viewModel.selectedDuration != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Card(
-                                    elevation: defaultElevation,
-                                    child: RoutesView(
-                                      selectedClient: viewModel.selectedClient,
-                                      onRoutesPageInView:
-                                          (FetchRoutesResponse clickedRoute) {},
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
                               ? BarChartView(
                                   clientId: viewModel.selectedClient.clientId,
                                   selectedDuration: viewModel.selectedDuration,
@@ -160,35 +137,50 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   selectedDuration: viewModel.selectedDuration,
                                 )
                               : Container(),
-                          // viewModel.selectedClient == null
-                          //     ? Container()
-                          //     : Column(
-                          //         crossAxisAlignment: CrossAxisAlignment.start,
-                          //         mainAxisSize: MainAxisSize.max,
-                          //         children: [
-                          //           Padding(
-                          //             padding: const EdgeInsets.all(8.0),
-                          //             child: Text("Routes"),
-                          //           ),
-                          //           Padding(
-                          //             padding: const EdgeInsets.only(
-                          //                 top: 8, bottom: 8),
-                          //             child: SizedBox(
-                          //               height:
-                          //                   MediaQuery.of(context).size.height *
-                          //                       0.30,
-                          //               child: RoutesView(
-                          //                 selectedClient:
-                          //                     viewModel.selectedClient,
-                          //                 onRoutesPageInView: (clickedRoute) {
-                          //                   // FetchRoutesResponse route = clickedRoute;
-                          //                   // viewModel.selectedRoute = route;
-                          //                 },
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       ),
+
+                          // viewModel.selectedClient != null &&
+                          //     viewModel.selectedDuration != null
+                          //     ? ClipRRect(
+                          //   borderRadius: BorderRadius.circular(20),
+                          //   child: Card(
+                          //     elevation: defaultElevation,
+                          //     child: RoutesView(
+                          //       selectedClient: viewModel.selectedClient,
+                          //       onRoutesPageInView:
+                          //           (FetchRoutesResponse clickedRoute) {},
+                          //     ),
+                          //   ),
+                          // )
+                          //     : Container(),
+
+                          viewModel.selectedClient == null
+                              ? Container()
+                              : Card(
+                                  elevation: defaultElevation,
+                                  shape: getCardShape(),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text("Routes"),
+                                      ),
+                                      SizedBox(
+                                        height: 450,
+                                        child: RoutesView(
+                                          selectedClient:
+                                              viewModel.selectedClient,
+                                          onRoutesPageInView: (clickedRoute) {
+                                            // FetchRoutesResponse route = clickedRoute;
+                                            // viewModel.selectedRoute = route;
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                         ],
                       )),
             drawer: Container(
@@ -218,7 +210,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         //   clientId: viewModel.selectedClient.clientId,
         //   period: viewModel.selectedDuration,
         // );
-
+        viewModel.getClientDashboardStats();
         MyPreferences().saveSelectedDuration(selectedValue);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
@@ -262,6 +254,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
       hint: "Select Client",
       onOptionSelect: (GetClientsResponse selectedValue) {
         viewModel.selectedClient = selectedValue;
+        print(
+          viewModel.clientsList.indexOf(selectedValue),
+        );
         MyPreferences().saveSelectedClient(selectedValue);
 
         //* call client tiles data
