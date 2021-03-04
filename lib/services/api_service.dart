@@ -367,6 +367,16 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getDistributors({@required String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_DISTRIBUTORS(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

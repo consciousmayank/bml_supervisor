@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:flutter/material.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:flutter/material.dart';
 
 class ViewAllConsignmentsView extends StatefulWidget {
   final List<RecentConginmentResponse> recentConsignmentList;
@@ -16,7 +17,7 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Consignment'),
+        title: Text('All Consignment', style: AppTextStyles.appBarTitleStyle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

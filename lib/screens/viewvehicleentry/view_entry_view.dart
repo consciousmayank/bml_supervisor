@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -24,7 +25,8 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('View Daily Entry'),
+          title:
+              Text('View Daily Entry', style: AppTextStyles.appBarTitleStyle),
         ),
         body: Padding(
           padding: getSidePadding(context: context),

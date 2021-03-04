@@ -2,10 +2,12 @@ import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.da
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -109,49 +111,6 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     notifyListeners();
   }
 
-  void takeToAllConsignmentsPage() {
-    print('taking to takeToAllConsignmentsPage');
-    navigationService.navigateTo(viewAllConsignmentsViewPageRoute,
-        arguments: recentConsignmentList);
-  }
-
-  takeToAddEntryPage() {
-    navigationService.navigateTo(addEntryLogPageRoute);
-  }
-
-  takeToBlankPage() {
-    navigationService.navigateTo(blankPageRoute);
-  }
-
-  takeToAddExpensePage() {
-    navigationService.navigateTo(addExpensesPageRoute);
-  }
-
-  takeToViewEntryPage() {
-    navigationService.navigateTo(viewEntryLogPageRoute);
-  }
-
-  takeToViewExpensePage() {
-    navigationService.navigateTo(viewExpensesPageRoute);
-  }
-
-  takeToAllotConsignmentsPage() {
-    navigationService.navigateTo(allotConsignmentsPageRoute);
-  }
-
-  takeToPaymentsPage() {
-    navigationService.navigateTo(paymentsPageRoute);
-  }
-
-  takeToViewRoutesPage() {
-    navigationService.navigateTo(viewRoutesPageRoute);
-  }
-
-  //! For testing purpose it is navigating to searchPageRoute
-  takeToViewConsignmentsPage() {
-    navigationService.navigateTo(viewConsignmentsPageRoute);
-  }
-
   void getClientDashboardStats() async {
     setBusy(true);
 
@@ -159,5 +118,100 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
         clientId: selectedClient.clientId);
     setBusy(false);
     notifyListeners();
+  }
+
+  takeToViewEntryPage() {
+    navigationService.navigateTo(viewEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToDistributorsPage() {
+    navigationService.navigateTo(distributorsLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToViewExpensePage() {
+    navigationService.navigateTo(viewExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToAllotConsignmentsPage() {
+    navigationService.back();
+    navigationService.navigateTo(allotConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToReviewConsignmentsPage() {
+    navigationService.back();
+    navigationService.navigateTo(viewConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToPaymentsPage() {
+    navigationService.navigateTo(paymentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToViewRoutesPage() {
+    navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToHubsView({FetchRoutesResponse clickedRoute}) {
+    navigationService.navigateTo(hubsViewPageRoute,
+        arguments: ViewRoutesArguments(
+          clickedRoute: clickedRoute,
+        ));
+  }
+
+  void reloadPage() {
+    getClients();
+    getClientDashboardStats();
+  }
+
+  void onViewRoutesTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewExpensesTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewEntryTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onTransactionsTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(paymentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onDashboardTileClick() {
+    navigationService.back();
+  }
+
+  void takeToAddDailyEntry() {
+    navigationService.back();
+    navigationService.navigateTo(addEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 }

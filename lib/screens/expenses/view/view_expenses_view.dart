@@ -3,6 +3,7 @@
 
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -29,7 +30,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('View Expenses'),
+          title: Text('View Expenses', style: AppTextStyles.appBarTitleStyle),
         ),
         body: Padding(
           padding: getSidePadding(context: context),

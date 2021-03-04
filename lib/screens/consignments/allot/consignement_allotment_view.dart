@@ -76,7 +76,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: true,
-              title: Text("Allot Consignments"),
+              title: Text("Allot Consignments",
+                  style: AppTextStyles.appBarTitleStyle),
             ),
             body: viewModel.isBusy
                 ? Center(

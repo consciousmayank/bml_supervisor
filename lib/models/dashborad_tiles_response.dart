@@ -13,28 +13,36 @@ String dashboardTilesStatsResponseToJson(DashboardTilesStatsResponse data) =>
 class DashboardTilesStatsResponse {
   DashboardTilesStatsResponse({
     this.hubCount,
-    this.kmCount,
+    this.totalKm,
     this.routeCount,
-    this.dueCount,
+    this.dueKm,
+    this.dueExpense,
+    this.totalExpense,
   });
 
   int hubCount;
-  int kmCount;
+  int totalKm;
   int routeCount;
-  int dueCount;
+  int dueKm;
+  double totalExpense;
+  double dueExpense;
 
   factory DashboardTilesStatsResponse.fromJson(Map<String, dynamic> json) =>
       DashboardTilesStatsResponse(
         hubCount: json["hubCount"],
-        kmCount: json["kmCount"],
+        totalKm: json["totalKm"],
         routeCount: json["routeCount"],
-        dueCount: json["dueKmCount"],
+        dueKm: json["dueKm"],
+        totalExpense: json["totalExpense"],
+        dueExpense: json["dueExpense"],
       );
 
   Map<String, dynamic> toJson() => {
         "hubCount": hubCount,
-        "kmCount": kmCount,
+        "totalKm": totalKm,
         "routeCount": routeCount,
-        "dueKmCount": dueCount,
+        "dueKm": dueKm,
+        "totalExpense": totalExpense,
+        "dueExpense": dueExpense,
       };
 }

@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -168,7 +169,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
     return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text("Add Entry Form"),
+          title: Text("Add Entry Form", style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
             ? Center(

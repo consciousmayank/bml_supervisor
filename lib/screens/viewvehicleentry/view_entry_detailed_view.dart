@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,8 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.arguments['selectedClient']),
+        title: Text(widget.arguments['selectedClient'],
+            style: AppTextStyles.appBarTitleStyle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

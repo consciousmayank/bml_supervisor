@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
@@ -23,7 +24,7 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Routes"),
+                  title: Text("Routes", style: AppTextStyles.appBarTitleStyle),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),

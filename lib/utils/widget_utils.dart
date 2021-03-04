@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_text_styles.dart';
 import 'dimens.dart';
 
 TextStyle topHeaderStyle() {
@@ -298,4 +300,36 @@ launchMaps({@required double latitude, @required double longitude}) async {
   } else {
     throw 'Could not launch url';
   }
+}
+
+Text buildChartTitle({@required String title}) {
+  return Text(
+    title,
+    style: AppTextStyles.latoBold16Black,
+  );
+}
+
+Text buildChartSubTitle({@required DateTime time}) {
+  return Text(
+    '(' + getDateStringCharts(time) + ')',
+    style: AppTextStyles.latoBold12Black,
+  );
+}
+
+String getDateStringCharts(DateTime date) {
+  return DateFormat('MMMM, yyyy').format(date);
+}
+
+Row buildChartDateLabel() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        "Dates",
+        style: AppTextStyles.latoBold12Black
+            .copyWith(color: AppColors.primaryColorShade5),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
 }

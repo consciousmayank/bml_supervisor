@@ -241,7 +241,9 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
           logoutTime: null,
           remarks: null,
           startReadingGround: null,
-          drivenKmGround: null);
+          drivenKmGround: null,
+          status: null,
+          routeId: null);
       flagForSearch = 1;
 
       // vehicleLog = EntryLog.fromMap(entryLog.data);

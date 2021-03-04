@@ -44,7 +44,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
         right: true,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Consignment Details"),
+            title: Text("Consignment Details",
+                style: AppTextStyles.appBarTitleStyle),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(

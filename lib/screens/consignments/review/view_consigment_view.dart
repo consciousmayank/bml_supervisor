@@ -69,7 +69,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
               child: Scaffold(
                 appBar: AppBar(
                     automaticallyImplyLeading: true,
-                    title: Text("View Consignments"),
+                    title: Text("View Consignments",
+                        style: AppTextStyles.appBarTitleStyle),
                     actions: [
                       isEditAllowed
                           ? FlatButton(

@@ -1,7 +1,9 @@
+import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/services/api_service.dart';
@@ -14,9 +16,11 @@ abstract class DashBoardApis {
   Future<List<FetchHubsResponse>> getHubs({@required int routeId});
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
       {@required String clientId});
+  Future<List<GetDistributorsResponse>> getDistributors(
+      {@required String clientId});
 }
 
-class DashBoardApisImpl implements DashBoardApis {
+class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   ApiService apiService = locator<ApiService>();
   SnackbarService snackBarService = locator<SnackbarService>();
 
@@ -55,7 +59,12 @@ class DashBoardApisImpl implements DashBoardApis {
     }
 
     return DashboardTilesStatsResponse(
-        hubCount: 0, kmCount: 0, routeCount: 0, dueCount: 0);
+        hubCount: 0,
+        totalKm: 0,
+        routeCount: 0,
+        dueKm: 0,
+        dueExpense: 0,
+        totalExpense: 0);
   }
 
   @override
@@ -104,5 +113,24 @@ class DashBoardApisImpl implements DashBoardApis {
     }
 
     return _hubsList;
+  }
+
+  @override
+  Future<List<GetDistributorsResponse>> getDistributors(
+      {@required String clientId}) async {
+    List<GetDistributorsResponse> _responseList = [];
+    ParentApiResponse response =
+        await apiService.getDistributors(clientId: clientId);
+    if (filterResponse(response) != null) {
+      var list = response.response.data as List;
+      if (list.length > 0) {
+        for (Map singleHub in list) {
+          GetDistributorsResponse singleDistributorsResponse =
+              GetDistributorsResponse.fromMap(singleHub);
+          _responseList.add(singleDistributorsResponse);
+        }
+      }
+    }
+    return _responseList;
   }
 }

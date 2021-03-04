@@ -19,26 +19,18 @@ class RoutesDrivenKm {
     this.title,
     this.entryDate,
     this.color = const Color(0xff68cfc6),
+    this.routeTitle,
   });
 
   int drivenKm;
   int routeId;
+  String routeTitle;
   String vehicleId;
   int drivenKmG;
   String title;
   String entryDate;
   final Color color;
   DateTime _entryDateTime;
-
-  // {
-  // "drivenKm": 36,
-  // "routeId": 7,
-  // "entryDate": "01-02-2021",
-  // "routeTitle": "DDN - LOC",
-  // "vehicleId": "UK07CB4764",
-  // "drivenKmG": 31,
-  // "title": "LOCAL ROUTE"
-  // }
 
   DateTime get entryDateTime {
     var dateAsList = entryDate.split('-');
@@ -56,6 +48,7 @@ class RoutesDrivenKm {
     String title,
     String entryDate,
     Color color,
+    String routeTitle,
   }) =>
       RoutesDrivenKm(
         drivenKm: drivenKm ?? this.drivenKm,
@@ -65,11 +58,13 @@ class RoutesDrivenKm {
         title: title ?? this.title,
         entryDate: title ?? this.title,
         color: color ?? this.color,
+        routeTitle: routeTitle ?? this.routeTitle,
       );
 
   factory RoutesDrivenKm.fromJson(Map<String, dynamic> json) => RoutesDrivenKm(
         drivenKm: json["drivenKm"],
         routeId: json["routeId"],
+        routeTitle: json["routeTitle"],
         vehicleId: json["vehicleId"],
         drivenKmG: json["drivenKmG"],
         title: json["title"],
@@ -83,6 +78,7 @@ class RoutesDrivenKm {
         "drivenKmG": drivenKmG,
         "title": title,
         "entryDate": entryDate,
+        "routeTitle": routeTitle,
       };
 
   void getParticularRouteDateWithDrivenKm() {}

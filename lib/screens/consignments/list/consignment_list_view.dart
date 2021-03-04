@@ -55,7 +55,8 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
     if (widget.isFulPageView) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("All Consignments"),
+          title:
+              Text("All Consignments", style: AppTextStyles.appBarTitleStyle),
         ),
         body: child,
       );

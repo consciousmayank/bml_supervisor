@@ -36,7 +36,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       // onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text("Add Entry"),
+          title: Text("Add Entry", style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
             ? Center(

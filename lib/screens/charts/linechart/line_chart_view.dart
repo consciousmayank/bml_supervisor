@@ -1,10 +1,11 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/painting/basic_types.dart' as scrollDirection;
+import 'package:flutter/material.dart' as axisMaterial;
 import 'package:flutter/src/painting/text_style.dart' as axisTextStyle;
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -40,106 +41,78 @@ class _LineChartViewState extends State<LineChartView> {
         if (viewModel.isBusy) {
           return DashBoardLoadingWidget();
         } else {
-          return viewModel.routesDrivenKmList.length > 0
+          return viewModel.routesDrivenKmListForLineChart.length > 0
               ? SizedBox(
-                  height: 300,
-                  child: Stack(
-                    children: [
-                      Card(
-                        color: AppColors.white,
-                        elevation: 6,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: BezierChart(
-                            fromDate: viewModel.uniqueDates.first,
-                            bezierChartScale: BezierChartScale.WEEKLY,
-                            toDate: viewModel.uniqueDates.first ==
-                                    viewModel.uniqueDates.last
-                                ? viewModel.uniqueDates.first
-                                    .add(Duration(days: 1))
-                                : viewModel.uniqueDates.last,
-                            onValueSelected: (value) {
-                              print("Indicator Visible :$value");
-                            },
-                            onIndicatorVisible: (val) {
-                              print("Indicator Visible :$val");
-                            },
-                            onDateTimeSelected: (datetime) {
-                              print("selected datetime: $datetime");
-                            },
-                            selectedDate: viewModel.uniqueDates.last,
-                            //this is optional
-                            footerDateTimeBuilder:
-                                (DateTime value, BezierChartScale scaleType) {
-                              final newFormat = DateFormat('dd/MM/yy');
-                              return newFormat.format(value);
-                            },
-                            bubbleLabelDateTimeBuilder:
-                                (DateTime value, BezierChartScale scaleType) {
-                              final newFormat = DateFormat('EEE d');
-                              return "${newFormat.format(value)}\n";
-                            },
-                            series: viewModel.getBezierData(),
-                            config: BezierChartConfig(
-                              xLinesColor: Colors.red,
-                              pinchZoom: false,
-                              showDataPoints: true,
-                              displayYAxis: true,
-                              yAxisTextStyle: axisTextStyle.TextStyle(
-                                  fontSize: 12, color: Colors.black),
-                              xAxisTextStyle: axisTextStyle.TextStyle(
-                                  fontSize: 10, color: Colors.black),
-                              displayLinesXAxis: true,
-                              stepsYAxis: 50,
-                              startYAxisFromNonZeroValue: false,
-                              updatePositionOnTap: true,
-                              bubbleIndicatorValueFormat:
-                                  NumberFormat("###,##0.00", "en_US"),
-                              verticalIndicatorStrokeWidth: 1.0,
-                              verticalIndicatorColor: Colors.black,
-                              verticalLineFullHeight: true,
-                              showVerticalIndicator: true,
-                              verticalIndicatorFixedPosition: true,
-                              backgroundColor: Colors.transparent,
-                              footerHeight: 10.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 10,
-                        left: 1,
-                        right: 1,
-                        child: SizedBox(
-                          height: 20,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: ListView.builder(
-                              itemCount: viewModel.data.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 10,
-                                        width: 20,
-                                        color: viewModel
-                                            .lineChartColorArray[index],
-                                      ),
-                                      wSizedBox(2),
-                                      Text(
-                                          'Route#${viewModel.uniqueRoutes[index]}'),
-                                      wSizedBox(10),
-                                    ],
-                                  ),
-                                );
+                  height: 350,
+                  child: Card(
+                    color: AppColors.white,
+                    elevation: defaultElevation,
+                    shape: getCardShape(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buildChartTitle(title: "Routes Driven Kilometers"),
+                          buildChartSubTitle(
+                              time: viewModel?.selectedDateForLineChart),
+                          Expanded(
+                            child: BezierChart(
+                              fromDate: viewModel.uniqueDatesForLineChart.first,
+                              bezierChartScale: BezierChartScale.WEEKLY,
+                              toDate: viewModel.uniqueDatesForLineChart.first ==
+                                      viewModel.uniqueDatesForLineChart.last
+                                  ? viewModel.uniqueDatesForLineChart.first
+                                      .add(Duration(days: 1))
+                                  : viewModel.uniqueDatesForLineChart.last,
+                              onValueSelected: (value) {},
+                              onIndicatorVisible: (val) {},
+                              onDateTimeSelected: (datetime) {},
+                              selectedDate:
+                                  viewModel.uniqueDatesForLineChart.last,
+                              //this is optional
+                              footerDateTimeBuilder:
+                                  (DateTime value, BezierChartScale scaleType) {
+                                final newFormat = DateFormat('dd');
+                                return newFormat.format(value);
                               },
-                              scrollDirection: scrollDirection.Axis.horizontal,
+                              bubbleLabelDateTimeBuilder:
+                                  (DateTime value, BezierChartScale scaleType) {
+                                final newFormat = DateFormat('EEE d');
+                                return "${newFormat.format(value)}\n";
+                              },
+                              series: viewModel.getBezierData(),
+                              config: BezierChartConfig(
+                                  xLinesColor: Colors.red,
+                                  pinchZoom: false,
+                                  showDataPoints: true,
+                                  displayYAxis: true,
+                                  yAxisTextStyle: axisTextStyle.TextStyle(
+                                      fontSize: 12, color: Colors.black),
+                                  xAxisTextStyle: axisTextStyle.TextStyle(
+                                      fontSize: 10, color: Colors.black),
+                                  displayLinesXAxis: true,
+                                  stepsYAxis: 50,
+                                  startYAxisFromNonZeroValue: false,
+                                  updatePositionOnTap: true,
+                                  bubbleIndicatorValueFormat:
+                                      NumberFormat("###,##0.00 kms", "en_US"),
+                                  verticalIndicatorStrokeWidth: 1.0,
+                                  verticalIndicatorColor: Colors.black,
+                                  verticalLineFullHeight: true,
+                                  showVerticalIndicator: true,
+                                  verticalIndicatorFixedPosition: true,
+                                  backgroundColor: Colors.transparent,
+                                  footerHeight: 15),
                             ),
                           ),
-                        ),
+                          buildChartDateLabel(),
+                          hSizedBox(10),
+                          Center(child: buildColorLegendListView(viewModel))
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 )
               : Container();
@@ -148,6 +121,44 @@ class _LineChartViewState extends State<LineChartView> {
       viewModelBuilder: () => LineChartViewModel(),
     );
   }
+}
+
+Widget buildColorLegendListView(LineChartViewModel viewModel) {
+  // return ListView(children: getWidgets(viewModel), scrollDirection: axisMaterial.Axis.horizontal,);
+  return Wrap(
+    direction: axisMaterial.Axis.horizontal,
+    alignment: WrapAlignment.center,
+    spacing: 2.0,
+    runSpacing: 5.0,
+    children: List.generate(
+      viewModel.dataForLineChart.length,
+      (index) => Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 10,
+              width: 10,
+              color: viewModel.lineChartColorArray[index],
+            ),
+            wSizedBox(5),
+            InkWell(
+              onTap: () {
+                // viewModel.snackBarService.showSnackbar(
+                //     message: 'Removing route: ${viewModel.uniqueRoutes[index].toString()}');
+                // viewModel.removeRoute(viewModel.uniqueRoutes[index], index);
+              },
+              child: Text(
+                  '#${viewModel.uniqueRoutes[index]}-${viewModel.getRouteTitle(index)}'),
+            ),
+            wSizedBox(10),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 // class DrivenKmPerRoute {

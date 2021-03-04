@@ -20,20 +20,14 @@ class RoutesDrivenKmPercentage {
     this.entryDate,
     this.trips,
     this.color = const Color(0xff68cfc6),
+    this.routeTitle,
   });
-
-  /*{
-        "routeTitle": "DDN - LOC",
-        "drivenKm": 910,
-        "routeId": 7,
-        "drivenKmG": 767,
-        "trips": 21
-    }*/
 
   int drivenKm;
   int routeId;
   int drivenKmG;
   String entryDate;
+  String routeTitle;
   int trips;
   final Color color;
 
@@ -44,6 +38,7 @@ class RoutesDrivenKmPercentage {
         drivenKmG: json["drivenKmG"],
         entryDate: json["entryDate"],
         trips: json["trips"],
+        routeTitle: json["routeTitle"],
       );
 
   RoutesDrivenKmPercentage copyWith({
@@ -53,6 +48,7 @@ class RoutesDrivenKmPercentage {
     int drivenKm,
     int trips,
     Color color,
+    String routeTitle,
   }) =>
       RoutesDrivenKmPercentage(
         routeId: routeId ?? this.routeId,
@@ -61,6 +57,7 @@ class RoutesDrivenKmPercentage {
         drivenKmG: drivenKmG ?? this.drivenKmG,
         trips: trips ?? this.trips,
         color: color ?? this.color,
+        routeTitle: routeTitle ?? this.routeTitle,
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,5 +66,6 @@ class RoutesDrivenKmPercentage {
         "drivenKmG": drivenKmG,
         "entryDate": entryDate,
         "trips": trips,
+        "routeTitle": routeTitle,
       };
 }

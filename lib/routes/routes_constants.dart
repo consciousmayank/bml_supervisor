@@ -23,3 +23,4 @@ const String viewAllConsignmentsViewPageRoute = '/viewAllConsignmentsViewPage';
 const String consignmentsListPageRoute = '/consignmentsListPageRoute';
 const String logInPageRoute = '/logInPageRoute';
 const String hubsViewPageRoute = '/hubsViewPageRoute';
+const String distributorsLogPageRoute = '/distributorsLogPageRoute';

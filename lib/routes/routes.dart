@@ -10,6 +10,7 @@ import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.d
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
+import 'package:bml_supervisor/screens/distributors/distributors_view.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
@@ -125,6 +126,12 @@ class AppRouter {
             child: ViewRoutesView(),
           ),
         );
+      case distributorsLogPageRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: DistributorsScreenView(),
+                ) //ViewEntryView(),
+            );
 
       case viewConsignmentsPageRoute:
         return MaterialPageRoute(

@@ -22,8 +22,8 @@ class DioConfig {
     alice.setNavigatorKey(StackedService.navigatorKey);
 
     _dio.options
-      // ..baseUrl = baseSecureUrl
-      ..baseUrl = baseSecureUrlBmlApp
+      ..baseUrl = baseSecureUrl
+      // ..baseUrl = baseSecureUrlBmlApp
       ..contentType = "application/json";
     if (!kReleaseMode) {
       _dio.interceptors.add(alice.getDioInterceptor());
