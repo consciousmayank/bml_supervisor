@@ -283,19 +283,25 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                             .hubsList[index].geoLongitude);
                                   },
                                 ),
-                                Text("# ${index + 1}"),
+                                Text(
+                                  "# ${index + 1}",
+                                  style: AppTextStyles.appBarTitleStyle,
+                                ),
                                 hSizedBox(10),
                                 Text(
                                   viewModel.hubsList[index].title.toUpperCase(),
-                                  style: AppTextStyles.latoBold18Black,
+                                  style: AppTextStyles.latoBold18Black
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 hSizedBox(10),
                                 Text(
                                   "${viewModel.hubsList[index].contactPerson}",
-                                  style: AppTextStyles.latoMedium14Black,
+                                  style: AppTextStyles.latoMedium14Black
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 Text(viewModel.hubsList[index].city,
-                                    style: AppTextStyles.latoMedium14Black),
+                                    style: AppTextStyles.latoMedium14Black
+                                        .copyWith(color: AppColors.white)),
                               ],
                             ),
                           ),
@@ -672,6 +678,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter HubTitle"),
       enabled: true,
       controller: hubTitleController,
@@ -705,6 +712,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Remarks"),
       enabled: true,
       controller: remarksController,
@@ -729,6 +737,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       onChanged: (_) {
         viewModel.isDropCratesEdited = true;
       },
@@ -763,6 +772,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.collect?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Crates to collect"),
       enabled: true,
       controller: collectController,
@@ -800,6 +810,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Payment"),
       enabled: !enabled,
       controller: paymentController,
@@ -839,7 +850,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       ),
       helperText: ' ',
       labelText: hintText,
-      labelStyle: TextStyle(color: AppColors.black, fontSize: 14),
+      labelStyle: TextStyle(color: AppColors.white, fontSize: 14),
       fillColor: AppColors.primaryColorShade5,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
@@ -386,6 +387,20 @@ class ApiService {
       var request = {"username": userName, "password": newPassword};
       String body = json.encode(request);
       response = await dioClient.getDio().post(CHANGE_PASSWORD, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> getAppVersions(
+      {AppVersioningRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(GET_APP_VERSION, data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }

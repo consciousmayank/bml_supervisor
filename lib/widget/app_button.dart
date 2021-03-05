@@ -72,7 +72,7 @@ class AppButton extends StatelessWidget {
                 child: Text(
                   buttonText,
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.white,
                   ),
                 ),
               ),

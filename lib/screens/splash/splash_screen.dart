@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -59,12 +64,37 @@ class _MyHomePageState extends State<MyHomePage> {
         if (_controller.isActive) {
           print('Animation started playing');
         } else {
-          Future.delayed(Duration(seconds: 3), () {
-            PreferencesSavedUser user = MyPreferences().getUserLoggedIn();
-            if (user != null && user.isUserLoggedIn) {
-              locator<NavigationService>().replaceWith(dashBoardPageRoute);
+          locator<AppStartApiImpl>().getAppVersions().then((response) {
+            if (response.major > appVersion) {
+              locator<DialogService>()
+                  .showConfirmationDialog(
+                      title: 'App update required!',
+                      description:
+                          'It seems you are having an old version of this application. Please click ok and update the application.',
+                      cancelTitle: 'Abort App',
+                      confirmationTitle: 'Update App')
+                  .then((value) {
+                if (value.confirmed) {
+                  // StoreRedirect.redirect();
+                  if (Platform.isIOS) {
+                    launch("apps.apple.com/us/app/appname/1553210309");
+                  } else if (Platform.isAndroid) {
+                    launch("https://play.google.com/store/apps/details?id=" +
+                        'com.mayank.bml_supervisor');
+                  }
+                } else {
+                  Navigator.pop(context);
+                }
+              });
             } else {
-              locator<NavigationService>().replaceWith(logInPageRoute);
+              // Future.delayed(Duration(seconds: 3), () {
+              PreferencesSavedUser user = MyPreferences().getUserLoggedIn();
+              if (user != null && user.isUserLoggedIn) {
+                locator<NavigationService>().replaceWith(dashBoardPageRoute);
+              } else {
+                locator<NavigationService>().replaceWith(logInPageRoute);
+              }
+              // });
             }
           });
         }

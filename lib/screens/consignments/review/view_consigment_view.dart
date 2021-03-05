@@ -457,6 +457,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget hubTitle(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hint: "Title"),
       enabled: false,
       controller: hubTitleController,
@@ -474,6 +475,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget remarksInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Remarks"),
       controller: remarksController,
@@ -488,6 +490,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
 
   Widget dropInput({BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Crates To Drop"),
       controller: dropController,
@@ -506,6 +509,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget gDropInput(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       // onChanged: (newGDrop) {
       //   // viewModel.consignmentDetailResponseNew.items[index].dropOffG = newGDrop;
       //   print('before dropG: ${viewModel.consignmentDetailResponseNew.items[index].dropOffG}');
@@ -541,6 +545,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget collectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Crates To Collect"),
       controller: collectController,
@@ -559,6 +564,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget gCollectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: true,
       decoration: getInputBorder(hint: "Crates Collected"),
       controller: gCollectController,
@@ -587,6 +593,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: enabled ? "" : "Payment To Receive"),
       controller: paymentController,
@@ -608,6 +615,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: !enabled,
       decoration: getInputBorder(hint: enabled ? "" : "Payment Received"),
       controller: gPaymentController,

@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
 import 'package:bml_supervisor/screens/login/login_apis.dart';
 import 'package:bml_supervisor/screens/payments/payments_apis.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
+import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
 import 'package:bml_supervisor/services/api_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -28,6 +29,7 @@ void declareDependencies() {
   locator.registerLazySingleton(() => DailyEntryApisImpl());
   locator.registerLazySingleton(() => ChartsApiImpl());
   locator.registerLazySingleton(() => ProfileApisImpl());
+  locator.registerLazySingleton(() => AppStartApiImpl());
   locator.registerLazySingleton(() => PaymentsApisImpl());
   locator.registerLazySingleton(() => ExpensesApisImpl());
   locator.registerLazySingleton(() => LoginApisImpl());

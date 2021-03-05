@@ -19,7 +19,7 @@ import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
-import 'package:bml_supervisor/screens/splash_screen.dart';
+import 'package:bml_supervisor/screens/splash/splash_screen.dart';
 import 'package:bml_supervisor/screens/viewhubs/hubs_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
