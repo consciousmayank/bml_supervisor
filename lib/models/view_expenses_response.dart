@@ -1,52 +1,33 @@
-// Added by Vikas
-// Subject to change
-import 'package:meta/meta.dart';
+// To parse this JSON data, do
+//
+//     final viewExpensesResponse = viewExpensesResponseFromMap(jsonString);
+
 import 'dart:convert';
 
 class ViewExpensesResponse {
   ViewExpensesResponse({
-    @required this.id,
-    @required this.vehicleId,
-    @required this.entryDate,
-    @required this.expenseType,
-    @required this.expenseAmount,
-    @required this.expenseDesc,
-    @required this.status,
-    @required this.creationdate,
-    @required this.lastupdated,
+    this.eType,
+    this.eAmount,
+    this.vehicleId,
+    this.eDate,
   });
 
-  final int id;
+  final String eType;
+  final double eAmount;
   final String vehicleId;
-  final String entryDate;
-  final String expenseType;
-  final double expenseAmount;
-  final String expenseDesc;
-  final bool status;
-  final String creationdate;
-  final String lastupdated;
+  final String eDate;
 
   ViewExpensesResponse copyWith({
-    int id,
+    String eType,
+    double eAmount,
     String vehicleId,
-    String entryDate,
-    String expenseType,
-    int expenseAmount,
-    String expenseDesc,
-    bool status,
-    String creationdate,
-    String lastupdated,
+    String eDate,
   }) =>
       ViewExpensesResponse(
-        id: id ?? this.id,
+        eType: eType ?? this.eType,
+        eAmount: eAmount ?? this.eAmount,
         vehicleId: vehicleId ?? this.vehicleId,
-        entryDate: entryDate ?? this.entryDate,
-        expenseType: expenseType ?? this.expenseType,
-        expenseAmount: expenseAmount ?? this.expenseAmount,
-        expenseDesc: expenseDesc ?? this.expenseDesc,
-        status: status ?? this.status,
-        creationdate: creationdate ?? this.creationdate,
-        lastupdated: lastupdated ?? this.lastupdated,
+        eDate: eDate ?? this.eDate,
       );
 
   factory ViewExpensesResponse.fromJson(String str) =>
@@ -56,26 +37,16 @@ class ViewExpensesResponse {
 
   factory ViewExpensesResponse.fromMap(Map<String, dynamic> json) =>
       ViewExpensesResponse(
-        id: json["id"],
+        eType: json["eType"],
+        eAmount: json["eAmount"],
         vehicleId: json["vehicleId"],
-        entryDate: json["entryDate"],
-        expenseType: json["expenseType"],
-        expenseAmount: json["expenseAmount"],
-        expenseDesc: json["expenseDesc"],
-        status: json["status"],
-        creationdate: json["creationdate"],
-        lastupdated: json["lastupdated"],
+        eDate: json["eDate"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        "eType": eType,
+        "eAmount": eAmount,
         "vehicleId": vehicleId,
-        "entryDate": entryDate,
-        "expenseType": expenseType,
-        "expenseAmount": expenseAmount,
-        "expenseDesc": expenseDesc,
-        "status": status,
-        "creationdate": creationdate,
-        "lastupdated": lastupdated,
+        "eDate": eDate,
       };
 }

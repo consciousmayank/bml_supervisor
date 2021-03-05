@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_text_styles.dart';
 import 'dimens.dart';
 
 TextStyle topHeaderStyle() {
@@ -263,21 +268,108 @@ String convertFrom24HoursTime(String timeString) {
   }
 }
 
-//DateFormat.yMd().add_jm()
+FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
+    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
 
-launchMaps(double latitude, double longitude) async {
-  String googleUrl = 'comgooglemaps://?center=$latitude,$longitude}';
-  String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-  if (await canLaunch("comgooglemaps://")) {
-    print('launching com googleUrl');
+String getBase64String({@required String value}) {
+  var bytes = utf8.encode(value);
+  return base64.encode(bytes);
+}
+
+String getUserName({@required String value}) {
+  return utf8.decode(base64.decode(value));
+}
+
+Map<String, String> getAuthHeader({@required String base64String}) {
+  return {"Authorization": "Basic $base64String"};
+}
+
+int collectionLength(Iterable iterable) {
+  return iterable == null ? 0 : iterable.length;
+}
+
+List<T> copyList<T>(List<T> items) {
+  var newItems = List<T>();
+  if (items != null) {
+    newItems.addAll(items);
+  }
+  return newItems;
+}
+
+launchMaps({@required double latitude, @required double longitude}) async {
+  String googleUrl =
+      'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+  // String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
+  if (await canLaunch(googleUrl)) {
     await launch(googleUrl);
-  } else if (await canLaunch(appleUrl)) {
-    print('launching apple url');
-    await launch(appleUrl);
   } else {
     throw 'Could not launch url';
   }
 }
 
-FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
-    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
+Text buildChartTitle({@required String title}) {
+  return Text(
+    title,
+    style: AppTextStyles.latoBold16Black,
+  );
+}
+
+Text buildChartSubTitle({@required DateTime time}) {
+  return Text(
+    '(' + getDateStringCharts(time) + ')',
+    style: AppTextStyles.latoBold12Black,
+  );
+}
+
+String getDateStringCharts(DateTime date) {
+  return DateFormat('MMMM, yyyy').format(date);
+}
+
+Row buildChartDateLabel() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        "Dates",
+        style: AppTextStyles.latoBold12Black
+            .copyWith(color: AppColors.primaryColorShade5),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
+}
+
+Widget drawerList({String text, String imageName, Function onTap}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 2, bottom: 2),
+    child: ClickableWidget(
+      borderRadius: getBorderRadius(),
+      onTap: () {
+        onTap.call();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            imageName == null
+                ? Container()
+                : Image.asset(
+                    imageName,
+                    height: drawerIconsHeight,
+                    width: drawerIconsWidth,
+                    // color: AppColors.primaryColorShade5,
+                  ),
+            imageName == null ? Container() : wSizedBox(20),
+            Expanded(
+              child: Text(
+                text,
+                style: AppTextStyles.latoBold14Black
+                    .copyWith(color: AppColors.primaryColorShade5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}

@@ -1,13 +1,10 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/review_consignment_request.dart'
-as reviewConsignment;
-import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
+import 'package:bml_supervisor/models/review_consignment_request.dart'
+    as reviewConsignment;
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -16,11 +13,11 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 
 class ViewConsignmentView extends StatefulWidget {
   @override
@@ -72,7 +69,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
               child: Scaffold(
                 appBar: AppBar(
                     automaticallyImplyLeading: true,
-                    title: Text("View Consignments"),
+                    title: Text("View Consignments",
+                        style: AppTextStyles.appBarTitleStyle),
                     actions: [
                       isEditAllowed
                           ? FlatButton(
@@ -217,6 +215,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                           setDataInTextFormFields(
                               position: index, viewModel: viewModel);
                         },
+                        // physics: NeverScrollableScrollPhysics(),
                         controller: _controller,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
@@ -248,25 +247,29 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Text("# ${index + 1}"),
-                                                // hSizedBox(10),
-                                                // Text(
-                                                //   viewModel.consignmentDetailResponseNew.items[index]
-                                                //       .contactPerson
-                                                //       .toUpperCase(),
-                                                //   style: AppTextStyles
-                                                //       .latoBold18Black,
-                                                // ),
                                                 hSizedBox(10),
-                                                // Text(
-                                                //   "${viewModel.consignmentDetailResponseNew.items[index].contactPerson}",
-                                                //   style: AppTextStyles
-                                                //       .latoMedium14Black,
-                                                // ),
-                                                // Text(
-                                                //     viewModel
-                                                //         .consignmentDetailResponseNew.items[index].city,
-                                                //     style: AppTextStyles
-                                                //         .latoMedium14Black),
+                                                Text(
+                                                  viewModel
+                                                      .consignmentDetailResponseNew
+                                                      .items[index]
+                                                      .hubContactPerson
+                                                      .toUpperCase(),
+                                                  style: AppTextStyles
+                                                      .latoBold18Black,
+                                                ),
+                                                hSizedBox(10),
+                                                Text(
+                                                  "${viewModel.consignmentDetailResponseNew.items[index].hubContactPerson}",
+                                                  style: AppTextStyles
+                                                      .latoMedium14Black,
+                                                ),
+                                                Text(
+                                                    viewModel
+                                                        .consignmentDetailResponseNew
+                                                        .items[index]
+                                                        .hubCity,
+                                                    style: AppTextStyles
+                                                        .latoMedium14Black),
                                               ],
                                             ),
                                           ),
@@ -454,6 +457,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget hubTitle(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hint: "Title"),
       enabled: false,
       controller: hubTitleController,
@@ -471,6 +475,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget remarksInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Remarks"),
       controller: remarksController,
@@ -485,6 +490,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
 
   Widget dropInput({BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Crates To Drop"),
       controller: dropController,
@@ -503,6 +509,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget gDropInput(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       // onChanged: (newGDrop) {
       //   // viewModel.consignmentDetailResponseNew.items[index].dropOffG = newGDrop;
       //   print('before dropG: ${viewModel.consignmentDetailResponseNew.items[index].dropOffG}');
@@ -538,6 +545,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget collectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: "Crates To Collect"),
       controller: collectController,
@@ -556,6 +564,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget gCollectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: true,
       decoration: getInputBorder(hint: "Crates Collected"),
       controller: gCollectController,
@@ -584,6 +593,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: false,
       decoration: getInputBorder(hint: enabled ? "" : "Payment To Receive"),
       controller: paymentController,
@@ -605,6 +615,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       enabled: !enabled,
       decoration: getInputBorder(hint: enabled ? "" : "Payment Received"),
       controller: gPaymentController,
@@ -661,7 +672,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
             viewModel.selectedRoute = null;
             viewModel.entryDate = selectedDate;
             if (viewModel.selectedClient != null) {
-              viewModel.getRoutes(viewModel.selectedClient.id);
+              viewModel.getRoutes(viewModel.selectedClient.clientId);
             }
           }
         }),
@@ -768,8 +779,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           '${viewModel.reviewConsignmentRequest.reviewedItems[index].payment}');
 
       if (goForward) {
-        if (index <
-            viewModel.consignmentDetailResponseNew.items.length) {
+        if (index < viewModel.consignmentDetailResponseNew.items.length) {
           _controller.nextPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }

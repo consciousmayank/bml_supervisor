@@ -1,10 +1,33 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/km_report_response.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/charts/charts_api.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/flutter.dart';
 
 class BarChartViewModel extends GeneralisedBaseViewModel {
-  double totalKmG = 0.0;
+  ChartsApi _chartsApi = locator<ChartsApiImpl>();
+
+  DateTime _selectedDate = DateTime.now();
+  List<String> uniqueDates = [];
+  List<TickSpec<num>> listOfTicks;
+
+  DateTime get selectedDate => _selectedDate;
+
+  set selectedDate(DateTime value) {
+    _selectedDate = value;
+    notifyListeners();
+  }
+
+  int _totalKmG = 0;
+
+  int get totalKmG => _totalKmG;
+
+  set totalKmG(int value) {
+    _totalKmG = value;
+  }
+
   List<charts.Series<KilometerReportResponse, String>> _seriesBarData;
 
   List<charts.Series<KilometerReportResponse, String>> get seriesBarData =>
@@ -25,48 +48,41 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  Future getBarGraphKmReport({int clientId, String selectedDuration}) async {
+  Future getBarGraphKmReport({String clientId, String selectedDuration}) async {
     kmReportListData.clear();
+    uniqueDates.clear();
+
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();
-    try {
-      final res = await apiService.getTotalDrivenKmStats(
-          client: clientId, period: selectedDurationValue);
-      if (res.statusCode == 200) {
-        if (res is String) {
-          snackBarService.showSnackbar(message: res.toString());
-        }
-        if (res.data is List) {
-          var list = res.data as List;
-          if (list.length > 0) {
-            for (Map singleDay in list) {
-              KilometerReportResponse singleDayReport =
-                  KilometerReportResponse.fromJson(singleDay);
-              kmReportListData.add(singleDayReport);
-              totalKmG += double.parse(singleDayReport.drivenKm);
-            }
-            // add response list to chart data
-            seriesBarData = [
-              charts.Series(
-                id: 'Total Kms: ' + totalKmG.toString(),
-                data: kmReportListData,
-                domainFn: (KilometerReportResponse series, _) =>
-                    series.entryDate,
-                measureFn: (KilometerReportResponse series, _) =>
-                    int.parse(series.drivenKm),
-                colorFn: (KilometerReportResponse series, _) => series.barColor,
-                labelAccessorFn: (KilometerReportResponse series, _) =>
-                    '${series.drivenKm.toString()}',
-              ),
-            ];
-            notifyListeners();
-          }
-        }
+    List<KilometerReportResponse> res = await _chartsApi.getDailyDrivenKm(
+        clientId: clientId, period: selectedDurationValue);
+
+    kmReportListData = copyList(res);
+
+    kmReportListData.forEach((element) {
+      totalKmG += element.drivenKm;
+      if (!uniqueDates.contains(element.entryDate)) {
+        uniqueDates.add(element.entryDate);
       }
-      notifyListeners();
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
+    });
+
+    seriesBarData = [
+      charts.Series(
+        id: 'Total Kms: ' + totalKmG.toString(),
+        data: kmReportListData,
+        insideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
+            charts.TextStyleSpec(fontSize: 10, color: charts.Color.white),
+        outsideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
+            charts.TextStyleSpec(fontSize: 10, color: charts.Color.black),
+        domainFn: (KilometerReportResponse series, _) =>
+            series.entryDate.split('-')[0],
+        measureFn: (KilometerReportResponse series, _) => series.drivenKm,
+        colorFn: (KilometerReportResponse series, _) => series.barColor,
+        labelAccessorFn: (KilometerReportResponse series, _) =>
+            '${series.drivenKm.toString()}\nkm',
+      ),
+    ];
+
+    notifyListeners();
   }
 }

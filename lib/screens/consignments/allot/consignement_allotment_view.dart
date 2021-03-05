@@ -5,9 +5,8 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_client_id_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -16,6 +15,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +68,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentAllotmentViewModel>.reactive(
       onModelReady: (viewModel) {
-        viewModel.getClientIds();
+        viewModel.getClients();
       },
       builder: (context, viewModel, child) => SafeArea(
           left: false,
@@ -76,7 +76,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: true,
-              title: Text("Allot Consignments"),
+              title: Text("Allot Consignments",
+                  style: AppTextStyles.appBarTitleStyle),
             ),
             body: viewModel.isBusy
                 ? Center(
@@ -103,7 +104,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
             hint: "Select Client",
             onOptionSelect: (GetClientsResponse selectedValue) {
               viewModel.selectedClient = selectedValue;
-              viewModel.getRoutes(selectedValue.id);
+              viewModel.getRoutes(selectedValue.clientId);
 
               viewModel.selectedRoute = null;
               viewModel.entryDate = null;
@@ -118,7 +119,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           RoutesDropDown(
             optionList: viewModel.routesList,
             hint: "Select Routes",
-            onOptionSelect: (GetRoutesResponse selectedValue) {
+            onOptionSelect: (FetchRoutesResponse selectedValue) {
               viewModel.selectedRoute = selectedValue;
 
               viewModel.entryDate = null;
@@ -276,23 +277,31 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                   ),
                                   onTap: () {
                                     launchMaps(
-                                        viewModel.hubsList[index].geoLatitude,
-                                        viewModel.hubsList[index].geoLongitude);
+                                        latitude: viewModel
+                                            .hubsList[index].geoLatitude,
+                                        longitude: viewModel
+                                            .hubsList[index].geoLongitude);
                                   },
                                 ),
-                                Text("# ${index + 1}"),
+                                Text(
+                                  "# ${index + 1}",
+                                  style: AppTextStyles.appBarTitleStyle,
+                                ),
                                 hSizedBox(10),
                                 Text(
                                   viewModel.hubsList[index].title.toUpperCase(),
-                                  style: AppTextStyles.latoBold18Black,
+                                  style: AppTextStyles.latoBold18Black
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 hSizedBox(10),
                                 Text(
                                   "${viewModel.hubsList[index].contactPerson}",
-                                  style: AppTextStyles.latoMedium14Black,
+                                  style: AppTextStyles.latoMedium14Black
+                                      .copyWith(color: AppColors.white),
                                 ),
                                 Text(viewModel.hubsList[index].city,
-                                    style: AppTextStyles.latoMedium14Black),
+                                    style: AppTextStyles.latoMedium14Black
+                                        .copyWith(color: AppColors.white)),
                               ],
                             ),
                           ),
@@ -669,6 +678,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter HubTitle"),
       enabled: true,
       controller: hubTitleController,
@@ -702,6 +712,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Remarks"),
       enabled: true,
       controller: remarksController,
@@ -726,6 +737,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       onChanged: (_) {
         viewModel.isDropCratesEdited = true;
       },
@@ -760,6 +772,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.collect?.toString();
     }
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Crates to collect"),
       enabled: true,
       controller: collectController,
@@ -797,6 +810,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
+      style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Enter Payment"),
       enabled: !enabled,
       controller: paymentController,
@@ -836,7 +850,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       ),
       helperText: ' ',
       labelText: hintText,
-      labelStyle: TextStyle(color: AppColors.black, fontSize: 14),
+      labelStyle: TextStyle(color: AppColors.white, fontSize: 14),
       fillColor: AppColors.primaryColorShade5,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
@@ -921,8 +935,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 }
 
 class RoutesDropDown extends StatefulWidget {
-  final List<GetRoutesResponse> optionList;
-  final GetRoutesResponse selectedValue;
+  final List<FetchRoutesResponse> optionList;
+  final FetchRoutesResponse selectedValue;
   final String hint;
   final Function onOptionSelect;
   final showUnderLine;
@@ -939,18 +953,18 @@ class RoutesDropDown extends StatefulWidget {
 }
 
 class _RoutesDropDownState extends State<RoutesDropDown> {
-  List<DropdownMenuItem<GetRoutesResponse>> dropdown = [];
+  List<DropdownMenuItem<FetchRoutesResponse>> dropdown = [];
 
-  List<DropdownMenuItem<GetRoutesResponse>> getDropDownItems() {
-    List<DropdownMenuItem<GetRoutesResponse>> dropdown =
-        List<DropdownMenuItem<GetRoutesResponse>>();
+  List<DropdownMenuItem<FetchRoutesResponse>> getDropDownItems() {
+    List<DropdownMenuItem<FetchRoutesResponse>> dropdown =
+        List<DropdownMenuItem<FetchRoutesResponse>>();
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}  (${widget.optionList[i].id})",
+            "${widget.optionList[i].routeTitle}  (${widget.optionList[i].routeId})",
             style: TextStyle(
               color: Colors.black54,
             ),

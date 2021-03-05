@@ -1,15 +1,19 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
-import 'package:bml_supervisor/models/routes_for_client_id_response.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   bool _isHubTitleEdited = false,
       _isDropCratesEdited = false,
       _isCollectCratesEdited = false,
@@ -91,24 +95,24 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     _clientsList = value;
   }
 
-  GetRoutesResponse _selectedRoute;
-  List<GetRoutesResponse> _routesList = [];
+  FetchRoutesResponse _selectedRoute;
+  List<FetchRoutesResponse> _routesList = [];
 
-  List<GetRoutesResponse> get routesList => _routesList;
+  List<FetchRoutesResponse> get routesList => _routesList;
 
-  set routesList(List<GetRoutesResponse> value) {
+  set routesList(List<FetchRoutesResponse> value) {
     _routesList = value;
     notifyListeners();
   }
 
-  GetRoutesResponse get selectedRoute => _selectedRoute;
+  FetchRoutesResponse get selectedRoute => _selectedRoute;
 
-  set selectedRoute(GetRoutesResponse selectedRoute) {
+  set selectedRoute(FetchRoutesResponse selectedRoute) {
     _selectedRoute = selectedRoute;
     notifyListeners();
   }
 
-  getRoutes(int clientId) async {
+  getRoutes(String clientId) async {
     entryDate = null;
     validatedRegistrationNumber = null;
     consignmentRequest = null;
@@ -116,81 +120,41 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     routesList = [];
     hubsList = [];
-    var response = await apiService.getRoutesForClient(clientId: clientId);
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var routesList = apiResponse.data as List;
-
-      routesList.forEach((element) {
-        GetRoutesResponse getRoutesResponse =
-            GetRoutesResponse.fromMap(element);
-
-        this.routesList.add(getRoutesResponse);
-      });
-    }
+    List<FetchRoutesResponse> response =
+        await _dashBoardApis.getRoutes(clientId: clientId);
+    this.routesList = copyList(response);
     setBusy(false);
     notifyListeners();
   }
 
-  getClientIds() async {
+  getClients() async {
     setBusy(true);
-    var clientIdsResponse = await apiService.getClientsList();
-    if (clientIdsResponse is String) {
-      snackBarService.showSnackbar(message: clientIdsResponse);
-    } else {
-      Response apiResponse = clientIdsResponse;
-      var clientsList = apiResponse.data as List;
+    clientsList = [];
+    //* get bar graph data too when populating the client dropdown
 
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        _clientsList.add(getClientsResponse);
-      });
-      setBusy(false);
-      notifyListeners();
-    }
+    List<GetClientsResponse> responseList =
+        await _dashBoardApis.getClientList();
+    this.clientsList = copyList(responseList);
+    setBusy(false);
+    notifyListeners();
   }
 
   getHubs() async {
     hubsList = [];
-    var consignmentResponse = await apiService.getHubsForRouteAndClientId(
-        routeId: selectedRoute.id,
-        clientId: selectedClient.id,
-        entryDate: null);
-
-    if (consignmentResponse is String) {
-      snackBarService.showSnackbar(message: consignmentResponse);
-    } else {
-      Response apiResponse = consignmentResponse;
-      List hubsList = apiResponse.data as List;
-      hubsList.forEach((element) {
-        _hubsList.add(FetchHubsResponse.fromMap(element));
-      });
-    }
+    List<FetchHubsResponse> hubList =
+        await _dashBoardApis.getHubs(routeId: selectedRoute.routeId);
+    this.hubsList = copyList(hubList);
     setBusy(false);
     notifyListeners();
   }
 
   void validateRegistrationNumber(String regNum) async {
     consignmentRequest = null;
-
     setBusy(true);
-
-    var entryLog = await apiService.searchByRegistrationNumber(regNum);
-    if (entryLog is String) {
-      snackBarService.showSnackbar(message: entryLog);
-    } else if (entryLog.data['status'].toString() == 'failed') {
-      setBusy(false);
-      snackBarService.showSnackbar(message: "No Results found for \"$regNum\"");
-    } else {
-      validatedRegistrationNumber =
-          SearchByRegNoResponse.fromMap(entryLog.data);
-      initializeConsignments();
-      setBusy(false);
-    }
+    validatedRegistrationNumber =
+        await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
+    initializeConsignments();
+    setBusy(false);
   }
 
   void initializeConsignments() {
@@ -216,11 +180,11 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
     consignmentRequest = CreateConsignmentRequest(
         vehicleId: validatedRegistrationNumber.registrationNumber,
-        clientId: selectedClient.id,
-        routeId: selectedRoute.id,
+        clientId: selectedClient.clientId,
+        routeId: selectedRoute.routeId,
         entryDate: getConvertedDate(entryDate),
         title: enteredTitle,
-        routeTitle: selectedRoute.title,
+        routeTitle: selectedRoute.routeTitle,
         items: items);
   }
 
@@ -242,26 +206,20 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       );
     });
 
-    var createConsignmentResponse =
-        await apiService.createConsignment(consignmentRequest);
-    if (createConsignmentResponse is String) {
-      snackBarService.showSnackbar(message: createConsignmentResponse);
-    } else {
-      Response apiResponse = createConsignmentResponse;
-      ApiResponse response = ApiResponse.fromMap(apiResponse.data);
-      if (response.status == 'failed') {
-        setBusy(false);
-        snackBarService.showSnackbar(message: "${response.message}");
+    ApiResponse createConsignmentResponse = await _consignmentApis
+        .createConsignment(createConsignmentRequest: consignmentRequest);
+    dialogService
+        .showConfirmationDialog(
+            title: createConsignmentResponse.message,
+            description: "You can edit the consignment, in View Consignment.")
+        .then((value) {
+      if (createConsignmentResponse.status != 'failed') {
+        navigationService.back();
       } else {
-        dialogService
-            .showConfirmationDialog(
-                title: response.message,
-                description:
-                    "You can edit the consignment, in View Consignment.")
-            .then((value) => navigationService.back());
-        setBusy(false);
+        navigationService.back();
       }
-    }
+    });
+    setBusy(false);
   }
 
   get isDropCratesEdited => _isDropCratesEdited;

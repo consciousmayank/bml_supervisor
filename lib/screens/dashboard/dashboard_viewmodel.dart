@@ -1,15 +1,32 @@
 import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
-import 'package:bml_supervisor/models/km_report_response.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:bml_supervisor/models/routes_driven_km.dart';
-import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:dio/dio.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
+  DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
+
+  PreferencesSavedUser _savedUser;
+
+  PreferencesSavedUser get savedUser => _savedUser;
+
+  set savedUser(PreferencesSavedUser value) {
+    _savedUser = value;
+    notifyListeners();
+  }
+
+  void getSavedUser() {
+    savedUser = MyPreferences().getUserLoggedIn();
+  }
+
   List<IconData> optionsIcons = [
     Icons.phone,
     Icons.clear,
@@ -73,7 +90,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Expenses",
     "Allot Consignments",
     "View Routes",
-    "View Consignments",
+    "Review Consignments",
     "Payments",
     // "Add Entry 2.0",
     // "View Entry 2.0",
@@ -86,105 +103,122 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     clientsList = [];
     //* get bar graph data too when populating the client dropdown
 
-    var response = await apiService.getClientsList();
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
+    List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
+    this.clientsList = copyList(responseList);
 
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-    }
+    this.selectedClient = clientsList.first;
     setBusy(false);
     notifyListeners();
   }
 
-  void getDashboardTilesStats(String clientId) async {
+  void getClientDashboardStats() async {
     setBusy(true);
-    var tilesData = await apiService.getDashboardTilesStats(clientId);
-    if (tilesData is String) {
-      snackBarService.showSnackbar(message: tilesData);
-    } else {
-      singleClientTileData =
-          DashboardTilesStatsResponse.fromJson(tilesData.data);
-      setBusy(false);
-      notifyListeners();
-    }
-  }
 
-  void takeToAllConsignmentsPage() {
-    print('taking to takeToAllConsignmentsPage');
-    navigationService.navigateTo(viewAllConsignmentsViewPageRoute,
-        arguments: recentConsignmentList);
-  }
-
-  getRecentConsignments({int clientId, String period}) async {
-    recentConsignmentList.clear();
-    int selectedPeriodValue = period == 'THIS MONTH' ? 1 : 2;
-
-    setBusy(true);
-    notifyListeners();
-    try {
-      var res = await apiService.getRecentConsignments(
-        clientId: clientId,
-        period: selectedPeriodValue,
-      );
-      if (res.data is List) {
-        var list = res.data as List;
-        if (list.length > 0) {
-          for (Map singleConsignment in list) {
-            RecentConginmentResponse singleConsignmentResponse =
-                RecentConginmentResponse.fromJson(singleConsignment);
-            recentConsignmentList.add(singleConsignmentResponse);
-          }
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
-    notifyListeners();
+    singleClientTileData = await _dashboardApi.getDashboardTilesStats(
+        clientId: selectedClient.clientId);
     setBusy(false);
-  }
-
-  takeToAddEntryPage() {
-    navigationService.navigateTo(addEntryLogPageRoute);
-  }
-
-  takeToBlankPage() {
-    navigationService.navigateTo(blankPageRoute);
-  }
-
-  takeToAddExpensePage() {
-    navigationService.navigateTo(addExpensesPageRoute);
+    notifyListeners();
   }
 
   takeToViewEntryPage() {
-    navigationService.navigateTo(viewEntryLogPageRoute);
+    navigationService.navigateTo(viewEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToDistributorsPage() {
+    navigationService.navigateTo(distributorsLogPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 
   takeToViewExpensePage() {
-    navigationService.navigateTo(viewExpensesPageRoute);
+    navigationService.navigateTo(viewExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 
   takeToAllotConsignmentsPage() {
-    navigationService.navigateTo(allotConsignmentsPageRoute);
+    navigationService.back();
+    navigationService.navigateTo(allotConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToReviewConsignmentsPage() {
+    navigationService.back();
+    navigationService.navigateTo(viewConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 
   takeToPaymentsPage() {
-    navigationService.navigateTo(paymentsPageRoute);
+    navigationService.navigateTo(paymentsPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 
   takeToViewRoutesPage() {
-    navigationService.navigateTo(viewRoutesPageRoute);
+    navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 
-  //! For testing purpose it is navigating to searchPageRoute
-  takeToViewConsignmentsPage() {
-    navigationService.navigateTo(viewConsignmentsPageRoute);
+  takeToHubsView({FetchRoutesResponse clickedRoute}) {
+    navigationService.navigateTo(hubsViewPageRoute,
+        arguments: ViewRoutesArguments(
+          clickedRoute: clickedRoute,
+        ));
+  }
+
+  void reloadPage() {
+    getClients();
+    getClientDashboardStats();
+  }
+
+  void onViewRoutesTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewExpensesTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewEntryTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onTransactionsTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(paymentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onDashboardTileClick() {
+    navigationService.back();
+  }
+
+  void takeToAddDailyEntry() {
+    navigationService.back();
+    navigationService.navigateTo(addEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void takeToAddExpensePage() {
+    navigationService.back();
+    navigationService.navigateTo(addExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
   }
 }

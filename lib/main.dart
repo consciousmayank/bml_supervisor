@@ -7,9 +7,12 @@ import 'package:stacked_services/stacked_services.dart';
 
 import 'app_level/locator.dart';
 import 'app_level/setup_dialogs_ui.dart';
+import 'app_level/shared_prefs.dart';
 import 'app_level/themes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MyPreferences().init();
   declareDependencies();
   setupDialogUi();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(
@@ -19,7 +22,6 @@ void main() {
       watch: 200,
     ),
   );
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 

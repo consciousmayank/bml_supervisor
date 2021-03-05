@@ -1,5 +1,5 @@
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:flutter/material.dart';
 
 class ClientsDropDown extends StatefulWidget {
@@ -32,7 +32,7 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].title}",
+            "${widget.optionList[i].clientId}",
             style: TextStyle(
               color: Colors.black54,
             ),

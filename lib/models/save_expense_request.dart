@@ -2,8 +2,9 @@
 //
 //     final saveExpenseRequest = saveExpenseRequestFromMap(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 class SaveExpenseRequest {
   SaveExpenseRequest({
@@ -22,7 +23,7 @@ class SaveExpenseRequest {
   final double expenseAmount;
   final String expenseDesc;
   final bool status;
-  final int clientId;
+  final String clientId;
 
   SaveExpenseRequest copyWith({
     String vehicleId,
@@ -31,7 +32,7 @@ class SaveExpenseRequest {
     int expenseAmount,
     String expenseDesc,
     bool status,
-    int clientId,
+    String clientId,
   }) =>
       SaveExpenseRequest(
         vehicleId: vehicleId ?? this.vehicleId,

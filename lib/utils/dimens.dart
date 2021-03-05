@@ -16,3 +16,20 @@ const dashboardDistributerTileBgColor = 0xff04BFAE;
 const dashboardTotalKmTileBgColor = 0xffFFB300;
 const dashboardRoutesTileBgColor = 0xffD89CB8;
 const dashboardDueKmTileBgColor = 0xffF26665;
+const double distributorIconHeight = 17;
+const double distributorIconWidth = 21;
+
+const double bmlIconIconHeight = 50;
+const double bmlIconIconWidth = 50;
+
+const double bmlIconDrawerIconHeight = 33;
+const double bmlIconDrawerIconWidth = 33;
+const double drawerContentPadding = 12;
+
+const double routesWidgetHeightPageView = 200.00;
+const double routesWidgetHeightListView = 169.00;
+const double drawerIconsHeight = 20.00;
+const double drawerIconsWidth = 20.00;
+
+const double defaultIconIconHeight = 24;
+const double defaultIconWidth = 24;

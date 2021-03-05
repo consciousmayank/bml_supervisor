@@ -22,6 +22,14 @@ class ApiResponse {
         message: message ?? this.message,
       );
 
+  bool isSuccessful() {
+    if (this.status == 'success') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   factory ApiResponse.fromJson(String str) =>
       ApiResponse.fromMap(json.decode(str));
 
