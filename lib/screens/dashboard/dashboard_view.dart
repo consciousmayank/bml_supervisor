@@ -35,12 +35,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
-              title: viewModel.savedUser != null
-                  ? Text(
-                      'Welcome, ${viewModel.savedUser.userName}',
-                      style: AppTextStyles.appBarTitleStyle,
-                    )
-                  : Text('DashBoard', style: AppTextStyles.appBarTitleStyle),
+              title: Text(
+                "BookMyLoading",
+                style: AppTextStyles.appBarTitleStyle,
+              ),
               centerTitle: true,
             ),
             body: SingleChildScrollView(

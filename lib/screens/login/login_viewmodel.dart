@@ -37,6 +37,7 @@ class LoginViewModel extends GeneralisedBaseViewModel {
       // locator<DioConfig>().configureDio();
       takeToDashBoard();
     }
+    setBusy(false);
   }
 
   void takeToDashBoard() {

@@ -1,4 +1,3 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -16,6 +15,7 @@ class DashBoardDrawer extends StatefulWidget {
 
   const DashBoardDrawer({Key key, @required this.dashBoardScreenViewModel})
       : super(key: key);
+
   @override
   _DashBoardDrawerState createState() => _DashBoardDrawerState();
 }
@@ -36,29 +36,44 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               bottom: drawerContentPadding),
           child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: AppColors.primaryColorShade5),
-                    child: Image.asset(
-                      bmlIcon,
-                      height: bmlIconDrawerIconHeight,
-                      width: bmlIconDrawerIconWidth,
-                    ),
+              ClickableWidget(
+                borderRadius: getBorderRadius(),
+                onTap: () {
+                  widget.dashBoardScreenViewModel.navigationService.back();
+                  widget.dashBoardScreenViewModel.navigationService
+                      .navigateTo(userProfileRoute);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: AppColors.primaryColorShade5),
+                        child: Image.asset(
+                          bmlIcon,
+                          height: bmlIconDrawerIconHeight,
+                          width: bmlIconDrawerIconWidth,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Welcome,\n${widget.dashBoardScreenViewModel?.savedUser?.userName}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.latoBold18Black,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "BookMyLoading",
-                    style: AppTextStyles.latoMediumItalics15,
-                  ),
-                ],
+                ),
               ),
               Divider(
                 thickness: 1,
@@ -89,7 +104,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 imageName: consignmentIcon,
                 text: "Add Expense",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.takeToAddDailyEntry();
+                  widget.dashBoardScreenViewModel.takeToAddExpensePage();
                 },
               ),
               drawerList(
@@ -127,50 +142,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 onTap: () {
                   widget.dashBoardScreenViewModel.onTransactionsTileClick();
                 },
-              ),
-              drawerList(
-                text: "Logout",
-                onTap: () {
-                  MyPreferences().setLoggedInUser(null);
-                  MyPreferences().saveCredentials(null);
-                  widget.dashBoardScreenViewModel.navigationService
-                      .replaceWith(logInPageRoute);
-                },
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget drawerList({String text, String imageName, Function onTap}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2, bottom: 2),
-      child: ClickableWidget(
-        borderRadius: getBorderRadius(),
-        onTap: () {
-          onTap.call();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              imageName == null
-                  ? Container()
-                  : Image.asset(
-                      imageName,
-                      height: drawerIconsHeight,
-                      width: drawerIconsWidth,
-                      // color: AppColors.primaryColorShade5,
-                    ),
-              imageName == null ? Container() : wSizedBox(20),
-              Expanded(
-                child: Text(
-                  text,
-                  style: AppTextStyles.latoBold14Black
-                      .copyWith(color: AppColors.primaryColorShade5),
-                ),
               ),
             ],
           ),

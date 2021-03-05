@@ -226,7 +226,6 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
     }
 
     return appTextFormField(
-      // enabled: int.parse(viewModel.selectedClient.clientId) == 0,
       enabled: false,
       controller: selectedRegNoController,
       focusNode: selectedRegNoFocusNode,

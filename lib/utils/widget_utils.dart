@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -275,6 +276,10 @@ String getBase64String({@required String value}) {
   return base64.encode(bytes);
 }
 
+String getUserName({@required String value}) {
+  return utf8.decode(base64.decode(value));
+}
+
 Map<String, String> getAuthHeader({@required String base64String}) {
   return {"Authorization": "Basic $base64String"};
 }
@@ -331,5 +336,40 @@ Row buildChartDateLabel() {
         textAlign: TextAlign.center,
       ),
     ],
+  );
+}
+
+Widget drawerList({String text, String imageName, Function onTap}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 2, bottom: 2),
+    child: ClickableWidget(
+      borderRadius: getBorderRadius(),
+      onTap: () {
+        onTap.call();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            imageName == null
+                ? Container()
+                : Image.asset(
+                    imageName,
+                    height: drawerIconsHeight,
+                    width: drawerIconsWidth,
+                    // color: AppColors.primaryColorShade5,
+                  ),
+            imageName == null ? Container() : wSizedBox(20),
+            Expanded(
+              child: Text(
+                text,
+                style: AppTextStyles.latoBold14Black
+                    .copyWith(color: AppColors.primaryColorShade5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }

@@ -161,40 +161,30 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget passwordTextField({LoginViewModel viewModel}) {
-    return Stack(
-      children: [
-        loginTextFormField(
-            obscureText: viewModel.hidePassword,
-            controller: passwordController,
-            focusNode: passwordFocusNode,
-            hintText: "Password",
-            keyboardType: TextInputType.visiblePassword,
-            onFieldSubmitted: (_) {
-              passwordFocusNode.unfocus();
-            },
-            validator: (value) {
-              if (value.isEmpty) {
-                return passwordRequired;
-              }
-              /*else if (value.length < 8) {
+    return loginTextFormField(
+      showSuffix: true,
+      obscureText: viewModel.hidePassword,
+      onPasswordTogglePressed: (obscureText) {
+        viewModel.hidePassword = !viewModel.hidePassword;
+      },
+      controller: passwordController,
+      focusNode: passwordFocusNode,
+      hintText: "Password",
+      keyboardType: TextInputType.visiblePassword,
+      onFieldSubmitted: (_) {
+        passwordFocusNode.unfocus();
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return passwordRequired;
+        }
+        /*else if (value.length < 8) {
                 return 'Password too short.';
               }*/
-              else {
-                return null;
-              }
-            }),
-        Positioned(
-          right: 4,
-          top: 3,
-          child: IconButton(
-            icon: Icon(Icons.remove_red_eye_rounded),
-            color: viewModel.hidePassword ? Colors.black : Colors.blueGrey,
-            onPressed: () {
-              viewModel.hidePassword = !viewModel.hidePassword;
-            },
-          ),
-        )
-      ],
+        else {
+          return null;
+        }
+      },
     );
   }
 }

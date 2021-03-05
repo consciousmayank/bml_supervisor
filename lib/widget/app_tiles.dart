@@ -60,7 +60,7 @@ class _AppTilesState extends State<AppTiles> {
                       ),
                       Row(
                         // mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             widget.value,

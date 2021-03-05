@@ -101,47 +101,6 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       key: _formKey,
       child: ListView(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: headerText("Vehicle Expenses"),
-          // ),
-          // Text('tet text'),
-          // selectClient(viewModel: viewModel),
-          // Stack(
-          //   alignment: Alignment.bottomRight,
-          //   children: [
-          //     Padding(
-          //       padding: const EdgeInsets.all(2.0),
-          //       child: appTextFormField(
-          //         // enabled: false,
-          //         controller: selectedRegNoController,
-          //         focusNode: selectedRegNoFocusNode,
-          //         hintText: drRegNoHint,
-          //         keyboardType: TextInputType.text,
-          //         validator: (value) {
-          //           if (value.isEmpty) {
-          //             return textRequired;
-          //           } else {
-          //             return null;
-          //           }
-          //         },
-          //       ),
-          //     ),
-          //     // Padding(
-          //     //   padding: const EdgeInsets.only(bottom: 5.0, right: 4),
-          //     //   child: appSuffixIconButton(
-          //     //     icon: Icon(Icons.search),
-          //     //     onPressed: () {
-          //     //       viewModel.entryDate = null;
-          //     //       viewModel.takeToSearch();
-          //     //     },
-          //     //   ),
-          //     // ),
-          //   ],
-          // ),
-          // viewModel.selectedSearchVehicle == null
-          //     ? Container()
-          //     :
           Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -396,7 +355,7 @@ class _ClientsDropDownState extends State<DailyKmInfoDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}",
+            "${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}(${widget.optionList[i].routeTitle})",
             style: TextStyle(
               color: Colors.black54,
             ),

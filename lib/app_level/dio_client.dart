@@ -1,15 +1,11 @@
-import 'package:alice/alice.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import 'configuration.dart';
 
 class DioConfig {
-  Alice alice = Alice(showNotification: true);
   final _dio = Dio();
 
   DioConfig() {
@@ -19,15 +15,10 @@ class DioConfig {
   Interceptor get element => Interceptor();
 
   configureDio() {
-    alice.setNavigatorKey(StackedService.navigatorKey);
-
     _dio.options
       ..baseUrl = baseSecureUrl
       // ..baseUrl = baseSecureUrlBmlApp
       ..contentType = "application/json";
-    if (!kReleaseMode) {
-      _dio.interceptors.add(alice.getDioInterceptor());
-    }
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
         onResponse: (Response response) => responseInterceptor(response),

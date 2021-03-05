@@ -61,6 +61,7 @@ final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
     (clientId) => "/manager/dashboard/statistics/client/goldenharvest";
 
 const String GET_CLIENTS = "/manager/client/list";
+const String CHANGE_PASSWORD = "/user/update/password";
 const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
 final GET_DAILY_KM_INFO = (date) => "//dailyKilometer/info/$date";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';

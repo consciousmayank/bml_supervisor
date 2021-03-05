@@ -377,6 +377,20 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> changePassword(
+      {@required String userName, @required String newPassword}) async {
+    Response response;
+    DioError error;
+    try {
+      var request = {"username": userName, "password": newPassword};
+      String body = json.encode(request);
+      response = await dioClient.getDio().post(CHANGE_PASSWORD, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

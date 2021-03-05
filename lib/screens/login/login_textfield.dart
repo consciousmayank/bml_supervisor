@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Widget loginTextFormField({
+  Function onPasswordTogglePressed,
   bool obscureText = false,
+  bool showSuffix = false,
   TextEditingController controller,
   FocusNode focusNode,
   String hintText,
@@ -20,63 +22,76 @@ Widget loginTextFormField({
   List<TextInputFormatter> formatter,
   String labelText,
   FormFieldValidator<String> validator,
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
 }) {
-  return ClipRRect(
-    borderRadius: getBorderRadius(),
-    child: TextFormField(
-        obscureText: obscureText,
-        textAlign: textAlignment,
-        onEditingComplete: onEditingComplete,
-        maxLines: maxLines,
-        onChanged: onTextChange,
-        textCapitalization: textCapitalization,
-        inputFormatters: formatter,
-        enabled: enabled,
-        controller: controller,
-        focusNode: focusNode,
-        autofocus: autoFocus,
-        decoration: textFieldDecoration(hintText),
-        keyboardType: keyboardType,
-        onFieldSubmitted: onFieldSubmitted,
-        validator: validator),
-  );
-}
-
-InputDecoration textFieldDecoration(String hintLabel) {
-  return InputDecoration(
-    alignLabelWithHint: true,
-    errorStyle: TextStyle(fontSize: 14, color: AppColors.white),
-    helperStyle: TextStyle(
-      fontSize: 14,
-    ),
-    // helperText: ' ',
-    hintText: hintLabel,
-    hintStyle: TextStyle(color: Colors.white, fontSize: 14),
-    fillColor: AppColors.white,
-    focusedBorder: OutlineInputBorder(
-      borderRadius: getBorderRadius(),
-      borderSide: BorderSide(
-        color: AppColors.primaryColorShade1,
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        hintText,
+        style: TextStyle(color: Colors.white, fontSize: 11),
       ),
-    ),
-    disabledBorder: OutlineInputBorder(
-      borderRadius: getBorderRadius(),
-      borderSide: BorderSide(
-        color: AppColors.primaryColorShade1,
-      ),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: getBorderRadius(),
-      borderSide: BorderSide(
-        color: AppColors.primaryColorShade1,
-      ),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: getBorderRadius(),
-      borderSide: BorderSide(
-        color: AppColors.primaryColorShade1,
-      ),
-    ),
+      hSizedBox(5),
+      TextFormField(
+          autovalidateMode: autoValidateMode,
+          obscureText: obscureText,
+          textAlign: textAlignment,
+          onEditingComplete: onEditingComplete,
+          maxLines: maxLines,
+          onChanged: onTextChange,
+          textCapitalization: textCapitalization,
+          inputFormatters: formatter,
+          enabled: enabled,
+          controller: controller,
+          focusNode: focusNode,
+          autofocus: autoFocus,
+          decoration: InputDecoration(
+            labelText: showSuffix ? ' ' : null,
+            suffixIcon: showSuffix
+                ? InkWell(
+                    onTap: () {
+                      onPasswordTogglePressed(obscureText);
+                    },
+                    child: Icon(obscureText
+                        ? Icons.remove_red_eye
+                        : Icons.remove_red_eye_outlined),
+                  )
+                : null,
+            alignLabelWithHint: true,
+            errorStyle: TextStyle(fontSize: 14, color: AppColors.white),
+            helperStyle: TextStyle(
+              fontSize: 14,
+            ),
+            fillColor: AppColors.white,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: getBorderRadius(),
+              borderSide: BorderSide(
+                color: AppColors.primaryColorShade1,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: getBorderRadius(),
+              borderSide: BorderSide(
+                color: AppColors.primaryColorShade1,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: getBorderRadius(),
+              borderSide: BorderSide(
+                color: AppColors.primaryColorShade1,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: getBorderRadius(),
+              borderSide: BorderSide(
+                color: AppColors.primaryColorShade1,
+              ),
+            ),
+          ),
+          keyboardType: keyboardType,
+          onFieldSubmitted: onFieldSubmitted,
+          validator: validator),
+    ],
   );
 }
 
