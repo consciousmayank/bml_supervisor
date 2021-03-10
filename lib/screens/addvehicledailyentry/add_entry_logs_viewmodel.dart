@@ -1,23 +1,28 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
+  DashBoardApisImpl _dashBoardApis = locator<DashBoardApisImpl>();
+  DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
+
   RoutesForSelectedClientAndDateResponse _selectedRoute;
 
   RoutesForSelectedClientAndDateResponse get selectedRoute => _selectedRoute;
 
   set selectedRoute(RoutesForSelectedClientAndDateResponse value) {
     _selectedRoute = value;
+    if (value != null) getEntryLogForLastDate(value.vehicleId);
     notifyListeners();
   }
 
@@ -166,59 +171,26 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   getClients() async {
     setBusy(true);
     clientsList = [];
-    // call client api
-    // get the data as list
-    // add Book my loading at 0
-    // pupulate the clients dropdown
-    var response = await apiService.getClientsList();
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        this.clientsList.add(getClientsResponse);
-      });
-      this.clientsList.insert(
-          0,
-          GetClientsResponse(
-            id: 0,
-            title: 'Book My Loading',
-          ));
-    }
-
+    List<GetClientsResponse> responseList =
+        await _dashBoardApis.getClientList();
+    this.clientsList = copyList(responseList);
     setBusy(false);
     notifyListeners();
-    print('Number of clients: ${clientsList.length}');
-    clientsList.forEach((element) {
-      print(element.id);
-      print(element.title);
-    });
-    // print(clientsList);
   }
 
   void getEntryLogForLastDate(String registrationNumber) async {
     setBusy(true);
     _registrationNumber = registrationNumber;
-    var entryLog = await apiService.getEntryLogForDate(registrationNumber,
-        DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase());
-    if (entryLog is String) {
-      snackBarService.showSnackbar(message: entryLog);
-    } else if (entryLog.data['status'].toString() == 'failed') {
+    EntryLog entryLog = await _dailyEntryApis.getLatestDailyEntry(
+        registrationNumber: registrationNumber);
+
+    if (entryLog == null) {
       searchByRegistrationNumber(registrationNumber);
     } else {
-      print('search via last entry');
-      vehicleLog = EntryLog.fromMap(entryLog.data);
-      //contains date
-      print('last entry date: ${vehicleLog.entryDate}');
+      vehicleLog = entryLog;
       setAddEntryDate(vehicleLog.entryDate);
-      // setAddEntryDate('22-01-2021');
-      setBusy(false);
     }
+    setBusy(false);
   }
 
   setAddEntryDate(String entryDate) {
@@ -226,7 +198,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');
     DateTime time = DateTime.parse(joinedReversedDate);
-    if (DateTime.now().difference(time).inDays==0) {
+    if (DateTime.now().difference(time).inDays == 0) {
       print('same date entry');
       print(datePickerEntryDate);
       datePickerEntryDate = DateTime.now();
@@ -269,7 +241,9 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
           logoutTime: null,
           remarks: null,
           startReadingGround: null,
-          drivenKmGround: null);
+          drivenKmGround: null,
+          status: null,
+          routeId: null);
       flagForSearch = 1;
 
       // vehicleLog = EntryLog.fromMap(entryLog.data);
@@ -277,103 +251,19 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     }
   }
 
-  void search(String text) async {
-    searchResponse.clear();
-    selectedVehicle = null;
-    notifyListeners();
-    setBusy(true);
-    try {
-      final res = await apiService.search(registrationNumber: text);
-      if (res.statusCode == 200) {
-        var list = res.data as List;
-        if (list.length == 1) {
-          //for (Map singleItem in list) {
-          SearchByRegNoResponse singleSearchResult =
-              SearchByRegNoResponse.fromMap(list.first);
-          searchResponse.add(singleSearchResult);
-          //}
-
-          setBusy(false);
-          vehicleLog = EntryLog(
-              clientId: null,
-              vehicleId: null,
-              entryDate: null,
-              startReading: searchResponse.first.initReading,
-              endReading: null,
-              drivenKm: null,
-              fuelLtr: null,
-              fuelMeterReading: null,
-              ratePerLtr: null,
-              amountPaid: null,
-              trips: null,
-              loginTime: null,
-              logoutTime: null,
-              remarks: null,
-              startReadingGround: null,
-              drivenKmGround: null);
-          print('search via reg num');
-          print('making flag 1');
-          flagForSearch = 1;
-          print('start reading: ${vehicleLog.startReading}');
-          // takeToAddEntry2PointOFormViewPage();
-        } else if (list.length > 1) {
-          snackBarService.showSnackbar(
-              message: "Please enter complete Registration Number");
-        } else {
-          snackBarService.showSnackbar(
-              message: "No Results found for \"$text\"");
-        }
-      }
-    } on DioError catch (e) {
-      snackBarService.showSnackbar(message: e.message);
-      setBusy(false);
-    }
-    setBusy(false);
-  }
-
   submitVehicleEntry(EntryLog entryLogRequest) async {
     setBusy(true);
-    try {
-      var response = await apiService.submitVehicleEntry(entryLogRequest);
+    bool apiResponse = await _dailyEntryApis.submitVehicleEntry(
+        entryLogRequest: entryLogRequest);
 
-      if (response is String) {
-        snackBarService.showSnackbar(message: response);
-      } else {
-        Response actualResponse = response;
-
-        if (actualResponse.statusCode == 200) {
-          entyLogSubmitResponse = ApiResponse.fromMap(actualResponse.data);
-        }
-
-        if (entyLogSubmitResponse.status == "success") {
-          var response = await dialogService.showConfirmationDialog(
-            title: 'Congratulations...',
-            description: entyLogSubmitResponse.message.split("!")[0],
-          );
-
-          if (response == null || response.confirmed) {
-            navigationService.back();
-          }
-        } else {
-          var response = await dialogService.showConfirmationDialog(
-            title: 'Oops...',
-            description: entyLogSubmitResponse.message,
-          );
-
-          if (response == null || response.confirmed) {
-            selectedVehicle = null;
-            entryDate = null;
-            vehicleLog = null;
-            undertakenTrips = 1;
-            isFuelEntryAdded = false;
-          }
-        }
-      }
-    } catch (e) {
-      snackBarService.showSnackbar(
-        message: e.toString(),
-      );
-      setBusy(false);
+    if (apiResponse) {
+      navigationService.back();
+    } else {
+      selectedVehicle = null;
+      entryDate = null;
+      vehicleLog = null;
+      undertakenTrips = 1;
+      isFuelEntryAdded = false;
     }
     setBusy(false);
   }
@@ -383,7 +273,6 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
       print('selectedvehicle is null- search via last entry');
     }
     print('flag before sending' + flagForSearch.toString());
-    print('navigation client id' + selectedClient.id.toString());
     navigationService
         .navigateTo(
       addEntry2PointOFormViewPageRoute,
@@ -392,7 +281,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
           vehicleLog: vehicleLog,
           flagForSearch: flagForSearch,
           registrationNumber: _registrationNumber,
-          selectedClientId: selectedClient.id,
+          selectedClientId: selectedClient.clientId,
           selectedRoute: selectedRoute),
       // arguments: {
       //   'entryDateArg': entryDate,
@@ -411,32 +300,15 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     });
   }
 
-  getRoutesForSelectedClientAndDate(int clientId) async {
+  getRoutesForSelectedClientAndDate(String clientId) async {
     setBusy(true);
     routesList = [];
-    var response = await apiService.getRoutesForSelectedClientAndDate(
+    List<RoutesForSelectedClientAndDateResponse> response =
+        await _dailyEntryApis.getRoutesForSelectedClientAndDate(
       clientId: clientId,
       date: getDateString(entryDate),
     );
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-
-      try {
-        var routesList = apiResponse.data as List;
-
-        routesList.forEach((element) {
-          RoutesForSelectedClientAndDateResponse routes =
-              RoutesForSelectedClientAndDateResponse.fromMap(element);
-
-          this.routesList.add(routes);
-        });
-      } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
-      }
-    }
+    this.routesList = copyList(response);
     setBusy(false);
     notifyListeners();
   }

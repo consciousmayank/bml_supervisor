@@ -3,6 +3,7 @@
 //     final routesDrivenKmPercentage = routesDrivenKmPercentageFromJson(jsonString);
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 RoutesDrivenKmPercentage routesDrivenKmPercentageFromJson(String str) =>
@@ -19,12 +20,14 @@ class RoutesDrivenKmPercentage {
     this.entryDate,
     this.trips,
     this.color = const Color(0xff68cfc6),
+    this.routeTitle,
   });
 
   int drivenKm;
   int routeId;
   int drivenKmG;
   String entryDate;
+  String routeTitle;
   int trips;
   final Color color;
 
@@ -35,6 +38,7 @@ class RoutesDrivenKmPercentage {
         drivenKmG: json["drivenKmG"],
         entryDate: json["entryDate"],
         trips: json["trips"],
+        routeTitle: json["routeTitle"],
       );
 
   RoutesDrivenKmPercentage copyWith({
@@ -44,6 +48,7 @@ class RoutesDrivenKmPercentage {
     int drivenKm,
     int trips,
     Color color,
+    String routeTitle,
   }) =>
       RoutesDrivenKmPercentage(
         routeId: routeId ?? this.routeId,
@@ -52,6 +57,7 @@ class RoutesDrivenKmPercentage {
         drivenKmG: drivenKmG ?? this.drivenKmG,
         trips: trips ?? this.trips,
         color: color ?? this.color,
+        routeTitle: routeTitle ?? this.routeTitle,
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,5 +66,6 @@ class RoutesDrivenKmPercentage {
         "drivenKmG": drivenKmG,
         "entryDate": entryDate,
         "trips": trips,
+        "routeTitle": routeTitle,
       };
 }

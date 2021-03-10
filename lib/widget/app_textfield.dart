@@ -16,6 +16,7 @@ Widget appTextFormField({
   bool enabled = true,
   bool autoFocus = false,
   int maxLines = 1,
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
   List<TextInputFormatter> formatter,
   String labelText,
   FormFieldValidator<String> validator,
@@ -34,6 +35,7 @@ Widget appTextFormField({
         child: Padding(
           padding: const EdgeInsets.only(top: 2, bottom: 2),
           child: TextFormField(
+              autovalidateMode: autoValidateMode,
               textAlign: textAlignment,
               onEditingComplete: onEditingComplete,
               maxLines: maxLines,

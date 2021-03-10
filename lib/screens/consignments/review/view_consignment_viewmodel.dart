@@ -1,19 +1,24 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/get_clients_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
-  // CreateConsignmentRequest consignmentRequest;
+  DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   // SearchByRegNoResponse validatedRegistrationNumber;
   ReviewConsignmentRequest reviewConsignmentRequest =
       ReviewConsignmentRequest();
@@ -114,49 +119,24 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   }
 
   getClientIds() async {
-    var clientIdsResponse = await apiService.getClientsList();
-    if (clientIdsResponse is String) {
-      snackBarService.showSnackbar(message: clientIdsResponse);
-    } else {
-      Response apiResponse = clientIdsResponse;
-      var clientsList = apiResponse.data as List;
-
-      clientsList.forEach((element) {
-        GetClientsResponse getClientsResponse =
-            GetClientsResponse.fromMap(element);
-        _clientsList.add(getClientsResponse);
-      });
-      notifyListeners();
-    }
+    setBusy(true);
+    List<GetClientsResponse> clientIdsResponse =
+        await _dashBoardApis.getClientList();
+    _clientsList = copyList(clientIdsResponse);
+    notifyListeners();
+    setBusy(false);
   }
 
-  getRoutes(int clientId) async {
+  getRoutes(String clientId) async {
     setBusy(true);
     routesList = [];
     hubList = [];
-    var response = await apiService.getRoutesForSelectedClientAndDate(
+    List<RoutesForSelectedClientAndDateResponse> response =
+        await _dailyEntryApis.getRoutesForSelectedClientAndDate(
       clientId: clientId,
       date: getDateString(entryDate),
     );
-
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-
-      try {
-        var routesList = apiResponse.data as List;
-
-        routesList.forEach((element) {
-          RoutesForSelectedClientAndDateResponse routes =
-              RoutesForSelectedClientAndDateResponse.fromMap(element);
-
-          this.routesList.add(routes);
-        });
-      } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
-      }
-    }
+    this.routesList = copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -167,25 +147,12 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     consignmentsList = [];
     print(getDateString(entryDate));
-    var response = await apiService.getConsignmentListWithDate(
-      entryDate: getDateString(entryDate),
-    );
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else {
-      Response apiResponse = response;
-      try {
-        var responseList = apiResponse.data as List;
-        responseList.forEach((element) {
-          ConsignmentsForSelectedDateAndClientResponse consignment =
-              ConsignmentsForSelectedDateAndClientResponse.fromMap(element);
-          consignmentsList.add(consignment);
-        });
-        notifyListeners();
-      } catch (e) {
-        snackBarService.showSnackbar(message: apiResponse.data['message']);
-      }
-    }
+    List<ConsignmentsForSelectedDateAndClientResponse> response =
+        await _consignmentApis.getConsignmentsForSelectedDateAndClient(
+            date: getDateString(entryDate), clientId: selectedClient.clientId);
+
+    consignmentsList = copyList(response);
+
     setBusy(false);
     notifyListeners();
   }
@@ -194,37 +161,26 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     reviewConsignmentRequest = ReviewConsignmentRequest();
     reviewConsignmentRequest.reviewedItems = [];
-    var response =
-        await apiService.getConsignmentWithId(consignmentId: consignmentId);
-    if (response is String) {
-      snackBarService.showSnackbar(message: response);
-    } else if (response.data['status'].toString() == 'failed') {
-      // setBusy(false);
-      snackBarService.showSnackbar(message: response.data['message']);
-    } else {
-      try {
-        consignmentDetailResponseNew =
-            ConsignmentDetailResponseNew.fromJson(response.data);
-        consignmentDetailResponseNew.items.forEach((element) {
-          reviewConsignmentRequest.reviewedItems.add(reviewConsignment.Item(
-            consignmentId: element.consignmentId,
-            title: element.title,
-            payment: element.payment,
-            collect: element.collect,
-            dropOff: element.dropOff,
-            flag: element.flag,
-            hubId: element.hubId,
-            paymentId: element.paymentId,
-            paymentMode: element.paymentMode,
-            remarks: element.remarks,
-            sequence: element.sequence,
-          ));
-          _formKeyList.add(GlobalKey<FormState>());
-        });
-      } catch (e) {
-        snackBarService.showSnackbar(message: e.toString());
-      }
-    }
+    consignmentDetailResponseNew = await _consignmentApis.getConsignmentWithId(
+        consignmentId: consignmentId);
+
+    consignmentDetailResponseNew.items.forEach((element) {
+      reviewConsignmentRequest.reviewedItems.add(reviewConsignment.Item(
+        consignmentId: element.consignmentId,
+        title: element.title,
+        payment: element.payment,
+        collect: element.collect,
+        dropOff: element.dropOff,
+        flag: element.flag,
+        hubId: element.hubId,
+        paymentId: element.paymentId,
+        paymentMode: element.paymentMode,
+        remarks: element.remarks,
+        sequence: element.sequence,
+      ));
+      _formKeyList.add(GlobalKey<FormState>());
+    });
+
     setBusy(false);
     notifyListeners();
   }
@@ -243,32 +199,21 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
         title: element.title.length == 0 ? 'NA' : element.title,
       );
     });
-    var updateConsignmentResponse = await apiService.updateConsignment(
+    ApiResponse apiResponse = await _consignmentApis.updateConsignment(
       consignmentId: consignmentDetailResponseNew.id,
       putRequest: reviewConsignmentRequest,
     );
 
-    if (updateConsignmentResponse is String) {
-      print('i am string');
-      snackBarService.showSnackbar(message: updateConsignmentResponse);
+    if (apiResponse.status == 'failed') {
+      setBusy(false);
+      snackBarService.showSnackbar(message: '${apiResponse.message}');
     } else {
-      print('i am else');
-
-      Response response = updateConsignmentResponse;
-      print(response);
-      ApiResponse apiResponse = ApiResponse.fromMap(response.data);
-      if (apiResponse.status == 'failed') {
-        setBusy(false);
-        snackBarService.showSnackbar(message: '${apiResponse.message}');
-      } else {
-        // print('')
-        dialogService
-            .showConfirmationDialog(
-                title: apiResponse.message,
-                description: 'Consignment Reviewed.')
-            .then((value) => navigationService.back());
-        setBusy(false);
-      }
+      // print('')
+      dialogService
+          .showConfirmationDialog(
+              title: apiResponse.message, description: 'Consignment Reviewed.')
+          .then((value) => navigationService.back());
+      setBusy(false);
     }
   }
 }

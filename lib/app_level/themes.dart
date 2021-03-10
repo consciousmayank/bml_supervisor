@@ -35,17 +35,20 @@ class ThemeConfiguration {
       const TextStyle(fontWeight: FontWeight.w700, color: Colors.white);
 
   //also bottom navigation color
-  static const Color appCanvasColor = AppColors.primaryColorShade5;
-  static const Color appScaffoldBackgroundColor = AppColors.primaryColorShade2;
+  static const Color appCanvasColor = AppColors.white;
+  static const Color appScaffoldBackgroundColor = AppColors.appScaffoldColor;
 
   ThemeData getAppThemeComplete() {
     return ThemeData(
       appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(color: AppColors.black),
+        iconTheme: IconThemeData(color: AppColors.white),
         elevation: 0.8,
-        color: AppColors.primaryColorShade4,
+        color: AppColors.primaryColorShade5,
         textTheme: appTextTheme,
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: AppColors.primaryColorShade11,
+          splashColor: AppColors.primaryColorShade3),
       primaryIconTheme: IconThemeData(color: secondaryBackground),
       brightness: Brightness.dark,
       primaryColor: primaryBackground,
@@ -53,7 +56,7 @@ class ThemeConfiguration {
       primaryColorLight: secondaryBackground,
       primaryColorDark: secondaryBackground,
       accentColor: accentElement,
-      accentColorBrightness: Brightness.light,
+      accentColorBrightness: Brightness.dark,
       canvasColor: appCanvasColor,
       scaffoldBackgroundColor: appScaffoldBackgroundColor,
 //      bottomAppBarColor: Color(0xffffffff), we don't hve this as of now
@@ -104,7 +107,7 @@ class ThemeConfiguration {
           onSurface: Color(0xff000000),
           onBackground: Color(0xff000000),
           onError: Color(0xffffffff),
-          brightness: Brightness.light,
+          brightness: Brightness.dark,
         ),
       ),
       textTheme: appTextTheme,
@@ -238,7 +241,7 @@ class ThemeConfiguration {
       // ),
       // chipTheme: ChipThemeData(
       //   backgroundColor: primaryBackground,
-      //   brightness: Brightness.light,
+      //   brightness: Brightness.dark,
       //   deleteIconColor: Color(0xde000000),
       //   disabledColor: Color(0x0c000000),
       //   labelPadding:

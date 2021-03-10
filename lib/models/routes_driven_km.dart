@@ -3,10 +3,7 @@
 //     final routesDrivenKm = routesDrivenKmFromJson(jsonString);
 
 import 'dart:convert';
-
 import 'dart:ui';
-
-import 'package:bml_supervisor/utils/widget_utils.dart';
 
 RoutesDrivenKm routesDrivenKmFromJson(String str) =>
     RoutesDrivenKm.fromJson(json.decode(str));
@@ -22,10 +19,12 @@ class RoutesDrivenKm {
     this.title,
     this.entryDate,
     this.color = const Color(0xff68cfc6),
+    this.routeTitle,
   });
 
   int drivenKm;
   int routeId;
+  String routeTitle;
   String vehicleId;
   int drivenKmG;
   String title;
@@ -33,9 +32,7 @@ class RoutesDrivenKm {
   final Color color;
   DateTime _entryDateTime;
 
-
-  DateTime get entryDateTime{
-
+  DateTime get entryDateTime {
     var dateAsList = entryDate.split('-');
     var reversedDateList = dateAsList.reversed;
     var joinedReversedDate = reversedDateList.join('-');
@@ -51,6 +48,7 @@ class RoutesDrivenKm {
     String title,
     String entryDate,
     Color color,
+    String routeTitle,
   }) =>
       RoutesDrivenKm(
         drivenKm: drivenKm ?? this.drivenKm,
@@ -60,11 +58,13 @@ class RoutesDrivenKm {
         title: title ?? this.title,
         entryDate: title ?? this.title,
         color: color ?? this.color,
+        routeTitle: routeTitle ?? this.routeTitle,
       );
 
   factory RoutesDrivenKm.fromJson(Map<String, dynamic> json) => RoutesDrivenKm(
         drivenKm: json["drivenKm"],
         routeId: json["routeId"],
+        routeTitle: json["routeTitle"],
         vehicleId: json["vehicleId"],
         drivenKmG: json["drivenKmG"],
         title: json["title"],
@@ -78,6 +78,7 @@ class RoutesDrivenKm {
         "drivenKmG": drivenKmG,
         "title": title,
         "entryDate": entryDate,
+        "routeTitle": routeTitle,
       };
 
   void getParticularRouteDateWithDrivenKm() {}

@@ -1,4 +1,4 @@
-import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardLoadingWidget extends StatefulWidget {
@@ -10,10 +10,10 @@ class _DashBoardLoadingWidgetState extends State<DashBoardLoadingWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: buttonWidth,
-      height: buttonHeight,
+      width: double.infinity,
+      height: 200,
       child: Center(
-        child: CircularProgressIndicator(),
+        child: ShimmerContainer(),
       ),
     );
   }
