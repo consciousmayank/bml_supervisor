@@ -373,9 +373,3 @@ Widget drawerList({String text, String imageName, Function onTap}) {
     ),
   );
 }
-
-// FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
-//     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
-// bool isCollectionNullOrEmpty(Iterable iterable) {
-//   return iterable == null || iterable.length == 0;
-// }

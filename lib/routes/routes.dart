@@ -16,6 +16,7 @@ import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
+import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
@@ -164,7 +165,12 @@ class AppRouter {
 
       case paymentsPageRoute:
         return MaterialPageRoute(
-          builder: (_) => PaymentsView(),
+          builder: (_) => NetworkSensitive(child: PaymentsView()),
+        );
+
+      case pickImagePageRoute:
+        return MaterialPageRoute(
+          builder: (_) => PickImageView(),
         );
 
       case hubsViewPageRoute:
