@@ -49,6 +49,8 @@ dependencies:
   shimmer: ^1.1.2
   flutter_offline: "^0.3.0"
   data_connection_checker: ^0.3.4
+  store_redirect: ^1.0.2
+  image_pickers: ^1.0.8+7
 #  store_redirect: ^1.0.2
 
   # The following adds the Cupertino Icons font to your application.

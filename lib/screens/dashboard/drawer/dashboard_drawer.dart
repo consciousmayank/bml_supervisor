@@ -144,6 +144,13 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
+                imageName: rupeesIcon,
+                text: "Pick Image",
+                onTap: () {
+                  widget.dashBoardScreenViewModel.onPickImageTileClick();
+                },
+              ),
+              drawerList(
                 imageName: addDriverIcon,
                 text: "Add Driver",
                 onTap: () {

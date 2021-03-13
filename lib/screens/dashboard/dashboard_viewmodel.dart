@@ -211,6 +211,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
         );
   }
 
+  void onPickImageTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(pickImagePageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void onDashboardTileClick() {
     navigationService.back();
   }
