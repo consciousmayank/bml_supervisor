@@ -11,6 +11,7 @@ import 'package:bml_supervisor/services/api_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'api_provider.dart';
 import 'dio_client.dart';
 
 final locator = GetIt.instance;
@@ -22,7 +23,7 @@ void declareDependencies() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => DialogService());
-  // locator.registerLazySingleton(() => MyPreferences());
+  locator.registerLazySingleton(() => ApiProvider());
   locator.registerLazySingleton(() => DioConfig());
   locator.registerLazySingleton(() => DashBoardApisImpl());
   locator.registerLazySingleton(() => ConsignmentApisImpl());

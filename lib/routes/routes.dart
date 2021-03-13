@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
@@ -165,6 +166,11 @@ class AppRouter {
       case paymentsPageRoute:
         return MaterialPageRoute(
           builder: (_) => PaymentsView(),
+        );
+
+      case addDriverPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => AddDriverView(),
         );
 
       case hubsViewPageRoute:

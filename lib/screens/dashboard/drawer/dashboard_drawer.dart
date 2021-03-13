@@ -143,6 +143,13 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                   widget.dashBoardScreenViewModel.onTransactionsTileClick();
                 },
               ),
+              drawerList(
+                imageName: addDriverIcon,
+                text: "Add Driver",
+                onTap: () {
+                  widget.dashBoardScreenViewModel.onAddDriverTileClick();
+                },
+              ),
             ],
           ),
         ),
