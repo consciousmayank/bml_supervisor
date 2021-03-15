@@ -256,7 +256,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: buttonHeight,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           // ! Validation Code Below
           if (_formKey.currentState.validate()) {
@@ -348,7 +348,7 @@ class _ClientsDropDownState extends State<DailyKmInfoDropDown> {
 
   List<DropdownMenuItem<GetDailyKilometerInfo>> getDropDownItems() {
     List<DropdownMenuItem<GetDailyKilometerInfo>> dropdown =
-        List<DropdownMenuItem<GetDailyKilometerInfo>>();
+        <DropdownMenuItem<GetDailyKilometerInfo>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(

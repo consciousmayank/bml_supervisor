@@ -50,23 +50,25 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                       )
                     : Column(
                         children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: selectClientForDashboardStats(
-                                    viewModel: viewModel),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: selectDuration(viewModel: viewModel),
-                                flex: 1,
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 4),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: selectClientForDashboardStats(
+                                      viewModel: viewModel),
+                                  flex: 1,
+                                ),
+                                Expanded(
+                                  child: selectDuration(viewModel: viewModel),
+                                  flex: 1,
+                                ),
+                              ],
+                            ),
                           ),
                           viewModel.singleClientTileData != null
                               ? makeTiles(viewModel: viewModel)
                               : Container(),
-
                           viewModel.selectedClient != null &&
                                   viewModel.selectedDuration != null
                               ? BarChartView(
@@ -88,22 +90,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   selectedDuration: viewModel.selectedDuration,
                                 )
                               : Container(),
-
-                          // viewModel.selectedClient != null &&
-                          //     viewModel.selectedDuration != null
-                          //     ? ClipRRect(
-                          //   borderRadius: BorderRadius.circular(20),
-                          //   child: Card(
-                          //     elevation: defaultElevation,
-                          //     child: RoutesView(
-                          //       selectedClient: viewModel.selectedClient,
-                          //       onRoutesPageInView:
-                          //           (FetchRoutesResponse clickedRoute) {},
-                          //     ),
-                          //   ),
-                          // )
-                          //     : Container(),
-
                           viewModel.selectedClient == null
                               ? Container()
                               : Card(

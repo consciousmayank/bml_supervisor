@@ -289,7 +289,7 @@ int collectionLength(Iterable iterable) {
 }
 
 List<T> copyList<T>(List<T> items) {
-  var newItems = List<T>();
+  var newItems = <T>[];
   if (items != null) {
     newItems.addAll(items);
   }
@@ -373,9 +373,3 @@ Widget drawerList({String text, String imageName, Function onTap}) {
     ),
   );
 }
-
-// FilteringTextInputFormatter twoDigitDecimalPointFormatter() =>
-//     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
-// bool isCollectionNullOrEmpty(Iterable iterable) {
-//   return iterable == null || iterable.length == 0;
-// }

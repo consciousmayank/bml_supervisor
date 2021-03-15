@@ -160,3 +160,22 @@ const List<String> tempRoutes = [
   'R4',
   'R5',
 ];
+const String addDriverVehicleIdHint = "Vehicle Registration Id";
+const String addDriverFirstNameHint = "First Name";
+const String addDriverLastNameHint = "Last Name";
+const String addDriverDobHint = "Date of Birth";
+const String addDriverFatherNameHint = "Father's Name";
+const String addDriverMobileHint = "Mobile Number";
+const String addDriverAlternateMobileHint = "Alternate Mobile Number";
+const String addDriverWhatsAppMobileHint = "WhatsApp Number";
+const String addDriverExperienceHint = "Experience (Yrs)";
+const String addDriverStreetHint = "Street";
+const String addDriverLocalityHint = "Locality";
+const String addDriverLandmarkHint = "Landmark";
+const String addDriverCityHint = "City";
+const String addDriverStateHint = "State";
+const String addDriverCountryHint = "Country";
+const String addDriverAadhaarHint = "Aadhaar Card Number";
+const String addDriverDlHint = "Driving License";
+const String addDriverRemarksHint = "Remarks";
+const List<String> genders = ['MALE', 'FEMALE', 'OTHERS'];

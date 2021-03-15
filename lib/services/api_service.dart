@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
@@ -237,7 +238,6 @@ class ApiService {
       response = await dioClient.getDio().post(GET_DAILY_ENTRIES, data: body);
     } on DioError catch (e) {
       error = e;
-      ;
     }
     return ParentApiResponse(error: error, response: response);
   }
@@ -401,6 +401,43 @@ class ApiService {
       response = await dioClient
           .getDio()
           .post(GET_APP_VERSION, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  ///Get list of cities for adding driver.
+  Future<ParentApiResponse> getCities() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_CITIES);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  ///Get details of a city selected.
+  Future<ParentApiResponse> getCityLocation({@required String cityId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_CITY_LOCATION(cityId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> addDriver(
+      {@required AddDriverRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().post(ADD_DRIVER, data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }

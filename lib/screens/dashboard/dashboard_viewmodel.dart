@@ -204,6 +204,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
         );
   }
 
+  void onAddDriverTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(addDriverPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void onDashboardTileClick() {
     navigationService.back();
   }

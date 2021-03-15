@@ -223,6 +223,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_native_image:
+    dependency: "direct main"
+    description:
+      name: flutter_native_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5+3"
   flutter_offline:
     dependency: "direct main"
     description:
@@ -303,6 +310,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  image_pickers:
+    dependency: "direct main"
+    description:
+      name: image_pickers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8+7"
   intl:
     dependency: "direct main"
     description:
@@ -623,13 +637,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.2"
-  store_redirect:
-    dependency: "direct main"
-    description:
-      name: store_redirect
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   stream_channel:
     dependency: transitive
     description:

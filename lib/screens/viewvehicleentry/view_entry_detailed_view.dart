@@ -230,7 +230,7 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                FlatButton(
+                                TextButton(
                                   child: Text(
                                     'More Info',
                                     style: TextStyle(

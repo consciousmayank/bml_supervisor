@@ -13,7 +13,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();
 
   double _totalAmt = 0.0;
-  int _page = 1;
 
   double get totalAmt => _totalAmt;
 

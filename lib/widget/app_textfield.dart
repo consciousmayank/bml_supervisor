@@ -16,6 +16,7 @@ Widget appTextFormField({
   bool enabled = true,
   bool autoFocus = false,
   int maxLines = 1,
+  InputDecoration inputDecoration,
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled,
   List<TextInputFormatter> formatter,
   String labelText,
@@ -46,7 +47,8 @@ Widget appTextFormField({
               controller: controller,
               focusNode: focusNode,
               autofocus: autoFocus,
-              decoration: textFieldDecoration(showRupeesSymbol),
+              decoration:
+                  inputDecoration ?? textFieldDecoration(showRupeesSymbol),
               keyboardType: keyboardType,
               onFieldSubmitted: onFieldSubmitted,
               validator: validator),

@@ -25,7 +25,7 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
 
   List<DropdownMenuItem<GetClientsResponse>> getDropDownItems() {
     List<DropdownMenuItem<GetClientsResponse>> dropdown =
-        List<DropdownMenuItem<GetClientsResponse>>();
+        <DropdownMenuItem<GetClientsResponse>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(
@@ -53,13 +53,13 @@ class _ClientsDropDownState extends State<ClientsDropDown> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(widget.hint ?? ""),
               ),
               Card(
                 elevation: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                  padding: const EdgeInsets.only(top: 2, bottom: 2),
                   child: DropdownButton(
                     icon: Padding(
                       padding: const EdgeInsets.only(right: 4),

@@ -376,12 +376,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
-            // side: BorderSide(color: Colors.red),
-          ),
-          color: Color(0xff04BFAE),
+        child: ElevatedButton(
           child: Text("CREATE"),
           onPressed: () {
             //* hit add transaction api

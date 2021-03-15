@@ -115,7 +115,7 @@ class _RoutesViewState extends State<RoutesView> {
               itemBuilder: (BuildContext context, int index) {
                 return buildRoutesView(viewModel, index);
               },
-              itemCount: widget.isInDashBoard ? 4 : viewModel.routesList.length,
+              itemCount: widget.isInDashBoard ? 6 : viewModel.routesList.length,
               separatorBuilder: (BuildContext context, int index) {
                 return Divider(
                   thickness: 1,

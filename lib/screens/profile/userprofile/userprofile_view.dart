@@ -102,7 +102,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                             MyPreferences().setLoggedInUser(null);
                             MyPreferences().saveCredentials(null);
                             widget.userProfileViewModel.navigationService
-                                .replaceWith(logInPageRoute);
+                                .clearStackAndShow(logInPageRoute);
                           },
                         ),
                       ],

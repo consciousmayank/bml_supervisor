@@ -38,3 +38,4 @@ final String filterIcon = _imagePath + 'down_arrow_icon.png';
 final String filteredIcon = _imagePath + 'filterd.png';
 final String unFilteredIcon = _imagePath + 'non_filltered.png';
 final String totalConsignmentIcon = _imagePath + 'total_consignments_icon.png';
+final String addDriverIcon = _imagePath + 'add_driver_icon.png';

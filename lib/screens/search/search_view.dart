@@ -306,7 +306,7 @@ class _SearchViewState extends State<SearchView> {
       height: buttonHeight,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text("Find"),
           onPressed: () {
             searchFocusNode.unfocus();

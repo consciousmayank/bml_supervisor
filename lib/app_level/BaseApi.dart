@@ -7,19 +7,23 @@ class BaseApi {
   SnackbarService snackBarService = locator<SnackbarService>();
   ApiService apiService = locator<ApiService>();
 
-  ParentApiResponse filterResponse(ParentApiResponse apiResponse) {
+  ParentApiResponse filterResponse(ParentApiResponse apiResponse,
+      {bool showSnackBar = true}) {
     ParentApiResponse returningResponse;
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {
-        snackBarService.showSnackbar(message: ParentApiResponse().emptyResult);
+        if (showSnackBar)
+          snackBarService.showSnackbar(
+              message: ParentApiResponse().emptyResult);
       } else {
         returningResponse = ParentApiResponse(
             error: apiResponse.error, response: apiResponse.response);
       }
     } else {
-      snackBarService.showSnackbar(
-        message: apiResponse.getErrorReason(),
-      );
+      if (showSnackBar)
+        snackBarService.showSnackbar(
+          message: apiResponse.getErrorReason(),
+        );
     }
 
     return returningResponse;

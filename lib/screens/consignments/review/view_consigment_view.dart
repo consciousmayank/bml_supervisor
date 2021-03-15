@@ -73,7 +73,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                         style: AppTextStyles.appBarTitleStyle),
                     actions: [
                       isEditAllowed
-                          ? FlatButton(
+                          ? TextButton(
                               onPressed: () {
                                 // call update consignment api
                               },
@@ -819,7 +819,7 @@ class _ConsignmentsDropDownState extends State<ConsignmentsDropDown> {
       getDropDownItems() {
     List<DropdownMenuItem<ConsignmentsForSelectedDateAndClientResponse>>
         dropdown =
-        List<DropdownMenuItem<ConsignmentsForSelectedDateAndClientResponse>>();
+        <DropdownMenuItem<ConsignmentsForSelectedDateAndClientResponse>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(

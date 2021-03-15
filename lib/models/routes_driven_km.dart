@@ -30,7 +30,6 @@ class RoutesDrivenKm {
   String title;
   String entryDate;
   final Color color;
-  DateTime _entryDateTime;
 
   DateTime get entryDateTime {
     var dateAsList = entryDate.split('-');
