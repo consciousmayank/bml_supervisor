@@ -24,7 +24,6 @@ class AddVehicleEntryView extends StatefulWidget {
 }
 
 class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
-  final _controller = ScrollController();
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
   TextEditingController selectedDateController = TextEditingController();
@@ -469,7 +468,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
   List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>>
       getDropDownItems() {
     List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>> dropdown =
-        List<DropdownMenuItem<RoutesForSelectedClientAndDateResponse>>();
+        <DropdownMenuItem<RoutesForSelectedClientAndDateResponse>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(

@@ -345,7 +345,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
           ? SizedBox(
               height: buttonHeight,
               width: MediaQuery.of(context).size.width,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   if (!viewModel.isFuelEntryAdded) {
                     addVehicleEntry(viewModel);
@@ -566,7 +566,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
                 children: [
                   SizedBox(
                     width: 50,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text("-"),
                       onPressed: viewModel.undertakenTrips > 1
                           ? () {
@@ -584,7 +584,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
                   ),
                   SizedBox(
                     width: 50,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text(
                         "+",
                       ),

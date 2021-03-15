@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:io' as Io;
 
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 class PickImageViewModel extends GeneralisedBaseViewModel {
   String _imagePath = '', base64ImageString = '';
   File _selectedImageFile;
+  Function onImageSelected;
 
   File get selectedImageFile => _selectedImageFile;
 
@@ -18,16 +19,35 @@ class PickImageViewModel extends GeneralisedBaseViewModel {
 
   set imagePath(String value) {
     _imagePath = value;
-    selectedImageFile = File(_imagePath);
-    convert();
+    if (value.length > 0) {
+      selectedImageFile = File(_imagePath);
+      convert();
+    }
+  }
+
+  void convert() async {
+    File compressedFile = await FlutterNativeImage.compressImage(
+      selectedImageFile.path,
+      targetHeight: 300,
+      targetWidth: 400,
+      quality: 50,
+      percentage: 20,
+    );
+
+    compressedFile.readAsBytes().then((value) {
+      base64ImageString = base64Encode(value);
+      onImageSelected('data:image/jpeg;base64, $base64ImageString');
+    });
     notifyListeners();
   }
 
-  void convert() {
-    Io.File(imagePath).readAsBytes().then((value) {
-      base64ImageString = base64Encode(value);
-    });
+  void clearImage() {
+    imagePath = '';
     notifyListeners();
+  }
+
+  setFunction(Function onImageSelected) {
+    this.onImageSelected = onImageSelected;
   }
 }
 

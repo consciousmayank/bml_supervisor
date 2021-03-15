@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/screens/adddriver/driver_apis.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
@@ -23,6 +24,7 @@ void declareDependencies() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => DialogService());
+  locator.registerLazySingleton(() => DriverApisImpl());
   locator.registerLazySingleton(() => ApiProvider());
   locator.registerLazySingleton(() => DioConfig());
   locator.registerLazySingleton(() => DashBoardApisImpl());

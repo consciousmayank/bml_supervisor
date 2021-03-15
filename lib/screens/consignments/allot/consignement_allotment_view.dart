@@ -470,7 +470,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0, top: 10),
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text("Create Consignment"),
           onPressed: () {
             if (consignmentTitleController.text.trim().length == 0) {
@@ -957,7 +957,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
 
   List<DropdownMenuItem<FetchRoutesResponse>> getDropDownItems() {
     List<DropdownMenuItem<FetchRoutesResponse>> dropdown =
-        List<DropdownMenuItem<FetchRoutesResponse>>();
+        <DropdownMenuItem<FetchRoutesResponse>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(

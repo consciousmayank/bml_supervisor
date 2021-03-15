@@ -16,8 +16,8 @@ class DioConfig {
 
   configureDio() {
     _dio.options
-      ..baseUrl = baseSecureUrl
-      // ..baseUrl = baseSecureUrlBmlApp
+      // ..baseUrl = baseSecureUrl
+      ..baseUrl = baseSecureUrlBmlApp
       // ..baseUrl = baseRestUrlProduction
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(

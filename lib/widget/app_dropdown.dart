@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class AppDropDown extends StatefulWidget {
@@ -25,7 +24,7 @@ class _AppDropDownState extends State<AppDropDown> {
   List<DropdownMenuItem<Object>> dropdown = [];
 
   List<DropdownMenuItem<String>> getDropDownItems() {
-    List<DropdownMenuItem<String>> dropdown = List<DropdownMenuItem<String>>();
+    List<DropdownMenuItem<String>> dropdown = <DropdownMenuItem<String>>[];
 
     for (int i = 0; i < widget.optionList.length; i++) {
       dropdown.add(DropdownMenuItem(
@@ -51,13 +50,13 @@ class _AppDropDownState extends State<AppDropDown> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0),
                 child: Text(widget.hint ?? ""),
               ),
               Card(
                 elevation: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                  padding: const EdgeInsets.only(top: 2, bottom: 2),
                   child: DropdownButton(
                     icon: Padding(
                       padding: const EdgeInsets.only(right: 4),

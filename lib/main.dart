@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         theme: ThemeConfiguration().getAppThemeComplete(),
         debugShowCheckedModeBanner: false,
-        navigatorKey: locator<NavigationService>().navigatorKey,
+        navigatorKey: StackedService.navigatorKey,
         onGenerateRoute: _router.generateRoute,
         initialRoute: mainViewRoute,
       ),

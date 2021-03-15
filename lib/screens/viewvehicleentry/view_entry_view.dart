@@ -63,7 +63,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text("View Entry"),
           onPressed: () {
             if (viewModel.selectedDuration.length != 0) {

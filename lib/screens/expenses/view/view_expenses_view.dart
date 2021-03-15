@@ -112,7 +112,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text("Get Expenses List"),
           onPressed: () {
             if (viewModel.selectedDuration.length != 0) {

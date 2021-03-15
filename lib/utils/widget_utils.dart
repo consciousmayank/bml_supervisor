@@ -289,7 +289,7 @@ int collectionLength(Iterable iterable) {
 }
 
 List<T> copyList<T>(List<T> items) {
-  var newItems = List<T>();
+  var newItems = <T>[];
   if (items != null) {
     newItems.addAll(items);
   }
