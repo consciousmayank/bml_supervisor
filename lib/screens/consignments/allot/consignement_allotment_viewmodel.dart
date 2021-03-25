@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
@@ -87,14 +88,6 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
-  }
-
   FetchRoutesResponse _selectedRoute;
   List<FetchRoutesResponse> _routesList = [];
 
@@ -129,14 +122,9 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    clientsList = [];
-    //* get bar graph data too when populating the client dropdown
-
-    List<GetClientsResponse> responseList =
-        await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+    selectedClient = MyPreferences().getSelectedClient();
+    getRoutes(selectedClient.clientId);
     setBusy(false);
-    notifyListeners();
   }
 
   getHubs() async {

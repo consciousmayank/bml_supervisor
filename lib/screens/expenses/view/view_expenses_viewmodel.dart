@@ -2,6 +2,7 @@
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
@@ -81,15 +82,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     _emptyDateSelector = emptyDateSelector;
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
-    notifyListeners();
-  }
-
   GetClientsResponse _selectedClient;
   GetClientsResponse get selectedClient => _selectedClient;
 
@@ -104,13 +96,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    clientsList = [];
-    // call client api
-    // get the data as list
-    // add Book my loading at 0
-    // populate the clients dropdown
-    var response = await _dashBoardApis.getClientList();
-    _clientsList = copyList(response);
+    selectedClient = MyPreferences().getSelectedClient();
     setBusy(false);
     notifyListeners();
   }
@@ -131,7 +117,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     viewExpensesResponse.forEach((element) {
       _totalExpenses += element.eAmount;
     });
-    takeToViewExpenseDetailedPage();
+    // takeToViewExpenseDetailedPage();
     notifyListeners();
     setBusy(false);
   }
@@ -154,4 +140,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
       // selectedDuration = null;
     });
   }
+
+  double get totalExpenses => _totalExpenses;
 }

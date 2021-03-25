@@ -2,6 +2,7 @@
 
 const String searchPageRoute = '/search';
 const String dashBoardPageRoute = '/dashBoardPageRoute';
+const String clientSelectPageRoute = '/clientSelectPageRoute';
 const String mainViewRoute = '/';
 const String addExpensesPageRoute = '/addExpensesPage';
 const String blankPageRoute = '/blankPage';

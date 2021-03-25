@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
@@ -170,10 +171,13 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    clientsList = [];
-    List<GetClientsResponse> responseList =
-        await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+
+    selectedClient = MyPreferences().getSelectedClient();
+
+    // clientsList = [];
+    // List<GetClientsResponse> responseList =
+    //     await _dashBoardApis.getClientList();
+    // this.clientsList = copyList(responseList);
     setBusy(false);
     notifyListeners();
   }

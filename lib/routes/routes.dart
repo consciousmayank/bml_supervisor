@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
+import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
@@ -47,6 +48,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: DashBoardScreenView(),
+          ),
+        );
+
+      case clientSelectPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: ClientSelectView(),
           ),
         );
 

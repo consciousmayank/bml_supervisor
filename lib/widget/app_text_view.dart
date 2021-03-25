@@ -44,7 +44,7 @@ class AppTextView extends StatelessWidget {
     return InputDecoration(
       filled: true,
       fillColor: AppColors.appScaffoldColor,
-      contentPadding: EdgeInsets.only(top: 16, left: 4, right: 4, bottom: 8),
+      contentPadding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 8),
       labelText: hint,
       labelStyle: TextStyle(
         color: AppColors.primaryColorShade5,

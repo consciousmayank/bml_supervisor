@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -10,7 +9,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -57,15 +55,6 @@ class _PaymentsViewState extends State<PaymentsView> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: getPaymentScreenSidePadding(),
-              child: selectClientForTransactionList(viewModel: viewModel),
-            ),
-            // Padding(
-            //   padding: getPaymentScreenSidePadding(),
-            //   child: selectDuration(viewModel: viewModel),
-            // ),
-            // hSizedBox(15),
             viewModel.paymentHistoryResponseList.length > 0
                 ? Padding(
                     padding: getPaymentScreenSidePadding(),
@@ -318,11 +307,6 @@ class _PaymentsViewState extends State<PaymentsView> {
                     children: [
                       Padding(
                         padding: getPaymentScreenSidePadding(),
-                        child:
-                            selectClientForNewTransaction(viewModel: viewModel),
-                      ),
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
                         child: dateSelector(viewModel: viewModel),
                       ),
                       Padding(
@@ -494,43 +478,4 @@ class _PaymentsViewState extends State<PaymentsView> {
           : viewModel.selectedDuration,
     );
   }
-
-  Widget selectClientForTransactionList({PaymentsViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClientForTransactionList = selectedValue;
-        print(
-            'transaction list: client - ${viewModel.selectedClientForTransactionList.title}');
-        //* call client specific payment history
-        viewModel.getPaymentHistory(
-            viewModel.selectedClientForTransactionList.clientId);
-      },
-      selectedClient: viewModel.selectedClientForTransactionList == null
-          ? null
-          : viewModel.selectedClientForTransactionList,
-    );
-  }
-}
-
-Widget selectClientForNewTransaction({PaymentsViewModel viewModel}) {
-  return StatefulBuilder(
-    builder: (BuildContext context, StateSetter setState) {
-      return ClientsDropDown(
-        optionList: viewModel.clientsList,
-        hint: "Select Client",
-        onOptionSelect: (GetClientsResponse selectedValue) {
-          setState(
-              () => viewModel.selectedClientForNewTransaction = selectedValue);
-
-          print(
-              'new transaction: client-${viewModel.selectedClientForNewTransaction.title}');
-        },
-        selectedClient: viewModel.selectedClientForNewTransaction == null
-            ? null
-            : viewModel.selectedClientForNewTransaction,
-      );
-    },
-  );
 }

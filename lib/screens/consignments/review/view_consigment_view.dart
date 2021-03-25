@@ -4,7 +4,6 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -13,7 +12,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -160,22 +158,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           dateSelector(context: context, viewModel: viewModel),
-          viewModel.entryDate != null
-              ? ClientsDropDown(
-                  optionList: viewModel.clientsList,
-                  hint: "Select Client",
-                  onOptionSelect: (GetClientsResponse selectedValue) {
-                    viewModel.selectedClient = selectedValue;
-                    viewModel.getConsignmentListWithDate();
-                    // viewModel.getRoutes(selectedValue.id);
-                    // viewModel.selectedRoute = null;
-                    viewModel.selectedConsignment = null;
-                  },
-                  selectedClient: viewModel.selectedClient == null
-                      ? null
-                      : viewModel.selectedClient,
-                )
-              : Container(),
           viewModel.consignmentsList.length == 0
               ? Container()
               : ConsignmentsDropDown(
@@ -668,12 +650,10 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           if (selectedDate != null) {
             selectedDateController.text =
                 DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.selectedClient = null;
             viewModel.selectedRoute = null;
             viewModel.entryDate = selectedDate;
-            if (viewModel.selectedClient != null) {
-              viewModel.getRoutes(viewModel.selectedClient.clientId);
-            }
+            // viewModel.getRoutes(viewModel.selectedClient.clientId);
+            viewModel.getConsignmentListWithDate();
           }
         }),
       ),

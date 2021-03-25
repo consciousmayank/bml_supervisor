@@ -39,9 +39,6 @@ class _ViewEntryDetailedViewState extends State<ViewEntryDetailedView> {
   }
 
   Widget _buildChip() {
-    print(
-      'After receiveing-total Km: ' + widget.arguments['totalKm'].toString(),
-    );
     return Padding(
       padding: getSidePadding(context: context),
       child: Column(

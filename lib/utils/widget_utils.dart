@@ -343,28 +343,39 @@ Widget drawerList({String text, String imageName, Function onTap}) {
   return Padding(
     padding: const EdgeInsets.only(top: 2, bottom: 2),
     child: ClickableWidget(
+      childColor: AppColors.white,
       borderRadius: getBorderRadius(),
       onTap: () {
         onTap.call();
       },
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
           children: [
             imageName == null
                 ? Container()
-                : Image.asset(
-                    imageName,
-                    height: drawerIconsHeight,
-                    width: drawerIconsWidth,
-                    // color: AppColors.primaryColorShade5,
+                : Container(
+                    height: 48,
+                    width: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.drawerIconsBackgroundColor,
+                      borderRadius: getBorderRadius(),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        imageName,
+                        height: drawerIconsHeight,
+                        width: drawerIconsWidth,
+                        // color: AppColors.primaryColorShade5,
+                      ),
+                    ),
                   ),
             imageName == null ? Container() : wSizedBox(20),
             Expanded(
               child: Text(
                 text,
-                style: AppTextStyles.latoBold14Black
-                    .copyWith(color: AppColors.primaryColorShade5),
+                style: AppTextStyles.latoMedium12Black.copyWith(
+                    color: AppColors.primaryColorShade5, fontSize: 14),
               ),
             ),
           ],

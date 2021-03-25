@@ -6,7 +6,6 @@ import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -15,7 +14,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -99,23 +97,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ClientsDropDown(
-            optionList: viewModel.clientsList,
-            hint: "Select Client",
-            onOptionSelect: (GetClientsResponse selectedValue) {
-              viewModel.selectedClient = selectedValue;
-              viewModel.getRoutes(selectedValue.clientId);
-
-              viewModel.selectedRoute = null;
-              viewModel.entryDate = null;
-              viewModel.validatedRegistrationNumber = null;
-              viewModel.consignmentRequest = null;
-              viewModel.resetControllerBoolValue();
-            },
-            selectedClient: viewModel.selectedClient == null
-                ? null
-                : viewModel.selectedClient,
-          ),
           RoutesDropDown(
             optionList: viewModel.routesList,
             hint: "Select Routes",

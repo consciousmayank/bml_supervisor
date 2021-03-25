@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
@@ -27,15 +28,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   set noOfPayments(int value) {
     _noOfPayments = value;
-    notifyListeners();
-  }
-
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
     notifyListeners();
   }
 
@@ -100,10 +92,9 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    clientsList = [];
-    print('selected client: $selectedClientForTransactionList');
-    _clientsList = copyList(await _dashBoardApis.getClientList());
-
+    selectedClientForTransactionList = MyPreferences().getSelectedClient();
+    selectedClientForNewTransaction = selectedClientForTransactionList;
+    getPaymentHistory(selectedClientForTransactionList.clientId);
     setBusy(false);
     notifyListeners();
   }
@@ -122,6 +113,12 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
       noOfPayments++;
     });
 
+    //TODO delete this
+    paymentHistoryResponseList.addAll(response);
+    paymentHistoryResponseList.addAll(response);
+    paymentHistoryResponseList.addAll(response);
+    paymentHistoryResponseList.addAll(response);
+    paymentHistoryResponseList.addAll(response);
     notifyListeners();
     setBusy(false);
   }

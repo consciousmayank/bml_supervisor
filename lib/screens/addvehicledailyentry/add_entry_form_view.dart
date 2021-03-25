@@ -533,7 +533,6 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
       alignment: Alignment.bottomRight,
       children: [
         loginTimeTextField(viewModel),
-        wSizedBox(8),
         selectLoginTimeButton(context, viewModel),
       ],
     );
@@ -820,7 +819,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
   selectLogoutTimeButton(
       BuildContext context, AddVehicleEntryViewModel viewModel) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
+      padding: const EdgeInsets.only(bottom: 3.0, right: 4),
       child: appSuffixIconButton(
         icon: Icon(Icons.logout),
         onPressed: () async {

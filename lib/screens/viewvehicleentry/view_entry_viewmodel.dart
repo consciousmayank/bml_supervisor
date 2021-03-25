@@ -1,19 +1,18 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
-  DashBoardApis _dashBoardApi = locator<DashBoardApisImpl>();
   int _totalKm = 0;
-
+  Set _datesSet = Set();
+  int get totalKm => _totalKm;
   int _totalKmGround = 0;
 
   int _kmDifference = 0;
@@ -35,7 +34,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   List<ViewEntryResponse> vehicleEntrySearchResponseList = [];
 
   List<SearchByRegNoResponse> searchResponse = [];
-  String _selectedDuration = "";
+  String _selectedDuration = "1";
   String get selectedDuration => _selectedDuration;
 
   set selectedDuration(String selectedDuration) {
@@ -66,15 +65,6 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
-    notifyListeners();
-  }
-
   int getSelectedDurationValue(String selectedDuration) {
     switch (selectedDuration) {
       case 'THIS MONTH':
@@ -87,16 +77,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   }
 
   getClients() async {
-    setBusy(true);
-    clientsList = [];
-    // call client api
-    // get the data as list
-    // add Book my loading at 0
-    // pupulate the clients dropdown
-    List<GetClientsResponse> response = await _dashBoardApi.getClientList();
-    _clientsList = copyList(response);
-    setBusy(false);
-    notifyListeners();
+    selectedClient = MyPreferences().getSelectedClient();
   }
 
   void vehicleEntrySearch(
@@ -117,6 +98,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
 
     vehicleEntrySearchResponseList = copyList(res);
     vehicleEntrySearchResponseList.forEach((element) {
+      _datesSet.add(element.entryDate);
       _totalKmGround += element.drivenKmGround;
       _totalFuelInLtr += element.fuelLtr;
       _totalKm += element.drivenKm;
@@ -128,30 +110,21 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     if ((_totalKm != 0 && _totalFuelInLtr != 0)) {
       _avgPerLitre = _totalKm / _totalFuelInLtr;
     }
-    takeToViewEntryDetailedPage2Point0();
+    // takeToViewEntryDetailedPage2Point0();
 
     notifyListeners();
     setBusy(false);
   }
 
-  void takeToViewEntryDetailedPage2Point0() {
-    print('taking to detailed page 2.0');
-    navigationService
-        .navigateTo(viewEntryDetailedView2PointOPageRoute, arguments: {
-      'totalKm': _totalKm,
-      'kmDifference': _kmDifference.abs(),
-      'totalFuelInLtr': _totalFuelInLtr,
-      'avgPerLitre': _avgPerLitre,
-      'totalFuelAmt': _totalFuelAmt,
-      'vehicleEntrySearchResponseList': vehicleEntrySearchResponseList,
-      'selectedClient':
-          selectedClient == null ? 'All Clients' : selectedClient.clientId,
-    });
-    _totalFuelAmt = 0;
-    _kmDifference = 0;
-    _totalFuelInLtr = 0;
-    _avgPerLitre = 0;
-    _totalKm = 0;
-    _totalKmGround = 0;
-  }
+  Set get datesSet => _datesSet;
+
+  int get totalKmGround => _totalKmGround;
+
+  int get kmDifference => _kmDifference;
+
+  double get totalFuelInLtr => _totalFuelInLtr;
+
+  double get avgPerLitre => _avgPerLitre;
+
+  double get totalFuelAmt => _totalFuelAmt;
 }

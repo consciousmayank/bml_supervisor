@@ -1,7 +1,9 @@
+import 'dart:async';
+
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
+import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
@@ -9,10 +11,10 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -24,252 +26,276 @@ class DashBoardScreenView extends StatefulWidget {
 }
 
 class _DashBoardScreenViewState extends State<DashBoardScreenView> {
+  final UniqueKey scrollKey = UniqueKey();
+  final ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
+          viewModel.selectedClient = MyPreferences().getSelectedClient();
+          viewModel.getClientDashboardStats();
           viewModel.selectedDuration = MyPreferences().getSelectedDuration();
-          viewModel.getClients();
+          // viewModel.getBarGraphKmReport(
+          //   selectedDuration: viewModel.selectedDuration,
+          // );
           viewModel.getSavedUser();
         },
-        builder: (context, viewModel, child) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "BookMyLoading",
-                style: AppTextStyles.appBarTitleStyle,
-              ),
-              centerTitle: true,
-            ),
-            body: SingleChildScrollView(
-                child: viewModel.isBusy
-                    ? Container(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: selectClientForDashboardStats(
-                                      viewModel: viewModel),
-                                  flex: 1,
-                                ),
-                                Expanded(
-                                  child: selectDuration(viewModel: viewModel),
-                                  flex: 1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          viewModel.singleClientTileData != null
-                              ? makeTiles(viewModel: viewModel)
-                              : Container(),
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? BarChartView(
-                                  clientId: viewModel.selectedClient.clientId,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? LineChartView(
-                                  clientId: viewModel.selectedClient.clientId,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient != null &&
-                                  viewModel.selectedDuration != null
-                              ? PieChartView(
-                                  clientId: viewModel.selectedClient.clientId,
-                                  selectedDuration: viewModel.selectedDuration,
-                                )
-                              : Container(),
-                          viewModel.selectedClient == null
-                              ? Container()
-                              : Card(
-                                  elevation: defaultElevation,
-                                  shape: getCardShape(),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text("Routes"),
-                                      ),
-                                      SizedBox(
+        builder: (context, viewModel, child) => SafeArea(
+              top: false,
+              bottom: true,
+              child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      'Dashboard',
+                      style: AppTextStyles.whiteRegular,
+                    ),
+                    centerTitle: true,
+                  ),
+                  body: RefreshIndicator(
+                    onRefresh: () {
+                      final Completer<void> completer = Completer<void>();
+                      Timer(const Duration(milliseconds: 200), () {
+                        completer.complete();
+                      });
+
+                      return completer.future.then<void>((_) {
+                        viewModel.reloadPage();
+                      });
+                    },
+                    child: SingleChildScrollView(
+                      key: scrollKey,
+                      controller: scrollController,
+                      child: viewModel.isBusy
+                          ? SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              child: ShimmerContainer(
+                                itemCount: 20,
+                              ),
+                            )
+                          : Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  hSizedBox(3),
+                                  viewModel.singleClientTileData != null
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Distributors',
+                                                value: viewModel
+                                                    .singleClientTileData
+                                                    .hubCount
+                                                    .toString(),
+                                                iconName: distributorIcon,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToDistributorsPage();
+                                                },
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Routes',
+                                                value: viewModel
+                                                    .singleClientTileData
+                                                    .routeCount
+                                                    .toString(),
+                                                iconName: routesIcon,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToViewRoutesPage();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                  viewModel.singleClientTileData != null
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Total Kilometer',
+                                                value: viewModel
+                                                    .singleClientTileData
+                                                    .totalKm
+                                                    .toString(),
+                                                iconName: totalKmIcon,
+                                                //todo: give percentage from API
+                                                // percentage: 88,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToViewEntryPage();
+                                                },
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Due (km)',
+                                                value: viewModel
+                                                    .singleClientTileData.dueKm
+                                                    .toString(),
+                                                iconName: dueKmIcon,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToPaymentsPage();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+
+                                  viewModel.singleClientTileData != null
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Total Expense',
+                                                value: viewModel
+                                                    .singleClientTileData
+                                                    .totalExpense
+                                                    .toString(),
+                                                iconName: rupeesIcon,
+                                                // percentage: -1,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToViewExpensePage();
+                                                },
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: AppTiles(
+                                                title: 'Due Expense',
+                                                value: viewModel
+                                                    .singleClientTileData
+                                                    .dueExpense
+                                                    .toString(),
+                                                iconName: rupeesIcon,
+                                                onTap: () {
+                                                  viewModel
+                                                      .takeToViewExpensePage();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+
+                                  selectDuration(viewModel: viewModel),
+
+                                  ///line chart
+                                  LineChartView(
+                                    selectedDuration:
+                                        viewModel.selectedDuration,
+                                    clientId: MyPreferences()
+                                        .getSelectedClient()
+                                        .clientId,
+                                  ),
+
+                                  /// Driven Km pie chart
+                                  PieChartView(
+                                    // key: UniqueKey(),
+                                    selectedDuration:
+                                        viewModel.selectedDuration,
+                                    clientId: MyPreferences()
+                                        .getSelectedClient()
+                                        .clientId,
+                                  ),
+
+                                  /// Expense Pie Chart
+                                  // ExpensesPieChartView( TODO get this api from Rawat G
+                                  //   // key: UniqueKey(),
+                                  //   selectedDuration:
+                                  //       viewModel.selectedDuration,
+                                  // ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'Route List',
+                                      style: AppTextStyles
+                                          .latoBold14primaryColorShade6,
+                                    ),
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Card(
+                                      elevation: defaultElevation,
+                                      child: SizedBox(
                                         height: 450,
                                         child: RoutesView(
-                                          selectedClient:
-                                              viewModel.selectedClient,
-                                          onRoutesPageInView: (clickedRoute) {
-                                            // FetchRoutesResponse route = clickedRoute;
-                                            // viewModel.selectedRoute = route;
+                                          // selectedClient: viewModel.selectedClient,
+                                          onRoutesPageInView:
+                                              (FetchRoutesResponse
+                                                  clickedRoute) {
+                                            viewModel.takeToHubsView(
+                                                clickedRoute: clickedRoute);
                                           },
+                                          isInDashBoard: true,
+                                          selectedClient: MyPreferences()
+                                              .getSelectedClient(),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                        ],
-                      )),
-            drawer: DashBoardDrawer(
-              dashBoardScreenViewModel: viewModel,
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
+                  drawer: DashBoardDrawer(
+                    dashBoardScreenViewModel: viewModel,
+                  )),
             ),
-          );
-        },
         viewModelBuilder: () => DashBoardScreenViewModel());
   }
 
   Widget selectDuration({DashBoardScreenViewModel viewModel}) {
-    return AppDropDown(
-      optionList: selectDurationList,
-      hint: "Select Duration",
-      onOptionSelect: (selectedValue) {
-        viewModel.selectedDuration = selectedValue;
-        //!call recent consignment api here
-        // viewModel.getRecentConsignments(
-        //   clientId: viewModel.selectedClient.clientId,
-        //   period: viewModel.selectedDuration,
-        // );
-        viewModel.getClientDashboardStats();
-        MyPreferences().saveSelectedDuration(selectedValue);
-      },
-      selectedValue: viewModel.selectedDuration.isEmpty
-          ? null
-          : viewModel.selectedDuration,
-    );
-  }
-
-  Widget buildDashboradTileCard({
-    String title,
-    String value,
-    DashBoardScreenViewModel viewModel,
-    Color color,
-  }) {
-    return Card(
-      color: color,
-      elevation: 6,
-      child: Padding(
-        padding: getDashboradTilesVerticlePadding(),
-        child: Column(
-          children: [
-            Text(
-              title,
-              style:
-                  TextStyle(color: getDashboardTileTextColor(), fontSize: 14),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 30,
+        width: MediaQuery.of(context).size.width,
+        child: DefaultTabController(
+          length: 2, // length of tabs
+          initialIndex:
+              viewModel.selectedDuration == selectDurationListDashBoard.first
+                  ? 0
+                  : 1,
+          child: TabBar(
+            onTap: (index) {
+              String selectedValue = selectDurationListDashBoard[index];
+              viewModel.selectedDuration = selectedValue;
+              // viewModel.getBarGraphKmReport(selectedDuration: selectedValue);
+              MyPreferences().saveSelectedDuration(selectedValue);
+              viewModel.selectedDuration = selectedValue;
+              viewModel.reloadPage();
+            },
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicator: new BubbleTabIndicator(
+              indicatorHeight: 25.0,
+              indicatorColor: AppColors.primaryColorShade5,
+              tabBarIndicatorSize: TabBarIndicatorSize.tab,
             ),
-            Text(
-              value,
-              style:
-                  TextStyle(color: getDashboardTileTextColor(), fontSize: 20),
-            ), //! make it dynamic
-          ],
+            labelColor: Colors.white,
+            unselectedLabelColor: AppColors.primaryColorShade5,
+            tabs: [
+              Tab(text: selectDurationListDashBoard.first),
+              Tab(text: selectDurationListDashBoard.last),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget selectClientForDashboardStats({DashBoardScreenViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClient = selectedValue;
-        print(
-          viewModel.clientsList.indexOf(selectedValue),
-        );
-        MyPreferences().saveSelectedClient(selectedValue);
-
-        //* call client tiles data
-        viewModel.getClientDashboardStats();
-        // viewModel.getRecentConsignments(
-        //   clientId: viewModel.selectedClient.clientId,
-        //   period: viewModel.selectedDuration,
-        // );
-      },
-      selectedClient:
-          viewModel.selectedClient == null ? null : viewModel.selectedClient,
-    );
-  }
-
-  makeTiles({@required DashBoardScreenViewModel viewModel}) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  onTap: () {
-                    viewModel.takeToDistributorsPage();
-                  },
-                  title: 'Distributors',
-                  value: viewModel.singleClientTileData.hubCount.toString(),
-                  iconName: distributorIcon),
-            ),
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  onTap: () {
-                    viewModel.takeToViewRoutesPage();
-                  },
-                  title: 'Routes',
-                  value: viewModel.singleClientTileData.routeCount.toString(),
-                  iconName: routesIcon),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  onTap: () {
-                    viewModel.takeToViewEntryPage();
-                  },
-                  title: 'Total Kilometer',
-                  value: viewModel.singleClientTileData.totalKm.toString(),
-                  iconName: totalKmIcon),
-            ),
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  title: 'Due(Km)',
-                  value: viewModel.singleClientTileData.dueKm.toString(),
-                  iconName: dueKmIcon),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  title: 'Total Expense',
-                  value: viewModel.singleClientTileData.totalExpense.toString(),
-                  iconName: expensesIcon),
-            ),
-            Expanded(
-              flex: 1,
-              child: AppTiles(
-                  onTap: () {
-                    viewModel.takeToPaymentsPage();
-                  },
-                  title: 'Due Expense',
-                  value: viewModel.singleClientTileData.dueExpense.toString(),
-                  iconName: rupeesIcon),
-            ),
-          ],
-        )
-      ],
     );
   }
 }
