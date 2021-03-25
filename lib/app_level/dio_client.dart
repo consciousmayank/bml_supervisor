@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
@@ -17,8 +18,8 @@ class DioConfig {
   configureDio() {
     _dio.options
       // ..baseUrl = baseSecureUrl
-      ..baseUrl = baseSecureUrlBmlApp
-      // ..baseUrl = baseRestUrlProduction
+      // ..baseUrl = baseSecureUrlBmlApp
+      ..baseUrl = baseRestUrlProduction
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
@@ -30,7 +31,9 @@ class DioConfig {
     bool result = await DataConnectionChecker().hasConnection;
     if (result == true) {
       String credentials = MyPreferences().getCredentials();
-      options.headers.addAll(getAuthHeader(base64String: credentials));
+      if (options.path != GET_APP_VERSION) {
+        options.headers.addAll(getAuthHeader(base64String: credentials));
+      }
       return options;
     }
   }
