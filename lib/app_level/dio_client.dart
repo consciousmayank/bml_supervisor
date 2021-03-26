@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
