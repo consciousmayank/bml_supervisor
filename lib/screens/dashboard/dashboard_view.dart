@@ -4,6 +4,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
@@ -213,11 +214,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
 
                                   /// Expense Pie Chart
-                                  // ExpensesPieChartView( TODO get this api from Rawat G
-                                  //   // key: UniqueKey(),
-                                  //   selectedDuration:
-                                  //       viewModel.selectedDuration,
-                                  // ),
+                                  ExpensesPieChartView(
+                                    // key: UniqueKey(),
+                                    selectedDuration:
+                                        viewModel.selectedDuration,
+                                  ),
 
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),

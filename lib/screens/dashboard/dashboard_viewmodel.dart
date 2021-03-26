@@ -7,6 +7,7 @@ import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -160,8 +161,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   }
 
   void onTransactionsDrawerTileClicked() {
+    PaymentArgs _paymentArgs = PaymentArgs(
+        totalKm: singleClientTileData.totalKm,
+        dueKm: singleClientTileData.dueKm);
     navigationService.back();
-    navigationService.navigateTo(paymentsPageRoute).then(
+    navigationService
+        .navigateTo(paymentsPageRoute, arguments: _paymentArgs)
+        .then(
           (value) => reloadPage(),
         );
   }
@@ -214,7 +220,12 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   }
 
   void takeToPaymentsPage() {
-    navigationService.navigateTo(paymentsPageRoute).then(
+    PaymentArgs _paymentArgs = PaymentArgs(
+        totalKm: singleClientTileData.totalKm,
+        dueKm: singleClientTileData.dueKm);
+    navigationService
+        .navigateTo(paymentsPageRoute, arguments: _paymentArgs)
+        .then(
           (value) => reloadPage(),
         );
   }

@@ -184,3 +184,5 @@ const List<String> selectDurationListDashBoard = [
   "THIS MONTH REPORT",
   "LAST MONTH REPORT",
 ];
+const String addDriverSuccessful = "Driver added successfully";
+const String addDriverUnSuccessful = "Driver not added. Please try again";

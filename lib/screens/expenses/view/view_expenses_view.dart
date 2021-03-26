@@ -11,6 +11,7 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
+import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/select_duration_tab.dart';
@@ -264,28 +265,24 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Text("Expense Type : "),
+                                      child: AppTextView(
+                                        textAlign: TextAlign.center,
+                                        hintText: 'Expense Type',
+                                        value: viewModel
+                                            .viewExpensesResponse[index].eType,
+                                      ),
                                       flex: 1,
                                     ),
+                                    wSizedBox(10),
                                     Expanded(
                                       flex: 1,
-                                      child: Text(viewModel
-                                          .viewExpensesResponse[index].eType),
-                                    )
-                                  ],
-                                ),
-                                hSizedBox(5),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text("Expense Amount : "),
-                                      flex: 1,
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(viewModel
-                                          .viewExpensesResponse[index].eAmount
-                                          .toStringAsFixed(2)),
+                                      child: AppTextView(
+                                        textAlign: TextAlign.center,
+                                        hintText: 'Expense Amount',
+                                        value: viewModel
+                                            .viewExpensesResponse[index].eAmount
+                                            .toString(),
+                                      ),
                                     )
                                   ],
                                 ),

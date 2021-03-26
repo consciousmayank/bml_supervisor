@@ -91,8 +91,10 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
         await _driverApis.addDriver(request: newDriverObject);
     dialogService
         .showConfirmationDialog(
+            title: _apiResponse.isSuccessful()
+                ? addDriverSuccessful
+                : addDriverUnSuccessful,
             description: _apiResponse.message,
-            title: _apiResponse.message,
             barrierDismissible: false)
         .then((value) {
       if (value.confirmed) {

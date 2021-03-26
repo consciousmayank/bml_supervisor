@@ -112,13 +112,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
       totalAmt += element.amount;
       noOfPayments++;
     });
-
-    //TODO delete this
-    paymentHistoryResponseList.addAll(response);
-    paymentHistoryResponseList.addAll(response);
-    paymentHistoryResponseList.addAll(response);
-    paymentHistoryResponseList.addAll(response);
-    paymentHistoryResponseList.addAll(response);
     notifyListeners();
     setBusy(false);
   }

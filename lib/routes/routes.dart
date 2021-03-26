@@ -17,6 +17,7 @@ import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
+import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
@@ -172,8 +173,10 @@ class AppRouter {
         );
 
       case paymentsPageRoute:
+        PaymentArgs _paymentArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => NetworkSensitive(child: PaymentsView()),
+          builder: (_) =>
+              NetworkSensitive(child: PaymentsView(args: _paymentArgs)),
         );
 
       case addDriverPageRoute:

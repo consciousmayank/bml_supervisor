@@ -12,6 +12,7 @@ import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/select_duration_tab.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
@@ -381,6 +382,45 @@ class _SingleEntryWidget extends StatelessWidget {
                         ),
                       ],
                     ),
+                    hSizedBox(10),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: AppTextView(
+                            textAlign: TextAlign.center,
+                            hintText: 'Fuel Ltr',
+                            value: viewModel
+                                .vehicleEntrySearchResponseList[index].fuelLtr
+                                .toString(),
+                          ),
+                        ),
+                        wSizedBox(10),
+                        Expanded(
+                          flex: 1,
+                          child: AppTextView(
+                            textAlign: TextAlign.center,
+                            hintText: 'Fuel Rate (INR)',
+                            value: viewModel
+                                .vehicleEntrySearchResponseList[index]
+                                .ratePerLtr
+                                .toString(),
+                          ),
+                        ),
+                        wSizedBox(10),
+                        Expanded(
+                          flex: 1,
+                          child: AppTextView(
+                            textAlign: TextAlign.center,
+                            hintText: 'Fuel Amount (INR)',
+                            value: viewModel
+                                .vehicleEntrySearchResponseList[index]
+                                .amountPaid
+                                .toString(),
+                          ),
+                        ),
+                      ],
+                    ),
                     hSizedBox(5),
                     InkWell(
                       onTap: () {
@@ -409,8 +449,8 @@ class _SingleEntryWidget extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         builder: (_) {
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.25,
             child: ClipRRect(
               borderRadius: getBorderRadius(),
               child: Card(
@@ -432,7 +472,7 @@ class _SingleEntryWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Entry Date",
+                            response.vehicleId,
                             style: const TextStyle(color: Colors.white),
                           ),
                           Text(
@@ -451,132 +491,44 @@ class _SingleEntryWidget extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: Text("START READING : "),
+                                child: AppTextView(
+                                  textAlign: TextAlign.center,
+                                  hintText: 'Start Reading (G)',
+                                  value: viewModel
+                                      .vehicleEntrySearchResponseList[index]
+                                      .startReadingGround
+                                      .toString(),
+                                ),
                                 flex: 1,
                               ),
+                              wSizedBox(10),
                               Expanded(
                                 flex: 1,
-                                child: Text(response.startReading.toString()),
+                                child: AppTextView(
+                                  textAlign: TextAlign.center,
+                                  hintText: 'DRIVEN KM (G)',
+                                  value: viewModel
+                                      .vehicleEntrySearchResponseList[index]
+                                      .drivenKmGround
+                                      .toString(),
+                                ),
                               )
                             ],
                           ),
-                          hSizedBox(5),
+                          hSizedBox(10),
                           Row(
                             children: [
                               Expanded(
-                                child: Text("START READING (G) : "),
+                                child: AppTextView(
+                                  textAlign: TextAlign.center,
+                                  hintText: 'FUEL METER READING',
+                                  value: viewModel
+                                      .vehicleEntrySearchResponseList[index]
+                                      .fuelMeterReading
+                                      .toString(),
+                                ),
                                 flex: 1,
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                    response.startReadingGround.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("END READING : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.endReading.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("DRIVEN KM : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.drivenKm.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("DRIVEN KM (G) : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.drivenKmGround.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("TRIPS : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.trips.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("FUEL LTR. : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.fuelLtr.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("FUEL RATE (INR) : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.ratePerLtr.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("FUEL METER READING "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child:
-                                    Text(response.fuelMeterReading.toString()),
-                              )
-                            ],
-                          ),
-                          hSizedBox(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("FUEL AMOUNT (INR) : "),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(response.amountPaid.toString()),
-                              )
                             ],
                           ),
                         ],
