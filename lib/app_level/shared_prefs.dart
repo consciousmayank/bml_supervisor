@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import "package:bml_supervisor/app_level/string_extensions.dart";
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,7 +106,9 @@ class PreferencesSavedUser {
   String get role {
     List<String> splitRoles = userRole.split('_');
 
-    return splitRoles[splitRoles.length - 1];
+    return splitRoles[splitRoles.length - 1]
+        .toLowerCase()
+        .capitalizeFirstLetter();
   }
 
   factory PreferencesSavedUser.fromJson(String str) =>

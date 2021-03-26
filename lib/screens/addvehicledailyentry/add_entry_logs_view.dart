@@ -1,8 +1,8 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -10,7 +10,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -32,10 +31,12 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddVehicleEntryViewModel>.reactive(
-      // onModelReady: (viewModel) => viewModel.getClients(),
+      onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text("Add Entry", style: AppTextStyles.appBarTitleStyle),
+          title: Text(
+              "Add Entry - ${MyPreferences().getSelectedClient().clientId}",
+              style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
             ? Center(
@@ -47,9 +48,9 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                   children: [
                     dateSelector(context: context, viewModel: viewModel),
 
-                    viewModel.clientsList.length == 0
-                        ? Container()
-                        : selectClient(viewModel: viewModel),
+                    // viewModel.clientsList.length == 0
+                    //     ? Container()
+                    //     : selectClient(viewModel: viewModel),
 
                     viewModel.routesList.length == 0
                         ? Container()
@@ -67,7 +68,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                                 : viewModel.selectedRoute,
                           ),
 
-                    viewModel.selectedClient == null
+                    viewModel.selectedRoute == null
                         ? Container()
                         : registrationSelector(
                             context: context, viewModel: viewModel),
@@ -112,21 +113,21 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
     );
   }
 
-  Widget selectClient({AddVehicleEntryViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedRoute = null;
-        selectedRegNoController.clear();
-        viewModel.vehicleLog = null;
-        viewModel.selectedClient = selectedValue;
-        viewModel.getRoutesForSelectedClientAndDate(selectedValue.clientId);
-      },
-      selectedClient:
-          viewModel.selectedClient == null ? null : viewModel.selectedClient,
-    );
-  }
+  // Widget selectClient({AddVehicleEntryViewModel viewModel}) {
+  //   return ClientsDropDown(
+  //     optionList: viewModel.clientsList,
+  //     hint: "Select Client",
+  //     onOptionSelect: (GetClientsResponse selectedValue) {
+  //       viewModel.selectedRoute = null;
+  //       selectedRegNoController.clear();
+  //       viewModel.vehicleLog = null;
+  //       viewModel.selectedClient = selectedValue;
+  //       viewModel.getRoutesForSelectedClientAndDate(selectedValue.clientId);
+  //     },
+  //     selectedClient:
+  //         viewModel.selectedClient == null ? null : viewModel.selectedClient,
+  //   );
+  // }
 
   dateSelector({BuildContext context, AddVehicleEntryViewModel viewModel}) {
     return Stack(
@@ -146,14 +147,14 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
         onPressed: (() async {
           DateTime selectedDate = await selectDate(viewModel);
           if (selectedDate != null) {
-            viewModel.selectedClient = null;
             viewModel.selectedRoute = null;
             viewModel.vehicleLog = null;
 
             selectedDateController.text =
                 DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
             viewModel.entryDate = selectedDate;
-            viewModel.getClients();
+            viewModel.getRoutesForSelectedClientAndDate(
+                viewModel.selectedClient.clientId);
             viewModel.emptyDateSelector = true;
           }
         }),

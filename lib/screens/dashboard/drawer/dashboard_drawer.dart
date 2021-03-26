@@ -1,4 +1,3 @@
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
@@ -25,7 +24,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
-      color: ThemeConfiguration.appScaffoldBackgroundColor,
+      color: AppColors.white,
       width: MediaQuery.of(context).size.width * 0.70,
       child: SingleChildScrollView(
         child: Padding(
@@ -37,6 +36,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
           child: Column(
             children: [
               ClickableWidget(
+                childColor: AppColors.white,
                 borderRadius: getBorderRadius(),
                 onTap: () {
                   widget.dashBoardScreenViewModel.navigationService.back();
@@ -64,11 +64,25 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                         width: 10,
                       ),
                       Expanded(
-                        child: Text(
-                          'Welcome,\n${widget.dashBoardScreenViewModel?.savedUser?.userName}',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.latoBold18Black,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.dashBoardScreenViewModel?.savedUser?.userName}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.latoBold18Black.copyWith(
+                                  color: AppColors.primaryColorShade5),
+                            ),
+                            Text(
+                              '${widget.dashBoardScreenViewModel?.savedUser?.role}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.latoMedium16Primary5
+                                  .copyWith(
+                                      color: AppColors.primaryColorShade5),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -83,42 +97,31 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 imageName: homeIcon,
                 text: "Dashboard",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.onDashboardTileClick();
+                  widget.dashBoardScreenViewModel
+                      .onDashboardDrawerTileClicked();
                 },
               ),
               drawerList(
-                imageName: consignmentIcon,
-                text: "Add Daily Entry",
+                imageName: entryCountIcon,
+                text: "Daily Kilometers",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.takeToAddDailyEntry();
+                  widget.dashBoardScreenViewModel
+                      .onDailyKilometersDrawerTileClicked();
                 },
               ),
               drawerList(
-                imageName: consignmentIcon,
-                text: "View Daily Entry",
+                imageName: expensesIcon,
+                text: "Expenses",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.takeToViewEntryPage();
-                },
-              ),
-              drawerList(
-                imageName: consignmentIcon,
-                text: "Add Expense",
-                onTap: () {
-                  widget.dashBoardScreenViewModel.takeToAddExpensePage();
-                },
-              ),
-              drawerList(
-                imageName: consignmentIcon,
-                text: "View Expense",
-                onTap: () {
-                  widget.dashBoardScreenViewModel.onViewExpensesTileClick();
+                  widget.dashBoardScreenViewModel.onExpensesDrawerTileClicked();
                 },
               ),
               drawerList(
                 imageName: consignmentIcon,
                 text: "Allot Consignment",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.takeToAllotConsignmentsPage();
+                  widget.dashBoardScreenViewModel
+                      .onAllotConsignmentsDrawerTileClicked();
                 },
               ),
               drawerList(
@@ -126,28 +129,31 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 text: "Review Consignment",
                 onTap: () {
                   widget.dashBoardScreenViewModel
-                      .takeToReviewConsignmentsPage();
+                      .onReviewConsignmentsDrawerTileClicked();
                 },
               ),
               drawerList(
                 imageName: routesIcon,
                 text: "Route List",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.onViewRoutesTileClick();
+                  widget.dashBoardScreenViewModel
+                      .onViewRoutesDrawerTileClicked();
                 },
               ),
               drawerList(
                 imageName: rupeesIcon,
                 text: "Transaction History",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.onTransactionsTileClick();
+                  widget.dashBoardScreenViewModel
+                      .onTransactionsDrawerTileClicked();
                 },
               ),
               drawerList(
                 imageName: addDriverIcon,
                 text: "Add Driver",
                 onTap: () {
-                  widget.dashBoardScreenViewModel.onAddDriverTileClick();
+                  widget.dashBoardScreenViewModel
+                      .onAddDriverDrawerTileClicked();
                 },
               ),
             ],

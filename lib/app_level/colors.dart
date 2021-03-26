@@ -15,6 +15,7 @@ class AppColors {
   static const Color primaryColorShade11 = Color(0xff52789D);
   static const Color routesCardColor = Color(0xffE7EAED);
   static const Color appScaffoldColor = Color(0xFFECECEC);
+  static const Color drawerIconsBackgroundColor = Color(0xFFE6F3FF);
   static const Color black = Colors.black87;
 
   static const Color white = Colors.white;

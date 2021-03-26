@@ -7,6 +7,7 @@ import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -120,14 +121,77 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     notifyListeners();
   }
 
-  takeToViewEntryPage() {
+  void onDashboardDrawerTileClicked() {
+    navigationService.back();
+  }
+
+  void onDailyKilometersDrawerTileClicked() {
+    navigationService.back();
     navigationService.navigateTo(viewEntryLogPageRoute).then(
           (value) => reloadPage(),
         );
   }
 
+  void takeToViewExpensesPage() {
+    navigationService.back();
+    navigationService.navigateTo(viewExpensesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onAllotConsignmentsDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(allotConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onReviewConsignmentsDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(viewConsignmentsPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewRoutesDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onTransactionsDrawerTileClicked() {
+    PaymentArgs _paymentArgs = PaymentArgs(
+        totalKm: singleClientTileData.totalKm,
+        dueKm: singleClientTileData.dueKm);
+    navigationService.back();
+    navigationService
+        .navigateTo(paymentsPageRoute, arguments: _paymentArgs)
+        .then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onAddDriverDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(addDriverPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void reloadPage() {
+    getClients();
+    getClientDashboardStats();
+  }
+
   takeToDistributorsPage() {
     navigationService.navigateTo(distributorsLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  takeToViewEntryPage() {
+    navigationService.navigateTo(viewEntryLogPageRoute).then(
           (value) => reloadPage(),
         );
   }
@@ -138,93 +202,37 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
         );
   }
 
-  takeToAllotConsignmentsPage() {
-    navigationService.back();
-    navigationService.navigateTo(allotConsignmentsPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  takeToReviewConsignmentsPage() {
-    navigationService.back();
-    navigationService.navigateTo(viewConsignmentsPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  takeToPaymentsPage() {
-    navigationService.navigateTo(paymentsPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  takeToViewRoutesPage() {
-    navigationService.navigateTo(viewRoutesPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
   takeToHubsView({FetchRoutesResponse clickedRoute}) {
-    navigationService.navigateTo(hubsViewPageRoute,
-        arguments: ViewRoutesArguments(
-          clickedRoute: clickedRoute,
-        ));
+    navigationService
+        .navigateTo(hubsViewPageRoute,
+            arguments: ViewRoutesArguments(
+              clickedRoute: clickedRoute,
+            ))
+        .then(
+          (value) => reloadPage(),
+        );
   }
 
-  void reloadPage() {
-    getClients();
-    getClientDashboardStats();
-  }
-
-  void onViewRoutesTileClick() {
-    navigationService.back();
+  void takeToViewRoutesPage() {
     navigationService.navigateTo(viewRoutesPageRoute).then(
           (value) => reloadPage(),
         );
   }
 
-  void onViewExpensesTileClick() {
+  void takeToPaymentsPage() {
+    PaymentArgs _paymentArgs = PaymentArgs(
+        totalKm: singleClientTileData.totalKm,
+        dueKm: singleClientTileData.dueKm);
+    navigationService
+        .navigateTo(paymentsPageRoute, arguments: _paymentArgs)
+        .then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onExpensesDrawerTileClicked() {
     navigationService.back();
     navigationService.navigateTo(viewExpensesPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  void onViewEntryTileClick() {
-    navigationService.back();
-    navigationService.navigateTo(viewEntryLogPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  void onTransactionsTileClick() {
-    navigationService.back();
-    navigationService.navigateTo(paymentsPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  void onAddDriverTileClick() {
-    navigationService.back();
-    navigationService.navigateTo(addDriverPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  void onDashboardTileClick() {
-    navigationService.back();
-  }
-
-  void takeToAddDailyEntry() {
-    navigationService.back();
-    navigationService.navigateTo(addEntryLogPageRoute).then(
-          (value) => reloadPage(),
-        );
-  }
-
-  void takeToAddExpensePage() {
-    navigationService.back();
-    navigationService.navigateTo(addExpensesPageRoute).then(
           (value) => reloadPage(),
         );
   }

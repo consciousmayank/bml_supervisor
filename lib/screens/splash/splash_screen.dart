@@ -90,7 +90,12 @@ class _MyHomePageState extends State<MyHomePage> {
               // Future.delayed(Duration(seconds: 3), () {
               PreferencesSavedUser user = MyPreferences().getUserLoggedIn();
               if (user != null && user.isUserLoggedIn) {
-                locator<NavigationService>().replaceWith(dashBoardPageRoute);
+                if (MyPreferences().getSelectedClient() != null) {
+                  locator<NavigationService>().replaceWith(dashBoardPageRoute);
+                } else {
+                  locator<NavigationService>()
+                      .replaceWith(clientSelectPageRoute);
+                }
               } else {
                 locator<NavigationService>().replaceWith(logInPageRoute);
               }

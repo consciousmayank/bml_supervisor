@@ -443,6 +443,18 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
+      {int period}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(period));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

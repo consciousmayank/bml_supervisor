@@ -34,6 +34,7 @@ class _LineChartViewState extends State<LineChartView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LineChartViewModel>.reactive(
+      createNewModelOnInsert: true,
       onModelReady: (viewModel) => viewModel.getRoutesDrivenKm(
         clientId: widget.clientId,
         selectedDuration: widget.selectedDuration,

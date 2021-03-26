@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/profile/userprofile/userprofile_viewmodel
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -89,22 +90,28 @@ class _BodyWidgetState extends State<BodyWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        drawerList(
-                          text: "Change Password",
-                          onTap: () {
-                            widget.userProfileViewModel.navigationService
-                                .navigateTo(changePasswordRoute);
-                          },
-                        ),
-                        drawerList(
-                          text: "Logout",
-                          onTap: () {
-                            MyPreferences().setLoggedInUser(null);
-                            MyPreferences().saveCredentials(null);
-                            widget.userProfileViewModel.navigationService
-                                .clearStackAndShow(logInPageRoute);
-                          },
-                        ),
+                        _ProfileTile(
+                            title: "Change Password",
+                            onTap: () {
+                              widget.userProfileViewModel.navigationService
+                                  .navigateTo(changePasswordRoute);
+                            }),
+                        _ProfileTile(
+                            title: "Change Client",
+                            onTap: () {
+                              MyPreferences().saveSelectedClient(null);
+                              widget.userProfileViewModel.navigationService
+                                  .clearStackAndShow(clientSelectPageRoute);
+                            }),
+                        _ProfileTile(
+                            title: "Logout",
+                            onTap: () {
+                              MyPreferences().setLoggedInUser(null);
+                              MyPreferences().saveCredentials(null);
+                              MyPreferences().saveSelectedClient(null);
+                              widget.userProfileViewModel.navigationService
+                                  .clearStackAndShow(logInPageRoute);
+                            }),
                       ],
                     ),
                   ),
@@ -112,6 +119,36 @@ class _BodyWidgetState extends State<BodyWidget> {
               ),
             ),
           )),
+    );
+  }
+}
+
+class _ProfileTile extends StatelessWidget {
+  final String title;
+  final Function onTap;
+
+  const _ProfileTile({
+    Key key,
+    @required this.title,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: buttonHeight,
+        child: ClickableWidget(
+          elevation: defaultElevation,
+          borderRadius: getBorderRadius(),
+          onTap: () {
+            onTap.call();
+          },
+          child: Center(child: Text(title)),
+        ),
+      ),
     );
   }
 }

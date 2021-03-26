@@ -41,10 +41,16 @@ class ThemeConfiguration {
   ThemeData getAppThemeComplete() {
     return ThemeData(
       appBarTheme: AppBarTheme(
+        centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.white),
         elevation: 0.8,
         color: AppColors.primaryColorShade5,
         textTheme: appTextTheme,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: AppColors.primaryColorShade5,
+        ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: AppColors.primaryColorShade11,

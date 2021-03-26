@@ -113,6 +113,7 @@ const List<String> selectDurationList = [
   "THIS MONTH",
   "LAST MONTH",
 ];
+const String selectDurationTabWidgetTitle = 'Select Duration';
 const List<String> selectClientList = [
   'BOOK MY LOADING',
   "GOLDEN HARVEST",
@@ -179,3 +180,9 @@ const String addDriverAadhaarHint = "Aadhaar Card Number";
 const String addDriverDlHint = "Driving License";
 const String addDriverRemarksHint = "Remarks";
 const List<String> genders = ['MALE', 'FEMALE', 'OTHERS'];
+const List<String> selectDurationListDashBoard = [
+  "THIS MONTH REPORT",
+  "LAST MONTH REPORT",
+];
+const String addDriverSuccessful = "Driver added successfully";
+const String addDriverUnSuccessful = "Driver not added. Please try again";

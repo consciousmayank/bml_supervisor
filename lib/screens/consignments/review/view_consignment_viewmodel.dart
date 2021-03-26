@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -110,20 +111,9 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
-  }
-
   getClientIds() async {
     setBusy(true);
-    List<GetClientsResponse> clientIdsResponse =
-        await _dashBoardApis.getClientList();
-    _clientsList = copyList(clientIdsResponse);
-    notifyListeners();
+    selectedClient = MyPreferences().getSelectedClient();
     setBusy(false);
   }
 

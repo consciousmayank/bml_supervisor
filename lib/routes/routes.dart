@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
+import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
@@ -16,6 +17,7 @@ import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
+import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
@@ -47,6 +49,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: DashBoardScreenView(),
+          ),
+        );
+
+      case clientSelectPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: ClientSelectView(),
           ),
         );
 
@@ -164,8 +173,10 @@ class AppRouter {
         );
 
       case paymentsPageRoute:
+        PaymentArgs _paymentArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => NetworkSensitive(child: PaymentsView()),
+          builder: (_) =>
+              NetworkSensitive(child: PaymentsView(args: _paymentArgs)),
         );
 
       case addDriverPageRoute:

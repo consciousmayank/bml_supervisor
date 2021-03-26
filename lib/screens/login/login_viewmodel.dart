@@ -35,12 +35,12 @@ class LoginViewModel extends GeneralisedBaseViewModel {
         getBase64String(value: '$userName:$password'),
       );
       // locator<DioConfig>().configureDio();
-      takeToDashBoard();
+      takeToClientSelect();
     }
     setBusy(false);
   }
 
-  void takeToDashBoard() {
-    navigationService.replaceWith(dashBoardPageRoute);
+  void takeToClientSelect() {
+    navigationService.replaceWith(clientSelectPageRoute);
   }
 }
