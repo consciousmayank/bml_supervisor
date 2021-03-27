@@ -122,6 +122,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
+                                                percentage: 0,
                                                 title: 'Total Kilometer',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -139,6 +140,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
+                                                percentage: 0,
                                                 title: 'Due (km)',
                                                 value: viewModel
                                                     .singleClientTileData.dueKm
@@ -160,6 +162,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
+                                                percentage: 0,
                                                 title: 'Total Expense',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -176,6 +179,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
+                                                percentage: 0,
                                                 title: 'Due Expense',
                                                 value: viewModel
                                                     .singleClientTileData
