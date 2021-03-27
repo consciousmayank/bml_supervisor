@@ -161,6 +161,14 @@ const List<String> tempRoutes = [
   'R4',
   'R5',
 ];
+
+const String addHubsHubNameHint = "Hub Name";
+const String addHubsContactPersonHint = "Contact Person";
+const String addHubsDateOfRegistrationHint = "Date of Registration";
+const String addHubsContactNumberHint = "Contact Number";
+const String addHubsAlternateMobileNumberHint = "Alternate Number";
+const String addHubsEmailHint = "E-mail";
+
 const String addDriverVehicleIdHint = "Vehicle Registration Id";
 const String addDriverFirstNameHint = "First Name";
 const String addDriverLastNameHint = "Last Name";
@@ -186,3 +194,8 @@ const List<String> selectDurationListDashBoard = [
 ];
 const String addDriverSuccessful = "Driver added successfully";
 const String addDriverUnSuccessful = "Driver not added. Please try again";
+
+const String addHubSuccessful = "Hub added successfully";
+const String addHubUnSuccessful = "Hub not added. Please try again";
+
+

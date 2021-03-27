@@ -214,11 +214,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
 
                                   /// Expense Pie Chart
-                                  ExpensesPieChartView(
-                                    // key: UniqueKey(),
-                                    selectedDuration:
-                                        viewModel.selectedDuration,
-                                  ),
+                                  // ExpensesPieChartView(
+                                  //   // key: UniqueKey(),
+                                  //   selectedDuration:
+                                  //       viewModel.selectedDuration,
+                                  // ),
 
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),

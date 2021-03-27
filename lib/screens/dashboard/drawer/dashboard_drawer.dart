@@ -156,6 +156,13 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                       .onAddDriverDrawerTileClicked();
                 },
               ),
+              drawerList(
+                imageName: addDriverIcon,
+                text: "Add Hubs",
+                onTap: () {
+                  widget.dashBoardScreenViewModel.onAddHubTileClick();
+                },
+              ),
             ],
           ),
         ),
