@@ -60,7 +60,8 @@ class _AppTilesState extends State<AppTiles> {
                       ),
                       Row(
                         // mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.baseline,
+                        // textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
                             widget.value,
@@ -73,23 +74,27 @@ class _AppTilesState extends State<AppTiles> {
                           ),
                           wSizedBox(5),
                           widget.percentage != null
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                    color: widget.percentage > 0
-                                        ? Colors.green
-                                        : Colors.red,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4)),
-                                  ),
-                                  padding: EdgeInsets.all(2),
-                                  child: Text(
-                                    widget.percentage.toString() + '%',
-                                    style: AppTextStyles.latoMedium12Black
-                                        .copyWith(
-                                      fontSize: 10,
-                                      color: Colors.white,
+                              ? Center(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: widget.percentage > 0
+                                          ? Colors.green
+                                          : widget.percentage == 0
+                                              ? Colors.orange
+                                              : Colors.red,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
                                     ),
-                                    textAlign: TextAlign.center,
+                                    padding: EdgeInsets.all(2),
+                                    child: Text(
+                                      widget.percentage.toString() + '%',
+                                      style: AppTextStyles.latoMedium12Black
+                                          .copyWith(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 )
                               : Container(),
