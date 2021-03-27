@@ -29,3 +29,4 @@ const String distributorsLogPageRoute = '/distributorsLogPageRoute';
 const String changePasswordRoute = '/changePasswordRoute';
 const String userProfileRoute = '/userProfileRoute';
 const String addHubRoute = '/addHubRoute';
+const String addRoutesPageRoute = '/addRoutesPageRoute';

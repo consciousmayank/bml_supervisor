@@ -184,6 +184,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
           (value) => reloadPage(),
     );
   }
+  void onAddRoutesTileClick(){
+    navigationService.back();
+    navigationService.navigateTo(addRoutesPageRoute).then(
+          (value) => reloadPage(),
+    );
+  }
+
 
 
   void reloadPage() {

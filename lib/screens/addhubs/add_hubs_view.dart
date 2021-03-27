@@ -106,7 +106,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             child: Column(
               children: [
                 selectClientForDashboardStats(viewModel: widget.viewModel),
-                buildVehicleTextFormField(),
+                buildHubTitleTextFormField(),
                 buildDateOfRegistrationView(),
                 buildContactPersonView(),
                 buildContactNumberTextFormField(),
@@ -153,26 +153,35 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               if (hubTitleController.text.length >= 8) {
-                widget.viewModel.addHub(
-                    newHubObject: AddHubRequest(
-                  clientId: widget.viewModel.selectedClient.clientId,
-                  title: hubTitleController.text.trim(),
-                  contactPerson: contactPersonController.text.trim(),
-                  email: emailController.text.trim(),
-                  geoLatitude: double.parse(latitudeController.text.trim()),
-                  geoLongitude: double.parse(longitudeController.text.trim()),
-                  landmark: landmarkController.text.trim(),
-                  remarks: remarkController.text.trim(),
-                  city: widget.viewModel.selectedCity.city,
-                  state: widget.viewModel.stateController.text,
-                  country: widget.viewModel.countryController.text,
-                  pincode: widget.viewModel.pinCodeController.text,
-                  locality: localityController.text.trim(),
-                  mobile: contactNumberController.text.trim(),
-                  phone: alternateMobileNumberController.text.trim(),
-                  registrationDate: doRController.text,
-                  street: streetController.text.trim(),
-                ));
+                if (contactNumberController.text.length >= 10) {
+                  widget.viewModel.addHub(
+                      newHubObject: AddHubRequest(
+                    clientId: widget.viewModel.selectedClient.clientId,
+                    title: hubTitleController.text.trim(),
+                    contactPerson: contactPersonController.text.trim(),
+                    email: emailController.text.trim(),
+                    geoLatitude: latitudeController.text.length > 0
+                        ? double.parse(latitudeController.text.trim())
+                        : 0,
+                    geoLongitude: longitudeController.text.length > 0
+                        ? double.parse(longitudeController.text.trim())
+                        : 0,
+                    landmark: landmarkController.text.trim(),
+                    remarks: remarkController.text.trim(),
+                    city: widget.viewModel.selectedCity.city,
+                    state: widget.viewModel.stateController.text,
+                    country: widget.viewModel.countryController.text,
+                    pincode: widget.viewModel.pinCodeController.text,
+                    locality: localityController.text.trim(),
+                    mobile: contactNumberController.text.trim(),
+                    phone: alternateMobileNumberController.text.trim(),
+                    registrationDate: doRController.text,
+                    street: streetController.text.trim(),
+                  ));
+                } else {
+                  widget.viewModel.snackBarService.showSnackbar(
+                      message: 'Please enter correct mobile number');
+                }
               } else {
                 widget.viewModel.snackBarService.showSnackbar(
                     message: 'Hub Title Length should be greater than 7');
@@ -184,7 +193,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
-  Widget buildVehicleTextFormField() {
+  Widget buildHubTitleTextFormField() {
     return appTextFormField(
       enabled: true,
       controller: hubTitleController,
@@ -367,6 +376,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     return appTextFormField(
       enabled: true,
       textCapitalization: TextCapitalization.words,
+      //todo: regex for email verification
       // formatter: <TextInputFormatter>[
       //   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
       // ],
@@ -396,6 +406,13 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, streetFocusNode, localityFocusNode);
       },
+      validator: (value) {
+        if (value.isEmpty) {
+          return textRequired;
+        } else {
+          return null;
+        }
+      },
     );
   }
 
@@ -414,6 +431,13 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, localityFocusNode, landmarkFocusNode);
       },
+      validator: (value) {
+        if (value.isEmpty) {
+          return textRequired;
+        } else {
+          return null;
+        }
+      },
     );
   }
 
@@ -431,13 +455,6 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, landmarkFocusNode, widget.viewModel.cityFocusNode);
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
       },
     );
   }
@@ -586,10 +603,11 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildLatitudeTextFormField() {
     return appTextFormField(
       enabled: true,
-      // formatter: <TextInputFormatter>[
-      //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      //   LengthLimitingTextInputFormatter(6)
-      // ],
+      formatter: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(
+            r'^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$')),
+        // LengthLimitingTextInputFormatter(6)
+      ],
       controller: latitudeController,
       focusNode: latitudeFocusNode,
       hintText: "Latitude",
@@ -598,23 +616,17 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, latitudeFocusNode, longitudeFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
     );
   }
 
   Widget buildLongitudeTextFormField() {
     return appTextFormField(
       enabled: true,
-      // formatter: <TextInputFormatter>[
-      //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      //   LengthLimitingTextInputFormatter(6)
-      // ],
+      formatter: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(
+            r'^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$')),
+        // LengthLimitingTextInputFormatter(6)
+      ],
       controller: longitudeController,
       focusNode: longitudeFocusNode,
       hintText: "Longitude",
@@ -622,13 +634,6 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, longitudeFocusNode, remarkFocusNode);
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
       },
     );
   }

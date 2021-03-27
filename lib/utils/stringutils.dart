@@ -162,7 +162,7 @@ const List<String> tempRoutes = [
   'R5',
 ];
 
-const String addHubsHubNameHint = "Hub Name";
+const String addHubsHubNameHint = "Hub Title";
 const String addHubsContactPersonHint = "Contact Person";
 const String addHubsDateOfRegistrationHint = "Date of Registration";
 const String addHubsContactNumberHint = "Contact Number";

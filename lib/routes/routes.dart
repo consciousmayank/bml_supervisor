@@ -3,6 +3,7 @@ import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
@@ -75,14 +76,14 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddVehicleEntryView(),
-                ) //EntryLogsView(),
+                )
             );
 
       case viewEntryLogPageRoute:
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: ViewVehicleEntryView(),
-                ) //ViewEntryView(),
+                )
             );
 
       case addHubRoute:
@@ -91,6 +92,15 @@ class AppRouter {
               child: AddHubsView(),
             ) //EntryLogsView(),
         );
+
+        case addRoutesPageRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+              child: AddRoutesView(),
+            ) //EntryLogsView(),
+        );
+
+
 
       case viewEntryDetailedView2PointOPageRoute:
         Map<String, dynamic> args = settings.arguments;

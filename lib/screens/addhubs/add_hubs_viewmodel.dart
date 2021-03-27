@@ -105,7 +105,6 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
 
   void addHub({AddHubRequest newHubObject}) async {
 
-    // return;
     ApiResponse _apiResponse = await _addHubsApis.addHub(request: newHubObject);
     dialogService.showConfirmationDialog(
         title:
