@@ -169,6 +169,8 @@ const String addHubsContactNumberHint = "Contact Number";
 const String addHubsAlternateMobileNumberHint = "Alternate Number";
 const String addHubsEmailHint = "E-mail";
 
+const String addRouteRouteNameHint = "Route Title";
+
 const String addDriverVehicleIdHint = "Vehicle Registration Id";
 const String addDriverFirstNameHint = "First Name";
 const String addDriverLastNameHint = "Last Name";

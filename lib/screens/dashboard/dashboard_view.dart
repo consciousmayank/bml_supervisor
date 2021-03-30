@@ -122,7 +122,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                percentage: 10,
                                                 title: 'Total Kilometer',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -179,7 +179,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                percentage: -5,
                                                 title: 'Due Expense',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -218,6 +218,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
 
                                   /// Expense Pie Chart
+                                  //todo: commented out due to 'Not authorised error from server'
                                   // ExpensesPieChartView(
                                   //   // key: UniqueKey(),
                                   //   selectedDuration:

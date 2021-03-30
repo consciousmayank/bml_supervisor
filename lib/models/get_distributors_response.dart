@@ -28,6 +28,7 @@ class GetDistributorsResponse {
     this.geoLatitude,
     this.geoLongitude,
     this.remarks,
+    this.isCheck = false,
   });
 
   int id;
@@ -48,6 +49,7 @@ class GetDistributorsResponse {
   double geoLatitude;
   double geoLongitude;
   String remarks;
+  bool isCheck;
 
   GetDistributorsResponse copyWith({
     int id,
