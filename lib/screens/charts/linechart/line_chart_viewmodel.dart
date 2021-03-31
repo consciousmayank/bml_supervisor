@@ -16,6 +16,15 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
     _selectedDateForLineChart = value;
   }
 
+  String _chartDate;
+
+  String get chartDate => _chartDate;
+
+  set chartDate(String value) {
+    _chartDate = value;
+    notifyListeners();
+  }
+
   List<RoutesDrivenKm> routesDrivenKmListForLineChart = [];
   List uniqueRoutes = [];
   List<DateTime> uniqueDatesForLineChart = [];
@@ -23,6 +32,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
 
   // List<charts.Series<RoutesDrivenKm, int>> seriesLineData = [];
   List<BezierLine> bezierLineList = [];
+  List<String> uniqueDates = [];
 
   List<Color> lineChartColorArray = [
     Color(0xff2F4B7C),
@@ -46,7 +56,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
     String clientId,
     String selectedDuration,
   }) async {
-    //line chart/graph api
+    chartDate = '';
     routesDrivenKmListForLineChart.clear();
     dataForLineChart = [];
 
@@ -72,11 +82,16 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
         if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
           uniqueRoutes.add(routesDrivenKmObject.routeId);
         }
+        if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
+          uniqueDates.add(routesDrivenKmObject.entryDate);
+        }
         if (!uniqueDatesForLineChart.contains(routesDrivenKmObject.entryDate)) {
           uniqueDatesForLineChart.add(routesDrivenKmObject.entryDateTime);
         }
       },
     );
+
+    chartDate = uniqueDates.first;
 
     uniqueRoutes.forEach(
       (singleRouteElement) {
