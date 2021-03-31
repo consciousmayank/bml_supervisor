@@ -74,7 +74,9 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
         uniqueDates.add(element.entryDate);
       }
     });
-    chartDate = uniqueDates.first;
+    if(uniqueDates.length> 0) {
+      chartDate = uniqueDates.first;
+    }
 
     seriesBarData = [
       charts.Series(

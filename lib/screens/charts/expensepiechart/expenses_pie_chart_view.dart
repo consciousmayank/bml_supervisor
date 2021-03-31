@@ -43,9 +43,8 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             buildChartTitle(title: 'Expenses'),
-                            buildChartSubTitle(time: viewModel?.selectedDate),
-                            // buildChartSubTitleNew(
-                            //     date: viewModel.chartDate),
+                            // buildChartSubTitle(time: viewModel?.selectedDate),
+                            viewModel.buildChartSubTitleNew(),
                             hSizedBox(5),
                             // Text(viewModel.expensePieChartResponseList[0].vehicleId),
                             SizedBox(

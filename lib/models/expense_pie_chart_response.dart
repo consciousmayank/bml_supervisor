@@ -18,6 +18,8 @@ class ExpensePieChartResponse {
     this.eAmount,
     this.vehicleId,
     this.eDate,
+    this.eMonth,
+    this.eYear,
     this.color = const Color(0xff68cfc6),
   });
 
@@ -25,6 +27,8 @@ class ExpensePieChartResponse {
   double eAmount;
   String vehicleId;
   String eDate;
+  String eMonth;
+  String eYear;
   final Color color;
 
   ExpensePieChartResponse copyWith({
@@ -33,12 +37,16 @@ class ExpensePieChartResponse {
     String vehicleId,
     String eDate,
     Color color,
+    String eMonth,
+    String eYear,
   }) =>
       ExpensePieChartResponse(
         eType: eType ?? this.eType,
         eAmount: eAmount ?? this.eAmount,
         vehicleId: vehicleId ?? this.vehicleId,
         eDate: eDate ?? this.eDate,
+        eMonth: eMonth?? this.eMonth,
+        eYear: eYear??this.eYear,
         color: color ?? this.color,
       );
 
@@ -48,6 +56,8 @@ class ExpensePieChartResponse {
         eAmount: json["eAmount"].toDouble(),
         vehicleId: json["vehicleId"],
         eDate: json["eDate"],
+        eMonth: json["eMonth"],
+        eYear: json["eYear"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,5 +65,7 @@ class ExpensePieChartResponse {
         "eAmount": eAmount,
         "vehicleId": vehicleId,
         "eDate": eDate,
+        "eMonth": eMonth,
+        "eYear": eYear,
       };
 }
