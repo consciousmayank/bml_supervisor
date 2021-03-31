@@ -70,6 +70,6 @@ const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
 final GET_DAILY_KM_INFO = (date) => "/dailyKilometer/info/$date";
 final GET_CITY_LOCATION = (cityId) => "/location/city/$cityId";
 final GET_EXPENSE_PIE_CHART =
-    (period) => "/client/expense/aggregate/period/$period";
+    (clientId, period) => "/expense/aggregate/client/$clientId/period/$period";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 ///////////////////////////////////////////////////////////////

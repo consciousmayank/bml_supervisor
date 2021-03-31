@@ -28,6 +28,15 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  String _chartDate;
+
+  String get chartDate => _chartDate;
+
+  set chartDate(String value) {
+    _chartDate = value;
+    notifyListeners();
+  }
+
   List<ExpensePieChartResponse> expensePieChartResponseList = [];
   List<charts.Series<ExpensePieChartResponse, String>> expenseSeriesPieData =
       [];
@@ -47,7 +56,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalExpenses = 0.0;
 
-  void getExpensesListForPieChart({String selectedDuration}) async {
+  void getExpensesListForPieChart({String selectedDuration, String clientId}) async {
     int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
 
     if (selectedPeriodValue == 1) {
@@ -63,7 +72,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     // try {
     ParentApiResponse apiResponse =
         await _chartsApi.getExpensesListForPieChartAggregate(
-      period: selectedPeriodValue,
+      period: selectedPeriodValue,clientId: clientId
     );
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {

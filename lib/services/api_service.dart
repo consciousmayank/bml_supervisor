@@ -461,11 +461,11 @@ class ApiService {
 
 
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {int period}) async {
+      {int period, String clientId}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(period));
+      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(clientId, period));
     } on DioError catch (e) {
       error = e;
     }

@@ -24,6 +24,21 @@ hSizedBox(double height) {
   );
 }
 
+Text buildChartSubTitleNew({String date}) {
+  return Text(
+    '(' + getChartMonth(date: date) + ', ' + getChartYear(date: date) + ')',
+    style: AppTextStyles.latoBold12Black,
+  );
+}
+
+String getChartYear({String date}) {
+  return date.split('-').last;
+}
+
+String getChartMonth({String date}) {
+  return getMonth(int.parse(date.split('-')[1]));
+}
+
 getDashboardDistributerTileBgColor() {
   return Color(dashboardDistributerTileBgColor);
 }
