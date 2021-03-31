@@ -27,6 +27,14 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
   set totalKmG(int value) {
     _totalKmG = value;
   }
+  String _chartDate;
+
+  String get chartDate => _chartDate;
+
+  set chartDate(String value) {
+    _chartDate = value;
+    notifyListeners();
+  }
 
   List<charts.Series<KilometerReportResponse, String>> _seriesBarData;
 
@@ -51,6 +59,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
   Future getBarGraphKmReport({String clientId, String selectedDuration}) async {
     kmReportListData.clear();
     uniqueDates.clear();
+    chartDate = '';
 
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();
@@ -65,6 +74,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
         uniqueDates.add(element.entryDate);
       }
     });
+    chartDate = uniqueDates.first;
 
     seriesBarData = [
       charts.Series(

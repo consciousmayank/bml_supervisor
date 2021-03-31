@@ -4,6 +4,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
@@ -198,14 +199,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
                                   selectDuration(viewModel: viewModel),
 
+                                  ///Bar chart
+                                  BarChartView(),
+
                                   ///line chart
-                                  LineChartView(
-                                    selectedDuration:
-                                        viewModel.selectedDuration,
-                                    clientId: MyPreferences()
-                                        .getSelectedClient()
-                                        .clientId,
-                                  ),
+                                  LineChartView(),
 
                                   /// Driven Km pie chart
                                   PieChartView(
@@ -218,7 +216,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
 
                                   /// Expense Pie Chart
-                                  //todo: commented out due to 'Not authorised error from server'
                                   ExpensesPieChartView(
                                     // key: UniqueKey(),
                                     selectedDuration:
