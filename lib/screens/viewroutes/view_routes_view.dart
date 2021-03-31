@@ -21,7 +21,7 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Routes", style: AppTextStyles.appBarTitleStyle),
+                  title: Text("Route List", style: AppTextStyles.appBarTitleStyle),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),

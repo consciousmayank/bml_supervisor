@@ -314,9 +314,19 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   child: buildHeaderChip(
                       title: 'TOTAL EXPENSES (INR)',
                       value: viewModel.totalExpenses.toStringAsFixed(2),
-                      iconName: expensesIcon),
+                      iconName: rupeesIcon),
                 ),
               ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: buildHeaderChip(
+                      title: 'EXPENSES COUNT',
+                      value: viewModel.expenseCount.toString(),
+                      iconName: expensesCountIcon),
+                ),
+              ),
+
             ],
           ),
         ],

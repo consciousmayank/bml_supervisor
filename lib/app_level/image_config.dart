@@ -41,3 +41,5 @@ final String totalConsignmentIcon = _imagePath + 'total_consignments_icon.png';
 final String addDriverIcon = _imagePath + 'add_driver_icon.png';
 final String addHubIcon = _imagePath + 'add_hub_icon.png';
 final String addRouteIcon = _imagePath + 'add_routes_icon.png';
+final String fuelIcon = _imagePath + 'fuel_icon.png';
+final String review_consig_Icon = _imagePath + 'review_consig_icon.png';

@@ -49,7 +49,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               child: Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      'Dashboard',
+                      'Dashboard-${MyPreferences().getSelectedClient().clientId}',
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
@@ -203,7 +203,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   BarChartView(),
 
                                   ///line chart
-                                  LineChartView(),
+                                  LineChartView(
+                                    clientId: MyPreferences().getSelectedClient().clientId,
+                                    selectedDuration: MyPreferences().getSelectedDuration(),
+                                  ),
 
                                   /// Driven Km pie chart
                                   PieChartView(

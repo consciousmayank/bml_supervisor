@@ -48,7 +48,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('Payments', style: AppTextStyles.appBarTitleStyle),
+          title: Text('Transaction History', style: AppTextStyles.appBarTitleStyle),
         ),
         floatingActionButton: viewModel.paymentHistoryResponseList.length > 0
             ? FloatingActionButton.extended(
@@ -327,7 +327,9 @@ class _PaymentsViewState extends State<PaymentsView> {
                 child: Form(
                   key: _formKey,
                   child: ListView(
+
                     controller: _scrollController,
+
                     children: [
                       Padding(
                         padding: getPaymentScreenSidePadding(),

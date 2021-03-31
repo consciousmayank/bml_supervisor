@@ -37,8 +37,8 @@ class _LineChartViewState extends State<LineChartView> {
     return ViewModelBuilder<LineChartViewModel>.reactive(
       createNewModelOnInsert: true,
       onModelReady: (viewModel) => viewModel.getRoutesDrivenKm(
-        clientId: MyPreferences().getSelectedClient().clientId,
-        selectedDuration: MyPreferences().getSelectedDuration(),
+        clientId: widget.clientId,
+        selectedDuration: widget.selectedDuration,
       ),
       builder: (context, viewModel, child) {
         if (viewModel.isBusy) {

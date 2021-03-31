@@ -39,6 +39,15 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  int _expenseCount = 0;
+
+  int get expenseCount => _expenseCount;
+
+  set expenseCount(int value) {
+    _expenseCount = value;
+    notifyListeners();
+  }
+
   String _expenseEntryDate;
 
   String get expenseEntryDate => _expenseEntryDate;
@@ -103,6 +112,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   void getExpensesList(
       {String regNum, String selectedDuration, String clientId}) async {
+    expenseCount = 0;
     setBusy(true);
     viewExpensesResponse.clear();
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
@@ -116,6 +126,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     viewExpensesResponse = copyList(res);
     viewExpensesResponse.forEach((element) {
       _totalExpenses += element.eAmount;
+      ++expenseCount;
     });
     // takeToViewExpenseDetailedPage();
     notifyListeners();

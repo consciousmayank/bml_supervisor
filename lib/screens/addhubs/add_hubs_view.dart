@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _AddHubsViewState extends State<AddHubsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddHubsViewModel>.reactive(
         onModelReady: (viewModel) {
-          viewModel.getClients();
+          // viewModel.getClients();
           viewModel.getCities();
         },
         builder: (context, viewModel, child) => Scaffold(
@@ -105,7 +106,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             key: _formKey,
             child: Column(
               children: [
-                selectClientForDashboardStats(viewModel: widget.viewModel),
+                // selectClientForDashboardStats(viewModel: widget.viewModel),
                 buildHubTitleTextFormField(),
                 buildDateOfRegistrationView(),
                 buildContactPersonView(),
@@ -156,7 +157,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                 if (contactNumberController.text.length >= 10) {
                   widget.viewModel.addHub(
                       newHubObject: AddHubRequest(
-                    clientId: widget.viewModel.selectedClient.clientId,
+                    // clientId: widget.viewModel.selectedClient.clientId,
+                    clientId: MyPreferences().getSelectedClient().clientId,
                     title: hubTitleController.text.trim(),
                     contactPerson: contactPersonController.text.trim(),
                     email: emailController.text.trim(),
