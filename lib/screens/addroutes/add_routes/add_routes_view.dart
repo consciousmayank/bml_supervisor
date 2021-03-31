@@ -17,10 +17,10 @@ import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 
 class AddRoutesView extends StatefulWidget {
-  // final AddRoutesArguments args;
-  // AddRoutesView({this.args});
-  List<GetDistributorsResponse> newHubsList;
-  AddRoutesView({this.newHubsList});
+  final AddRoutesArguments args;
+  AddRoutesView({this.args});
+  // List<GetDistributorsResponse> newHubsList;
+  // AddRoutesView({this.newHubsList});
 
   @override
   _AddRoutesViewState createState() => _AddRoutesViewState();
@@ -41,7 +41,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
     return ViewModelBuilder<AddRoutesViewModel>.reactive(
         onModelReady: (viewModel) {
           viewModel.getClients();
-          viewModel.newHubsList = widget.newHubsList;
+          // viewModel.newHubsList = widget.args.newHubsList;
           // viewModel.getCities();
         },
         builder: (context, viewModel, child) => Scaffold(
@@ -64,9 +64,9 @@ class _AddRoutesViewState extends State<AddRoutesView> {
                         buildRemarksTextFormField(),
                         buildPickHubsButton(
                             viewModel: viewModel, context: context),
-                        viewModel?.newHubsList?.length > 0
-                            ? Text(viewModel?.newHubsList?.first.title)
-                            : Container(),
+                        // widget?.args?.newHubsList?.length > 0
+                        //     ? Text(widget?.args?.newHubsList?.first?.title)
+                        //     : Container(),
                       ],
                     ),
                   ),
@@ -155,7 +155,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
             }
           },
           background: AppColors.primaryColorShade5,
-          buttonText: 'PICK HUBS'),
+          buttonText: 'Select Hub'),
     );
   }
 

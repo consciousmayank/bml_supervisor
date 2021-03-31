@@ -105,14 +105,14 @@ class AppRouter {
             );
 
       case addRoutesPageRoute:
-        // AddRoutesArguments args = settings.arguments;
+        AddRoutesArguments args = settings.arguments;
         List<GetDistributorsResponse> newHubsList = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddRoutesView(
-                    newHubsList: newHubsList,
+                    args: args,
                   ),
-                ) //EntryLogsView(),
+                )
             );
 
       case viewEntryDetailedView2PointOPageRoute:

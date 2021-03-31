@@ -94,7 +94,7 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
 
   void takeToPickHubsPage() {
     navigationService.navigateTo(pickHubsPageRoute,
-        arguments: PickHubsArguments(hubsList: hubsList));
+        arguments: PickHubsArguments(hubsList: hubsList)).then((value) => null);
   }
 
 // getCities() async {
