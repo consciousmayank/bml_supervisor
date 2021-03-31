@@ -157,14 +157,14 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
-                imageName: addDriverIcon,
+                imageName: addHubIcon,
                 text: "Add Hubs",
                 onTap: () {
                   widget.dashBoardScreenViewModel.onAddHubTileClick();
                 },
               ),
               drawerList(
-                imageName: addDriverIcon,
+                imageName: addRouteIcon,
                 text: "Add Routes",
                 onTap: () {
                   widget.dashBoardScreenViewModel.onAddRoutesTileClick();
