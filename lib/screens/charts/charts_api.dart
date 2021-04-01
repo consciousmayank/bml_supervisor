@@ -13,7 +13,7 @@ abstract class ChartsApi {
   Future<List<RoutesDrivenKmPercentage>> getRoutesDrivenKmPercentage(
       {String clientId, int period});
 
-  Future<ParentApiResponse> getExpensesListForPieChartAggregate({String clientId, int period});
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate({String clientId});
 }
 
 class ChartsApiImpl extends BaseApi implements ChartsApi {
@@ -90,6 +90,6 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
   @override
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
       {int period, String clientId}) async {
-    return await apiService.getExpensesListForPieChartAggregate(clientId: clientId,period: period);
+    return await apiService.getExpensesListForPieChartAggregate(clientId: clientId);
   }
 }

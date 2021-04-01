@@ -27,7 +27,6 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
         onModelReady: (viewModel) {
           viewModel.getExpensesListForPieChart(
             clientId: MyPreferences().getSelectedClient().clientId,
-            selectedDuration: MyPreferences().getSelectedDuration(),
           );
         },
         builder: (context, viewModel, child) {

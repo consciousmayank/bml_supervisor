@@ -109,10 +109,18 @@ const List<String> expenseTypes = [
   'OTHERS',
 ];
 
+
+
 const List<String> selectDurationList = [
   "THIS MONTH",
   "LAST MONTH",
 ];
+const List<String> selectItemUnit = [
+  "Crate",
+  "Kilogram",
+];
+
+
 const String selectDurationTabWidgetTitle = 'Select Duration';
 const List<String> selectClientList = [
   'BOOK MY LOADING',

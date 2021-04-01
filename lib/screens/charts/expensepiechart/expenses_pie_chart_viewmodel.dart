@@ -62,14 +62,14 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalExpenses = 0.0;
 
-  void getExpensesListForPieChart({String selectedDuration, String clientId}) async {
-    int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
-
-    if (selectedPeriodValue == 1) {
-      selectedDate = DateTime.now();
-    } else {
-      selectedDate = Jiffy(DateTime.now()).subtract(months: 1);
-    }
+  void getExpensesListForPieChart({String clientId}) async {
+    // int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
+    //
+    // if (selectedPeriodValue == 1) {
+    //   selectedDate = DateTime.now();
+    // } else {
+    //   selectedDate = Jiffy(DateTime.now()).subtract(months: 1);
+    // }
 
     expensePieChartResponseList.clear();
     uniqueExpenseTypes.clear();
@@ -78,7 +78,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     // try {
     ParentApiResponse apiResponse =
         await _chartsApi.getExpensesListForPieChartAggregate(
-      period: selectedPeriodValue,clientId: clientId
+      clientId: clientId
     );
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {
