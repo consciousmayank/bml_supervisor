@@ -8,6 +8,7 @@ import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
+import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -201,6 +202,27 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
                                   ///Bar chart
                                   BarChartView(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'Recent Driven Kilometers',
+                                      style: AppTextStyles
+                                          .latoBold14primaryColorShade6,
+                                    ),
+                                  ),
+
+                                  ///Recent Driven Km Table
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Card(
+                                      elevation: defaultElevation,
+                                      child: Text(' Show Table here after api '),
+                                          //todo: uncomment it
+                                      // ConsignmentListView(
+                                      //   isFulPageView: false,
+                                      // ),
+                                    ),
+                                  ),
 
                                   ///line chart
                                   LineChartView(

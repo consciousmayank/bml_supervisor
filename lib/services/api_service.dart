@@ -151,6 +151,17 @@ class ApiService {
     return ParentApiResponse(error: _error, response: _response);
   }
 
+  Future getRecentDrivenKm() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get('$GET_LAST_SEVEN_ENTRIES');
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
   Future<ParentApiResponse> submitVehicleEntry({
     @required EntryLog entryLogRequest,
   }) async {

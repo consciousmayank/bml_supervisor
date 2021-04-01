@@ -1,9 +1,11 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   final double borderRadius;
+  final double fontSize;
   final GestureTapCallback onTap;
   final GestureTapCallback onLongPressed;
   final Color background;
@@ -18,6 +20,7 @@ class AppButton extends StatelessWidget {
     this.onLongPressed,
     @required this.background,
     @required this.buttonText,
+    @required this.fontSize,
   }) : super(key: key);
 
   @override
@@ -71,9 +74,8 @@ class AppButton extends StatelessWidget {
               child: Center(
                 child: Text(
                   buttonText,
-                  style: TextStyle(
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.latoMedium18White.copyWith(fontSize: fontSize),
+                  // style: TextStyle(),
                 ),
               ),
             ),

@@ -1,5 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -11,14 +13,11 @@ import 'package:stacked/stacked.dart';
 
 class ConsignmentListView extends StatefulWidget {
   final bool isFulPageView;
-  final String duration;
-  final int clientId;
+
 
   const ConsignmentListView({
     Key key,
     this.isFulPageView = false,
-    @required this.duration,
-    @required this.clientId,
   }) : super(key: key);
 
   @override
@@ -29,20 +28,22 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentListViewModel>.reactive(
-      onModelReady: (viewModel) => viewModel.getRecentConsignments(
-        clientId: widget.clientId,
-        duration: widget.duration,
-      ),
-      builder: (context, viewModel, child) => SafeArea(
-        left: true,
-        right: true,
-        bottom: true,
-        child: getRootWidget(
-          context: context,
-          viewModel: viewModel,
-          child: getBody(context: context, viewModel: viewModel),
-        ),
-      ),
+      onModelReady: (viewModel) {
+        //todo: put new api for last seven entries here
+        // viewModel.getRecentConsignments();
+        // viewModel.getRecentDrivenKm();
+      },
+      builder: (context, viewModel, child) =>
+          SafeArea(
+            left: true,
+            right: true,
+            bottom: true,
+            child: getRootWidget(
+              context: context,
+              viewModel: viewModel,
+              child: getBody(context: context, viewModel: viewModel),
+            ),
+          ),
       viewModelBuilder: () => ConsignmentListViewModel(),
     );
   }
@@ -56,7 +57,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
       return Scaffold(
         appBar: AppBar(
           title:
-              Text("All Consignments", style: AppTextStyles.appBarTitleStyle),
+          Text("All Consignments", style: AppTextStyles.appBarTitleStyle),
         ),
         body: child,
       );
@@ -71,13 +72,13 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
     return viewModel.recentConsignmentList.length == 0
         ? Container()
         : SizedBox(
-            child: makeConsignmentList(context: context, viewModel: viewModel),
-            height: widget.isFulPageView
-                ? double.infinity
-                : viewModel.recentConsignmentList.length <= 7
-                    ? 400
-                    : 400,
-          );
+      child: makeConsignmentList(context: context, viewModel: viewModel),
+      height: widget.isFulPageView
+          ? double.infinity
+          : viewModel.recentConsignmentList.length <= 7
+          ? 400
+          : 400,
+    );
   }
 
   Widget makeConsignmentList({
@@ -135,52 +136,9 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
             child: ListView.separated(
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      viewModel.recentConsignmentList[index].entryDate,
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.only(top: 5, bottom: 5, left: 8, right: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColorShade1,
-                        borderRadius: getBorderRadius(),
-                      ),
-                      child: Text(
-                        viewModel.recentConsignmentList[index].drivenKmG
-                            .toString(),
-                      ),
-                    ),
-                    Text(
-                      viewModel.recentConsignmentList[index].trips.toString(),
-                    ),
-                    SizedBox(
-                      height: 25,
-                      width: 100,
-                      child: AppButton(
-                          borderColor:
-                              viewModel.recentConsignmentList[index].routeId ==
-                                      0
-                                  ? Colors.transparent
-                                  : AppColors.primaryColorShade5,
-                          onTap:
-                              viewModel.recentConsignmentList[index].routeId ==
-                                      0
-                                  ? null
-                                  : () {
-                                      showConsignmentDetailsBottomSheet(
-                                          clickedConsignmentDetails: viewModel
-                                              .recentConsignmentList[index],
-                                          context: context,
-                                          viewModel: viewModel);
-                                    },
-                          background: AppColors.primaryColorShade5,
-                          buttonText: "Consignment"),
-                    )
-                  ],
+                return RecentDrivenSingleItem(
+                  viewModel: viewModel,
+                  index: index,
                 );
               },
               itemCount: viewModel.recentConsignmentList.length >= 7
@@ -197,18 +155,27 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         ),
         widget.isFulPageView
             ? Container()
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () {
-                    viewModel.takeToAllConsignmentsPage();
-                  },
-                  child: Text(
-                    "View More",
-                    style: AppTextStyles.underLinedText,
-                  ),
-                ),
-              )
+            : InkWell(
+          onTap: () {
+            viewModel.takeToDailyKilometersPage();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+              color: AppColors.primaryColorShade5,
+            ),
+            padding:
+            const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            child: Text(
+              "View More",
+              style: AppTextStyles.whiteRegular,
+            ),
+          ),
+        ),
+        hSizedBox(5),
+
       ],
     );
   }
@@ -230,11 +197,89 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         context: context,
         builder: (_) {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.75,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.75,
             child: ConsignmentDetailsView(
               consignmentId: clickedConsignmentDetails.consgId,
             ),
           );
         });
+  }
+}
+
+class RecentDrivenSingleItem extends StatelessWidget {
+  final ConsignmentListViewModel viewModel;
+  final int index;
+
+  const RecentDrivenSingleItem({
+    Key key,
+    this.viewModel,
+    this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          viewModel.recentConsignmentList[index].entryDate,
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 5, bottom: 5, left: 8, right: 8),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColorShade5,
+            borderRadius: getBorderRadius(),
+          ),
+          child: Text(
+            viewModel.recentConsignmentList[index].drivenKmG.toString(),
+            style: AppTextStyles.whiteRegular,
+          ),
+        ),
+        Text(
+          viewModel.recentConsignmentList[index].trips.toString(),
+        ),
+        SizedBox(
+          height: 25,
+          width: 100,
+          child: AppButton(
+            borderColor: viewModel.recentConsignmentList[index].routeId == 0
+                ? Colors.transparent
+                : AppColors.primaryColorShade11,
+            onTap: viewModel.recentConsignmentList[index].routeId == 0
+                ? null
+                : () {
+              // call getConsignment by Id
+              viewModel.takeToConsignmentDetailsRoute(
+                args: ConsignmentDetailsArgument(
+                  callingScreen: CallingScreen.RECENT_DRIVEN_KMS,
+                  consignmentId: viewModel
+                      .recentConsignmentList[index].consgId
+                      .toString(),
+                  routeId: viewModel.recentConsignmentList[index].routeId
+                      .toString(),
+                  routeName: viewModel
+                      .recentConsignmentList[index].routeTitle
+                      .toString(),
+                  entryDate:
+                  viewModel.recentConsignmentList[index].entryDate,
+                  vehicleId:
+                  viewModel.recentConsignmentList[index].vehicleId,
+                ),
+              );
+            },
+            background: AppColors.primaryColorShade5,
+            fontSize: 12,
+            buttonText: '#' +
+                viewModel.recentConsignmentList[index].routeId.toString() +
+                '-' +
+                viewModel.recentConsignmentList[index].routeTitle,
+          ),
+        )
+      ],
+    );
   }
 }

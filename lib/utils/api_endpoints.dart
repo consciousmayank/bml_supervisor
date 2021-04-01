@@ -7,6 +7,8 @@ const String SEARCH_BY_REG_NO = "/vehicle/list/";
 final FIND_LAST_ENTRY_BY_DATE =
     (vehicleId) => "/dailyKilometer/recent/entry/vehicle/$vehicleId";
 
+const String GET_LAST_SEVEN_ENTRIES = '/client/recent/drivenKm';
+
 final GET_DAILY_DRIVEN_KMS_BAR_CHART =
     (clientId, period) => "/dailyKilometer/client/$clientId/period/$period";
 

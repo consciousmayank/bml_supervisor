@@ -230,8 +230,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: ConsignmentListView(
-              duration: args.duration,
-              clientId: args.clientId,
               isFulPageView: args.isFulPageView,
             ),
           ),
