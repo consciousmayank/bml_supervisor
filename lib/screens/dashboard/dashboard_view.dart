@@ -198,7 +198,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         )
                                       : Container(),
 
-                                  selectDuration(viewModel: viewModel),
+                                  // selectDuration(viewModel: viewModel),
 
                                   ///Bar chart
                                   BarChartView(),

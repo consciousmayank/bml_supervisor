@@ -88,7 +88,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   padding: getSidePadding(context: context),
                   child: Column(
                     children: [
-                      buildSelectDurationTabWidget(viewModel),
+                      // buildSelectDurationTabWidget(viewModel),
                       registrationSelector(
                           context: context, viewModel: viewModel),
                       viewModel.viewExpensesResponse.length > 0

@@ -68,16 +68,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                 )
               : Column(
                   children: [
-                    buildSelectDurationTabWidget(viewModel),
-                    // TextField(
-                    //   decoration: const InputDecoration(
-                    //     icon: Icon(Icons.person),
-                    //     hintText: 'What do people call you?',
-                    //     hintStyle: TextStyle(color: Colors.red,),
-                    //     // labelText: 'Name *',
-                    //   ),
-                    //   controller: myController,
-                    // ),
+                    // buildSelectDurationTabWidget(viewModel),
                     registrationSelector(
                         context: context, viewModel: viewModel),
                     viewModel.vehicleEntrySearchResponseList.length > 0
