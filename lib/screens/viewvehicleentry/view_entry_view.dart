@@ -56,7 +56,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'View Entry - ${MyPreferences().getSelectedClient().clientId}',
+                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
           ),
