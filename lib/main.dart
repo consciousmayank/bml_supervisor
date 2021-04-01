@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/routes/routes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -47,11 +48,7 @@ class _MyAppState extends State<MyApp> {
     ]);
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          currentFocus.focusedChild.unfocus();
-        }
+        hideKeyboard(context);
       },
       child: MaterialApp(
         theme: ThemeConfiguration().getAppThemeComplete(),

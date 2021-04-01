@@ -1,13 +1,11 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
-import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
-import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
-import 'file:///C:/bml_supervisor_v3/bml_supervisor/lib/screens/addroutes/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
@@ -105,15 +103,10 @@ class AppRouter {
             );
 
       case addRoutesPageRoute:
-        AddRoutesArguments args = settings.arguments;
-        List<GetDistributorsResponse> newHubsList = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
-                  child: AddRoutesView(
-                    args: args,
-                  ),
-                )
-            );
+                  child: AddRoutesView(),
+                ));
 
       case viewEntryDetailedView2PointOPageRoute:
         Map<String, dynamic> args = settings.arguments;

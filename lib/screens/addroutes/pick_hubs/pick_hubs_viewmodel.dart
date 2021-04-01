@@ -1,15 +1,32 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:flutter/material.dart';
 
 class PickHubsViewModel extends GeneralisedBaseViewModel {
-  List<GetDistributorsResponse> _newHubsList = [];
+  int _currentStep = 0;
 
-  List<GetDistributorsResponse> get newHubsList => _newHubsList;
+  List<GetDistributorsResponse> _selectedHubsList = [];
+  List<GetDistributorsResponse> _completeHubsList = [];
+  List<TextEditingController> kilometerController = [];
 
-  set newHubsList(List<GetDistributorsResponse> value) {
-    _newHubsList = value;
+  List<GetDistributorsResponse> get selectedHubsList => _selectedHubsList;
+
+  set selectedHubsList(List<GetDistributorsResponse> value) {
+    _selectedHubsList = value;
+    notifyListeners();
+  }
+
+  List<GetDistributorsResponse> get completeHubsList => _completeHubsList;
+
+  set completeHubsList(List<GetDistributorsResponse> value) {
+    _completeHubsList = value;
+  }
+
+  int get currentStep => _currentStep;
+
+  set currentStep(int value) {
+    _currentStep = value;
     notifyListeners();
   }
 
@@ -23,11 +40,10 @@ class PickHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToAddRoutesPage(List<GetDistributorsResponse> newHubsList) {
-    // navigationService.navigateTo(addRoutesPageRoute,
-    //     arguments: AddRoutesArguments(newHubsList: newHubsList));
+    navigationService.back(result: newHubsList);
+  }
 
-    navigationService.navigateTo(addRoutesPageRoute,
-        arguments: newHubsList);
-
+  setCompleteHubList(List<GetDistributorsResponse> hubsList) {
+    completeHubsList = copyList(hubsList);
   }
 }
