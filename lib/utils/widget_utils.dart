@@ -103,6 +103,10 @@ LinearProgressIndicator getLinearProgress() {
         new AlwaysStoppedAnimation<Color>(ThemeConfiguration.primaryBackground),
   );
 }
+String capitalizeFirstLetter(String title) {
+  return "${title[0].toUpperCase()}${title.substring(1)}";
+}
+
 
 String getDateString(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date);

@@ -65,14 +65,14 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
           isFulPageView: true,
         ));
   }
-  getRecentDrivenKm() async {
+  getRecentDrivenKm({String clientId}) async {
     recentConsignmentList.clear();
     // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
 
     setBusy(true);
     notifyListeners();
     try {
-      ParentApiResponse apiResponse = await apiService.getRecentDrivenKm();
+      ParentApiResponse apiResponse = await apiService.getRecentDrivenKm(clientId: clientId);
       if (apiResponse.error == null) {
         if (apiResponse.isNoDataFound()) {
           snackBarService.showSnackbar(message: apiResponse.emptyResult);

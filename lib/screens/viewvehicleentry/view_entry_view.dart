@@ -25,6 +25,8 @@ class ViewVehicleEntryView extends StatefulWidget {
 class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
+  final myController = TextEditingController();
+
   // ScrollController _scrollController = ScrollController();
   //
   // @override
@@ -67,6 +69,15 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
               : Column(
                   children: [
                     buildSelectDurationTabWidget(viewModel),
+                    // TextField(
+                    //   decoration: const InputDecoration(
+                    //     icon: Icon(Icons.person),
+                    //     hintText: 'What do people call you?',
+                    //     hintStyle: TextStyle(color: Colors.red,),
+                    //     // labelText: 'Name *',
+                    //   ),
+                    //   controller: myController,
+                    // ),
                     registrationSelector(
                         context: context, viewModel: viewModel),
                     viewModel.vehicleEntrySearchResponseList.length > 0
@@ -129,12 +140,19 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
 
   registrationNumberTextField(ViewVehicleEntryViewModel viewModel) {
     return appTextFormField(
+      inputDecoration: InputDecoration(
+        hintText: 'Vehicle Number',
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+      // labelText: 'demo',
       enabled: true,
       controller: selectedRegNoController,
       onFieldSubmitted: (String value) {
         getDailyEntry(viewModel: viewModel, registrationNumber: value);
       },
-      hintText: '$drRegNoHint (Optional)',
+      // hintText: '',
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.isEmpty) {
@@ -243,7 +261,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                   ),
                 ),
               ),
-
             ],
           ),
         ],

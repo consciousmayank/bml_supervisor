@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
@@ -31,7 +32,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
       onModelReady: (viewModel) {
         //todo: put new api for last seven entries here
         // viewModel.getRecentConsignments();
-        // viewModel.getRecentDrivenKm();
+        viewModel.getRecentDrivenKm(clientId: MyPreferences().getSelectedClient().clientId);
       },
       builder: (context, viewModel, child) =>
           SafeArea(
@@ -86,26 +87,27 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
     ConsignmentListViewModel viewModel,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           color: AppColors.primaryColorShade5,
           padding: EdgeInsets.all(15),
           child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 flex: 1,
                 child: Text(
                   ('Date'),
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: AppTextStyles.whiteRegular,
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Text(
-                  ('Km Driven'),
+                  ('Driven Km.'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: AppTextStyles.whiteRegular,
                 ),
               ),
               Expanded(
@@ -115,21 +117,22 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
                   child: Text(
                     ('Trips'),
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: AppTextStyles.whiteRegular,
                   ),
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Text(
-                  'Track',
+                  'Consg.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: AppTextStyles.whiteRegular,
                 ),
               ),
             ],
           ),
         ),
+        hSizedBox(8),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -175,38 +178,37 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
           ),
         ),
         hSizedBox(5),
-
       ],
     );
   }
 
-  void showConsignmentDetailsBottomSheet({
-    BuildContext context,
-    ConsignmentListViewModel viewModel,
-    RecentConginmentResponse clickedConsignmentDetails,
-  }) async {
-    await showModalBottomSheet(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(defaultBorder),
-            topRight: Radius.circular(defaultBorder),
-          ),
-        ),
-        // isScrollControlled: true,
-        context: context,
-        builder: (_) {
-          return SizedBox(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height * 0.75,
-            child: ConsignmentDetailsView(
-              consignmentId: clickedConsignmentDetails.consgId,
-            ),
-          );
-        });
-  }
+  // void showConsignmentDetailsBottomSheet({
+  //   BuildContext context,
+  //   ConsignmentListViewModel viewModel,
+  //   RecentConginmentResponse clickedConsignmentDetails,
+  // }) async {
+  //   await showModalBottomSheet(
+  //       backgroundColor: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //           topLeft: Radius.circular(defaultBorder),
+  //           topRight: Radius.circular(defaultBorder),
+  //         ),
+  //       ),
+  //       // isScrollControlled: true,
+  //       context: context,
+  //       builder: (_) {
+  //         return SizedBox(
+  //           height: MediaQuery
+  //               .of(context)
+  //               .size
+  //               .height * 0.75,
+  //           child: ConsignmentDetailsView(
+  //             : clickedConsignmentDetails.consgId,
+  //           ),
+  //         );
+  //       });
+  // }
 }
 
 class RecentDrivenSingleItem extends StatelessWidget {

@@ -13,6 +13,8 @@ import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
@@ -96,6 +98,13 @@ class AppRouter {
                     args: args,
                   ),
                 ));
+
+      case consignmentListPageRoute:
+        ConsignmentDetailsArgument args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) =>
+              NetworkSensitive(child: ConsignmentDetailsView(args: args)),
+        );
 
       case addHubRoute:
         return MaterialPageRoute(

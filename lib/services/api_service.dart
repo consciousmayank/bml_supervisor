@@ -151,11 +151,11 @@ class ApiService {
     return ParentApiResponse(error: _error, response: _response);
   }
 
-  Future getRecentDrivenKm() async {
+  Future getRecentDrivenKm({String clientId}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get('$GET_LAST_SEVEN_ENTRIES');
+      response = await dioClient.getDio().get(GET_LAST_SEVEN_ENTRIES(clientId));
     } on DioError catch (e) {
       error = e;
     }

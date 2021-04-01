@@ -56,7 +56,7 @@ const String vehicleClassHint = "Select Vehicle Class";
 const String vehicleFuelTypeHint = "Select Fuel Type";
 const String vehicleEmissionTypeHint = "Select Emmision Type";
 const String vehicleSeatingCapacityHint = "Select Vehicle Seating Capacity";
-const String drRegNoHint = "Registration No";
+const String drRegNoHint = "Vehicle Number";
 const String consignmentTitleHint = "Enter Consignment Title";
 const String searchPageTitleHint = "Enter Registration Number";
 const String fuelMeterReadingError =
@@ -171,7 +171,7 @@ const String addHubsEmailHint = "E-mail";
 
 const String addRouteRouteNameHint = "Route Title";
 
-const String addDriverVehicleIdHint = "Vehicle Registration Id";
+const String addDriverVehicleIdHint = "Vehicle Number";
 const String addDriverFirstNameHint = "First Name";
 const String addDriverLastNameHint = "Last Name";
 const String addDriverDobHint = "Date of Birth";

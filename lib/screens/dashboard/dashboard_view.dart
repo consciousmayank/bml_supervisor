@@ -50,7 +50,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               child: Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      'Dashboard-${MyPreferences().getSelectedClient().clientId}',
+                      'Dashboard - ${capitalizeFirstLetter(MyPreferences().getSelectedClient().clientId)}',
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
@@ -216,18 +216,19 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                     borderRadius: BorderRadius.circular(20),
                                     child: Card(
                                       elevation: defaultElevation,
-                                      child: Text(' Show Table here after api '),
-                                          //todo: uncomment it
-                                      // ConsignmentListView(
-                                      //   isFulPageView: false,
-                                      // ),
+                                      child: ConsignmentListView(
+                                        isFulPageView: false,
+                                      ),
                                     ),
                                   ),
 
                                   ///line chart
                                   LineChartView(
-                                    clientId: MyPreferences().getSelectedClient().clientId,
-                                    selectedDuration: MyPreferences().getSelectedDuration(),
+                                    clientId: MyPreferences()
+                                        .getSelectedClient()
+                                        .clientId,
+                                    selectedDuration:
+                                        MyPreferences().getSelectedDuration(),
                                   ),
 
                                   /// Driven Km pie chart

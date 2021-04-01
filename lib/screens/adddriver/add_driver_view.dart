@@ -187,6 +187,12 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       controller: vehicleIdController,
       focusNode: vehicleIdFocusNode,
       hintText: addDriverVehicleIdHint,
+      // inputDecoration: InputDecoration(
+      //   hintText: 'Vehicle Number',
+      //   hintStyle: TextStyle(
+      //     color: Colors.grey,
+      //   ),
+      // ),
       keyboardType: TextInputType.text,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {

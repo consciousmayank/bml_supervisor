@@ -134,12 +134,18 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
 
   Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
     return appTextFormField(
+      inputDecoration: InputDecoration(
+        hintText: 'Vehicle Number',
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
       enabled: true,
       controller: selectedRegNoController,
       onFieldSubmitted: (String value) {
         getExpenses(viewModel: viewModel, registrationNumber: value);
       },
-      hintText: drRegNoHint,
+      // hintText: drRegNoHint,
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.isEmpty) {
