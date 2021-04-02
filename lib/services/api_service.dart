@@ -226,13 +226,13 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRoutesDrivenKmPercentage(
-      {String clientId, int period}) async {
+      {String clientId}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient
           .getDio()
-          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId, period));
+          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId));
     } on DioError catch (e) {
       error = e;
     }

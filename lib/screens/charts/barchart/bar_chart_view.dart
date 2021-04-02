@@ -29,7 +29,6 @@ class _BarChartViewState extends State<BarChartView> {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
         clientId: MyPreferences().getSelectedClient().clientId,
-        selectedDuration: MyPreferences().getSelectedDuration(),
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy

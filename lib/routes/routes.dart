@@ -5,6 +5,7 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
@@ -107,14 +108,14 @@ class AppRouter {
               NetworkSensitive(child: ConsignmentDetailsView(args: args)),
         );
 
-        case arrangeHubsPageRoute:
-        // ConsignmentDetailsArgument args = settings.arguments;
+      case arrangeHubsPageRoute:
+        ArrangeHubsArguments args = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) =>
-              NetworkSensitive(child: ArrangeHubsView()),
+          builder: (_) => NetworkSensitive(
+              child: ArrangeHubsView(
+            args: args,
+          )),
         );
-
-
 
       case addHubRoute:
         return MaterialPageRoute(
@@ -131,8 +132,7 @@ class AppRouter {
                   child: AddRoutesView(
                     args: args,
                   ),
-                )
-            );
+                ));
 
       case viewEntryDetailedView2PointOPageRoute:
         Map<String, dynamic> args = settings.arguments;

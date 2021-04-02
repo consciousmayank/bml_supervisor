@@ -11,10 +11,10 @@ final GET_LAST_SEVEN_ENTRIES =
     (clientId) => "/manager/recent/drivenKm/client/$clientId";
 
 final GET_DAILY_DRIVEN_KMS_BAR_CHART =
-    (clientId, period) => "/dailyKilometer/client/$clientId/period/$period";
+    (clientId, period) => "/dailyKilometer/client/$clientId";
 
 final GET_ROUTES_DRIVEN_KM =
-    (clientId, period) => "/route/drivenKm/client/$clientId/period/$period";
+    (clientId, period) => "/route/drivenKm/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
     (clientId, date) => "/consignment/list/client/$clientId/date/$date";
@@ -23,8 +23,8 @@ final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 
 final GET_ROUTES_DRIVEN_KM_PERCENTAGE = //06 Get Client Aggregate Driven Km (Donut Chart)
-    (clientId, period) =>
-        "/route/drivenKm/aggregate/client/$clientId/period/$period";
+    (clientId) =>
+        "/route/drivenKm/aggregate/client/$clientId";
 
 const String ADD_PUCC_FORM = "/vehicle/pucc/add/";
 const String ADD_INSURANCE_FORM = "/vehicle/insurance/add/";

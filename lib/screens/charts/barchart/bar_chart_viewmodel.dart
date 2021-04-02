@@ -56,15 +56,15 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  Future getBarGraphKmReport({String clientId, String selectedDuration}) async {
+  Future getBarGraphKmReport({String clientId}) async {
     kmReportListData.clear();
     uniqueDates.clear();
     chartDate = '';
 
-    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+    // int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();
     List<KilometerReportResponse> res = await _chartsApi.getDailyDrivenKm(
-        clientId: clientId, period: selectedDurationValue);
+        clientId: clientId);
 
     kmReportListData = copyList(res);
 

@@ -55,15 +55,14 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
 
   void getRoutesDrivenKm({
     String clientId,
-    String selectedDuration,
   }) async {
 
       chartDate = '';
       routesDrivenKmListForLineChart.clear();
       dataForLineChart = [];
 
-      int selectedDurationValue =
-          selectedDuration.contains('THIS MONTH') ? 1 : 2;
+      // int selectedDurationValue =
+      //     selectedDuration.contains('THIS MONTH') ? 1 : 2;
       // if (selectedDurationValue == 1) {
       //   selectedDateForLineChart = DateTime.now();
       // } else {
@@ -74,7 +73,6 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
       notifyListeners();
       List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
         clientId: clientId,
-        period: selectedDurationValue,
       );
 
       routesDrivenKmListForLineChart = copyList(res);

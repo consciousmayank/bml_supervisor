@@ -33,7 +33,7 @@ class _PickHubsViewState extends State<PickHubsView> {
               ),
               body: Column(
                 children: [
-                  buildCityTextFormField(viewModel: viewModel),
+                  // buildCityTextFormField(viewModel: viewModel),
                   Expanded(
                     child: ListView.separated(
                       controller: _scrollController,
@@ -66,6 +66,7 @@ class _PickHubsViewState extends State<PickHubsView> {
       child: SizedBox(
         height: buttonHeight,
         child: AppButton(
+          fontSize: 14,
             borderRadius: defaultBorder,
             borderColor: AppColors.primaryColorShade1,
             onTap: () {
@@ -73,10 +74,11 @@ class _PickHubsViewState extends State<PickHubsView> {
               viewModel.newHubsList.forEach((element) {
                 print(element.title);
               });
-              viewModel.takeToAddRoutesPage(viewModel.newHubsList);
+              // viewModel.takeToAddRoutesPage(viewModel.newHubsList);
+              viewModel.takeToArrangeHubs(viewModel.newHubsList);
             },
             background: AppColors.primaryColorShade5,
-            buttonText: 'ADD HUBS'),
+            buttonText: 'NEXT'),
       ),
     );
   }

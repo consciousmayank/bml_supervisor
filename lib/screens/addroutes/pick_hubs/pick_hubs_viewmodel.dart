@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 
 class PickHubsViewModel extends GeneralisedBaseViewModel {
   List<GetDistributorsResponse> _newHubsList = [];
@@ -26,8 +27,14 @@ class PickHubsViewModel extends GeneralisedBaseViewModel {
     // navigationService.navigateTo(addRoutesPageRoute,
     //     arguments: AddRoutesArguments(newHubsList: newHubsList));
 
-    navigationService.navigateTo(addRoutesPageRoute,
-        arguments: newHubsList);
+    navigationService.navigateTo(arrangeHubsPageRoute, arguments: newHubsList);
 
+    navigationService.navigateTo(addRoutesPageRoute, arguments: newHubsList);
+  }
+
+  void takeToArrangeHubs(List<GetDistributorsResponse> newHubsList) {
+    print('goiing to arrange hubs');
+    navigationService.navigateTo(arrangeHubsPageRoute,
+        arguments: ArrangeHubsArguments(newHubsList: newHubsList));
   }
 }

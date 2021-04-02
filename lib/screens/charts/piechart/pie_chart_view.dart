@@ -26,7 +26,6 @@ class _PieChartViewState extends State<PieChartView> {
     return ViewModelBuilder<PieChartViewModel>.reactive(
         onModelReady: (viewModel) => viewModel.getRoutesDrivenKmPercentage(
               clientId: widget.clientId,
-              period: widget.selectedDuration,
             ),
         builder: (context, viewModel, child) {
           return viewModel.isBusy
