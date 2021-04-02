@@ -59,9 +59,11 @@ class _AddRoutesViewState extends State<AddRoutesView> {
                     key: _formKey,
                     child: Column(
                       children: [
+
                         selectClientForDashboardStats(viewModel: viewModel),
                         buildRouteTitleTextFormField(),
                         buildRemarksTextFormField(),
+                        // Text('asd'),
                         buildPickHubsButton(
                             viewModel: viewModel, context: context),
                         // widget?.args?.newHubsList?.length > 0
@@ -134,6 +136,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
     return SizedBox(
       height: buttonHeight,
       child: AppButton(
+        fontSize: 14,
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
@@ -155,7 +158,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
             }
           },
           background: AppColors.primaryColorShade5,
-          buttonText: 'Select Hub'),
+          buttonText: 'NEXT'),
     );
   }
 

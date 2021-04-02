@@ -154,7 +154,13 @@ class _PickHubsViewState extends State<PickHubsView> {
           FocusNode focusNode,
           VoidCallback onFieldSubmitted) {
         return appTextFormField(
-          hintText: "City",
+          // hintText: "Hubs",
+          inputDecoration: InputDecoration(
+            hintText: 'Select Hubs',
+            hintStyle: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
           controller: textEditingController,
           focusNode: focusNode,
           onFieldSubmitted: (String value) {

@@ -26,6 +26,7 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
     );
   }
 
+
   // getRecentConsignments({int clientId, String duration}) async {
   //   this.clientId = clientId;
   //   this.duration = duration;
