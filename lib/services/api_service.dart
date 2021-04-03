@@ -7,6 +7,7 @@ import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
@@ -455,6 +456,21 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> addRoute(
+      {@required CreateRouteRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().post(ADD_ROUTE, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+
 
   Future<ParentApiResponse> addHub(
       {@required AddHubRequest request}) async {

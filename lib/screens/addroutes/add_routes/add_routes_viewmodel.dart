@@ -1,5 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -22,15 +24,6 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
   //   _newHubsList = value;
   //   notifyListeners();
   // }
-
-  GetClientsResponse _selectedClient;
-
-  GetClientsResponse get selectedClient => _selectedClient;
-
-  set selectedClient(GetClientsResponse selectedClient) {
-    _selectedClient = selectedClient;
-    notifyListeners();
-  }
 
   List<GetClientsResponse> _clientsList = [];
 
@@ -92,10 +85,19 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
     setBusy(false);
   }
 
-  void takeToPickHubsPage() {
+  void takeToPickHubsPage({String routeTitle, String remarks}) {
+    print('add routes');
+    print(routeTitle);
+    print(remarks);
     navigationService.navigateTo(pickHubsPageRoute,
-        arguments: PickHubsArguments(hubsList: hubsList)).then((value) => null);
+        arguments: PickHubsArguments(
+          hubsList: hubsList,
+          routeTitle: routeTitle,
+          remarks: remarks,
+        ));
   }
+
+
 
 // getCities() async {
 //   var citiesList = await _driverApis.getCities();

@@ -23,7 +23,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
     return ViewModelBuilder<ArrangeHubsViewModel>.reactive(
         onModelReady: (viewModel) {
           viewModel.selectedHubList = widget.args.newHubsList;
-          viewModel.selectedSourceHubList = widget.args.newHubsList;
+          // viewModel.selectedSourceHubList = widget.args.newHubsList;
         },
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -37,20 +37,23 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
             body: Padding(
               padding: getSidePadding(context: context),
               child: Column(children: [
-
                 buildSelectedHubList(viewModel: viewModel),
                 // buildReturningHubList(viewModel),
                 // Text('asdf'),
                 buildReturnListCheckButton(viewModel),
-                buildPickHubsButton(viewModel: viewModel, context: context),
+                buildCreateRouteButton(viewModel: viewModel, context: context),
               ]),
             ),
           );
         },
-        viewModelBuilder: () => ArrangeHubsViewModel());
+        viewModelBuilder: () => ArrangeHubsViewModel(
+              sourceListLength: widget.args.newHubsList.length,
+              selectedSourceHubList: widget.args.newHubsList,
+              // srcDestinationHubId: widget.args.srcLocation
+            ));
   }
 
-  Widget buildPickHubsButton(
+  Widget buildCreateRouteButton(
       {BuildContext context, ArrangeHubsViewModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
@@ -59,22 +62,26 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-            // if (viewModel.selectedClient != null) {
-            //   if (routeTitleController.text.length > 0) {
-            //     viewModel
-            //         .getHubsForSelectedClient(
-            //         selectedClient: viewModel.selectedClient)
-            //         .then((value) => viewModel.takeToPickHubsPage());
-            //     // if(viewModel.hubsList.length>0) {
-            //     //   viewModel.takeToPickHubsPage();
-            //     // }
-            //
-            //     // showHubsList(context, viewModel);
-            //   }
-            // } else {
-            //   viewModel.snackBarService
-            //       .showSnackbar(message: 'Please Select Client');
-            // }
+            // print('remarks in view: ${widget.args.remarks}');
+
+            bool isKmEmpty = false;
+
+            viewModel.selectedHubList.forEach((element) {
+              if (element.kiloMeters == null) {
+                isKmEmpty = true;
+              }
+            });
+            if (isKmEmpty) {
+              viewModel.snackBarService
+                  .showSnackbar(message: 'Please fill all the Kms');
+            } else {
+              viewModel.createRoute(
+                title: widget.args.routeTitle,
+                remarks: widget.args.remarks,
+                dstLocation: widget.args.dstLocation,
+                srcLocation: widget.args.srcLocation,
+              );
+            }
           },
           background: AppColors.primaryColorShade5,
           buttonText: 'CREATE ROUTE'),
@@ -141,23 +148,20 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          viewModel.isReturnList ? Text('As Above') : Text('No Return List'),
+          Text('Return List'),
           Checkbox(
             value: viewModel.isReturnList,
             onChanged: (value) {
-
-                /// add the item to list
-                // print(value);
-                viewModel.isReturnList = value;
-                if (value) {
-                  viewModel.createReturningList(
-                      list: viewModel.selectedHubList);
-                } else {
-                  viewModel.removeReturningList();
-                  // viewModel.selectedReturningHubsList = [];
-                }
-                // widget.args.hubsList[index].isCheck = value;
-
+              /// add the item to list
+              // print(value);
+              viewModel.isReturnList = value;
+              if (value) {
+                viewModel.createReturningList(list: viewModel.selectedHubList);
+              } else {
+                viewModel.removeReturningList();
+                // viewModel.selectedReturningHubsList = [];
+              }
+              // widget.args.hubsList[index].isCheck = value;
             },
           ),
         ],
@@ -190,6 +194,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
     //   print('uncheck');
     // }
     // print(viewModel.selectedHubList.length);
+    print('args list length ${widget.args.newHubsList.length}');
     // print(widget.args.newHubsList.length);
     // print(viewModel.isReturnList);
     return Expanded(
@@ -202,7 +207,9 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
               children: [
                 Text(viewModel.selectedHubList[index].id.toString()),
                 wSizedBox(10),
-                Expanded(flex: 2, child: Text('${viewModel.selectedHubList[index].title}')),
+                Expanded(
+                    flex: 2,
+                    child: Text('${viewModel.selectedHubList[index].title}')),
                 Expanded(
                   flex: 1,
                   child: TextFormField(
@@ -210,15 +217,17 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
                         hintText: 'Kms',
                         hintStyle: AppTextStyles.latoMedium12Black
                             .copyWith(color: Colors.black45)),
-                    enabled: index != 0,
+                    enabled: true,
+                    // index != 0,
                     keyboardType: TextInputType.number,
-                    initialValue: '0',
-                    // widget.args.newHubsList[index].kiloMeters.toString(),
+                    // initialValue: index == 0 ? '0' : null,
+                    // widgetdget.args.newHubsList[index].kiloMeters!=null
+                    //             widget.args.newHubsList[index].kiloMeters.toString(),
                     onChanged: (value) {
-                      // if (value.length > 0) {
-                      //   viewModel.selectedHubsList[index].kiloMeters =
-                      //       int.parse(value);
-                      // }
+                      if (value.length > 0) {
+                        viewModel.selectedHubList[index].kiloMeters =
+                            int.parse(value);
+                      }
                     },
                   ),
                 ),

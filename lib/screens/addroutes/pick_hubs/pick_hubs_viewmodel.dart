@@ -28,13 +28,27 @@ class PickHubsViewModel extends GeneralisedBaseViewModel {
     //     arguments: AddRoutesArguments(newHubsList: newHubsList));
 
     navigationService.navigateTo(arrangeHubsPageRoute, arguments: newHubsList);
-
     navigationService.navigateTo(addRoutesPageRoute, arguments: newHubsList);
   }
 
-  void takeToArrangeHubs(List<GetDistributorsResponse> newHubsList) {
-    print('goiing to arrange hubs');
+  void takeToArrangeHubs(
+      {List<GetDistributorsResponse> newHubsList,
+      String remark,
+      String title,
+      int srcLocation,
+      int dstLocation}) {
+    print(remark);
+    print(title);
+    print(srcLocation);
+    print(dstLocation);
+    print(newHubsList);
     navigationService.navigateTo(arrangeHubsPageRoute,
-        arguments: ArrangeHubsArguments(newHubsList: newHubsList));
+        arguments: ArrangeHubsArguments(
+          newHubsList: newHubsList,
+          routeTitle: title,
+          remarks: remark,
+          dstLocation: dstLocation,
+          srcLocation: srcLocation,
+        ));
   }
 }

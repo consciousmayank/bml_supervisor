@@ -68,6 +68,7 @@ const String CHANGE_PASSWORD = "/user/update/password";
 const String GET_APP_VERSION = "/info/get/version";
 const String GET_CITIES = "/location/city/list";
 const String ADD_DRIVER = "/manager/driver/add";
+const String ADD_ROUTE = "/route/add";
 const String ADD_HUB = "/hub/add";
 const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
 final GET_DAILY_KM_INFO = (date) => "/dailyKilometer/info/$date";

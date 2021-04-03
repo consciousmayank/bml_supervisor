@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -18,7 +19,9 @@ import 'package:stacked/stacked.dart';
 
 class AddRoutesView extends StatefulWidget {
   final AddRoutesArguments args;
+
   AddRoutesView({this.args});
+
   // List<GetDistributorsResponse> newHubsList;
   // AddRoutesView({this.newHubsList});
 
@@ -59,13 +62,11 @@ class _AddRoutesViewState extends State<AddRoutesView> {
                     key: _formKey,
                     child: Column(
                       children: [
-
-                        selectClientForDashboardStats(viewModel: viewModel),
+                        // selectClientForDashboardStats(viewModel: viewModel),
                         buildRouteTitleTextFormField(),
                         buildRemarksTextFormField(),
                         // Text('asd'),
-                        buildPickHubsButton(
-                            viewModel: viewModel, context: context),
+                        buildNextButton(viewModel: viewModel, context: context),
                         // widget?.args?.newHubsList?.length > 0
                         //     ? Text(widget?.args?.newHubsList?.first?.title)
                         //     : Container(),
@@ -118,43 +119,35 @@ class _AddRoutesViewState extends State<AddRoutesView> {
     );
   }
 
-  Widget selectClientForDashboardStats({AddRoutesViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClient = selectedValue;
-        // viewModel.getDistributors(selectedClient: selectedValue);
-      },
-      selectedClient:
-          viewModel.selectedClient == null ? null : viewModel.selectedClient,
-    );
-  }
+  // Widget selectClientForDashboardStats({AddRoutesViewModel viewModel}) {
+  //   return ClientsDropDown(
+  //     optionList: viewModel.clientsList,
+  //     hint: "Select Client",
+  //     onOptionSelect: (GetClientsResponse selectedValue) {
+  //       viewModel.selectedClient = selectedValue;
+  //       // viewModel.getDistributors(selectedClient: selectedValue);
+  //     },
+  //     selectedClient:
+  //         viewModel.selectedClient == null ? null : viewModel.selectedClient,
+  //   );
+  // }
 
-  Widget buildPickHubsButton(
-      {BuildContext context, AddRoutesViewModel viewModel}) {
+  Widget buildNextButton({BuildContext context, AddRoutesViewModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
       child: AppButton(
-        fontSize: 14,
+          fontSize: 14,
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-            if (viewModel.selectedClient != null) {
-              if (routeTitleController.text.length > 0) {
-                viewModel
-                    .getHubsForSelectedClient(
-                        selectedClient: viewModel.selectedClient)
-                    .then((value) => viewModel.takeToPickHubsPage());
-                // if(viewModel.hubsList.length>0) {
-                //   viewModel.takeToPickHubsPage();
-                // }
-
-                // showHubsList(context, viewModel);
-              }
-            } else {
-              viewModel.snackBarService
-                  .showSnackbar(message: 'Please Select Client');
+            if (routeTitleController.text.length > 0) {
+              viewModel
+                  .getHubsForSelectedClient(
+                      selectedClient: MyPreferences().getSelectedClient())
+                  .then((value) => viewModel.takeToPickHubsPage(
+                        remarks: remarkController.text,
+                        routeTitle: routeTitleController.text,
+                      ));
             }
           },
           background: AppColors.primaryColorShade5,
@@ -175,6 +168,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
         // isScrollControlled: true,
         context: context,
         builder: (_) {
+          /// read about it later
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return Container(
@@ -266,7 +260,6 @@ class _AddRoutesViewState extends State<AddRoutesView> {
               });
             },
           ),
-
           // CheckboxListTile(
           //   // dense: true,
           //   // isThreeLine: false,

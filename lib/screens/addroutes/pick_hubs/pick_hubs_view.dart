@@ -23,6 +23,11 @@ class _PickHubsViewState extends State<PickHubsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PickHubsViewModel>.reactive(
+      onModelReady: (viewModel){
+        print('pick hubs onModelReady');
+        print(widget.args.routeTitle);
+        print(widget.args.remarks);
+      },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -53,20 +58,20 @@ class _PickHubsViewState extends State<PickHubsView> {
                       },
                     ),
                   ),
-                  buildDoneButton(viewModel: viewModel, context: context),
+                  buildNextButton(viewModel: viewModel, context: context),
                 ],
               ),
             ),
         viewModelBuilder: () => PickHubsViewModel());
   }
 
-  Widget buildDoneButton({BuildContext context, PickHubsViewModel viewModel}) {
+  Widget buildNextButton({BuildContext context, PickHubsViewModel viewModel}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         height: buttonHeight,
         child: AppButton(
-          fontSize: 14,
+            fontSize: 14,
             borderRadius: defaultBorder,
             borderColor: AppColors.primaryColorShade1,
             onTap: () {
@@ -75,7 +80,13 @@ class _PickHubsViewState extends State<PickHubsView> {
                 print(element.title);
               });
               // viewModel.takeToAddRoutesPage(viewModel.newHubsList);
-              viewModel.takeToArrangeHubs(viewModel.newHubsList);
+              viewModel.takeToArrangeHubs(
+                newHubsList: viewModel.newHubsList,
+                srcLocation: viewModel.newHubsList.first.id,
+                dstLocation: viewModel.newHubsList.last.id,
+                title: widget.args.routeTitle,
+                remark: widget.args.remarks,
+              );
             },
             background: AppColors.primaryColorShade5,
             buttonText: 'NEXT'),
