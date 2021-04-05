@@ -38,8 +38,6 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
               padding: getSidePadding(context: context),
               child: Column(children: [
                 buildSelectedHubList(viewModel: viewModel),
-                // buildReturningHubList(viewModel),
-                // Text('asdf'),
                 buildReturnListCheckButton(viewModel),
                 buildCreateRouteButton(viewModel: viewModel, context: context),
               ]),
@@ -62,8 +60,6 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-            // print('remarks in view: ${widget.args.remarks}');
-
             bool isKmEmpty = false;
 
             viewModel.selectedHubList.forEach((element) {
@@ -75,6 +71,12 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please fill all the Kms');
             } else {
+              if(viewModel.selectedHubList.first.kiloMeters!=0){
+                viewModel.snackBarService
+                    .showSnackbar(message: 'First hub\'s km should be 0 km');
+              }
+
+
               viewModel.createRoute(
                 title: widget.args.routeTitle,
                 remarks: widget.args.remarks,
@@ -88,59 +90,59 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
     );
   }
 
-  Expanded buildReturningHubList(ArrangeHubsViewModel viewModel) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
-          itemBuilder: (context, index) {
-            return viewModel.isReturnList
-                ? Row(
-                    children: [
-                      // Text('${index + 1}'),
-                      Text(viewModel.selectedReturningHubsList[index].id
-                          .toString()),
-                      wSizedBox(10),
-                      Expanded(
-                          flex: 2,
-                          child: Text(
-                              '${viewModel.selectedReturningHubsList[index].title}')),
-                      Expanded(
-                        flex: 1,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              hintText: 'Kms',
-                              hintStyle: AppTextStyles.latoMedium12Black
-                                  .copyWith(color: Colors.black45)),
-                          enabled: true,
-                          keyboardType: TextInputType.number,
-                          initialValue: '0',
-                          // viewModel
-                          //     .selectedReturningHubsList[index].kiloMeters
-                          //     .toString(),
-                          onChanged: (value) {
-                            // if (value.length > 0) {
-                            //   viewModel.selectedReturningHubsList[index]
-                            //       .kiloMeters = int.parse(value);
-                            // }
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                : Container();
-          },
-          itemCount: viewModel.selectedReturningHubsList.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return Divider(
-              thickness: 0.9,
-              color: AppColors.white,
-            );
-          },
-        ),
-      ),
-    );
-  }
+  // Expanded buildReturningHubList(ArrangeHubsViewModel viewModel) {
+  //   return Expanded(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(8.0),
+  //       child: ListView.separated(
+  //         itemBuilder: (context, index) {
+  //           return viewModel.isReturnList
+  //               ? Row(
+  //                   children: [
+  //                     // Text('${index + 1}'),
+  //                     Text(viewModel.selectedReturningHubsList[index].id
+  //                         .toString()),
+  //                     wSizedBox(10),
+  //                     Expanded(
+  //                         flex: 2,
+  //                         child: Text(
+  //                             '${viewModel.selectedReturningHubsList[index].title}')),
+  //                     Expanded(
+  //                       flex: 1,
+  //                       child: TextFormField(
+  //                         decoration: InputDecoration(
+  //                             hintText: 'Kms',
+  //                             hintStyle: AppTextStyles.latoMedium12Black
+  //                                 .copyWith(color: Colors.black45)),
+  //                         enabled: true,
+  //                         keyboardType: TextInputType.number,
+  //                         initialValue: '0',
+  //                         // viewModel
+  //                         //     .selectedReturningHubsList[index].kiloMeters
+  //                         //     .toString(),
+  //                         onChanged: (value) {
+  //                           // if (value.length > 0) {
+  //                           //   viewModel.selectedReturningHubsList[index]
+  //                           //       .kiloMeters = int.parse(value);
+  //                           // }
+  //                         },
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 )
+  //               : Container();
+  //         },
+  //         itemCount: viewModel.selectedReturningHubsList.length,
+  //         separatorBuilder: (BuildContext context, int index) {
+  //           return Divider(
+  //             thickness: 0.9,
+  //             color: AppColors.white,
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget buildReturnListCheckButton(ArrangeHubsViewModel viewModel) {
     return Padding(
@@ -153,15 +155,26 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
             value: viewModel.isReturnList,
             onChanged: (value) {
               /// add the item to list
-              // print(value);
-              viewModel.isReturnList = value;
-              if (value) {
-                viewModel.createReturningList(list: viewModel.selectedHubList);
+              bool isKmEmpty = false;
+
+              viewModel.selectedHubList.forEach((element) {
+                // print('hub km ${element.kiloMeters}');
+                if (element.kiloMeters == null) {
+                  isKmEmpty = true;
+                }
+              });
+              if (isKmEmpty) {
+                viewModel.snackBarService
+                    .showSnackbar(message: 'Please fill all the Kms');
               } else {
-                viewModel.removeReturningList();
-                // viewModel.selectedReturningHubsList = [];
+                viewModel.isReturnList = value;
+                if (value) {
+                  viewModel.createReturningList(
+                      list: viewModel.selectedHubList);
+                } else {
+                  viewModel.removeReturningList();
+                }
               }
-              // widget.args.hubsList[index].isCheck = value;
             },
           ),
         ],
@@ -226,7 +239,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
                     onChanged: (value) {
                       if (value.length > 0) {
                         viewModel.selectedHubList[index].kiloMeters =
-                            int.parse(value);
+                            double.parse(value);
                       }
                     },
                   ),

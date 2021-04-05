@@ -1,14 +1,18 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes_apis.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/route_dialog_params.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   AddRoutesApis _routesApis = locator<AddRouteApisImpl>();
@@ -34,14 +38,6 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
 
   final List<GetDistributorsResponse> selectedSourceHubList;
 
-  // List<GetDistributorsResponse> get selectedSourceHubList =>
-  //     _selectedSourceHubList;
-
-  // set selectedSourceHubList(List<GetDistributorsResponse> value) {
-  //   _selectedSourceHubList = value;
-  //   notifyListeners();
-  // }
-
   List<GetDistributorsResponse> _selectedHubList;
 
   List<GetDistributorsResponse> get selectedHubList => _selectedHubList;
@@ -66,14 +62,15 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
 
     selectedReturningHubsList = List.from(selectedReturningHubsList.reversed);
     selectedReturningHubsList.removeAt(0);
+    selectedReturningHubsList.forEach((element) {
+      element.kiloMeters = null;
+    });
     selectedHubList.addAll(selectedReturningHubsList);
-    // print('create');
-    // print('selected hub list length: ${selectedHubList.length}');
     notifyListeners();
   }
 
   void createRoute(
-      {String title, String remarks, int srcLocation, int dstLocation}) async{
+      {String title, String remarks, int srcLocation, int dstLocation}) async {
     CreateRouteRequest request = CreateRouteRequest(
       title: title,
       remarks: remarks,
@@ -82,14 +79,30 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
       clientId: MyPreferences().getSelectedClient().clientId,
       hubs: getHubsList(),
     );
+    request.hubs.first.kms = 0.0;
+    locator<DialogService>()
+        .showCustomDialog(
+      variant: DialogType
+          .CREATE_ROUTE,
+      // Which builder you'd like to call that was assigned in the builders function above.
+      customData:
+      RouteDialogParams(request: request),
+    )
+        .then((value) {
+      if (value != null) {
+        if (value.confirmed) {
+          createRouteConfirmed(request);
+        }
+      }
+    });
 
-    print('source hub list length: ${selectedSourceHubList.length}');
-    print('source hub list length int: $sourceListLength');
-    print('return hub list length: ${selectedReturningHubsList.length}');
+
+  }
+
+  void createRouteConfirmed(CreateRouteRequest request) async{
 
     print('Request is ${request.toJson()}');
-    ApiResponse _apiResponse =
-        await _routesApis.addRoute(request: request);
+    ApiResponse _apiResponse = await _routesApis.addRoute(request: request);
     dialogService
         .showConfirmationDialog(
         title: _apiResponse.isSuccessful()
@@ -100,11 +113,14 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
         .then((value) {
       if (value.confirmed) {
         if (_apiResponse.isSuccessful()) {
-          navigationService.back();
+          navigationService.replaceWith(addRoutesPageRoute);
         }
       }
     });
+
   }
+
+
 
   List<Hub> getHubsList() {
     List<Hub> listOfHubsToBeAdded = [];
@@ -178,6 +194,4 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
 
     notifyListeners();
   }
-
-
 }

@@ -69,7 +69,7 @@ class Hub {
 
   final int hub;
   final int sequence;
-  final double kms;
+   double kms;
   final String flag;
 
   Hub copyWith({

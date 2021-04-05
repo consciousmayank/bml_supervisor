@@ -329,7 +329,6 @@ class ApiService {
 
   Future<ParentApiResponse> getExpensesList({
     String registrationNumber,
-    String duration,
     String clientId,
   }) async {
     Response response;
@@ -338,9 +337,6 @@ class ApiService {
       var request = new Map();
       if (registrationNumber != null) {
         request['vehicleId'] = registrationNumber;
-      }
-      if (duration != null) {
-        request['period'] = duration;
       }
       if (clientId != null) {
         request['clientId'] = clientId;
@@ -470,25 +466,19 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-
-
-  Future<ParentApiResponse> addHub(
-      {@required AddHubRequest request}) async {
+  Future<ParentApiResponse> addHub({@required AddHubRequest request}) async {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().post(ADD_HUB, data: request.toJson());
+      response = await dioClient.getDio().post(ADD_HUB, data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }
     return ParentApiResponse(response: response, error: error);
   }
 
-
-
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      { String clientId}) async {
+      {String clientId}) async {
     Response response;
     DioError error;
     try {
@@ -498,6 +488,7 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
