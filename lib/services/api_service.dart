@@ -4,8 +4,10 @@ import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
+import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
@@ -150,6 +152,17 @@ class ApiService {
     return ParentApiResponse(error: _error, response: _response);
   }
 
+  Future getRecentDrivenKm({String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_LAST_SEVEN_ENTRIES(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
   Future<ParentApiResponse> submitVehicleEntry({
     @required EntryLog entryLogRequest,
   }) async {
@@ -214,13 +227,13 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRoutesDrivenKmPercentage(
-      {String clientId, int period}) async {
+      {String clientId}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient
           .getDio()
-          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId, period));
+          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -444,12 +457,42 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {int period}) async {
+  Future<ParentApiResponse> addRoute(
+      {@required CreateRouteRequest request}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(period));
+      response =
+          await dioClient.getDio().post(ADD_ROUTE, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+
+
+  Future<ParentApiResponse> addHub(
+      {@required AddHubRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().post(ADD_HUB, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+
+
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
+      { String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(clientId));
     } on DioError catch (e) {
       error = e;
     }

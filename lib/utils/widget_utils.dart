@@ -24,6 +24,21 @@ hSizedBox(double height) {
   );
 }
 
+Text buildChartSubTitleNew({String date}) {
+  return Text(
+    '(' + getChartMonth(date: date) + ', ' + getChartYear(date: date) + ')',
+    style: AppTextStyles.latoBold12Black,
+  );
+}
+
+String getChartYear({String date}) {
+  return date.split('-').last;
+}
+
+String getChartMonth({String date}) {
+  return getMonth(int.parse(date.split('-')[1]));
+}
+
 getDashboardDistributerTileBgColor() {
   return Color(dashboardDistributerTileBgColor);
 }
@@ -66,6 +81,13 @@ wSpacer() {
   );
 }
 
+void hideKeyboard(BuildContext context) {
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+    currentFocus.focusedChild.unfocus();
+  }
+}
+
 RoundedRectangleBorder getCardShape() {
   return RoundedRectangleBorder(borderRadius: getBorderRadius());
 }
@@ -88,6 +110,10 @@ LinearProgressIndicator getLinearProgress() {
         new AlwaysStoppedAnimation<Color>(ThemeConfiguration.primaryBackground),
   );
 }
+String capitalizeFirstLetter(String title) {
+  return "${title[0].toUpperCase()}${title.substring(1)}";
+}
+
 
 String getDateString(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date);

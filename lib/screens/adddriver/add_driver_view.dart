@@ -187,6 +187,12 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       controller: vehicleIdController,
       focusNode: vehicleIdFocusNode,
       hintText: addDriverVehicleIdHint,
+      // inputDecoration: InputDecoration(
+      //   hintText: 'Vehicle Number',
+      //   hintStyle: TextStyle(
+      //     color: Colors.grey,
+      //   ),
+      // ),
       keyboardType: TextInputType.text,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
@@ -711,15 +717,16 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       vehicleId: vehicleIdController.text,
                       address: [
                     Address(
-                        type: 'RESIDENTIAL',
-                        addressLine1: streetController.text,
-                        addressLine2: 'NA',
-                        locality: localityController.text,
-                        nearby: landmarkController.text,
-                        city: widget.viewModel.selectedCity.city,
-                        state: widget.viewModel.stateController.text,
-                        country: widget.viewModel.countryController.text,
-                        pincode: widget.viewModel.pinCodeController.text)
+                      type: 'RESIDENTIAL',
+                      addressLine1: streetController.text,
+                      addressLine2: 'NA',
+                      locality: localityController.text,
+                      nearby: landmarkController.text,
+                      city: widget.viewModel.selectedCity.city,
+                      state: widget.viewModel.stateController.text,
+                      country: widget.viewModel.countryController.text,
+                      pincode: widget.viewModel.pinCodeController.text,
+                    )
                   ]));
             }
           },

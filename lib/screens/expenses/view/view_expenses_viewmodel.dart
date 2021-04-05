@@ -3,6 +3,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
@@ -39,6 +40,15 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  int _expenseCount = 0;
+
+  int get expenseCount => _expenseCount;
+
+  set expenseCount(int value) {
+    _expenseCount = value;
+    notifyListeners();
+  }
+
   String _expenseEntryDate;
 
   String get expenseEntryDate => _expenseEntryDate;
@@ -47,10 +57,33 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  String _expenseType;
-  String get expenseType => _expenseType;
-  set expenseType(String expenseType) {
-    _expenseType = expenseType;
+  List<String> _expenseTypes = [];
+
+  List<String> get expenseTypes => _expenseTypes;
+
+  set expenseTypes(List<String> value) {
+    _expenseTypes = value;
+    notifyListeners();
+  }
+
+  String _selectedExpenseType = "All";
+
+  String get selectedExpenseType => _selectedExpenseType;
+
+  set selectedExpenseType(String value) {
+    _selectedExpenseType = value;
+    notifyListeners();
+  }
+
+  List<ExpensePieChartResponse> expensePieChartResponseListAll = [];
+
+  List<ExpensePieChartResponse> _expensePieChartResponseList = [];
+
+  List<ExpensePieChartResponse> get expensePieChartResponseList =>
+      _expensePieChartResponseList;
+
+  set expensePieChartResponseList(List<ExpensePieChartResponse> value) {
+    _expensePieChartResponseList = value;
     notifyListeners();
   }
 
@@ -103,6 +136,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   void getExpensesList(
       {String regNum, String selectedDuration, String clientId}) async {
+    expenseCount = 0;
     setBusy(true);
     viewExpensesResponse.clear();
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
@@ -116,6 +150,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     viewExpensesResponse = copyList(res);
     viewExpensesResponse.forEach((element) {
       _totalExpenses += element.eAmount;
+      ++expenseCount;
     });
     // takeToViewExpenseDetailedPage();
     notifyListeners();

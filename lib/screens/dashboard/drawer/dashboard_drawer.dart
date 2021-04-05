@@ -102,7 +102,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
-                imageName: entryCountIcon,
+                imageName: totalKmIcon,
                 text: "Daily Kilometers",
                 onTap: () {
                   widget.dashBoardScreenViewModel
@@ -125,7 +125,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
-                imageName: totalKmIcon,
+                imageName: review_consig_Icon,
                 text: "Review Consignment",
                 onTap: () {
                   widget.dashBoardScreenViewModel
@@ -134,7 +134,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               drawerList(
                 imageName: routesIcon,
-                text: "Route List",
+                text: "Routes List",
                 onTap: () {
                   widget.dashBoardScreenViewModel
                       .onViewRoutesDrawerTileClicked();
@@ -156,6 +156,21 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                       .onAddDriverDrawerTileClicked();
                 },
               ),
+              drawerList(
+                imageName: addHubIcon,
+                text: "Add Hubs",
+                onTap: () {
+                  widget.dashBoardScreenViewModel.onAddHubTileClick();
+                },
+              ),
+              drawerList(
+                imageName: addRouteIcon,
+                text: "Create Route",
+                onTap: () {
+                  widget.dashBoardScreenViewModel.onAddRoutesTileClick();
+                },
+              ),
+
             ],
           ),
         ),

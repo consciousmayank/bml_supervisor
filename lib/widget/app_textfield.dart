@@ -27,10 +27,12 @@ Widget appTextFormField({
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Text(hintText ?? "Null"),
-      ),
+      hintText!=null
+          ? Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(hintText ?? "Null"),
+            )
+          : Container(),
       Card(
         elevation: 2,
         child: Padding(

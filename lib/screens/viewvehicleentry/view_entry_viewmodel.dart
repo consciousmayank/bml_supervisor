@@ -23,6 +23,14 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
 
   double _totalFuelAmt = 0.0;
 
+  int _entryCount = 0;
+
+  int get entryCount => _entryCount;
+
+  set entryCount(int value) {
+    _entryCount = value;
+  }
+
   GetClientsResponse _selectedClient;
   GetClientsResponse get selectedClient => _selectedClient;
 
@@ -83,6 +91,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   void vehicleEntrySearch(
       {String regNum, String selectedDuration, String clientId}) async {
     int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+    entryCount = 0;
     vehicleEntrySearchResponseList.clear();
     _vehicleLog = null;
     notifyListeners();
@@ -103,6 +112,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       _totalFuelInLtr += element.fuelLtr;
       _totalKm += element.drivenKm;
       _totalFuelAmt += element.amountPaid;
+      entryCount++;
     });
     if (!(_totalKm == 0 && _totalKmGround == 0)) {
       _kmDifference = _totalKmGround - _totalKm;

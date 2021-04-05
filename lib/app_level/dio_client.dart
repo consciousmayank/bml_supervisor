@@ -4,6 +4,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../utils/api_endpoints.dart';
 import 'configuration.dart';
 
 class DioConfig {
@@ -17,7 +18,7 @@ class DioConfig {
 
   configureDio() {
     _dio.options
-      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrlBmlApp
+      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrl
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),

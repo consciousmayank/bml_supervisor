@@ -1,4 +1,4 @@
-// import 'package:bml_supervisor/screens/charts/piechart/expenses_pie_chart_viewmodel.dart';
+
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -26,7 +26,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
         // createNewModelOnInsert: true,
         onModelReady: (viewModel) {
           viewModel.getExpensesListForPieChart(
-            selectedDuration: MyPreferences().getSelectedDuration(),
+            clientId: MyPreferences().getSelectedClient().clientId,
           );
         },
         builder: (context, viewModel, child) {
@@ -42,7 +42,8 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             buildChartTitle(title: 'Expenses'),
-                            buildChartSubTitle(time: viewModel?.selectedDate),
+                            // buildChartSubTitle(time: viewModel?.selectedDate),
+                            viewModel.buildChartSubTitleNew(),
                             hSizedBox(5),
                             // Text(viewModel.expensePieChartResponseList[0].vehicleId),
                             SizedBox(

@@ -56,7 +56,7 @@ const String vehicleClassHint = "Select Vehicle Class";
 const String vehicleFuelTypeHint = "Select Fuel Type";
 const String vehicleEmissionTypeHint = "Select Emmision Type";
 const String vehicleSeatingCapacityHint = "Select Vehicle Seating Capacity";
-const String drRegNoHint = "Registration No";
+const String drRegNoHint = "Vehicle Number";
 const String consignmentTitleHint = "Enter Consignment Title";
 const String searchPageTitleHint = "Enter Registration Number";
 const String fuelMeterReadingError =
@@ -109,10 +109,18 @@ const List<String> expenseTypes = [
   'OTHERS',
 ];
 
+
+
 const List<String> selectDurationList = [
   "THIS MONTH",
   "LAST MONTH",
 ];
+const List<String> selectItemUnit = [
+  "Crate",
+  "Kilogram",
+];
+
+
 const String selectDurationTabWidgetTitle = 'Select Duration';
 const List<String> selectClientList = [
   'BOOK MY LOADING',
@@ -161,7 +169,17 @@ const List<String> tempRoutes = [
   'R4',
   'R5',
 ];
-const String addDriverVehicleIdHint = "Vehicle Registration Id";
+
+const String addHubsHubNameHint = "Hub Title";
+const String addHubsContactPersonHint = "Contact Person";
+const String addHubsDateOfRegistrationHint = "Date of Registration";
+const String addHubsContactNumberHint = "Contact Number";
+const String addHubsAlternateMobileNumberHint = "Alternate Number";
+const String addHubsEmailHint = "E-mail";
+
+const String addRouteRouteNameHint = "Route Title";
+
+const String addDriverVehicleIdHint = "Vehicle Number";
 const String addDriverFirstNameHint = "First Name";
 const String addDriverLastNameHint = "Last Name";
 const String addDriverDobHint = "Date of Birth";
@@ -185,4 +203,11 @@ const List<String> selectDurationListDashBoard = [
   "LAST MONTH REPORT",
 ];
 const String addDriverSuccessful = "Driver added successfully";
+const String addRouteSuccessful = "Route added successfully";
 const String addDriverUnSuccessful = "Driver not added. Please try again";
+const String addRouteUnSuccessful = "Route not added. Please try again";
+
+const String addHubSuccessful = "Hub added successfully";
+const String addHubUnSuccessful = "Hub not added. Please try again";
+
+

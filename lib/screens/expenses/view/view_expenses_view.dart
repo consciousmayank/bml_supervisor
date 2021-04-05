@@ -1,9 +1,11 @@
 // Added by Vikas
 // Subject to change
 
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -77,8 +79,58 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           ),
           appBar: AppBar(
             title: Text(
-                'View Expenses - ${MyPreferences().getSelectedClient().clientId}',
-                style: AppTextStyles.appBarTitleStyle),
+              'View Expenses - ${MyPreferences().getSelectedClient().clientId}',
+              style: AppTextStyles.appBarTitleStyle,
+            ),
+            actions: [
+              IconButton(
+                  icon: Image.asset(
+                    viewExpenseFilterIcon,
+                    height: 20,
+                    width: 20,
+                  ),
+                  onPressed: () {
+                    print('bottom sheet');
+                    showModalBottomSheet(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(defaultBorder),
+                          topRight: Radius.circular(defaultBorder),
+                        ),
+                      ),
+                      context: context,
+                      builder: (_) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            viewModel.expenseTypes.length,
+                                (index) => ListTile(
+                              onTap: () {
+                                viewModel.selectedExpenseType =
+                                viewModel.expenseTypes[index];
+                                if (index == 0) {
+                                  viewModel.expensePieChartResponseList = copyList(
+                                      viewModel.expensePieChartResponseListAll);
+                                } else {
+                                  filterList(viewModel, index);
+                                }
+                                viewModel.notifyListeners();
+                                viewModel.navigationService.back();
+                              },
+                              title: Text(
+                                '${viewModel.expenseTypes[index]}',
+                              ),
+                              selectedTileColor: AppColors.primaryColorShade3,
+                              selected: viewModel.selectedExpenseType ==
+                                  viewModel.expenseTypes[index],
+                            ),
+                          ).toList(),
+                        );
+                      },
+                    );
+                  })
+            ],
           ),
           body: viewModel.isBusy
               ? ShimmerContainer(
@@ -88,7 +140,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   padding: getSidePadding(context: context),
                   child: Column(
                     children: [
-                      buildSelectDurationTabWidget(viewModel),
+                      // buildSelectDurationTabWidget(viewModel),
                       registrationSelector(
                           context: context, viewModel: viewModel),
                       viewModel.viewExpensesResponse.length > 0
@@ -103,6 +155,19 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
       },
       viewModelBuilder: () => ViewExpensesViewModel(),
     );
+  }
+
+  void filterList(ViewExpensesViewModel viewModel, int index) {
+    List<ExpensePieChartResponse> tempList = [];
+
+    viewModel.expensePieChartResponseListAll.forEach((element) {
+      if (element.eType == viewModel.expenseTypes[index]) {
+        tempList.add(element);
+      }
+    });
+
+    viewModel.expensePieChartResponseList.clear();
+    viewModel.expensePieChartResponseList = copyList(tempList);
   }
 
   Widget selectDuration({ViewExpensesViewModel viewModel}) {
@@ -134,12 +199,18 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
 
   Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
     return appTextFormField(
+      inputDecoration: InputDecoration(
+        hintText: 'Vehicle Number',
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
       enabled: true,
       controller: selectedRegNoController,
       onFieldSubmitted: (String value) {
         getExpenses(viewModel: viewModel, registrationNumber: value);
       },
-      hintText: drRegNoHint,
+      // hintText: drRegNoHint,
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.isEmpty) {
@@ -314,7 +385,16 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   child: buildHeaderChip(
                       title: 'TOTAL EXPENSES (INR)',
                       value: viewModel.totalExpenses.toStringAsFixed(2),
-                      iconName: expensesIcon),
+                      iconName: rupeesIcon),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: buildHeaderChip(
+                      title: 'EXPENSES COUNT',
+                      value: viewModel.expenseCount.toString(),
+                      iconName: expensesCountIcon),
                 ),
               ),
             ],

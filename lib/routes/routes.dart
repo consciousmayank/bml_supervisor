@@ -1,12 +1,22 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
+import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
+import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
+import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
+import 'file:///C:/bml_supervisor_v3/bml_supervisor/lib/screens/addroutes/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
@@ -74,15 +84,55 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddVehicleEntryView(),
-                ) //EntryLogsView(),
-            );
+                ));
 
       case viewEntryLogPageRoute:
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: ViewVehicleEntryView(),
-                ) //ViewEntryView(),
+                ));
+
+      case pickHubsPageRoute:
+        PickHubsArguments args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: PickHubsView(
+                    args: args,
+                  ),
+                ));
+
+      case consignmentListPageRoute:
+        ConsignmentDetailsArgument args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) =>
+              NetworkSensitive(child: ConsignmentDetailsView(args: args)),
+        );
+
+      case arrangeHubsPageRoute:
+        ArrangeHubsArguments args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+              child: ArrangeHubsView(
+            args: args,
+          )),
+        );
+
+      case addHubRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: AddHubsView(),
+                ) //EntryLogsView(),
             );
+
+      case addRoutesPageRoute:
+        AddRoutesArguments args = settings.arguments;
+        List<GetDistributorsResponse> newHubsList = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: AddRoutesView(
+                    args: args,
+                  ),
+                ));
 
       case viewEntryDetailedView2PointOPageRoute:
         Map<String, dynamic> args = settings.arguments;
@@ -199,8 +249,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: ConsignmentListView(
-              duration: args.duration,
-              clientId: args.clientId,
               isFulPageView: args.isFulPageView,
             ),
           ),

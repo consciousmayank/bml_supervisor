@@ -1,5 +1,6 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -16,8 +17,8 @@ class LineChartView extends StatefulWidget {
   final String selectedDuration;
 
   LineChartView({
-    @required this.clientId,
-    @required this.selectedDuration,
+     this.clientId,
+     this.selectedDuration,
   });
 
   @override
@@ -37,7 +38,6 @@ class _LineChartViewState extends State<LineChartView> {
       createNewModelOnInsert: true,
       onModelReady: (viewModel) => viewModel.getRoutesDrivenKm(
         clientId: widget.clientId,
-        selectedDuration: widget.selectedDuration,
       ),
       builder: (context, viewModel, child) {
         if (viewModel.isBusy) {
@@ -57,8 +57,10 @@ class _LineChartViewState extends State<LineChartView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           buildChartTitle(title: "Routes Driven Kilometers"),
-                          buildChartSubTitle(
-                              time: viewModel?.selectedDateForLineChart),
+                          // buildChartSubTitle(
+                          //     time: viewModel?.selectedDateForLineChart),
+                          buildChartSubTitleNew(
+                              date: viewModel.chartDate),
                           Expanded(
                             child: BezierChart(
                               fromDate: viewModel.uniqueDatesForLineChart.first,

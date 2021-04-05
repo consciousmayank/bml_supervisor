@@ -4,9 +4,11 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
+import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -48,7 +50,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               child: Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      'Dashboard',
+                      'Dashboard - ${capitalizeFirstLetter(MyPreferences().getSelectedClient().clientId)}',
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
@@ -122,7 +124,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                percentage: 10,
                                                 title: 'Total Kilometer',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -179,7 +181,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                percentage: -5,
                                                 title: 'Due Expense',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -196,15 +198,37 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         )
                                       : Container(),
 
-                                  selectDuration(viewModel: viewModel),
+                                  // selectDuration(viewModel: viewModel),
+/// I am here
+                                  ///Bar chart
+                                  BarChartView(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'Recent Driven Kilometers',
+                                      style: AppTextStyles
+                                          .latoBold14primaryColorShade6,
+                                    ),
+                                  ),
+
+                                  ///Recent Driven Km Table
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Card(
+                                      elevation: defaultElevation,
+                                      child: ConsignmentListView(
+                                        isFulPageView: false,
+                                      ),
+                                    ),
+                                  ),
 
                                   ///line chart
                                   LineChartView(
-                                    selectedDuration:
-                                        viewModel.selectedDuration,
                                     clientId: MyPreferences()
                                         .getSelectedClient()
                                         .clientId,
+                                    selectedDuration:
+                                        MyPreferences().getSelectedDuration(),
                                   ),
 
                                   /// Driven Km pie chart
@@ -218,11 +242,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   ),
 
                                   /// Expense Pie Chart
-                                  ExpensesPieChartView(
-                                    // key: UniqueKey(),
-                                    selectedDuration:
-                                        viewModel.selectedDuration,
-                                  ),
+                                  ExpensesPieChartView(),
 
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),

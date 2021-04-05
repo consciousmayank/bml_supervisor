@@ -43,14 +43,14 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalDrivenKmG = 0.0;
 
-  void getRoutesDrivenKmPercentage({String clientId, String period}) async {
-    int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
+  void getRoutesDrivenKmPercentage({String clientId}) async {
+    // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
 
-    if (selectedPeriodValue == 1) {
-      selectedDate = DateTime.now();
-    } else {
-      selectedDate = DateTime.now().subtract(Duration(days: 30));
-    }
+    // if (selectedPeriodValue == 1) {
+    //   selectedDate = DateTime.now();
+    // } else {
+    //   selectedDate = DateTime.now().subtract(Duration(days: 30));
+    // }
 
     routesDrivenKmPercentageList.clear();
     totalDrivenKmG = 0;
@@ -60,7 +60,6 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
     List<RoutesDrivenKmPercentage> res =
         await _chartsApi.getRoutesDrivenKmPercentage(
       clientId: clientId,
-      period: selectedPeriodValue,
     );
 
     routesDrivenKmPercentageList = copyList(res);

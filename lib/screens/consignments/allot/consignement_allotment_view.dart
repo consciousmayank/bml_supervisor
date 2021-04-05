@@ -12,6 +12,7 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
@@ -144,6 +145,22 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   padding: const EdgeInsets.all(16),
                   child: Text(
                       "${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model}"),
+                ),
+          viewModel.validatedRegistrationNumber == null
+              ? Container()
+              : AppDropDown(
+                  showUnderLine: true,
+                  selectedValue:
+                      viewModel.itemUnit != null ? viewModel.itemUnit : null,
+                  hint: "Item Unit",
+                  onOptionSelect: (selectedValue) {
+                    viewModel.itemUnit = selectedValue;
+                    // if (viewModel.selectedSearchVehicle != null &&
+                    //     viewModel.entryDate != null) {
+                    //   viewModel.getExpensesList();
+                    // }
+                  },
+                  optionList: selectItemUnit,
                 ),
 
           viewModel.validatedRegistrationNumber == null
@@ -373,35 +390,45 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                                         milliseconds: 200),
                                                     curve: Curves.easeInOut);
                                               } else {
-                                                locator<DialogService>()
-                                                    .showCustomDialog(
-                                                  variant: DialogType
-                                                      .CREATE_CONSIGNMENT,
-                                                  // Which builder you'd like to call that was assigned in the builders function above.
-                                                  customData:
-                                                      ConsignmentDialogParams(
-                                                    selectedClient: viewModel
-                                                        .selectedClient,
-                                                    validatedRegistrationNumber:
-                                                        viewModel
-                                                            .validatedRegistrationNumber,
-                                                    consignmentRequest:
-                                                        viewModel
-                                                            .consignmentRequest,
-                                                    selectedRoute:
-                                                        viewModel.selectedRoute,
-                                                  ),
-                                                )
-                                                    .then((value) {
-                                                  if (value != null) {
-                                                    if (value.confirmed) {
-                                                      viewModel.createConsignment(
-                                                          consignmentTitle:
-                                                              consignmentTitleController
-                                                                  .text);
+                                                if (viewModel.itemUnit ==
+                                                    null) {
+                                                  locator<SnackbarService>()
+                                                      .showSnackbar(
+                                                          message:
+                                                              "Please Select Item Unit");
+                                                } else {
+                                                  locator<DialogService>()
+                                                      .showCustomDialog(
+                                                    variant: DialogType
+                                                        .CREATE_CONSIGNMENT,
+                                                    // Which builder you'd like to call that was assigned in the builders function above.
+                                                    customData:
+                                                        ConsignmentDialogParams(
+                                                      selectedClient: viewModel
+                                                          .selectedClient,
+                                                      validatedRegistrationNumber:
+                                                          viewModel
+                                                              .validatedRegistrationNumber,
+                                                      consignmentRequest:
+                                                          viewModel
+                                                              .consignmentRequest,
+                                                      selectedRoute: viewModel
+                                                          .selectedRoute,
+                                                    ),
+                                                  )
+                                                      .then((value) {
+                                                    if (value != null) {
+                                                      if (value.confirmed) {
+                                                        viewModel.createConsignment(
+                                                            consignmentTitle:
+                                                                consignmentTitleController
+                                                                    .text);
+                                                      }
                                                     }
-                                                  }
-                                                });
+                                                  });
+                                                }
+
+                                                ///end of else
                                               }
                                             }
                                           : () {
@@ -945,7 +972,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Text(
-            "${widget.optionList[i].routeTitle}  (${widget.optionList[i].routeId})",
+            "#${widget.optionList[i].routeId}-${widget.optionList[i].routeTitle}",
             style: TextStyle(
               color: Colors.black54,
             ),

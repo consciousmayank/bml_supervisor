@@ -28,6 +28,14 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  String _itemUnit;
+  String get itemUnit => _itemUnit;
+
+  set itemUnit(String itemUnit) {
+    _itemUnit = itemUnit;
+    notifyListeners();
+  }
+
   CreateConsignmentRequest _consignmentRequest;
   SearchByRegNoResponse _validatedRegistrationNumber;
   DateTime _entryDate;

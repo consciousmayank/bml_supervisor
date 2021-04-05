@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -10,17 +11,9 @@ import 'package:stacked/stacked.dart';
 import 'consignment_detials_viewmodel.dart';
 
 class ConsignmentDetailsView extends StatefulWidget {
-  final int consignmentId;
+  final ConsignmentDetailsArgument args;
 
-  // final int clientId;
-  // final String entryDate;
-
-  const ConsignmentDetailsView({
-    Key key,
-    @required this.consignmentId,
-    // @required this.clientId,
-    // @required this.entryDate
-  }) : super(key: key);
+  const ConsignmentDetailsView({Key key, this.args}) : super(key: key);
 
   @override
   _ConsignmentDetailsViewState createState() => _ConsignmentDetailsViewState();
@@ -35,7 +28,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentDetailsViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getConsignmentWithId(
-        widget.consignmentId.toString(),
+        widget.args.consignmentId.toString(),
       ),
       builder: (context, viewModel, child) => SafeArea(
         top: true,

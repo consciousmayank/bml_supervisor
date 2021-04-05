@@ -1,3 +1,4 @@
+// import 'dart:html';
 import 'dart:ui';
 
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
@@ -5,10 +6,15 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 
 class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
+  int eMonth;
+  int eYear;
   ChartsApi _chartsApi = locator<ChartsApiImpl>();
   List<String> _uniqueExpenseTypes = [];
 
@@ -25,6 +31,15 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
 
   set selectedDate(DateTime value) {
     _selectedDate = value;
+    notifyListeners();
+  }
+
+  String _chartDate;
+
+  String get chartDate => _chartDate;
+
+  set chartDate(String value) {
+    _chartDate = value;
     notifyListeners();
   }
 
@@ -47,14 +62,14 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalExpenses = 0.0;
 
-  void getExpensesListForPieChart({String selectedDuration}) async {
-    int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
-
-    if (selectedPeriodValue == 1) {
-      selectedDate = DateTime.now();
-    } else {
-      selectedDate = Jiffy(DateTime.now()).subtract(months: 1);
-    }
+  void getExpensesListForPieChart({String clientId}) async {
+    // int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
+    //
+    // if (selectedPeriodValue == 1) {
+    //   selectedDate = DateTime.now();
+    // } else {
+    //   selectedDate = Jiffy(DateTime.now()).subtract(months: 1);
+    // }
 
     expensePieChartResponseList.clear();
     uniqueExpenseTypes.clear();
@@ -63,7 +78,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     // try {
     ParentApiResponse apiResponse =
         await _chartsApi.getExpensesListForPieChartAggregate(
-      period: selectedPeriodValue,
+      clientId: clientId
     );
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {
@@ -84,6 +99,8 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
                   .contains(routesDrivenKmPercentageResponse.eType)) {
                 uniqueExpenseTypes.add(routesDrivenKmPercentageResponse.eType);
               }
+              eMonth = int.parse(routesDrivenKmPercentageResponse.eMonth);
+              eYear = int.parse(routesDrivenKmPercentageResponse.eYear);
 
               ++colorArrayIndex;
               totalExpenses += routesDrivenKmPercentageResponse.eAmount;
@@ -118,6 +135,13 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     // }
     notifyListeners();
     setBusy(false);
+  }
+
+  Text buildChartSubTitleNew() {
+    return Text(
+      '(' + getMonth(eMonth) + ', ' + eYear.toString() + ')',
+      style: AppTextStyles.latoBold12Black,
+    );
   }
 
 // String getRouteTitle(int index) {

@@ -100,11 +100,12 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   }
 
   getPaymentHistory(String clientId) async {
+    setBusy(true);
     totalAmt = 0.0;
     noOfPayments = 0;
     paymentHistoryResponseList.clear();
     notifyListeners();
-    setBusy(true);
+
     var response = await _paymentsApis.getPaymentHistory(clientId: clientId);
     paymentHistoryResponseList = copyList(response);
 

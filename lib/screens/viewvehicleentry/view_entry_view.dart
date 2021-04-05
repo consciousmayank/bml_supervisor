@@ -25,6 +25,8 @@ class ViewVehicleEntryView extends StatefulWidget {
 class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
+  final myController = TextEditingController();
+
   // ScrollController _scrollController = ScrollController();
   //
   // @override
@@ -56,7 +58,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'View Entry - ${MyPreferences().getSelectedClient().clientId}',
+                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
           ),
@@ -66,7 +68,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                 )
               : Column(
                   children: [
-                    buildSelectDurationTabWidget(viewModel),
+                    // buildSelectDurationTabWidget(viewModel),
                     registrationSelector(
                         context: context, viewModel: viewModel),
                     viewModel.vehicleEntrySearchResponseList.length > 0
@@ -129,12 +131,19 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
 
   registrationNumberTextField(ViewVehicleEntryViewModel viewModel) {
     return appTextFormField(
+      inputDecoration: InputDecoration(
+        hintText: 'Vehicle Number',
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+      // labelText: 'demo',
       enabled: true,
       controller: selectedRegNoController,
       onFieldSubmitted: (String value) {
         getDailyEntry(viewModel: viewModel, registrationNumber: value);
       },
-      hintText: '$drRegNoHint (Optional)',
+      // hintText: '',
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.isEmpty) {
@@ -206,7 +215,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                 child: buildViewEntrySummary(
                   title: 'FUEL (LTR)',
                   value: viewModel.totalFuelInLtr.toStringAsFixed(2),
-                  iconName: totalKmIcon,
+                  iconName: fuelIcon,
                 ),
               ),
               wSizedBox(10),
@@ -215,7 +224,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                 child: buildViewEntrySummary(
                   title: 'AVG./LTR',
                   value: viewModel.avgPerLitre.toStringAsFixed(2),
-                  iconName: totalKmIcon,
+                  iconName: fuelIcon,
                 ),
               ),
             ],
@@ -229,7 +238,17 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                   child: buildViewEntrySummary(
                     title: 'AMOUNT (INR)',
                     value: viewModel.totalFuelAmt.toStringAsFixed(2),
-                    iconName: totalKmIcon,
+                    iconName: rupeesIcon,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: buildViewEntrySummary(
+                    title: 'ENTRY COUNT',
+                    value: viewModel.entryCount.toString(),
+                    iconName: entryCountIcon,
                   ),
                 ),
               ),
