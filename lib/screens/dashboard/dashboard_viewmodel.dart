@@ -153,6 +153,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
         );
   }
 
+  void onPendingConsignmentsListDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(pendingConsignmentsListPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void onViewRoutesDrawerTileClicked() {
     navigationService.back();
     navigationService.navigateTo(viewRoutesPageRoute).then(
@@ -178,20 +185,20 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
           (value) => reloadPage(),
         );
   }
-  void onAddHubTileClick(){
+
+  void onAddHubTileClick() {
     navigationService.back();
     navigationService.navigateTo(addHubRoute).then(
           (value) => reloadPage(),
-    );
+        );
   }
-  void onAddRoutesTileClick(){
+
+  void onAddRoutesTileClick() {
     navigationService.back();
     navigationService.navigateTo(addRoutesPageRoute).then(
           (value) => reloadPage(),
-    );
+        );
   }
-
-
 
   void reloadPage() {
     getClients();

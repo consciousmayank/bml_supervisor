@@ -128,8 +128,11 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 imageName: review_consig_Icon,
                 text: "Review Consignment",
                 onTap: () {
+                  // widget.dashBoardScreenViewModel
+                  //     .onReviewConsignmentsDrawerTileClicked();
+
                   widget.dashBoardScreenViewModel
-                      .onReviewConsignmentsDrawerTileClicked();
+                      .onPendingConsignmentsListDrawerTileClicked();
                 },
               ),
               drawerList(
@@ -170,7 +173,6 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                   widget.dashBoardScreenViewModel.onAddRoutesTileClick();
                 },
               ),
-
             ],
           ),
         ),

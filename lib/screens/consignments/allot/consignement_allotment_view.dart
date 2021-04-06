@@ -195,17 +195,29 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   PageView _hubsPageView(ConsignmentAllotmentViewModel viewModel) {
     return PageView.builder(
       onPageChanged: (index) {
-        hubTitleController.text =
-            viewModel.consignmentRequest.items[index].title ?? "NA";
-        dropController.text =
-            viewModel.consignmentRequest.items[index].dropOff != null
-                ? dropController.text =
-                    viewModel.consignmentRequest.items[index].dropOff.toString()
-                : "0";
-        collectController.text =
-            viewModel.consignmentRequest.items[index].collect != null
-                ? viewModel.consignmentRequest.items[index].collect.toString()
-                : "0";
+        setValueAt(
+          textEditingController: hubTitleController,
+          value: viewModel.consignmentRequest.items[index].title ?? "NA",
+        );
+        setValueAt(
+          textEditingController: dropController,
+          value: viewModel.consignmentRequest.items[index].dropOff != null
+              ? dropController.text =
+                  viewModel.consignmentRequest.items[index].dropOff.toString()
+              : "0",
+        );
+
+        setValueAt(
+          textEditingController: collectController,
+          value: viewModel.consignmentRequest.items[index].collect != null
+              ? viewModel.consignmentRequest.items[index].collect.toString()
+              : "0",
+        );
+
+        setValueAt(
+          textEditingController: remarksController,
+          value: viewModel.consignmentRequest.items[index].remarks ?? "",
+        );
 
         if (index == viewModel.hubsList.length - 1) {
           double grandTotal = 0;
@@ -227,9 +239,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   ? viewModel.consignmentRequest.items[index].payment.toString()
                   : "0.0";
         }
-
-        remarksController.text =
-            viewModel.consignmentRequest.items[index].remarks ?? "";
       },
       physics: NeverScrollableScrollPhysics(),
       controller: _controller,
@@ -939,6 +948,16 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       viewModel.resetControllerBoolValue();
       consignmentTitleController.clear();
     }
+  }
+
+  void setCursorAtEndFor({@required TextEditingController controller}) {
+    controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length));
+  }
+
+  void setValueAt({TextEditingController textEditingController, value}) {
+    textEditingController.text = value;
+    setCursorAtEndFor(controller: textEditingController);
   }
 }
 
