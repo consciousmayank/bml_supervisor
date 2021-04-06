@@ -60,23 +60,11 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-            bool isKmEmpty = false;
 
-            viewModel.selectedHubList.forEach((element) {
-              if (element.kiloMeters == null) {
-                isKmEmpty = true;
-              }
-            });
-            if (isKmEmpty) {
+            if (viewModel.isKmEmpty(viewModel.selectedHubList)) {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please fill all the Kms');
             } else {
-              if(viewModel.selectedHubList.first.kiloMeters!=0){
-                viewModel.snackBarService
-                    .showSnackbar(message: 'First hub\'s km should be 0 km');
-              }
-
-
               viewModel.createRoute(
                 title: widget.args.routeTitle,
                 remarks: widget.args.remarks,

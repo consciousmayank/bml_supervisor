@@ -41,7 +41,8 @@ class _PickHubsViewState extends State<PickHubsView> {
                 padding: const EdgeInsets.all(4.0),
                 child: Column(
                   children: [
-                    // buildCityTextFormField(viewModel: viewModel),
+                    buildCityTextFormField(viewModel: viewModel),
+                    hSizedBox(10),
                     Container(
                       color: AppColors.primaryColorShade5,
                       padding: EdgeInsets.all(15),

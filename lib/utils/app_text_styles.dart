@@ -13,6 +13,12 @@ class AppTextStyles {
     color: AppColors.white,
   );
 
+  static const TextStyle bold = TextStyle(
+    fontWeight: FontWeight.bold,
+  );
+
+
+
   static const TextStyle latoBold18PrimaryShade5 = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 20,

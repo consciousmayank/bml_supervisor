@@ -48,7 +48,8 @@ class _PaymentsViewState extends State<PaymentsView> {
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('Transaction History', style: AppTextStyles.appBarTitleStyle),
+          title: Text('Transaction History',
+              style: AppTextStyles.appBarTitleStyle),
         ),
         floatingActionButton: viewModel.paymentHistoryResponseList.length > 0
             ? FloatingActionButton.extended(
@@ -310,50 +311,40 @@ class _PaymentsViewState extends State<PaymentsView> {
             topRight: Radius.circular(defaultBorder),
           ),
         ),
-        isScrollControlled: true,
+        // isScrollControlled: true,
         context: context,
         builder: (_) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 10,
-                right: 10,
-                top: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-              ),
-              child: Scrollbar(
-                controller: _scrollController,
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-
-                    controller: _scrollController,
-
-                    children: [
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
-                        child: dateSelector(viewModel: viewModel),
-                      ),
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
-                        child: totalKmView(context: context, node: node),
-                      ),
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
-                        child: totalPaymentView(context: context, node: node),
-                      ),
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
-                        child: getRemarksView(node: node),
-                      ),
-                      hSizedBox(10),
-                      Padding(
-                        padding: getPaymentScreenSidePadding(),
-                        child: addNewPaymentButton(viewModel: viewModel),
-                      ),
-                    ],
-                  ),
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Scrollbar(
+              controller: _scrollController,
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  controller: _scrollController,
+                  children: [
+                    Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: dateSelector(viewModel: viewModel),
+                    ),
+                    Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: totalKmView(context: context, node: node),
+                    ),
+                    Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: totalPaymentView(context: context, node: node),
+                    ),
+                    Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: getRemarksView(node: node),
+                    ),
+                    hSizedBox(10),
+                    Padding(
+                      padding: getPaymentScreenSidePadding(),
+                      child: addNewPaymentButton(viewModel: viewModel),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -375,7 +366,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       hintText: "Remarks",
       keyboardType: TextInputType.text,
       onFieldSubmitted: (_) {
-        // remarksFocusNode.unfocus();
+        remarksFocusNode.unfocus();
       },
     );
   }
@@ -448,7 +439,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       labelText: "Total Km",
       onFieldSubmitted: (_) {
         //! below code - on done, focus goes to next textField
-        // fieldFocusChange(context, totalKmFocusNode, totalAmountFocusNode);
+        fieldFocusChange(context, totalKmFocusNode, totalAmountFocusNode);
       },
       validator: (value) {
         if (value.isEmpty) {

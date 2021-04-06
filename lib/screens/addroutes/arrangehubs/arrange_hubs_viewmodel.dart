@@ -70,8 +70,8 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void createRoute(
-      {String title, String remarks, int srcLocation, int dstLocation}) async {
-    CreateRouteRequest request = CreateRouteRequest(
+      {String title, String remarks, int srcLocation, int dstLocation}) {
+    CreateRouteRequest routeRequest = CreateRouteRequest(
       title: title,
       remarks: remarks,
       srcLocation: srcLocation,
@@ -79,48 +79,52 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
       clientId: MyPreferences().getSelectedClient().clientId,
       hubs: getHubsList(),
     );
-    request.hubs.first.kms = 0.0;
+    routeRequest.hubs.first.kms = 0.0;
     locator<DialogService>()
         .showCustomDialog(
-      variant: DialogType
-          .CREATE_ROUTE,
+      variant: DialogType.CREATE_ROUTE,
       // Which builder you'd like to call that was assigned in the builders function above.
-      customData:
-      RouteDialogParams(request: request),
+      customData: RouteDialogParams(routeRequest: routeRequest),
     )
         .then((value) {
       if (value != null) {
         if (value.confirmed) {
-          createRouteConfirmed(request);
+          createRouteConfirmed(routeRequest);
         }
       }
     });
-
-
   }
 
-  void createRouteConfirmed(CreateRouteRequest request) async{
-
+  void createRouteConfirmed(CreateRouteRequest request) async {
     print('Request is ${request.toJson()}');
     ApiResponse _apiResponse = await _routesApis.addRoute(request: request);
     dialogService
         .showConfirmationDialog(
-        title: _apiResponse.isSuccessful()
-            ? addRouteSuccessful
-            : addRouteUnSuccessful,
-        description: _apiResponse.message,
-        barrierDismissible: false)
+            title: _apiResponse.isSuccessful()
+                ? addRouteSuccessful
+                : addRouteUnSuccessful,
+            description: _apiResponse.message,
+            barrierDismissible: false)
         .then((value) {
       if (value.confirmed) {
         if (_apiResponse.isSuccessful()) {
-          navigationService.replaceWith(addRoutesPageRoute);
+          navigationService.clearStackAndShow(dashBoardPageRoute);
+
         }
       }
     });
-
   }
 
+  bool isKmEmpty(List<GetDistributorsResponse> list){
+    bool temp = false;
 
+    list.forEach((element) {
+      if (element.kiloMeters == null) {
+        temp = true;
+      }
+    });
+    return temp;
+  }
 
   List<Hub> getHubsList() {
     List<Hub> listOfHubsToBeAdded = [];

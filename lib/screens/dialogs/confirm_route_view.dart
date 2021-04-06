@@ -1,17 +1,20 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmRouteView extends StatelessWidget {
-  final CreateRouteRequest request;
+  final CreateRouteRequest routeRequest;
   final Function onSubmitClicked;
   final bool isShowSubmitButton;
 
   ConfirmRouteView({
-    this.request,
+    @required this.routeRequest,
     this.isShowSubmitButton,
-    this.onSubmitClicked,
+    @required this.onSubmitClicked,
   });
 
   @override
@@ -25,14 +28,35 @@ class ConfirmRouteView extends StatelessWidget {
           RichText(
             text: TextSpan(
               children: [
-                TextSpan(text: '${request.title}'),
-                TextSpan(text: '${request.clientId}'),
-                TextSpan(text: '${request.remarks}'),
-                TextSpan(text: '${request.srcLocation}'),
-                TextSpan(text: '${request.dstLocation}'),
-                hSizedBox(10),
+                TextSpan(text: 'Route name '),
+                TextSpan(
+                    text: '${routeRequest.title}, ', style: AppTextStyles.bold),
+                TextSpan(text: 'for '),
+                TextSpan(
+                    text: '${capitalizeFirstLetter(routeRequest.clientId)}'),
+
+                //
+                // TextSpan(
+                //     text: '${routeRequest.title}', style: AppTextStyles.bold),
+                // hSizedBox(10),
               ],
             ),
+          ),
+          hSizedBox(5),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: 'Creation Date '),
+                TextSpan(text: '${getDateString(DateTime.now())}'),
+                // hSizedBox(10),
+              ],
+            ),
+          ),
+          hSizedBox(5),
+          Text(
+            'Route Hub Details',
+            style:
+                AppTextStyles.latoMedium14Black.copyWith(color: Colors.white),
           ),
           Expanded(
             child: ListView.builder(
@@ -40,56 +64,112 @@ class ConfirmRouteView extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8),
                   child: Card(
-                    color: AppColors.primaryColorShade3,
-                    elevation: 4,
-                    shape: getCardShape(),
-                    child: Stack(
-                      children: [
-                        Image.asset(semiCircles),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              rowMaker(
-                                  label: "Articles",
-                                  value: consignmentRequest.items[index].title),
-                              hSizedBox(10),
-                              rowMaker(
-                                  label: "Hub",
-                                  value: consignmentRequest.items[index].hubId
-                                      .toString()),
-                              hSizedBox(10),
-                              rowMaker(
-                                  label: "Crates to Collect",
-                                  value: consignmentRequest.items[index].collect
-                                      .toString()),
-                              hSizedBox(10),
-                              rowMaker(
-                                  label: "Crates to Drop",
-                                  value: consignmentRequest.items[index].dropOff
-                                      .toString()),
-                              hSizedBox(10),
-                              rowMaker(
-                                  label: "Payment to receive",
-                                  value: consignmentRequest.items[index].payment
-                                      .toString()),
-                              hSizedBox(10),
-                              rowMaker(
-                                  label: "Remarks",
-                                  value:
-                                  consignmentRequest.items[index].remarks),
-                              hSizedBox(10),
-                            ],
+                      color: AppColors.white,
+                      elevation: 4,
+                      shape: getCardShape(),
+                      child: Column(
+                        children: [
+                          buildHubDetails(
+                            label: "Sequence",
+                            value: routeRequest.hubs[index].sequence,
                           ),
-                        )
-                      ],
-                    ),
-                  ),
+                          hSizedBox(10),
+                          buildHubDetails(
+                            label: "Hub ID",
+                            value: routeRequest.hubs[index].hub,
+                          ),
+                          hSizedBox(10),
+
+                          buildHubDetails(
+                            label: "Kms",
+                            value: routeRequest.hubs[index].kms,
+                          ),
+                          hSizedBox(10),
+                          buildHubDetails(
+                            label: "Flag",
+                            value: routeRequest.hubs[index].flag,
+                          ),
+                          // hSizedBox(10),
+                        ],
+                      )),
                 );
               },
-              itemCount: request.hubs.length,
+              itemCount: routeRequest.hubs.length,
+            ),
+          ),
+          // RichText(
+          //   text: TextSpan(
+          //     children: [
+          //       TextSpan(text: '${routeRequest.remarks}'),
+          //
+          //       TextSpan(text: '${routeRequest.srcLocation}'),
+          //       TextSpan(text: '${routeRequest.dstLocation}'),
+          //       // hSizedBox(10),
+          //     ],
+          //   ),
+          // ),
+          rowMaker(
+            label: "Remarks",
+            value: routeRequest.remarks,
+          ),
+          rowMaker(
+            label: "Src Hub ID",
+            value: routeRequest.srcLocation,
+          ),
+          rowMaker(
+            label: "Dst Hub ID",
+            value: routeRequest.dstLocation,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: buttonHeight,
+              child: AppButton(
+                fontSize: 14,
+                  borderRadius: defaultBorder,
+                  borderColor: AppColors.primaryColorShade1,
+                  onTap: () {
+                    onSubmitClicked(true);
+                  },
+                  background: AppColors.primaryColorShade5,
+                  buttonText: 'SUBMIT'),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget buildHubDetails({@required String label, @required Object value}) {
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          label == null ? Container() : Text(label),
+          Text(value.toString()),
+        ],
+      ),
+    );
+  }
+
+  Widget rowMaker({@required String label, @required Object value}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          label == null
+              ? Container()
+              : Text(
+                  label,
+                  style: AppTextStyles.whiteRegular,
+                ),
+          value is String
+              ? Text('NA', style: AppTextStyles.whiteRegular)
+              : Text(value.toString(), style: AppTextStyles.whiteRegular),
         ],
       ),
     );

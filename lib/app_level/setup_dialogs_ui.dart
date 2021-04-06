@@ -27,6 +27,12 @@ void setupDialogUi() {
               sheetRequest.customData.validatedRegistrationNumber,
           consignmentRequest: sheetRequest.customData.consignmentRequest,
         ),
+    DialogType.CREATE_ROUTE: (context, sheetRequest, completer) =>
+        _CreateRouteDialog(
+          request: sheetRequest,
+          completer: completer,
+          routeRequest: sheetRequest.customData.routeRequest,
+        ),
   };
 
   dialogService.registerCustomDialogBuilders(builders);
@@ -90,7 +96,7 @@ class _CreateRouteDialog extends StatelessWidget {
   const _CreateRouteDialog({
     this.request,
     this.completer,
-    this.routeRequest,
+    @required this.routeRequest,
   });
 
   @override
@@ -98,10 +104,7 @@ class _CreateRouteDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: AppColors.primaryColorShade5,
       child: ConfirmRouteView(
-        selectedClient: selectedClient,
-        consignmentRequest: consignmentRequest,
-        selectedRoute: selectedRoute,
-        validatedRegistrationNumber: validatedRegistrationNumber,
+        routeRequest: routeRequest,
         onSubmitClicked: (bool value) {
           completer(
             DialogResponse(confirmed: value),

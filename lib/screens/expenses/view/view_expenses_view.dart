@@ -92,6 +92,8 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   onPressed: () {
                     print('bottom sheet');
                     showModalBottomSheet(
+                      isScrollControlled: true,
+                      isDismissible: false,
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -101,31 +103,59 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                       ),
                       context: context,
                       builder: (_) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            viewModel.expenseTypes.length,
-                            (index) => ListTile(
-                              onTap: () {
-                                viewModel.selectedExpenseType =
-                                    viewModel.expenseTypes[index];
-                                if (index == 0) {
-                                  viewModel.viewExpensesResponse = copyList(
-                                      viewModel.expensePieChartResponseListAll);
-                                } else {
-                                  filterList(viewModel, index);
-                                }
-                                viewModel.notifyListeners();
-                                viewModel.navigationService.back();
-                              },
-                              title: Text(
-                                '${viewModel.expenseTypes[index]}',
+                        return Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          child: Wrap(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  // Container(),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Close',
+                                        style: AppTextStyles.latoMedium12PrimaryShade5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              selectedTileColor: AppColors.primaryColorShade3,
-                              selected: viewModel.selectedExpenseType ==
-                                  viewModel.expenseTypes[index],
-                            ),
-                          ).toList(),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: List.generate(
+                                  viewModel.expenseTypes.length,
+                                  (index) => ListTile(
+                                    onTap: () {
+                                      viewModel.selectedExpenseType =
+                                          viewModel.expenseTypes[index];
+                                      if (index == 0) {
+                                        viewModel.viewExpensesResponse = copyList(
+                                            viewModel
+                                                .expensePieChartResponseListAll);
+                                      } else {
+                                        filterList(viewModel, index);
+                                      }
+                                      viewModel.notifyListeners();
+                                      viewModel.navigationService.back();
+                                    },
+                                    title: Text(
+                                      '${viewModel.expenseTypes[index]}',
+                                    ),
+                                    selectedTileColor:
+                                        AppColors.primaryColorShade4,
+
+                                    selected: viewModel.selectedExpenseType ==
+                                        viewModel.expenseTypes[index],
+                                  ),
+                                ).toList(),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     );
@@ -362,7 +392,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   child: AppTextView(
                     hintText: "Type",
                     textAlign: TextAlign.left,
-                    fontSize: 14,
+                    fontSize: 12,
                     value: viewModel
                         .getConsolidatedData(outerIndex)[index]
                         .eType
@@ -374,7 +404,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   flex: 1,
                   child: AppTextView(
                     textAlign: TextAlign.left,
-                    fontSize: 14,
+                    fontSize: 12,
                     hintText: "Vehicle",
                     value: viewModel
                         .getConsolidatedData(outerIndex)[index]
