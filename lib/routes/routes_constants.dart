@@ -14,6 +14,8 @@ const String viewEntryDetailedViewPageRoute = '/viewEntryDetailedViewPage';
 const String allotConsignmentsPageRoute = '/allotConsignmentsPage';
 const String viewRoutesPageRoute = '/viewRoutesPage';
 const String viewConsignmentsPageRoute = '/viewConsignmentPage';
+const String pendingConsignmentsListPageRoute =
+    '/pendingConsignmentsListPageRoute';
 const String addEntry2PointOLogPageRoute = '/addEntry2PointOLogPage';
 const String addEntry2PointOFormViewPageRoute = '/addEntry2PointOFormViewPage';
 const String viewEntry2PointOLogPageRoute = '/viewEntry2PointOLogPage';

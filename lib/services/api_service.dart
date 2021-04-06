@@ -270,6 +270,22 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getPendingConsignmentsList({
+    @required String clientId,
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
   ///Get the Consignment details with the help of consignmentId.
   Future<ParentApiResponse> getConsignmentWithId({String consignmentId}) async {
     Response response;

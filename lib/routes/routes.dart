@@ -5,11 +5,11 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
-import 'file:///C:/bml_supervisor_v3/bml_supervisor/lib/screens/addroutes/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
@@ -19,6 +19,8 @@ import 'package:bml_supervisor/screens/consignments/details/consignment_details_
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
@@ -208,9 +210,19 @@ class AppRouter {
             );
 
       case viewConsignmentsPageRoute:
+        ReviewConsignmentArgs reviewConsignmentArgs = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ViewConsignmentView(),
+            child: ViewConsignmentView(
+              reviewConsignmentArgs: reviewConsignmentArgs,
+            ),
+          ),
+        );
+
+      case pendingConsignmentsListPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: PendingConsignmentsListView(),
           ),
         );
 

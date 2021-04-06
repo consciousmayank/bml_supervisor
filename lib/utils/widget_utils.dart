@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -110,10 +111,10 @@ LinearProgressIndicator getLinearProgress() {
         new AlwaysStoppedAnimation<Color>(ThemeConfiguration.primaryBackground),
   );
 }
+
 String capitalizeFirstLetter(String title) {
   return "${title[0].toUpperCase()}${title.substring(1)}";
 }
-
 
 String getDateString(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date);
@@ -380,21 +381,8 @@ Widget drawerList({String text, String imageName, Function onTap}) {
           children: [
             imageName == null
                 ? Container()
-                : Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.drawerIconsBackgroundColor,
-                      borderRadius: getBorderRadius(),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        imageName,
-                        height: drawerIconsHeight,
-                        width: drawerIconsWidth,
-                        // color: AppColors.primaryColorShade5,
-                      ),
-                    ),
+                : IconBlueBackground(
+                    iconName: imageName,
                   ),
             imageName == null ? Container() : wSizedBox(20),
             Expanded(

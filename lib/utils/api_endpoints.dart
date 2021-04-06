@@ -19,12 +19,14 @@ final GET_ROUTES_DRIVEN_KM =
 final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
     (clientId, date) => "/consignment/list/client/$clientId/date/$date";
 
+final GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT = (clientId, pageIndex) =>
+    "/consignment/list/assess/false/client/$clientId/page/$pageIndex";
+
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 
 final GET_ROUTES_DRIVEN_KM_PERCENTAGE = //06 Get Client Aggregate Driven Km (Donut Chart)
-    (clientId) =>
-        "/route/drivenKm/aggregate/client/$clientId";
+    (clientId) => "/route/drivenKm/aggregate/client/$clientId";
 
 const String ADD_PUCC_FORM = "/vehicle/pucc/add/";
 const String ADD_INSURANCE_FORM = "/vehicle/insurance/add/";
