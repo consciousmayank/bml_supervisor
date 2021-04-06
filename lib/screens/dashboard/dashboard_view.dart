@@ -4,6 +4,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
@@ -54,6 +55,23 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
+                    actions: [
+                      InkWell(
+                        onTap: () {
+                          MyPreferences().saveSelectedClient(null);
+                          viewModel.navigationService
+                              .clearStackAndShow(clientSelectPageRoute);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            changeClient,
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   body: RefreshIndicator(
                     onRefresh: () {
@@ -199,7 +217,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                       : Container(),
 
                                   // selectDuration(viewModel: viewModel),
-/// I am here
+                                  /// I am here
                                   ///Bar chart
                                   BarChartView(),
                                   Padding(
