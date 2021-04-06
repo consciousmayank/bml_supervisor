@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
@@ -313,6 +314,11 @@ Map<String, String> getAuthHeader({@required String base64String}) {
 
 int collectionLength(Iterable iterable) {
   return iterable == null ? 0 : iterable.length;
+}
+
+Uint8List getImageFromBase64String({@required String base64String}) {
+  return Base64Codec()
+      .decode((base64String.split(',')[1]).replaceAll("\\n", "").trim());
 }
 
 List<T> copyList<T>(List<T> items) {

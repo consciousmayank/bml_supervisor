@@ -44,14 +44,6 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
   double totalDrivenKmG = 0.0;
 
   void getRoutesDrivenKmPercentage({String clientId}) async {
-    // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
-
-    // if (selectedPeriodValue == 1) {
-    //   selectedDate = DateTime.now();
-    // } else {
-    //   selectedDate = DateTime.now().subtract(Duration(days: 30));
-    // }
-
     routesDrivenKmPercentageList.clear();
     totalDrivenKmG = 0;
     setBusy(true);

@@ -1,13 +1,20 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
+import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
+import 'package:bml_supervisor/models/update_user_request.dart';
+import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class ProfileApi {
   Future<bool> changePassword(
       {@required String userName, @required String newPassword});
+
+  Future<UserProfileResponse> getUserProfile();
+  Future<ApiResponse> updateUserMobile({UpdateUserRequest request});
+  Future<ApiResponse> updateUserEmail({UpdateUserRequest request});
 }
 
 class ProfileApisImpl extends BaseApi implements ProfileApi {
@@ -29,4 +36,57 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
       );
     return _apiResponse.isSuccessful();
   }
+
+  @override
+  Future<UserProfileResponse> getUserProfile() async {
+    ParentApiResponse response = await apiService.getUserProfile();
+    if (filterResponse(response) != null) {
+      return UserProfileResponse.fromJson(response.response.data);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<ApiResponse> updateUserMobile({UpdateUserRequest request}) async{
+    ApiResponse response = ApiResponse(
+        status: 'failed', message: ParentApiResponse().defaultError);
+    ParentApiResponse parentApiResponse =
+    await apiService.updateUserMobile(request: request);
+
+    if (filterResponse(parentApiResponse) != null) {
+      response = ApiResponse.fromMap(parentApiResponse.response.data);
+      return response;
+    }
+    return null;
+
+  }
+
+  @override
+  Future<ApiResponse> updateUserEmail({UpdateUserRequest request}) async{
+    ApiResponse response = ApiResponse(
+        status: 'failed', message: ParentApiResponse().defaultError);
+    ParentApiResponse parentApiResponse =
+    await apiService.updateUserEmail(request: request);
+
+    if (filterResponse(parentApiResponse) != null) {
+      response = ApiResponse.fromMap(parentApiResponse.response.data);
+      return response;
+    }
+    return null;
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
