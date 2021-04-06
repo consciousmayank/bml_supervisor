@@ -19,6 +19,8 @@ import 'package:bml_supervisor/screens/consignments/details/consignment_details_
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
@@ -208,9 +210,19 @@ class AppRouter {
             );
 
       case viewConsignmentsPageRoute:
+        ReviewConsignmentArgs reviewConsignmentArgs = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ViewConsignmentView(),
+            child: ViewConsignmentView(
+              reviewConsignmentArgs: reviewConsignmentArgs,
+            ),
+          ),
+        );
+
+      case pendingConsignmentsListPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: PendingConsignmentsListView(),
           ),
         );
 

@@ -270,6 +270,22 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getPendingConsignmentsList({
+    @required String clientId,
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
   ///Get the Consignment details with the help of consignmentId.
   Future<ParentApiResponse> getConsignmentWithId({String consignmentId}) async {
     Response response;
@@ -470,25 +486,19 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-
-
-  Future<ParentApiResponse> addHub(
-      {@required AddHubRequest request}) async {
+  Future<ParentApiResponse> addHub({@required AddHubRequest request}) async {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().post(ADD_HUB, data: request.toJson());
+      response = await dioClient.getDio().post(ADD_HUB, data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }
     return ParentApiResponse(response: response, error: error);
   }
 
-
-
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      { String clientId}) async {
+      {String clientId}) async {
     Response response;
     DioError error;
     try {
@@ -498,6 +508,7 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

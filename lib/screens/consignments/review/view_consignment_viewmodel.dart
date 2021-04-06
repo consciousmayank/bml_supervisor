@@ -20,7 +20,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
-  // SearchByRegNoResponse validatedRegistrationNumber;
+
+  bool isInitiallyDataSet = false;
   ReviewConsignmentRequest reviewConsignmentRequest =
       ReviewConsignmentRequest();
   bool _isConsignmentAvailable = false;
@@ -147,7 +148,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void getConsignmentWithId(String consignmentId) async {
+  Future getConsignmentWithId({@required String consignmentId}) async {
     setBusy(true);
     reviewConsignmentRequest = ReviewConsignmentRequest();
     reviewConsignmentRequest.reviewedItems = [];
@@ -177,10 +178,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   void updateConsignment() async {
     // hit the update Consignment api
-    //Todo: accessBy should be initialized by Username
-    //TODO has to be changed post security
     reviewConsignmentRequest = reviewConsignmentRequest.copyWith(
-      assessBy: 'Vikas',
+      assessBy: MyPreferences().getUserLoggedIn().userName,
     );
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(
