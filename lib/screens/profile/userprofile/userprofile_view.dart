@@ -160,7 +160,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                 ),
                                 actions: <Widget>[
                                   // usually buttons at the bottom of the dialog
-                                  RaisedButton(
+                                  ElevatedButton(
                                     child: new Text("Update"),
                                     onPressed: () {
                                       if (emailController.text.length > 0) {
@@ -177,8 +177,12 @@ class _BodyWidgetState extends State<BodyWidget> {
                                             widget.userProfileViewModel
                                                 .getUserProfile();
                                             emailController.clear();
-                                            //todo: Dialog box is not closing
-                                            Navigator.of(context).pop();
+                                            widget.userProfileViewModel
+                                                .navigationService
+                                                .back();
+                                            widget.userProfileViewModel
+                                                .navigationService
+                                                .back();
                                           }
                                         });
                                       } else {
@@ -188,6 +192,15 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                 message: 'Please fill email');
                                       }
                                     },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: ElevatedButton(
+                                      child: new Text("Exit"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
                                   ),
                                 ],
                               );
@@ -226,7 +239,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                 ),
                                 actions: <Widget>[
                                   // usually buttons at the bottom of the dialog
-                                  RaisedButton(
+                                  ElevatedButton(
                                     child: new Text("Update"),
                                     onPressed: () {
                                       if (mobileNumberController.text.length >
@@ -241,8 +254,12 @@ class _BodyWidgetState extends State<BodyWidget> {
                                             .then((value) {
                                           if (widget.userProfileViewModel
                                               .isMobileUpdated) {
-                                            //todo: Dialog box is not closing
-                                            Navigator.pop(context);
+                                            widget.userProfileViewModel
+                                                .navigationService
+                                                .back();
+                                            widget.userProfileViewModel
+                                                .navigationService
+                                                .back();
                                             widget.userProfileViewModel
                                                 .getUserProfile();
                                             mobileNumberController.clear();
@@ -256,6 +273,15 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                     'Please fill mobile number');
                                       }
                                     },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: ElevatedButton(
+                                      child: new Text("Exit"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
                                   ),
                                 ],
                               );

@@ -235,3 +235,104 @@ class Item {
         "hubGeoLongitude": hubGeoLongitude,
       };
 }
+
+class ItemForCard {
+  ItemForCard({
+    this.consignmentId,
+    this.hubId,
+    this.sequence,
+    this.title,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.paymentMode,
+    this.paymentId,
+    this.remarks,
+    this.flag,
+    this.lastupdated,
+    this.hubCity,
+    this.hubTitle,
+  });
+
+  int consignmentId;
+  String hubTitle;
+  String hubCity;
+  int hubId;
+  int sequence;
+  String title;
+  String dropOff;
+  String collect;
+  String payment;
+  int paymentMode;
+  String paymentId;
+  String remarks;
+  String flag;
+  String lastupdated;
+
+  ItemForCard copyWith({
+    int consignmentId,
+    int hubId,
+    int sequence,
+    String title,
+    String dropOff,
+    String collect,
+    String payment,
+    int paymentMode,
+    String paymentId,
+    String remarks,
+    String flag,
+    String hubCity,
+    String hubTitle,
+    String lastupdated,
+  }) =>
+      ItemForCard(
+        consignmentId: consignmentId ?? this.consignmentId,
+        hubId: hubId ?? this.hubId,
+        sequence: sequence ?? this.sequence,
+        title: title ?? this.title,
+        dropOff: dropOff ?? this.dropOff,
+        collect: collect ?? this.collect,
+        payment: payment ?? this.payment,
+        paymentMode: paymentMode ?? this.paymentMode,
+        paymentId: paymentId ?? this.paymentId,
+        remarks: remarks ?? this.remarks,
+        flag: flag ?? this.flag,
+        lastupdated: lastupdated ?? this.lastupdated,
+        hubTitle: hubTitle ?? this.hubTitle,
+        hubCity: hubCity ?? this.hubCity,
+      );
+
+  factory ItemForCard.fromJson(Map<String, dynamic> json) => ItemForCard(
+    consignmentId: json["consignmentId"],
+    hubId: json["hubId"],
+    sequence: json["sequence"],
+    title: json["title"],
+    dropOff: json["dropOff"],
+    collect: json["collect"],
+    payment: json["payment"],
+    paymentMode: json["paymentMode"],
+    paymentId: json["paymentId"],
+    remarks: json["remarks"],
+    flag: json["flag"],
+    lastupdated: json["lastupdated"],
+    hubTitle: json["hubTitle"],
+    hubCity: json["hubCity"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "consignmentId": consignmentId,
+    "hubId": hubId,
+    "sequence": sequence,
+    "title": title,
+    "dropOff": dropOff,
+    "collect": collect,
+    "payment": payment,
+    "paymentMode": paymentMode,
+    "paymentId": paymentId,
+    "remarks": remarks,
+    "flag": flag,
+    "lastupdated": lastupdated,
+    "hubTitle": hubTitle,
+    "hubCity": hubCity,
+  };
+}

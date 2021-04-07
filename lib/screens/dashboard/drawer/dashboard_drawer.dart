@@ -125,6 +125,14 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
+                imageName: consignmentListIcon,
+                text: "List Consignment",
+                onTap: () {
+                  widget.dashBoardScreenViewModel
+                      .onListConsignmentTileClick();
+                },
+              ),
+              drawerList(
                 imageName: review_consig_Icon,
                 text: "Review Consignment",
                 onTap: () {

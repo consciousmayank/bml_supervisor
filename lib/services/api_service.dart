@@ -287,6 +287,24 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getConsignmentListPageWise({
+    @required String clientId,
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_CONSIGNMENT_LIST_PAGE_WISE(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+
+
   ///Get the Consignment details with the help of consignmentId.
   Future<ParentApiResponse> getConsignmentWithId({String consignmentId}) async {
     Response response;

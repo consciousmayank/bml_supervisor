@@ -29,6 +29,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   String _itemUnit;
+
   String get itemUnit => _itemUnit;
 
   set itemUnit(String itemUnit) {
@@ -149,7 +150,9 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     validatedRegistrationNumber =
         await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
-    initializeConsignments();
+    if (validatedRegistrationNumber != null) {
+      initializeConsignments();
+    }
     setBusy(false);
   }
 
