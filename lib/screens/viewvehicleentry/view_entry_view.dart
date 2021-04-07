@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
@@ -10,7 +11,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/select_duration_tab.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +27,13 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
   final FocusNode selectedRegNoFocusNode = FocusNode();
   final myController = TextEditingController();
 
-  // ScrollController _scrollController = ScrollController();
-  //
-  // @override
-  // void dispose() {
-  //   _scrollController.removeListener(() {});
-  //   super.dispose();
-  // }
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +45,38 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
             registrationNumber: selectedRegNoController.text);
       },
       builder: (context, viewModel, child) {
-        // _scrollController.addListener(() {
-        //   if (_scrollController.position.userScrollDirection ==
-        //       ScrollDirection.reverse) {
-        //     viewModel.hideFloatingActionButton();
-        //   }
-        //   if (_scrollController.position.userScrollDirection ==
-        //       ScrollDirection.forward) {
-        //     viewModel.showFloatingActionButton();
-        //   }
-        // });
+        _scrollController.addListener(() {
+          if (_scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+            viewModel.hideFloatingActionButton();
+          }
+          if (_scrollController.position.userScrollDirection ==
+              ScrollDirection.forward) {
+            viewModel.showFloatingActionButton();
+          }
+        });
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
+                'View Entry - ${MyPreferences().getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
+            actions: [
+              InkWell(
+                onTap: () {
+                  viewModel.showMonthYearBottomSheet();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    filteredIcon,
+                    color: AppColors.white,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              ),
+            ],
           ),
           body: viewModel.isBusy
               ? ShimmerContainer(
@@ -99,22 +115,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
     );
   }
 
-  SelectDurationTabWidget buildSelectDurationTabWidget(
-      ViewVehicleEntryViewModel viewModel) {
-    return SelectDurationTabWidget(
-      initiallySelectedDuration: viewModel.selectedDuration.isEmpty
-          ? null
-          : viewModel.selectedDuration,
-      onTabSelected: (String selectedValue) {
-        viewModel.selectedDuration = selectedValue;
-        getDailyEntry(
-            viewModel: viewModel,
-            registrationNumber: selectedRegNoController.text);
-      },
-      title: selectDurationTabWidgetTitle,
-    );
-  }
-
   registrationSelector(
       {BuildContext context, ViewVehicleEntryViewModel viewModel}) {
     return Stack(
@@ -124,7 +124,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
           padding: const EdgeInsets.all(2.0),
           child: registrationNumberTextField(viewModel),
         ),
-        // selectRegButton(context, viewModel),
       ],
     );
   }
@@ -159,7 +158,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
       {ViewVehicleEntryViewModel viewModel, String registrationNumber}) {
     viewModel.vehicleEntrySearch(
       regNum: registrationNumber,
-      selectedDuration: viewModel.selectedDuration,
       clientId: viewModel.selectedClient.clientId,
     );
   }

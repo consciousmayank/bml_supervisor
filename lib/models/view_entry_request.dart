@@ -14,12 +14,10 @@ class ViewEntryRequest {
   ViewEntryRequest({
     this.vehicleId,
     this.clientId,
-    this.period,
   });
 
   String vehicleId;
   String clientId;
-  String period;
 
   factory ViewEntryRequest.fromJson(String str) =>
       ViewEntryRequest.fromMap(json.decode(str));
@@ -30,12 +28,10 @@ class ViewEntryRequest {
       ViewEntryRequest(
         vehicleId: json["vehicleId"],
         clientId: json["clientId"],
-        period: json["period"],
       );
 
   Map<String, dynamic> toMap() => {
         "vehicleId": vehicleId,
         "clientId": clientId,
-        "period": period,
       };
 }

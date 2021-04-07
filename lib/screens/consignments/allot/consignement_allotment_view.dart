@@ -11,10 +11,12 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -98,44 +100,88 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          RoutesDropDown(
-            optionList: viewModel.routesList,
-            hint: "Select Routes",
-            onOptionSelect: (FetchRoutesResponse selectedValue) {
-              viewModel.selectedRoute = selectedValue;
+          dateSelector(context: context, viewModel: viewModel),
 
-              viewModel.entryDate = null;
-              selectedDateController.clear();
-              selectedRegNoController.clear();
-              consignmentTitleController.clear();
-              viewModel.validatedRegistrationNumber = null;
-              viewModel.consignmentRequest = null;
+          viewModel.consignmentsList.length > 0
+              ? Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ClickableWidget(
+                    childColor: AppColors.white,
+                    borderRadius: getBorderRadius(),
+                    onTap: () {
+                      viewModel.consignmentsListBottomSheet();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        children: [
+                          IconBlueBackground(
+                            iconName: consignmentIcon,
+                          ),
+                          wSizedBox(20),
+                          Expanded(
+                            child: Text(
+                              '${viewModel.consignmentsList.length} ${getConsignment(viewModel.consignmentsList.length)} for ${getDateString(viewModel.entryDate)} date',
+                              style: AppTextStyles.latoMedium12Black.copyWith(
+                                  color: AppColors.primaryColorShade5,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
 
-              viewModel.getHubs();
-              consignmentTitleController.clear();
-              hubTitleController.clear();
-              dropController.clear();
-              collectController.clear();
-              paymentController.clear();
-              remarksController.clear();
-              viewModel.resetControllerBoolValue();
-            },
-            selectedValue: viewModel.selectedRoute == null
-                ? null
-                : viewModel.selectedRoute,
-          ),
-
-          // getConsignments
-          viewModel.selectedRoute == null
-              ? Container()
-              // : makeTimeLine(context: context, viewModel: viewModel)
-              : dateSelector(context: context, viewModel: viewModel),
+              // Container(
+              //         height: 50,
+              //         decoration: BoxDecoration(
+              //           color: AppColors.primaryColorShade5,
+              //           borderRadius: BorderRadius.all(
+              //             Radius.circular(defaultBorder),
+              //           ),
+              //         ),
+              //         child: Center(
+              //           child: Text(
+              //               '${viewModel.consignmentsList.length} consignments for ${getDateString(viewModel.entryDate)} date'),
+              //         ),
+              //       )
+              : Container(),
 
           viewModel.entryDate == null
+              ? Container()
+              : RoutesDropDown(
+                  optionList: viewModel.routesList,
+                  hint: "Select Routes",
+                  onOptionSelect: (FetchRoutesResponse selectedValue) {
+                    viewModel.selectedRoute = selectedValue;
+
+                    selectedRegNoController.clear();
+                    consignmentTitleController.clear();
+                    viewModel.validatedRegistrationNumber = null;
+                    viewModel.consignmentRequest = null;
+
+                    viewModel.getHubs();
+                    consignmentTitleController.clear();
+                    hubTitleController.clear();
+                    dropController.clear();
+                    collectController.clear();
+                    paymentController.clear();
+                    remarksController.clear();
+                    viewModel.resetControllerBoolValue();
+                  },
+                  selectedValue: viewModel.selectedRoute == null
+                      ? null
+                      : viewModel.selectedRoute,
+                ),
+
+          // getConsignments
+
+          viewModel.hubsList.length < 1
               ? Container()
               : registrationSelector(context: context, viewModel: viewModel),
 
-          viewModel.entryDate == null
+          viewModel.hubsList.length < 1
               ? Container()
               : consignmentTextField(viewModel: viewModel),
 
@@ -648,7 +694,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
               selectedDateController.text =
                   DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
               viewModel.entryDate = selectedDate;
-
+              viewModel.getConsignmentListWithDate();
               selectedRegNoController.clear();
               consignmentTitleController.clear();
               viewModel.resetControllerBoolValue();
@@ -958,6 +1004,14 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   void setValueAt({TextEditingController textEditingController, value}) {
     textEditingController.text = value;
     setCursorAtEndFor(controller: textEditingController);
+  }
+
+  getConsignment(int length) {
+    if (length == 1) {
+      return 'consignment';
+    } else {
+      return 'consignments';
+    }
   }
 }
 

@@ -1,7 +1,9 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
+import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
@@ -149,7 +151,12 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     validatedRegistrationNumber =
         await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
-    initializeConsignments();
+    if (validatedRegistrationNumber != null) {
+      initializeConsignments();
+    } else {
+      snackBarService.showSnackbar(
+          message: 'Vehicle with registration number $regNum not found.');
+    }
     setBusy(false);
   }
 
@@ -175,6 +182,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     // final double payment;
 
     consignmentRequest = CreateConsignmentRequest(
+        itemUnit: itemUnit,
         vehicleId: validatedRegistrationNumber.registrationNumber,
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
@@ -249,5 +257,42 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   void resetControllerBoolValue() {
     _isHubTitleEdited = _isDropCratesEdited =
         _isCollectCratesEdited = _isPaymentEdited = _isRemarksEdited = false;
+  }
+
+  List<ConsignmentsForSelectedDateAndClientResponse> _consignmentsList = [];
+
+  List<ConsignmentsForSelectedDateAndClientResponse> get consignmentsList =>
+      _consignmentsList;
+
+  set consignmentsList(
+      List<ConsignmentsForSelectedDateAndClientResponse> value) {
+    _consignmentsList = value;
+    notifyListeners();
+  }
+
+  getConsignmentListWithDate() async {
+    setBusy(true);
+    consignmentsList = [];
+    print(getDateString(entryDate));
+    List<ConsignmentsForSelectedDateAndClientResponse> response =
+        await _consignmentApis.getConsignmentsForSelectedDateAndClient(
+            date: getDateString(entryDate), clientId: selectedClient.clientId);
+
+    consignmentsList = copyList(response);
+
+    setBusy(false);
+    notifyListeners();
+  }
+
+  Future consignmentsListBottomSheet() async {
+    var sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: true,
+      customData: consignmentsList,
+      variant: BottomSheetType.consignmentList,
+    );
+
+    print('confirmationResponse confirmed: ${sheetResponse?.confirmed}');
+    print(
+        'confirmationResponse return Data: ${sheetResponse?.responseData.toString()}');
   }
 }

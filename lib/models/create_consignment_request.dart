@@ -6,6 +6,7 @@ import 'dart:convert';
 
 class CreateConsignmentRequest {
   CreateConsignmentRequest({
+    this.itemUnit,
     this.dropOff,
     this.collect,
     this.payment,
@@ -28,32 +29,33 @@ class CreateConsignmentRequest {
   final int collect;
   final double payment;
   final List<Item> items;
+  final String itemUnit;
 
-  CreateConsignmentRequest copyWith({
-    int id,
-    String clientId,
-    int routeId,
-    dynamic vehicleId,
-    String entryDate,
-    String title,
-    String routeTitle,
-    List<Item> items,
-    final int dropOff,
-    final int collect,
-    final double payment,
-  }) =>
+  CreateConsignmentRequest copyWith(
+          {int id,
+          String clientId,
+          int routeId,
+          dynamic vehicleId,
+          String entryDate,
+          String title,
+          String routeTitle,
+          List<Item> items,
+          final int dropOff,
+          final int collect,
+          final double payment,
+          final String itemUnit}) =>
       CreateConsignmentRequest(
-        clientId: clientId ?? this.clientId,
-        routeId: routeId ?? this.routeId,
-        vehicleId: vehicleId ?? this.vehicleId,
-        entryDate: entryDate ?? this.entryDate,
-        title: title ?? this.title,
-        routeTitle: routeTitle ?? this.routeTitle,
-        items: items ?? this.items,
-        collect: collect ?? this.collect,
-        payment: payment ?? this.payment,
-        dropOff: dropOff ?? this.dropOff,
-      );
+          clientId: clientId ?? this.clientId,
+          routeId: routeId ?? this.routeId,
+          vehicleId: vehicleId ?? this.vehicleId,
+          entryDate: entryDate ?? this.entryDate,
+          title: title ?? this.title,
+          routeTitle: routeTitle ?? this.routeTitle,
+          items: items ?? this.items,
+          collect: collect ?? this.collect,
+          payment: payment ?? this.payment,
+          dropOff: dropOff ?? this.dropOff,
+          itemUnit: itemUnit ?? this.itemUnit);
 
   factory CreateConsignmentRequest.fromJson(String str) =>
       CreateConsignmentRequest.fromMap(json.decode(str));
@@ -71,6 +73,7 @@ class CreateConsignmentRequest {
         dropOff: json['dropOff'],
         collect: json['collect'],
         payment: json['payment'],
+        itemUnit: json['itemUnit'],
         items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
       );
 
@@ -84,6 +87,7 @@ class CreateConsignmentRequest {
         "dropOff": dropOff,
         "title": title,
         "routeTitle": routeTitle,
+        "itemUnit": itemUnit,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }

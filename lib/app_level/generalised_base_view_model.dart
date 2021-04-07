@@ -10,6 +10,7 @@ class GeneralisedBaseViewModel extends BaseViewModel {
   SnackbarService snackBarService = locator<SnackbarService>();
   NavigationService navigationService = locator<NavigationService>();
   DialogService dialogService = locator<DialogService>();
+  BottomSheetService bottomSheetService = locator<BottomSheetService>();
 
   void hideFloatingActionButton() {
     isFloatingActionButtonVisible = false;

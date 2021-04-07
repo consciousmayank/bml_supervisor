@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 
 import 'clickable_widget.dart';
 
-class SingleConsignmentItem extends StatelessWidget {
-  final SingleConsignmentItemArguments args;
+class ExistingConsignmentItem extends StatelessWidget {
+  final ExistingConsignmentItemArguments args;
 
-  const SingleConsignmentItem({Key key, @required this.args}) : super(key: key);
+  const ExistingConsignmentItem({Key key, @required this.args})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,7 @@ class SingleConsignmentItem extends StatelessWidget {
       child: ClickableWidget(
         borderRadius: getBorderRadius(),
         elevation: defaultElevation,
-        onTap: () {
-          args.onTap.call();
-        },
+        onTap: null,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -46,28 +45,29 @@ class SingleConsignmentItem extends StatelessWidget {
                 ],
               ),
               hSizedBox(14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: AppTextView(
-                      hintText: 'Collect',
-                      value: args.collect,
-                    ),
-                  ),
-                  wSizedBox(6),
-                  Expanded(
-                    child: AppTextView(
-                      hintText: 'Drop',
-                      value: args.drop,
-                    ),
-                  ),
-                ],
-              ),
-              hSizedBox(14),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Expanded(
+              //       child: AppTextView(
+              //         hintText: 'Route Id',
+              //         value: args.routeId.toString(),
+              //       ),
+              //     ),
+              //     wSizedBox(6),
+              //     Expanded(
+              //       child: AppTextView(
+              //         hintText: 'Vehicle Id',
+              //         value: args.vehicleId,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // hSizedBox(14),
               AppTextView(
-                hintText: 'Payment',
-                value: args.payment,
+                textAlign: TextAlign.center,
+                hintText: 'Vehicle Id',
+                value: args.vehicleId,
               )
             ],
           ),
@@ -77,17 +77,16 @@ class SingleConsignmentItem extends StatelessWidget {
   }
 }
 
-class SingleConsignmentItemArguments {
-  final String consignmentId, routeId, routeTitle, collect, drop, payment;
-  final Function onTap;
+class ExistingConsignmentItemArguments {
+  final String routeTitle;
+  final int consignmentId;
+  final int routeId;
+  final String vehicleId;
 
-  SingleConsignmentItemArguments({
-    @required this.onTap,
+  ExistingConsignmentItemArguments({
+    @required this.routeTitle,
     @required this.consignmentId,
     @required this.routeId,
-    @required this.routeTitle,
-    @required this.collect,
-    @required this.drop,
-    @required this.payment,
+    @required this.vehicleId,
   });
 }
