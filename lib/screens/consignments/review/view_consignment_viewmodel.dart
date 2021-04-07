@@ -12,13 +12,11 @@ import 'package:bml_supervisor/models/routes_for_selected_client_and_date_respon
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
 
   bool isInitiallyDataSet = false;
@@ -201,7 +199,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       dialogService
           .showConfirmationDialog(
               title: apiResponse.message, description: 'Consignment Reviewed.')
-          .then((value) => navigationService.back());
+          .then((value) => navigationService.back(result: true));
       setBusy(false);
     }
   }

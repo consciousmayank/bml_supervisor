@@ -24,8 +24,6 @@ abstract class DailyEntryApis {
   Future<List<GetDailyKilometerInfo>> getDailyKmInfo({@required String date});
 }
 
-//entryLog = await apiService.getLatestDailyEntry(registrationNumber: registrationNumber);
-
 class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
   @override
   Future<List<RoutesForSelectedClientAndDateResponse>>

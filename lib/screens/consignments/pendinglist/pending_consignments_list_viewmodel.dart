@@ -20,6 +20,7 @@ class PendingConsignmentsListViewModel extends GeneralisedBaseViewModel {
       setBusy(true);
       pendingConsignmentsList = [];
       pendingConsignmentsDateList = Set();
+      pageIndex = 0;
     }
 
     List<SinglePendingConsignmentListItem> response =
@@ -51,12 +52,16 @@ class PendingConsignmentsListViewModel extends GeneralisedBaseViewModel {
       {SinglePendingConsignmentListItem selectedConsignment}) {
     navigationService
         .navigateTo(
-          viewConsignmentsPageRoute,
-          arguments:
-              ReviewConsignmentArgs(selectedConsignment: selectedConsignment),
-        )
-        .then((value) => getPendingConsignmentsList(
-              showLoading: true,
-            ));
+      viewConsignmentsPageRoute,
+      arguments:
+          ReviewConsignmentArgs(selectedConsignment: selectedConsignment),
+    )
+        .then((value) {
+      if (value) {
+        getPendingConsignmentsList(
+          showLoading: true,
+        );
+      }
+    });
   }
 }

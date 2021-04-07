@@ -1,17 +1,20 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
   int _totalKm = 0;
   Set _datesSet = Set();
+
   int get totalKm => _totalKm;
   int _totalKmGround = 0;
 
@@ -32,6 +35,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   }
 
   GetClientsResponse _selectedClient;
+
   GetClientsResponse get selectedClient => _selectedClient;
 
   set selectedClient(GetClientsResponse selectedClient) {
@@ -42,15 +46,9 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   List<ViewEntryResponse> vehicleEntrySearchResponseList = [];
 
   List<SearchByRegNoResponse> searchResponse = [];
-  String _selectedDuration = "1";
-  String get selectedDuration => _selectedDuration;
-
-  set selectedDuration(String selectedDuration) {
-    _selectedDuration = selectedDuration;
-    notifyListeners();
-  }
 
   String _selectedRegistrationNumber = "";
+
   String get selectedRegistrationNumber => _selectedRegistrationNumber;
 
   set selectedRegistrationNumber(String selectedRegistrationNumber) {
@@ -59,7 +57,9 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   }
 
   SearchByRegNoResponse _selectedVehicle;
+
   SearchByRegNoResponse get selectedVehicle => _selectedVehicle;
+
   set selectedVehicle(SearchByRegNoResponse selectedVehicle) {
     _selectedVehicle = selectedVehicle;
     notifyListeners();
@@ -68,6 +68,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   ViewEntryResponse _vehicleLog; // _vehicleLog -> _viewEntryResponse
 
   ViewEntryResponse get vehicleLog => _vehicleLog;
+
   set vehicleLog(ViewEntryResponse vehicleLog) {
     _vehicleLog = vehicleLog;
     notifyListeners();
@@ -88,9 +89,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     selectedClient = MyPreferences().getSelectedClient();
   }
 
-  void vehicleEntrySearch(
-      {String regNum, String selectedDuration, String clientId}) async {
-    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+  void vehicleEntrySearch({String regNum, String clientId}) async {
     entryCount = 0;
     vehicleEntrySearchResponseList.clear();
     _vehicleLog = null;
@@ -100,7 +99,6 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
     final List<ViewEntryResponse> res = await _dailyEntryApis.getDailyEntries(
       viewEntryRequest: ViewEntryRequest(
         clientId: clientId ?? "",
-        period: selectedDurationValue.toString(),
         vehicleId: regNum ?? "",
       ),
     );
@@ -137,4 +135,16 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   double get avgPerLitre => _avgPerLitre;
 
   double get totalFuelAmt => _totalFuelAmt;
+
+  Future showMonthYearBottomSheet() async {
+    var sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: true,
+      customData: tempList,
+      variant: BottomSheetType.viewEntry,
+    );
+
+    print('confirmationResponse confirmed: ${sheetResponse?.confirmed}');
+    print(
+        'confirmationResponse return Data: ${sheetResponse?.responseData.toString()}');
+  }
 }

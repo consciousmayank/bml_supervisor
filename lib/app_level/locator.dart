@@ -41,6 +41,7 @@ void declareDependencies() {
   locator.registerLazySingleton(() => AddHubApisImpl());
   locator.registerLazySingleton(() => ApiService());
   locator.registerLazySingleton(() => AddRouteApisImpl());
+  locator.registerSingleton(BottomSheetService());
 
   //A Factory will return a new instance of the service anytime it is called.
   // locator.registerFactory(() => DashBoardApisImpl());
