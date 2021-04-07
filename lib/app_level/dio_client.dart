@@ -42,6 +42,7 @@ class DioConfig {
     print("${options.request.baseUrl}${options.request.path}");
     print("${options.data.toString()}");
     print('${options.request.method}');
+    print('${options.request.data}');
     print('${options.request.headers.toString()}');
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     return options;

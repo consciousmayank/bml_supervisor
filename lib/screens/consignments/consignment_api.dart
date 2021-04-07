@@ -50,7 +50,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
       //positive
 
       if (apiResponse.isNoDataFound()) {
-        _snackBarService.showSnackbar(message: apiResponse.emptyResult);
+        vehicleDetails = null;
       } else {
         vehicleDetails =
             SearchByRegNoResponse.fromMap(apiResponse.response.data);

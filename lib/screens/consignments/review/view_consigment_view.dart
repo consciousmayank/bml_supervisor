@@ -75,33 +75,39 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                 .toString(),
           );
         },
-        builder: (context, viewModel, child) => SafeArea(
-              left: false,
-              right: false,
-              child: Scaffold(
-                appBar: AppBar(
-                  automaticallyImplyLeading: true,
-                  title: Text(
-                      "Review Consignments - ${MyPreferences().getSelectedClient().clientId}",
-                      style: AppTextStyles.appBarTitleStyle),
-                  // actions: [
-                  //   isEditAllowed
-                  //       ? TextButton(
-                  //           onPressed: () {
-                  //             // call update consignment api
-                  //           },
-                  //           child: Text("Edit"))
-                  //       : Container()
-                  // ],
+        builder: (context, viewModel, child) => WillPopScope(
+              onWillPop: () {
+                viewModel.navigationService.back(result: false);
+                return Future.value(false);
+              },
+              child: SafeArea(
+                left: false,
+                right: false,
+                child: Scaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: true,
+                    title: Text(
+                        "Review Consignments - ${MyPreferences().getSelectedClient().clientId}",
+                        style: AppTextStyles.appBarTitleStyle),
+                    // actions: [
+                    //   isEditAllowed
+                    //       ? TextButton(
+                    //           onPressed: () {
+                    //             // call update consignment api
+                    //           },
+                    //           child: Text("Edit"))
+                    //       : Container()
+                    // ],
+                  ),
+                  body: viewModel.isBusy
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Padding(
+                          padding: getSidePadding(context: context),
+                          child: body(context, viewModel),
+                        ),
                 ),
-                body: viewModel.isBusy
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Padding(
-                        padding: getSidePadding(context: context),
-                        child: body(context, viewModel),
-                      ),
               ),
             ),
         viewModelBuilder: () => ViewConsignmentViewModel());
@@ -162,7 +168,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
 
   Widget body(BuildContext context, ViewConsignmentViewModel viewModel) {
     if (viewModel.consignmentDetailResponseNew != null &&
-        !viewModel.isInitiallyDataSet) {
+        !viewModel.isInitiallyDataSet &&
+        viewModel.consignmentDetailResponseNew.items.length > 0) {
       setDataInTextFormFields(position: 0, viewModel: viewModel);
       viewModel.isInitiallyDataSet = true;
     }
