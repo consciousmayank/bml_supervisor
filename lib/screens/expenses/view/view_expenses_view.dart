@@ -92,6 +92,8 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   onPressed: () {
                     print('bottom sheet');
                     showModalBottomSheet(
+                      isScrollControlled: true,
+                      isDismissible: false,
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -101,31 +103,59 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                       ),
                       context: context,
                       builder: (_) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            viewModel.expenseTypes.length,
-                                (index) => ListTile(
-                              onTap: () {
-                                viewModel.selectedExpenseType =
-                                viewModel.expenseTypes[index];
-                                if (index == 0) {
-                                  viewModel.expensePieChartResponseList = copyList(
-                                      viewModel.expensePieChartResponseListAll);
-                                } else {
-                                  filterList(viewModel, index);
-                                }
-                                viewModel.notifyListeners();
-                                viewModel.navigationService.back();
-                              },
-                              title: Text(
-                                '${viewModel.expenseTypes[index]}',
+                        return Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          child: Wrap(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  // Container(),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Close',
+                                        style: AppTextStyles.latoMedium12PrimaryShade5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              selectedTileColor: AppColors.primaryColorShade3,
-                              selected: viewModel.selectedExpenseType ==
-                                  viewModel.expenseTypes[index],
-                            ),
-                          ).toList(),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: List.generate(
+                                  viewModel.expenseTypes.length,
+                                  (index) => ListTile(
+                                    onTap: () {
+                                      viewModel.selectedExpenseType =
+                                          viewModel.expenseTypes[index];
+                                      if (index == 0) {
+                                        viewModel.viewExpensesResponse = copyList(
+                                            viewModel
+                                                .expensePieChartResponseListAll);
+                                      } else {
+                                        filterList(viewModel, index);
+                                      }
+                                      viewModel.notifyListeners();
+                                      viewModel.navigationService.back();
+                                    },
+                                    title: Text(
+                                      '${viewModel.expenseTypes[index]}',
+                                    ),
+                                    selectedTileColor:
+                                        AppColors.primaryColorShade4,
+
+                                    selected: viewModel.selectedExpenseType ==
+                                        viewModel.expenseTypes[index],
+                                  ),
+                                ).toList(),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     );
@@ -141,6 +171,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   child: Column(
                     children: [
                       // buildSelectDurationTabWidget(viewModel),
+                      // Text('asdf'),
                       registrationSelector(
                           context: context, viewModel: viewModel),
                       viewModel.viewExpensesResponse.length > 0
@@ -166,23 +197,23 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
       }
     });
 
-    viewModel.expensePieChartResponseList.clear();
-    viewModel.expensePieChartResponseList = copyList(tempList);
+    viewModel.viewExpensesResponse.clear();
+    viewModel.viewExpensesResponse = copyList(tempList);
   }
 
-  Widget selectDuration({ViewExpensesViewModel viewModel}) {
-    return AppDropDown(
-      optionList: selectDurationList,
-      hint: "Select Duration",
-      onOptionSelect: (selectedValue) {
-        viewModel.selectedDuration = selectedValue;
-        print(viewModel.selectedDuration);
-      },
-      selectedValue: viewModel.selectedDuration.isEmpty
-          ? null
-          : viewModel.selectedDuration,
-    );
-  }
+  // Widget selectDuration({ViewExpensesViewModel viewModel}) {
+  //   return AppDropDown(
+  //     optionList: selectDurationList,
+  //     hint: "Select Duration",
+  //     onOptionSelect: (selectedValue) {
+  //       viewModel.selectedDuration = selectedValue;
+  //       print(viewModel.selectedDuration);
+  //     },
+  //     selectedValue: viewModel.selectedDuration.isEmpty
+  //         ? null
+  //         : viewModel.selectedDuration,
+  //   );
+  // }
 
   Widget registrationSelector(
       {BuildContext context, ViewExpensesViewModel viewModel}) {
@@ -222,54 +253,54 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
     );
   }
 
-  Widget getExpenseListButton({ViewExpensesViewModel viewModel}) {
-    return SizedBox(
-      height: buttonHeight,
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
-        child: ElevatedButton(
-          child: Text("Get Expenses List"),
-          onPressed: () {
-            if (viewModel.selectedDuration.length != 0) {
-              viewModel.getExpensesList(
-                regNum: selectedRegNoController.text.trim().toUpperCase(),
-                selectedDuration: viewModel.selectedDuration,
-                clientId: viewModel.selectedClient != null
-                    ? viewModel.selectedClient.clientId
-                    : '',
-              );
-            } else {
-              viewModel.snackBarService
-                  .showSnackbar(message: 'Please select Duration');
-            }
-          },
-        ),
-      ),
-    );
-  }
+  // Widget getExpenseListButton({ViewExpensesViewModel viewModel}) {
+  //   return SizedBox(
+  //     height: buttonHeight,
+  //     width: double.infinity,
+  //     child: Padding(
+  //       padding: const EdgeInsets.only(bottom: 4.0),
+  //       child: ElevatedButton(
+  //         child: Text("Get Expenses List"),
+  //         onPressed: () {
+  //           if (viewModel.selectedDuration.length != 0) {
+  //             viewModel.getExpensesList(
+  //               regNum: selectedRegNoController.text.trim().toUpperCase(),
+  //               selectedDuration: viewModel.selectedDuration,
+  //               clientId: viewModel.selectedClient != null
+  //                   ? viewModel.selectedClient.clientId
+  //                   : '',
+  //             );
+  //           } else {
+  //             viewModel.snackBarService
+  //                 .showSnackbar(message: 'Please select Duration');
+  //           }
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  SelectDurationTabWidget buildSelectDurationTabWidget(
-      ViewExpensesViewModel viewModel) {
-    return SelectDurationTabWidget(
-      initiallySelectedDuration: viewModel.selectedDuration.isEmpty
-          ? null
-          : viewModel.selectedDuration,
-      onTabSelected: (String selectedValue) {
-        viewModel.selectedDuration = selectedValue;
-        getExpenses(
-            viewModel: viewModel,
-            registrationNumber: selectedRegNoController.text);
-      },
-      title: selectDurationTabWidgetTitle,
-    );
-  }
+  // SelectDurationTabWidget buildSelectDurationTabWidget(
+  //     ViewExpensesViewModel viewModel) {
+  //   return SelectDurationTabWidget(
+  //     initiallySelectedDuration: viewModel.selectedDuration.isEmpty
+  //         ? null
+  //         : viewModel.selectedDuration,
+  //     onTabSelected: (String selectedValue) {
+  //       viewModel.selectedDuration = selectedValue;
+  //       getExpenses(
+  //           viewModel: viewModel,
+  //           registrationNumber: selectedRegNoController.text);
+  //     },
+  //     title: selectDurationTabWidgetTitle,
+  //   );
+  // }
 
   void getExpenses(
       {ViewExpensesViewModel viewModel, String registrationNumber}) {
     viewModel.getExpensesList(
       regNum: registrationNumber,
-      selectedDuration: viewModel.selectedDuration,
+      // selectedDuration: viewModel.selectedDuration,
       clientId: viewModel.selectedClient.clientId,
     );
   }
@@ -297,10 +328,13 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   child: ClipRRect(
                     borderRadius: getBorderRadius(),
                     child: Card(
-                      elevation: 4,
+                      color: AppColors.appScaffoldColor,
+                      elevation: defaultElevation,
                       shape: getCardShape(),
                       child: Column(
                         children: [
+                          // if date is same don't build new date header
+                          // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
                           Container(
                             decoration: BoxDecoration(
                               color: ThemeConfiguration.primaryBackground,
@@ -315,50 +349,18 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  viewModel
-                                      .viewExpensesResponse[index].vehicleId,
-                                  style: const TextStyle(color: Colors.white),
+                                  'Date',
+                                  style: AppTextStyles.latoBold16White,
                                 ),
                                 Text(
-                                  viewModel.viewExpensesResponse[index].eDate
-                                      .toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                )
+                                  viewModel.uniqueDates[index].toString(),
+                                  style: AppTextStyles.latoBold16White,
+                                ),
                               ],
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AppTextView(
-                                        textAlign: TextAlign.center,
-                                        hintText: 'Expense Type',
-                                        value: viewModel
-                                            .viewExpensesResponse[index].eType,
-                                      ),
-                                      flex: 1,
-                                    ),
-                                    wSizedBox(10),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AppTextView(
-                                        textAlign: TextAlign.center,
-                                        hintText: 'Expense Amount',
-                                        value: viewModel
-                                            .viewExpensesResponse[index].eAmount
-                                            .toString(),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
+                          Column(
+                            children: buildNewEntryRow(viewModel, index),
                           )
                         ],
                       ),
@@ -367,8 +369,68 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 ));
           },
           // ! length + 1 is the compensation of including buildHeader()
-          itemCount: viewModel.viewExpensesResponse.length + 1),
+          itemCount: viewModel.uniqueDates.length + 1),
     );
+  }
+
+  List<Widget> buildNewEntryRow(
+      ViewExpensesViewModel viewModel, int outerIndex) {
+    return List.generate(
+      viewModel.getConsolidatedData(outerIndex).length,
+      (index) => Container(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Text("Driven Km"),
+                Expanded(
+                  flex: 1,
+                  child: AppTextView(
+                    hintText: "Type",
+                    textAlign: TextAlign.left,
+                    fontSize: 12,
+                    value: viewModel
+                        .getConsolidatedData(outerIndex)[index]
+                        .eType
+                        .toString(),
+                  ),
+                ),
+                wSizedBox(8),
+                Expanded(
+                  flex: 1,
+                  child: AppTextView(
+                    textAlign: TextAlign.left,
+                    fontSize: 12,
+                    hintText: "Vehicle",
+                    value: viewModel
+                        .getConsolidatedData(outerIndex)[index]
+                        .vehicleId
+                        .toString(),
+                  ),
+                ),
+                wSizedBox(8),
+                Expanded(
+                  flex: 1,
+                  child: AppTextView(
+                    textAlign: TextAlign.left,
+                    fontSize: 14,
+                    hintText: "Amount (INR)",
+                    value: viewModel
+                        .getConsolidatedData(outerIndex)[index]
+                        .eAmount
+                        .toString(),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    ).toList();
   }
 
   Widget _buildHeader({@required ViewExpensesViewModel viewModel}) {

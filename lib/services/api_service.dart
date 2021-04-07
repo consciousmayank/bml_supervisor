@@ -13,6 +13,7 @@ import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
@@ -345,7 +346,6 @@ class ApiService {
 
   Future<ParentApiResponse> getExpensesList({
     String registrationNumber,
-    String duration,
     String clientId,
   }) async {
     Response response;
@@ -354,9 +354,6 @@ class ApiService {
       var request = new Map();
       if (registrationNumber != null) {
         request['vehicleId'] = registrationNumber;
-      }
-      if (duration != null) {
-        request['period'] = duration;
       }
       if (clientId != null) {
         request['clientId'] = clientId;
@@ -407,6 +404,45 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> getUserProfile() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_USER);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future updateUserMobile({UpdateUserRequest request}) async {
+    String body = request.toJson();
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().put(UPDATE_USER_MOBILE, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future updateUserEmail({UpdateUserRequest request}) async {
+    String body = request.toJson();
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().put(UPDATE_USER_EMAIL, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+
+
+
 
   Future<ParentApiResponse> changePassword(
       {@required String userName, @required String newPassword}) async {

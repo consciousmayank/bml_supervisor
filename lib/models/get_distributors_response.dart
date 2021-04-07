@@ -49,7 +49,7 @@ class GetDistributorsResponse {
   double geoLongitude;
   String remarks;
   bool isCheck;
-  int kiloMeters;
+  double kiloMeters;
 
   GetDistributorsResponse copyWith(
       {int id,
@@ -70,7 +70,7 @@ class GetDistributorsResponse {
         double geoLatitude,
         double geoLongitude,
         String remarks,
-        int kiloMeters}) =>
+        double kiloMeters}) =>
       GetDistributorsResponse(
         id: id ?? this.id,
         clientId: clientId ?? this.clientId,

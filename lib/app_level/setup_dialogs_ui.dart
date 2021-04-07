@@ -1,10 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
+import 'package:bml_supervisor/screens/dialogs/confirm_route_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -24,6 +26,12 @@ void setupDialogUi() {
           validatedRegistrationNumber:
               sheetRequest.customData.validatedRegistrationNumber,
           consignmentRequest: sheetRequest.customData.consignmentRequest,
+        ),
+    DialogType.CREATE_ROUTE: (context, sheetRequest, completer) =>
+        _CreateRouteDialog(
+          request: sheetRequest,
+          completer: completer,
+          routeRequest: sheetRequest.customData.routeRequest,
         ),
   };
 
@@ -70,6 +78,33 @@ class _CreateConsignmentDialog extends StatelessWidget {
         consignmentRequest: consignmentRequest,
         selectedRoute: selectedRoute,
         validatedRegistrationNumber: validatedRegistrationNumber,
+        onSubmitClicked: (bool value) {
+          completer(
+            DialogResponse(confirmed: value),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CreateRouteDialog extends StatelessWidget {
+  final DialogRequest request;
+  final Function(DialogResponse) completer;
+  final CreateRouteRequest routeRequest;
+
+  const _CreateRouteDialog({
+    this.request,
+    this.completer,
+    @required this.routeRequest,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColors.primaryColorShade5,
+      child: ConfirmRouteView(
+        routeRequest: routeRequest,
         onSubmitClicked: (bool value) {
           completer(
             DialogResponse(confirmed: value),

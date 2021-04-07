@@ -142,15 +142,13 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 10,
+                                                percentage: viewModel.singleClientTileData.totalKmVariance,
                                                 title: 'Total Kilometer',
                                                 value: viewModel
                                                     .singleClientTileData
                                                     .totalKm
                                                     .toString(),
                                                 iconName: totalKmIcon,
-                                                //todo: give percentage from API
-                                                // percentage: 88,
                                                 onTap: () {
                                                   viewModel
                                                       .takeToViewEntryPage();
@@ -160,7 +158,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                // percentage: 0,
                                                 title: 'Due (km)',
                                                 value: viewModel
                                                     .singleClientTileData.dueKm
@@ -182,7 +180,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: 0,
+                                                percentage: viewModel.singleClientTileData.totalExpenseVariance,
                                                 title: 'Total Expense',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -199,7 +197,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: -5,
+                                                // percentage: -5,
                                                 title: 'Due Expense',
                                                 value: viewModel
                                                     .singleClientTileData

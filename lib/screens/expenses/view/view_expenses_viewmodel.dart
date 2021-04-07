@@ -17,7 +17,15 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
   double _totalExpenses = 0.0;
-  List<ViewExpensesResponse> viewExpensesResponse = [];
+
+  double get totalExpenses => _totalExpenses;
+
+  set totalExpenses(double value) {
+    _totalExpenses = value;
+    notifyListeners();
+  }
+
+  List<ExpensePieChartResponse> viewExpensesResponse = [];
   SearchByRegNoResponse _selectedSearchVehicle;
   SearchByRegNoResponse get selectedSearchVehicle => _selectedSearchVehicle;
   set selectedSearchVehicle(SearchByRegNoResponse selectedSearchVehicle) {
@@ -77,15 +85,17 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   List<ExpensePieChartResponse> expensePieChartResponseListAll = [];
 
-  List<ExpensePieChartResponse> _expensePieChartResponseList = [];
+  // List<ExpensePieChartResponse> _expensePieChartResponseList = [];
+  //
+  // List<ExpensePieChartResponse> get expensePieChartResponseList =>
+  //     _expensePieChartResponseList;
+  //
+  // set expensePieChartResponseList(List<ExpensePieChartResponse> value) {
+  //   _expensePieChartResponseList = value;
+  //   notifyListeners();
+  // }
 
-  List<ExpensePieChartResponse> get expensePieChartResponseList =>
-      _expensePieChartResponseList;
-
-  set expensePieChartResponseList(List<ExpensePieChartResponse> value) {
-    _expensePieChartResponseList = value;
-    notifyListeners();
-  }
+  List<String> uniqueDates = [];
 
   String _expenseAmount;
   String get expenseAmount => _expenseAmount;
@@ -135,46 +145,67 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   }
 
   void getExpensesList(
-      {String regNum, String selectedDuration, String clientId}) async {
+      {String regNum, String clientId}) async {
     expenseCount = 0;
+    uniqueDates.clear();
+    _expenseTypes.clear();
+    totalExpenses = 0.0;
     setBusy(true);
     viewExpensesResponse.clear();
-    int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
+    // int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();
     setBusy(true);
     final res = await _expensesApi.getExpensesList(
       registrationNumber: regNum,
       clientId: clientId,
-      duration: selectedDurationValue.toString(),
     );
     viewExpensesResponse = copyList(res);
     viewExpensesResponse.forEach((element) {
-      _totalExpenses += element.eAmount;
+      // expensePieChartResponseList
+      //     .add(element);
+      expensePieChartResponseListAll
+          .add(element);
+      if (!uniqueDates
+          .contains(element.eDate)) {
+        uniqueDates.add(element.eDate);
+      }
+      if (!_expenseTypes
+          .contains(element.eType)) {
+        _expenseTypes.add(element.eType);
+      }
+      totalExpenses += element.eAmount;
       ++expenseCount;
     });
+    _expenseTypes.insert(0, "All");
     // takeToViewExpenseDetailedPage();
     notifyListeners();
     setBusy(false);
   }
 
-  void takeToViewExpenseDetailedPage() {
-    print(
-        'before sending - expense type: $viewExpensesResponse[0].expenseType');
-
-    navigationService.navigateTo(
-      viewExpensesDetailedViewPageRoute,
-      arguments: {
-        'viewExpensesDetailedList': viewExpensesResponse,
-        'totalExpenses': _totalExpenses,
-        'selectedClient':
-            selectedClient == null ? 'All Clients' : selectedClient.clientId
-      },
-    ).then((value) {
-      vehicleRegNumber = null;
-      _totalExpenses = 0.0;
-      // selectedDuration = null;
-    });
+  List<ExpensePieChartResponse> getConsolidatedData(int index) {
+    return viewExpensesResponse
+        .where((element) => element.eDate == uniqueDates[index])
+        .toList();
   }
 
-  double get totalExpenses => _totalExpenses;
+  // void takeToViewExpenseDetailedPage() {
+  //   print(
+  //       'before sending - expense type: $viewExpensesResponse[0].expenseType');
+  //
+  //   navigationService.navigateTo(
+  //     viewExpensesDetailedViewPageRoute,
+  //     arguments: {
+  //       'viewExpensesDetailedList': viewExpensesResponse,
+  //       'totalExpenses': _totalExpenses,
+  //       'selectedClient':
+  //           selectedClient == null ? 'All Clients' : selectedClient.clientId
+  //     },
+  //   ).then((value) {
+  //     vehicleRegNumber = null;
+  //     _totalExpenses = 0.0;
+  //     // selectedDuration = null;
+  //   });
+  // }
+
+  // double get totalExpenses => _totalExpenses;
 }

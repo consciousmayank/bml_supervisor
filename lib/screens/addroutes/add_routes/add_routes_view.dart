@@ -58,20 +58,13 @@ class _AddRoutesViewState extends State<AddRoutesView> {
               body: Padding(
                 padding: getSidePadding(context: context),
                 child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        // selectClientForDashboardStats(viewModel: viewModel),
-                        buildRouteTitleTextFormField(),
-                        buildRemarksTextFormField(),
-                        // Text('asd'),
-                        buildNextButton(viewModel: viewModel, context: context),
-                        // widget?.args?.newHubsList?.length > 0
-                        //     ? Text(widget?.args?.newHubsList?.first?.title)
-                        //     : Container(),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      buildRouteTitleTextFormField(),
+                      buildRemarksTextFormField(),
+                      buildNextButton(viewModel: viewModel, context: context),
+                      // Text('asdf')
+                    ],
                   ),
                 ),
               ),
@@ -141,13 +134,24 @@ class _AddRoutesViewState extends State<AddRoutesView> {
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
             if (routeTitleController.text.length > 0) {
-              viewModel
-                  .getHubsForSelectedClient(
-                      selectedClient: MyPreferences().getSelectedClient())
-                  .then((value) => viewModel.takeToPickHubsPage(
-                        remarks: remarkController.text,
-                        routeTitle: routeTitleController.text,
-                      ));
+
+              if(routeTitleController.text.length>=6)
+              {
+                viewModel
+                    .getHubsForSelectedClient(
+                    selectedClient: MyPreferences().getSelectedClient())
+                    .then((value) =>
+                    viewModel.takeToPickHubsPage(
+                      remarks: remarkController.text,
+                      routeTitle: routeTitleController.text,
+                    ));
+              }
+              else{
+                viewModel.snackBarService.showSnackbar(message: 'Please enter route title with at least 6 characters');
+              }
+            }
+            else{
+              viewModel.snackBarService.showSnackbar(message: 'Please enter route title');
             }
           },
           background: AppColors.primaryColorShade5,

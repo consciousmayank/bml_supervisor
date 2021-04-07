@@ -3,6 +3,7 @@ import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.d
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +24,11 @@ class _PickHubsViewState extends State<PickHubsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PickHubsViewModel>.reactive(
-      onModelReady: (viewModel){
-        print('pick hubs onModelReady');
-        print(widget.args.routeTitle);
-        print(widget.args.remarks);
-      },
+        onModelReady: (viewModel) {
+          print('pick hubs onModelReady');
+          print(widget.args.routeTitle);
+          print(widget.args.remarks);
+        },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -36,30 +37,81 @@ class _PickHubsViewState extends State<PickHubsView> {
                 ),
                 centerTitle: true,
               ),
-              body: Column(
-                children: [
-                  // buildCityTextFormField(viewModel: viewModel),
-                  Expanded(
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      itemBuilder: (context, index) {
-                        return buildHubsList(
-                          viewModel: viewModel,
-                          index: index,
-                          // state: state,
-                        );
-                      },
-                      itemCount: widget.args.hubsList.length,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Divider(
-                          thickness: 1,
-                          color: AppColors.primaryColorShade3,
-                        );
-                      },
+              body: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Column(
+                  children: [
+                    buildCityTextFormField(viewModel: viewModel),
+                    hSizedBox(10),
+                    Container(
+                      color: AppColors.primaryColorShade5,
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // hSizedBox(5),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                ('Hub ID'),
+                                textAlign: TextAlign.left,
+                                style: AppTextStyles.whiteRegular,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              ('Hub Name'),
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.whiteRegular,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              ('City'),
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.whiteRegular,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'Pick',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.whiteRegular,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  buildNextButton(viewModel: viewModel, context: context),
-                ],
+                    Expanded(
+                      child: Card(
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            return buildHubsList(
+                              viewModel: viewModel,
+                              index: index,
+                              // state: state,
+                            );
+                          },
+                          itemCount: widget.args.hubsList.length,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider(
+                              thickness: 1,
+                              color: AppColors.primaryColorShade3,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    buildNextButton(viewModel: viewModel, context: context),
+                  ],
+                ),
               ),
             ),
         viewModelBuilder: () => PickHubsViewModel());
@@ -75,18 +127,18 @@ class _PickHubsViewState extends State<PickHubsView> {
             borderRadius: defaultBorder,
             borderColor: AppColors.primaryColorShade1,
             onTap: () {
-              /// go back with the newly populated list
-              viewModel.newHubsList.forEach((element) {
-                print(element.title);
-              });
-              // viewModel.takeToAddRoutesPage(viewModel.newHubsList);
-              viewModel.takeToArrangeHubs(
-                newHubsList: viewModel.newHubsList,
-                srcLocation: viewModel.newHubsList.first.id,
-                dstLocation: viewModel.newHubsList.last.id,
-                title: widget.args.routeTitle,
-                remark: widget.args.remarks,
-              );
+              if (viewModel.selectedHubsList.length >= 2) {
+                viewModel.takeToArrangeHubs(
+                  newHubsList: viewModel.selectedHubsList,
+                  srcLocation: viewModel.selectedHubsList.first.id,
+                  dstLocation: viewModel.selectedHubsList.last.id,
+                  title: widget.args.routeTitle,
+                  remark: widget.args.remarks,
+                );
+              } else {
+                viewModel.snackBarService
+                    .showSnackbar(message: 'Please select at least 2 hubs');
+              }
             },
             background: AppColors.primaryColorShade5,
             buttonText: 'NEXT'),
@@ -100,27 +152,35 @@ class _PickHubsViewState extends State<PickHubsView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(widget.args.hubsList[index].id.toString()),
-          Text(widget.args.hubsList[index].title),
-          Text(widget.args.hubsList[index].city),
-          Checkbox(
-            value: widget.args.hubsList[index].isCheck,
-            onChanged: (value) {
-              setState(() {
-                /// add the item to list
-                print(value);
-                if (value == true) {
-                  viewModel.newHubsList.add(widget.args.hubsList[index]);
-                }
-                if (value == false) {
-                  if (viewModel.newHubsList
-                      .contains(widget.args.hubsList[index])) {
-                    viewModel.newHubsList.remove(widget.args.hubsList[index]);
+          Expanded(
+              flex: 1, child: Padding(
+                padding: const EdgeInsets.all( 8.0),
+                child: Text(widget.args.hubsList[index].id.toString(), textAlign: TextAlign.left,),
+              )),
+          Expanded(flex: 2, child: Text(widget.args.hubsList[index].title, textAlign: TextAlign.center,)),
+          Expanded(flex: 2, child: Text(widget.args.hubsList[index].city, textAlign: TextAlign.center,)),
+          Expanded(flex: 1,
+            child: Checkbox(
+              value: widget.args.hubsList[index].isCheck,
+              onChanged: (value) {
+                setState(() {
+                  print(value);
+                  if (value == true) {
+                    viewModel.selectedHubsList.add(widget.args.hubsList[index]);
+                    // print('selected hubs : ${viewModel.selectedHubsList.length}');
                   }
-                }
-                widget.args.hubsList[index].isCheck = value;
-              });
-            },
+                  if (value == false) {
+                    if (viewModel.selectedHubsList
+                        .contains(widget.args.hubsList[index])) {
+                      viewModel.selectedHubsList
+                          .remove(widget.args.hubsList[index]);
+                      // print('selected hubs : ${viewModel.selectedHubsList.length}');
+                    }
+                  }
+                  widget.args.hubsList[index].isCheck = value;
+                });
+              },
+            ),
           ),
 
           // CheckboxListTile(

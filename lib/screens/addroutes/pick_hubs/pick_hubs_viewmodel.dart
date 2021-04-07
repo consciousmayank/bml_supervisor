@@ -5,12 +5,12 @@ import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 
 class PickHubsViewModel extends GeneralisedBaseViewModel {
-  List<GetDistributorsResponse> _newHubsList = [];
+  List<GetDistributorsResponse> _selectedHubsList = [];
 
-  List<GetDistributorsResponse> get newHubsList => _newHubsList;
+  List<GetDistributorsResponse> get selectedHubsList => _selectedHubsList;
 
-  set newHubsList(List<GetDistributorsResponse> value) {
-    _newHubsList = value;
+  set selectedHubsList(List<GetDistributorsResponse> value) {
+    _selectedHubsList = value;
     notifyListeners();
   }
 
@@ -23,13 +23,13 @@ class PickHubsViewModel extends GeneralisedBaseViewModel {
     return hubNames;
   }
 
-  void takeToAddRoutesPage(List<GetDistributorsResponse> newHubsList) {
-    // navigationService.navigateTo(addRoutesPageRoute,
-    //     arguments: AddRoutesArguments(newHubsList: newHubsList));
-
-    navigationService.navigateTo(arrangeHubsPageRoute, arguments: newHubsList);
-    navigationService.navigateTo(addRoutesPageRoute, arguments: newHubsList);
-  }
+  // void takeToAddRoutesPage(List<GetDistributorsResponse> newHubsList) {
+  //   // navigationService.navigateTo(addRoutesPageRoute,
+  //   //     arguments: AddRoutesArguments(newHubsList: newHubsList));
+  //
+  //   navigationService.navigateTo(arrangeHubsPageRoute, arguments: newHubsList);
+  //   navigationService.navigateTo(addRoutesPageRoute, arguments: newHubsList);
+  // }
 
   void takeToArrangeHubs(
       {List<GetDistributorsResponse> newHubsList,
@@ -37,11 +37,6 @@ class PickHubsViewModel extends GeneralisedBaseViewModel {
       String title,
       int srcLocation,
       int dstLocation}) {
-    print(remark);
-    print(title);
-    print(srcLocation);
-    print(dstLocation);
-    print(newHubsList);
     navigationService.navigateTo(arrangeHubsPageRoute,
         arguments: ArrangeHubsArguments(
           newHubsList: newHubsList,

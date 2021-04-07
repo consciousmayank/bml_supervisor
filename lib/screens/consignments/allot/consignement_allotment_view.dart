@@ -696,7 +696,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
     return TextFormField(
       style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Enter HubTitle"),
+      decoration: getInputBorder(hintText: "HubTitle"),
       enabled: true,
       controller: hubTitleController,
       keyboardType: TextInputType.text,
@@ -730,7 +730,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
     return TextFormField(
       style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Enter Remarks"),
+      decoration: getInputBorder(hintText: "Remarks"),
       enabled: true,
       controller: remarksController,
       focusNode: remarksFocusNode,
@@ -758,7 +758,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       onChanged: (_) {
         viewModel.isDropCratesEdited = true;
       },
-      decoration: getInputBorder(hintText: "Enter Crates to drop"),
+      decoration: getInputBorder(hintText: "Crates to drop"),
       enabled: true,
       controller: dropController,
       focusNode: dropFocusNode,
@@ -790,7 +790,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
     return TextFormField(
       style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Enter Crates to collect"),
+      decoration: getInputBorder(hintText: "Crates to collect"),
       enabled: true,
       controller: collectController,
       focusNode: collectFocusNode,
@@ -828,7 +828,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
     return TextFormField(
       style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Enter Payment"),
+      decoration: getInputBorder(hintText: "Payment"),
       enabled: !enabled,
       controller: paymentController,
       onChanged: (_) {

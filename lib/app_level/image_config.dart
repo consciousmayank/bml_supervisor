@@ -49,3 +49,5 @@ final String logout = _imagePath + 'icon_logout_profile.png';
 final String email = _imagePath + 'icon_profile_email.png';
 final String phoneNumber = _imagePath + 'icon_profile_phone_number.png';
 final String profile = _imagePath + 'icon_profile_user.png';
+final String whatsAppIcon = _imagePath + 'whats_app_icon.png';
+final String drawerRupeeIcon = _imagePath + 'drawer_rupee_icon.png';

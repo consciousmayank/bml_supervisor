@@ -144,7 +144,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 },
               ),
               drawerList(
-                imageName: rupeesIcon,
+                imageName: drawerRupeeIcon,
                 text: "Transaction History",
                 onTap: () {
                   widget.dashBoardScreenViewModel
