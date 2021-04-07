@@ -27,14 +27,14 @@ class ConsignmentListByDateView extends StatefulWidget {
 
 class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
   TextEditingController selectedDateController =
-      TextEditingController(text: getDateString(DateTime.now()));
+      TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ConsignmentListByDateViewModel>.reactive(
         onModelReady: (viewModel) {
-          viewModel.getConsignmentListWithDate();
+          // viewModel.getConsignmentListWithDate();
           viewModel.getConsignmentListPageWise(showLoading: true);
           // viewModel.setClient();
         },

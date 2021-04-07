@@ -43,7 +43,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
     _selectedConsignment = value;
   }
 
-  DateTime _entryDate = DateTime.now();
+  DateTime _entryDate;
 
   DateTime get entryDate => _entryDate;
 

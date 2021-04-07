@@ -223,7 +223,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                         child: DotsIndicator(
                           controller: _controller,
                           itemCount: viewModel.hubsList.length,
-                          color: AppColors.primaryColorShade1,
+                          color: AppColors.primaryColorShade5,
                         ),
                       )
                     ],
@@ -290,7 +290,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return Card(
-          color: ThemeConfiguration.primaryBackground,
+          color: AppColors.appScaffoldColor,
+          // color: Colors.white,
           elevation: defaultElevation,
           shape: getCardShape(),
           child: Container(
@@ -299,9 +300,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
               key: viewModel.formKeyList[index],
               child: Stack(
                 children: [
-                  Image.asset(
-                    semiCircles,
-                  ),
+                  // Image.asset(
+                  //   semiCircles,
+                  // ),
                   // Container(
                   //     height: double.infinity,
                   //     width: double.infinity,
@@ -318,43 +319,38 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                           child: Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                InkWell(
-                                  child: Image.asset(
-                                    locationIcon,
-                                    fit: BoxFit.cover,
-                                    height: locationIconHeight,
-                                    width: locationIconWidth,
-                                  ),
-                                  onTap: () {
-                                    launchMaps(
-                                        latitude: viewModel
-                                            .hubsList[index].geoLatitude,
-                                        longitude: viewModel
-                                            .hubsList[index].geoLongitude);
-                                  },
-                                ),
                                 Text(
                                   "# ${index + 1}",
-                                  style: AppTextStyles.appBarTitleStyle,
+                                  style: AppTextStyles.lato20PrimaryShade5
+                                      .copyWith(fontSize: 14),
                                 ),
                                 hSizedBox(10),
                                 Text(
                                   viewModel.hubsList[index].title.toUpperCase(),
-                                  style: AppTextStyles.latoBold18Black
-                                      .copyWith(color: AppColors.white),
+                                  style: AppTextStyles.latoBold16White.copyWith(
+                                    fontSize: 18,
+                                    color: AppColors.primaryColorShade5,
+                                    // fontWeight: FontWeight.bold
+                                  ),
                                 ),
                                 hSizedBox(10),
                                 Text(
                                   "${viewModel.hubsList[index].contactPerson}",
-                                  style: AppTextStyles.latoMedium14Black
-                                      .copyWith(color: AppColors.white),
+                                  style:
+                                      AppTextStyles.latoMedium14Black.copyWith(
+                                    color: AppColors.primaryColorShade5,
+                                        fontSize: 15
+                                  ),
                                 ),
-                                Text(viewModel.hubsList[index].city,
-                                    style: AppTextStyles.latoMedium14Black
-                                        .copyWith(color: AppColors.white)),
+                                hSizedBox(10),
+                                Text(
+                                  viewModel.hubsList[index].city,
+                                  style: AppTextStyles.latoMedium14Black
+                                      .copyWith(color: AppColors.primaryColorShade5),
+                                ),
                               ],
                             ),
                           ),
@@ -363,30 +359,32 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                             context: context,
                             viewModel: viewModel,
                             index: index),
-                        hSizedBox(5),
+                        hSizedBox(25),
                         dropInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
-                        hSizedBox(5),
+                        hSizedBox(25),
                         collectInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
-                        hSizedBox(5),
+                        hSizedBox(25),
                         paymentInput(
                           context: context,
                           viewModel: viewModel,
                           enabled: index == viewModel.hubsList.length - 1,
                           index: index,
                         ),
+                        hSizedBox(25),
                         remarksInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
+                        hSizedBox(25),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -741,8 +739,25 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "HubTitle"),
+      // style: AppTextStyles.appBarTitleStyle,
+      decoration: getInputBorder(hintText: "Item Title"),
+      // decoration: InputDecoration(
+      //   labelText: "Enter Email",
+      //   fillColor: AppColors.appScaffoldColor,
+      //   focusedBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(defaultBorder),
+      //     borderSide: BorderSide(
+      //       // color: Colors.blue,
+      //     ),
+      //   ),
+      //   enabledBorder: OutlineInputBorder(
+      //     borderRadius: BorderRadius.circular(defaultBorder),
+      //     borderSide: BorderSide(
+      //       color: AppColors.primaryColorShade5,
+      //       // width: 2.0,
+      //     ),
+      //   ),
+      // ),
       enabled: true,
       controller: hubTitleController,
       keyboardType: TextInputType.text,
@@ -775,7 +790,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
     }
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Remarks"),
       enabled: true,
       controller: remarksController,
@@ -800,11 +815,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
     }
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      // style: AppTextStyles.appBarTitleStyle,
       onChanged: (_) {
         viewModel.isDropCratesEdited = true;
       },
-      decoration: getInputBorder(hintText: "Crates to drop"),
+      decoration: getInputBorder(hintText: "Item Drop"),
       enabled: true,
       controller: dropController,
       focusNode: dropFocusNode,
@@ -835,8 +850,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel?.consignmentRequest?.items[index]?.collect?.toString();
     }
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Crates to collect"),
+      // style: AppTextStyles.appBarTitleStyle,
+      decoration: getInputBorder(hintText: "Item Collect"),
       enabled: true,
       controller: collectController,
       focusNode: collectFocusNode,
@@ -873,7 +888,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
 
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Payment"),
       enabled: !enabled,
       controller: paymentController,
@@ -902,7 +917,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  getInputBorder({String hintText}) {
+  getInputBorder2({String hintText}) {
     return InputDecoration(
       alignLabelWithHint: true,
       errorStyle: TextStyle(
@@ -937,6 +952,34 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(
           color: AppColors.primaryColorShade1,
+        ),
+      ),
+    );
+  }
+
+  getInputBorder({@required String hintText}) {
+    return InputDecoration(
+      alignLabelWithHint: true,
+      errorStyle: TextStyle(
+        fontSize: 14,
+      ),
+      helperStyle: TextStyle(
+        fontSize: 14,
+      ),
+      labelText: hintText,
+      labelStyle: TextStyle(color: AppColors.primaryColorShade5, fontSize: 14),
+      fillColor: AppColors.appScaffoldColor,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultBorder),
+        borderSide: BorderSide(
+            // color: Colors.blue,
+            ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultBorder),
+        borderSide: BorderSide(
+          color: AppColors.primaryColorShade5,
+          // width: 2.0,
         ),
       ),
     );
