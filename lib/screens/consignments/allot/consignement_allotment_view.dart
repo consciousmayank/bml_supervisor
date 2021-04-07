@@ -156,8 +156,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   onOptionSelect: (FetchRoutesResponse selectedValue) {
                     viewModel.selectedRoute = selectedValue;
 
-                    viewModel.entryDate = null;
-                    selectedDateController.clear();
                     selectedRegNoController.clear();
                     consignmentTitleController.clear();
                     viewModel.validatedRegistrationNumber = null;
@@ -179,11 +177,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
           // getConsignments
 
-          viewModel.entryDate == null
+          viewModel.hubsList.length < 1
               ? Container()
               : registrationSelector(context: context, viewModel: viewModel),
 
-          viewModel.entryDate == null
+          viewModel.hubsList.length < 1
               ? Container()
               : consignmentTextField(viewModel: viewModel),
 
