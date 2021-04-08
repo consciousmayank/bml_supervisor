@@ -488,7 +488,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       hint: "Select Duration",
       onOptionSelect: (selectedValue) {
         viewModel.selectedDuration = selectedValue;
-        print(viewModel.selectedDuration);
+        // print(viewModel.selectedDuration);
       },
       selectedValue: viewModel.selectedDuration.isEmpty
           ? null

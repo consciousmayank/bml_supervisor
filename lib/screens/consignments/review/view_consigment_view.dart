@@ -176,7 +176,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return viewModel.consignmentDetailResponseNew != null
         ? SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height - 100,
+              height: MediaQuery.of(context).size.height - 150,
               child: Stack(
                 children: [
                   PageView.builder(
@@ -188,210 +188,218 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                     controller: _controller,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
-                        color: AppColors.primaryColorShade5,
+                        color: AppColors.appScaffoldColor,
                         elevation: 4,
                         shape: getCardShape(),
                         child: Form(
                           key: viewModel.formKeyList[index],
-                          child: Stack(
-                            children: [
-                              Image.asset(
-                                semiCircles,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          "# ${index + 1}",
+                                          style: AppTextStyles.appBarTitleStyle
+                                              .copyWith(
+                                                  color: AppColors
+                                                      .primaryColorShade5),
+                                        ),
+                                        hSizedBox(10),
+                                        Text(
+                                          viewModel.consignmentDetailResponseNew
+                                              .items[index].hubTitle
+                                              .toUpperCase(),
+                                          style: AppTextStyles.appBarTitleStyle
+                                              .copyWith(
+                                                  color: AppColors
+                                                      .primaryColorShade5,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                        ),
+                                        hSizedBox(10),
+                                        Text(
+                                          "${viewModel.consignmentDetailResponseNew.items[index].hubContactPerson}",
+                                          style: AppTextStyles.appBarTitleStyle
+                                              .copyWith(
+                                            color: AppColors.primaryColorShade5,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        hSizedBox(10),
+                                        Text(
+                                            viewModel
+                                                .consignmentDetailResponseNew
+                                                .items[index]
+                                                .hubCity,
+                                            style: AppTextStyles
+                                                .appBarTitleStyle
+                                                .copyWith(
+                                              color:
+                                                  AppColors.primaryColorShade5,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                hubTitle(
+                                    context: context,
+                                    viewModel: viewModel,
+                                    index: index),
+                                hSizedBox(25),
+                                Row(
                                   children: [
                                     Expanded(
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text("# ${index + 1}"),
-                                            hSizedBox(10),
-                                            Text(
-                                              viewModel
-                                                  .consignmentDetailResponseNew
-                                                  .items[index]
-                                                  .hubContactPerson
-                                                  .toUpperCase(),
-                                              style:
-                                                  AppTextStyles.latoBold18Black,
-                                            ),
-                                            hSizedBox(10),
-                                            Text(
-                                              "${viewModel.consignmentDetailResponseNew.items[index].hubContactPerson}",
-                                              style: AppTextStyles
-                                                  .latoMedium14Black,
-                                            ),
-                                            Text(
-                                                viewModel
-                                                    .consignmentDetailResponseNew
-                                                    .items[index]
-                                                    .hubCity,
-                                                style: AppTextStyles
-                                                    .latoMedium14Black),
-                                          ],
-                                        ),
-                                      ),
+                                      flex: 1,
+                                      child: dropInput(
+                                          context: context,
+                                          viewModel: viewModel),
                                     ),
-                                    hubTitle(
-                                        context: context,
-                                        viewModel: viewModel,
-                                        index: index),
-                                    hSizedBox(5),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: dropInput(
-                                              context: context,
-                                              viewModel: viewModel),
-                                        ),
-                                        wSizedBox(10),
-                                        Expanded(
-                                          flex: 1,
-                                          child: gDropInput(
-                                              context: context,
-                                              viewModel: viewModel,
-                                              index: index),
-                                        ),
-                                      ],
+                                    wSizedBox(10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: gDropInput(
+                                          context: context,
+                                          viewModel: viewModel,
+                                          index: index),
                                     ),
-                                    hSizedBox(5),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: collectInput(
-                                              context: context,
-                                              viewModel: viewModel),
-                                        ),
-                                        wSizedBox(10),
-                                        Expanded(
-                                          flex: 1,
-                                          child: gCollectInput(
-                                              context: context,
-                                              viewModel: viewModel),
-                                        ),
-                                      ],
-                                    ),
-                                    hSizedBox(5),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: paymentInput(
-                                              context: context,
-                                              viewModel: viewModel,
-                                              enabled: index ==
-                                                  viewModel
-                                                          .consignmentDetailResponseNew
-                                                          .items
-                                                          .length -
-                                                      1),
-                                        ),
-                                        wSizedBox(10),
-                                        Expanded(
-                                          flex: 1,
-                                          child: gPaymentInput(
-                                              context: context,
-                                              viewModel: viewModel,
-                                              enabled: index ==
-                                                  viewModel
-                                                          .consignmentDetailResponseNew
-                                                          .items
-                                                          .length -
-                                                      1),
-                                        ),
-                                      ],
-                                    ),
-                                    hSizedBox(5),
-                                    remarksInput(
-                                        context: context, viewModel: viewModel),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: index == 0
-                                                ? Container()
-                                                : SizedBox(
-                                                    height: buttonHeight,
-                                                    child: AppButton(
-                                                      onTap: () {
-                                                        updateReviewConsignmentData(
-                                                          viewModel: viewModel,
-                                                          index: index,
-                                                          goForward: false,
-                                                        );
-                                                      },
-                                                      background: AppColors
-                                                          .primaryColorShade5,
-                                                      buttonText: "Previous",
-                                                      borderColor: AppColors
-                                                          .primaryColorShade1,
-                                                    ),
-                                                  ),
-                                          ),
-                                          wSizedBox(20),
-                                          Expanded(
-                                              flex: 1,
-                                              child: SizedBox(
-                                                height: buttonHeight,
-                                                child: AppButton(
-                                                  buttonText: index ==
-                                                          viewModel
-                                                                  .consignmentDetailResponseNew
-                                                                  .items
-                                                                  .length -
-                                                              1
-                                                      ? "Finish"
-                                                      : "Next",
-                                                  onTap: index ==
-                                                          viewModel
-                                                                  .consignmentDetailResponseNew
-                                                                  .items
-                                                                  .length -
-                                                              1
-                                                      ? () {
-                                                          // finish btn functionality
-                                                          updateReviewConsignmentData(
-                                                              viewModel:
-                                                                  viewModel,
-                                                              index: index);
-                                                          // update api call
-                                                          viewModel
-                                                              .updateConsignment();
-                                                        }
-                                                      : () {
-                                                          // Next btn functionality
-                                                          updateReviewConsignmentData(
-                                                              viewModel:
-                                                                  viewModel,
-                                                              index: index);
-                                                        },
-                                                  borderColor: AppColors
-                                                      .primaryColorShade1,
-                                                  background: AppColors
-                                                      .primaryColorShade5,
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                    )
                                   ],
                                 ),
-                              ),
-                            ],
+                                hSizedBox(25),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: collectInput(
+                                          context: context,
+                                          viewModel: viewModel),
+                                    ),
+                                    wSizedBox(10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: gCollectInput(
+                                          context: context,
+                                          viewModel: viewModel),
+                                    ),
+                                  ],
+                                ),
+                                hSizedBox(25),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: paymentInput(
+                                          context: context,
+                                          viewModel: viewModel,
+                                          enabled: index ==
+                                              viewModel
+                                                      .consignmentDetailResponseNew
+                                                      .items
+                                                      .length -
+                                                  1),
+                                    ),
+                                    wSizedBox(10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: gPaymentInput(
+                                          context: context,
+                                          viewModel: viewModel,
+                                          enabled: index ==
+                                              viewModel
+                                                      .consignmentDetailResponseNew
+                                                      .items
+                                                      .length -
+                                                  1),
+                                    ),
+                                  ],
+                                ),
+                                hSizedBox(25),
+                                remarksInput(
+                                    context: context, viewModel: viewModel),
+                                hSizedBox(25),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: index == 0
+                                            ? Container()
+                                            : SizedBox(
+                                                height: buttonHeight,
+                                                child: AppButton(
+                                                  onTap: () {
+                                                    updateReviewConsignmentData(
+                                                      viewModel: viewModel,
+                                                      index: index,
+                                                      goForward: false,
+                                                    );
+                                                  },
+                                                  background: AppColors
+                                                      .primaryColorShade5,
+                                                  buttonText: "Previous",
+                                                  borderColor: AppColors
+                                                      .primaryColorShade1,
+                                                ),
+                                              ),
+                                      ),
+                                      wSizedBox(20),
+                                      Expanded(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            height: buttonHeight,
+                                            child: AppButton(
+                                              buttonText: index ==
+                                                      viewModel
+                                                              .consignmentDetailResponseNew
+                                                              .items
+                                                              .length -
+                                                          1
+                                                  ? "Finish"
+                                                  : "Next",
+                                              onTap: index ==
+                                                      viewModel
+                                                              .consignmentDetailResponseNew
+                                                              .items
+                                                              .length -
+                                                          1
+                                                  ? () {
+                                                      // finish btn functionality
+                                                      updateReviewConsignmentData(
+                                                          viewModel: viewModel,
+                                                          index: index);
+                                                      // update api call
+                                                      viewModel
+                                                          .updateConsignment();
+                                                    }
+                                                  : () {
+                                                      // Next btn functionality
+                                                      updateReviewConsignmentData(
+                                                          viewModel: viewModel,
+                                                          index: index);
+                                                    },
+                                              borderColor:
+                                                  AppColors.primaryColorShade1,
+                                              background:
+                                                  AppColors.primaryColorShade5,
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -399,17 +407,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                     itemCount:
                         viewModel.consignmentDetailResponseNew.items.length,
                   ),
-                  Positioned(
-                    bottom: 5,
-                    left: 2,
-                    right: 2,
-                    child: DotsIndicator(
-                      controller: _controller,
-                      itemCount:
-                          viewModel.consignmentDetailResponseNew.items.length,
-                      color: AppColors.primaryColorShade1,
-                    ),
-                  )
+                  // Positioned(
+                  //   bottom: 5,
+                  //   left: 2,
+                  //   right: 2,
+                  //   child: DotsIndicator(
+                  //     controller: _controller,
+                  //     itemCount:
+                  //         viewModel.consignmentDetailResponseNew.items.length,
+                  //     color: AppColors.primaryColorShade1,
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -420,8 +428,10 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget hubTitle(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hint: "Title"),
+
+      style: getTextFormFieldStyle(),
+      decoration: getInputBorder(hint: "Item Title"),
+
       enabled: false,
       controller: hubTitleController,
       keyboardType: TextInputType.text,
@@ -438,7 +448,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget remarksInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: false,
       decoration: getInputBorder(hint: "Remarks"),
       controller: remarksController,
@@ -453,9 +463,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
 
   Widget dropInput({BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Crates To Drop"),
+      decoration: getInputBorder(hint: "Item Drop"),
       controller: dropController,
       focusNode: dropFocusNode,
       onFieldSubmitted: (_) {
@@ -469,22 +479,15 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
+
+
   Widget gDropInput(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
-      // onChanged: (newGDrop) {
-      //   // viewModel.consignmentDetailResponseNew.items[index].dropOffG = newGDrop;
-      //   print('before dropG: ${viewModel.consignmentDetailResponseNew.items[index].dropOffG}');
-      //   print('***************************************');
-      //   ConsignmentDetailsResponse temp = viewModel.consignmentDetailResponseNew.items[index];
-      //   viewModel.consignmentDetailResponseNew.items.removeAt(index);
-      //   temp = temp.copyWith(dropOffG: int.parse(newGDrop));
-      //   viewModel.consignmentDetailResponseNew.items.insert(index, temp);
-      //   print('after dropG: ${viewModel.consignmentDetailResponseNew.items[index].dropOffG}');
-      // },
+      style: getTextFormFieldStyle(),
+
       enabled: true,
-      decoration: getInputBorder(hint: "Crates Dropped"),
+      decoration: getInputBorder(hint: "Review Item Drop"),
       controller: gDropController,
       focusNode: gDropFocusNode,
       onFieldSubmitted: (_) {
@@ -508,9 +511,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget collectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Crates To Collect"),
+      decoration: getInputBorder(hint: "Item Collect"),
       controller: collectController,
       focusNode: collectFocusNode,
       onFieldSubmitted: (_) {
@@ -527,9 +530,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   Widget gCollectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: true,
-      decoration: getInputBorder(hint: "Crates Collected"),
+      decoration: getInputBorder(hint: "Review Item Collect"),
       controller: gCollectController,
       focusNode: gCollectFocusNode,
       onFieldSubmitted: (_) {
@@ -556,9 +559,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: enabled ? "" : "Payment To Receive"),
+      decoration: getInputBorder(hint: enabled ? "" : "Payment"),
       controller: paymentController,
       focusNode: paymentFocusNode,
       onFieldSubmitted: (_) {
@@ -578,9 +581,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool enabled,
   }) {
     return TextFormField(
-      style: AppTextStyles.appBarTitleStyle,
+      style: getTextFormFieldStyle(),
       enabled: !enabled,
-      decoration: getInputBorder(hint: enabled ? "" : "Payment Received"),
+      decoration: getInputBorder(hint: enabled ? "" : "Review Payment"),
       controller: gPaymentController,
       focusNode: gPaymentFocusNode,
       onFieldSubmitted: (_) {
@@ -667,41 +670,88 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return picked;
   }
 
+  // getInputBorder({@required String hint}) {
+  //   return InputDecoration(
+  //     alignLabelWithHint: true,
+  //     errorStyle: TextStyle(
+  //       fontSize: 14,
+  //     ),
+  //     labelText: hint,
+  //     helperStyle: TextStyle(
+  //       fontSize: 14,
+  //     ),
+  //     helperText: ' ',
+  //     labelStyle: TextStyle(color: AppColors.black, fontSize: 14),
+  //     fillColor: AppColors.primaryColorShade5,
+  //     focusedBorder: OutlineInputBorder(
+  //       borderRadius: BorderRadius.circular(5.0),
+  //       borderSide: BorderSide(
+  //         color: AppColors.primaryColorShade1,
+  //       ),
+  //     ),
+  //     disabledBorder: OutlineInputBorder(
+  //       borderRadius: BorderRadius.circular(5.0),
+  //       borderSide: BorderSide(
+  //         color: AppColors.primaryColorShade1,
+  //       ),
+  //     ),
+  //     enabledBorder: OutlineInputBorder(
+  //       borderRadius: BorderRadius.circular(5.0),
+  //       borderSide: BorderSide(
+  //         color: AppColors.primaryColorShade1,
+  //       ),
+  //     ),
+  //     errorBorder: OutlineInputBorder(
+  //       borderRadius: BorderRadius.circular(5.0),
+  //       borderSide: BorderSide(
+  //         color: AppColors.primaryColorShade1,
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  TextStyle getTextFormFieldStyle() {
+    return AppTextStyles.appBarTitleStyle.copyWith(
+        color: AppColors.primaryColorShade5,
+        fontSize: 16
+    );
+  }
+
   getInputBorder({@required String hint}) {
     return InputDecoration(
       alignLabelWithHint: true,
       errorStyle: TextStyle(
         fontSize: 14,
       ),
-      labelText: hint,
       helperStyle: TextStyle(
         fontSize: 14,
       ),
-      helperText: ' ',
-      labelStyle: TextStyle(color: AppColors.black, fontSize: 14),
-      fillColor: AppColors.primaryColorShade5,
+      labelText: hint,
+      labelStyle: TextStyle(color: AppColors.primaryColorShade5, fontSize: 14),
+      fillColor: AppColors.appScaffoldColor,
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(defaultBorder),
         borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
-        ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
+          color: AppColors.primaryColorShade5,
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(defaultBorder),
         borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
+          color: AppColors.primaryColorShade5,
+          // width: 2.0,
+        ),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultBorder),
+        borderSide: BorderSide(
+          color: AppColors.primaryColorShade5,
         ),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(defaultBorder),
         borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
+          color: AppColors.primaryColorShade5,
         ),
       ),
     );

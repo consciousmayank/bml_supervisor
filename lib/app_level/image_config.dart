@@ -51,3 +51,4 @@ final String phoneNumber = _imagePath + 'icon_profile_phone_number.png';
 final String profile = _imagePath + 'icon_profile_user.png';
 final String whatsAppIcon = _imagePath + 'whats_app_icon.png';
 final String drawerRupeeIcon = _imagePath + 'drawer_rupee_icon.png';
+final String consignmentListIcon = _imagePath + 'consignment_list_icon.png';

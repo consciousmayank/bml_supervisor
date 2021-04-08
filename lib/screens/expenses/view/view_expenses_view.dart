@@ -90,7 +90,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                     width: 20,
                   ),
                   onPressed: () {
-                    print('bottom sheet');
+                    // print('bottom sheet');
                     showModalBottomSheet(
                       isScrollControlled: true,
                       isDismissible: false,

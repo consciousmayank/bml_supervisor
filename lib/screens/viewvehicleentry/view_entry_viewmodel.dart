@@ -142,9 +142,5 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
       customData: tempList,
       variant: BottomSheetType.viewEntry,
     );
-
-    print('confirmationResponse confirmed: ${sheetResponse?.confirmed}');
-    print(
-        'confirmationResponse return Data: ${sheetResponse?.responseData.toString()}');
   }
 }
