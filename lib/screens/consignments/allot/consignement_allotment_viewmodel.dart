@@ -15,6 +15,14 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
+  double _totalWeight = 0.00;
+
+  double get totalWeight => _totalWeight;
+
+  set totalWeight(double value) {
+    _totalWeight = value;
+  }
+
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   bool _isHubTitleEdited = false,
@@ -184,6 +192,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
     consignmentRequest = CreateConsignmentRequest(
         itemUnit: itemUnit,
+        weight: this.totalWeight,
         vehicleId: validatedRegistrationNumber.registrationNumber,
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
@@ -199,6 +208,8 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
       collect: consignmentRequest.items.first.collect,
       payment: consignmentRequest.items.last.payment,
       title: consignmentTitle,
+      itemUnit: itemUnit,
+      weight: this.totalWeight,
     );
 
     List<Item> tempItems = consignmentRequest.items;

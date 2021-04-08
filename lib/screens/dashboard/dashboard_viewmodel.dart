@@ -91,7 +91,7 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     "View Entry",
     "Add Expense",
     "View Expenses",
-    "Allot Consignments",
+    "Create Consignments",
     "View Routes",
     "Review Consignments",
     "Payments",
@@ -147,13 +147,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
           (value) => reloadPage(),
         );
   }
+
   void onListConsignmentTileClick() {
     navigationService.back();
     navigationService.navigateTo(consignmentListByDatePageRoute).then(
           (value) => reloadPage(),
         );
   }
-
 
   void onReviewConsignmentsDrawerTileClicked() {
     navigationService.back();

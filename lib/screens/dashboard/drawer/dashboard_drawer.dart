@@ -118,7 +118,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               drawerList(
                 imageName: consignmentIcon,
-                text: "Consignments",
+                text: "Consignment",
                 onTap: () {
                   widget.dashBoardScreenViewModel
                       .changeConsignmentGroupVisibility();
@@ -140,17 +140,28 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                               onTap: () {
                                 widget.dashBoardScreenViewModel
                                     .onAllotConsignmentsDrawerTileClicked();
+                                widget.dashBoardScreenViewModel
+                                    .changeConsignmentGroupVisibility();
+                              },
+                            ),
+                            drawerList(
+                              imageName: consignmentListIcon,
+                              text: "List",
+                              onTap: () {
+                                widget.dashBoardScreenViewModel
+                                    .onListConsignmentTileClick();
+                                widget.dashBoardScreenViewModel
+                                    .changeConsignmentGroupVisibility();
                               },
                             ),
                             drawerList(
                               imageName: review_consig_Icon,
                               text: "Review",
                               onTap: () {
-                                // widget.dashBoardScreenViewModel
-                                //     .onReviewConsignmentsDrawerTileClicked();
-
                                 widget.dashBoardScreenViewModel
                                     .onPendingConsignmentsListDrawerTileClicked();
+                                widget.dashBoardScreenViewModel
+                                    .changeConsignmentGroupVisibility();
                               },
                             ),
                           ],

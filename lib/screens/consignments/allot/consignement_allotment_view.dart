@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
@@ -15,7 +14,6 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -37,6 +35,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
+
+  final TextEditingController totalWeightController = TextEditingController();
+  final FocusNode totalWeightFocusNode = FocusNode();
 
   final TextEditingController consignmentTitleController =
       TextEditingController();
@@ -75,7 +76,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: true,
-              title: Text("Allot Consignments",
+              title: Text("Create Consignment",
                   style: AppTextStyles.appBarTitleStyle),
             ),
             body: viewModel.isBusy
@@ -152,7 +153,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel.hubsList.length < 1
               ? Container()
               : registrationSelector(context: context, viewModel: viewModel),
-
           viewModel.hubsList.length < 1
               ? Container()
               : consignmentTextField(viewModel: viewModel),
@@ -166,33 +166,18 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   hint: "Item Unit",
                   onOptionSelect: (selectedValue) {
                     viewModel.itemUnit = selectedValue;
-                    // if (viewModel.selectedSearchVehicle != null &&
-                    //     viewModel.entryDate != null) {
-                    //   viewModel.getExpensesList();
-                    // }
+                    totalWeightFocusNode.requestFocus();
                   },
                   optionList: selectItemUnit,
                 ),
-
+          viewModel.validatedRegistrationNumber != null
+              ? totalWeightTextField(viewModel)
+              : Container(),
           viewModel.validatedRegistrationNumber == null
               ? Container()
               : SizedBox(
                   height: createConsignmentCardHeight,
-                  child: Stack(
-                    children: [
-                      _hubsPageView(viewModel),
-                      Positioned(
-                        bottom: 6,
-                        left: 2,
-                        right: 2,
-                        child: DotsIndicator(
-                          controller: _controller,
-                          itemCount: viewModel.hubsList.length,
-                          color: AppColors.primaryColorShade5,
-                        ),
-                      )
-                    ],
-                  ),
+                  child: _hubsPageView(viewModel),
                 ),
 
           // viewModel.validatedRegistrationNumber == null
@@ -278,48 +263,39 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  "# ${index + 1}",
-                                  style: AppTextStyles.lato20PrimaryShade5
-                                      .copyWith(fontSize: 14),
-                                ),
-                                hSizedBox(10),
-                                Text(
-                                  viewModel.hubsList[index].title.toUpperCase(),
-                                  style: AppTextStyles.latoBold16White.copyWith(
-                                    fontSize: 18,
-                                    color: AppColors.primaryColorShade5,
-                                    // fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                hSizedBox(10),
-                                Text(
-                                  "${viewModel.hubsList[index].contactPerson}",
-                                  style: AppTextStyles.latoMedium14Black
-                                      .copyWith(
-                                          color: AppColors.primaryColorShade5,
-                                          fontSize: 15),
-                                ),
-                                hSizedBox(10),
-                                Text(
-                                  viewModel.hubsList[index].city,
-                                  style: AppTextStyles.latoMedium14Black
-                                      .copyWith(
-                                          color: AppColors.primaryColorShade5),
-                                ),
-                              ],
-                            ),
+                        Chip(
+                          label: Text(
+                            "# ${index + 1}",
+                            style: AppTextStyles.lato20PrimaryShade5
+                                .copyWith(fontSize: 14, color: AppColors.white),
+                          ),
+                          backgroundColor: AppColors.primaryColorShade5,
+                        ),
+                        hSizedBox(10),
+                        Text(
+                          viewModel.hubsList[index].title.toUpperCase(),
+                          style: AppTextStyles.latoBold16White.copyWith(
+                            fontSize: 18,
+                            color: AppColors.primaryColorShade5,
+                            // fontWeight: FontWeight.bold
                           ),
                         ),
+                        hSizedBox(10),
+                        Text(
+                          "( ${viewModel.hubsList[index].contactPerson} )",
+                          style: AppTextStyles.latoMedium14Black.copyWith(
+                              color: AppColors.primaryColorShade5,
+                              fontSize: 15),
+                        ),
+                        hSizedBox(10),
+                        Text(
+                          viewModel.hubsList[index].city,
+                          style: AppTextStyles.latoMedium14Black
+                              .copyWith(color: AppColors.primaryColorShade5),
+                        ),
+                        hSizedBox(25),
                         hubTitle(
                             context: context,
                             viewModel: viewModel,
@@ -595,6 +571,18 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         });
   }
 
+  totalWeightTextField(ConsignmentAllotmentViewModel viewModel) {
+    return appTextFormField(
+        enabled: true,
+        controller: totalWeightController,
+        focusNode: totalWeightFocusNode,
+        hintText: totalWeightHint,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        onTextChange: (String value) {
+          viewModel.totalWeight = double.parse(value);
+        });
+  }
+
   consignmentTextField({ConsignmentAllotmentViewModel viewModel}) {
     return appTextFormField(
         enabled: true,
@@ -763,6 +751,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     return TextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Remarks"),
+      // maxLines: 5,
       enabled: true,
       controller: remarksController,
       focusNode: remarksFocusNode,
@@ -937,6 +926,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       helperStyle: TextStyle(
         fontSize: 14,
       ),
+      // contentPadding: EdgeInsets.all(16),
       labelText: hintText,
       labelStyle: TextStyle(color: AppColors.primaryColorShade5, fontSize: 14),
       fillColor: AppColors.appScaffoldColor,

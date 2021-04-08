@@ -72,7 +72,7 @@ class _CreateConsignmentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.primaryColorShade5,
+      backgroundColor: AppColors.appScaffoldColor,
       child: ConfirmConsignmentView(
         selectedClient: selectedClient,
         consignmentRequest: consignmentRequest,
