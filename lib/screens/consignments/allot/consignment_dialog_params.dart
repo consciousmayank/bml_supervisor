@@ -9,11 +9,13 @@ class ConsignmentDialogParams {
   final SearchByRegNoResponse validatedRegistrationNumber;
   final GetClientsResponse selectedClient;
   final FetchRoutesResponse selectedRoute;
+  final String  itemUnit;
 
   ConsignmentDialogParams({
     @required this.consignmentRequest,
     @required this.validatedRegistrationNumber,
     @required this.selectedClient,
     @required this.selectedRoute,
+    @required this.itemUnit,
   });
 }

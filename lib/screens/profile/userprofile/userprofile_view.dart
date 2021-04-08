@@ -31,6 +31,7 @@ class _UserProfileViewState extends State<UserProfileView> {
         builder: (context, viewModel, child) => SafeArea(
               bottom: true,
               child: Scaffold(
+                // backgroundColor: AppColors.white,
                 appBar: AppBar(
                   title: Text(
                     'Profile',
@@ -38,8 +39,10 @@ class _UserProfileViewState extends State<UserProfileView> {
                   ),
                   centerTitle: true,
                 ),
-                body: BodyWidget(
-                  userProfileViewModel: viewModel,
+                body: Center(
+                  child: BodyWidget(
+                    userProfileViewModel: viewModel,
+                  ),
                 ),
               ),
             ),
@@ -76,8 +79,8 @@ class _BodyWidgetState extends State<BodyWidget> {
               ),
             )
           : Card(
-            color: AppColors.white,
-            elevation: defaultElevation,
+            color: AppColors.appScaffoldColor,
+            // elevation: defaultElevation,
             shape: getCardShape(),
             child: SingleChildScrollView(
               child: Column(
@@ -118,7 +121,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                   ),
                   hSizedBox(8),
                   Text(
-                    MyPreferences().getUserLoggedIn().role,
+                    '( ${MyPreferences().getUserLoggedIn().role} )',
                     style: AppTextStyles.latoBold18PrimaryShade5
                         .copyWith(fontSize: 10),
                   ),

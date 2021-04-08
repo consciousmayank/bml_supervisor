@@ -177,6 +177,10 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       viewModel.getConsolidatedData(outerIndex).length,
       (index) => SingleConsignmentItem(
         args: SingleConsignmentItemArguments(
+          vehicleId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .vehicleId
+              .toString(),
           drop: viewModel
               .getConsolidatedData(outerIndex)[index]
               .dropOff

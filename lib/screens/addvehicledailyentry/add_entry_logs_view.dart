@@ -174,7 +174,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
           child: child,
         );
       },
-      helpText: 'Registration Expires on',
+      helpText: 'Select Date',
       errorFormatText: 'Enter valid date',
       errorInvalidText: 'Enter date in valid range',
       fieldLabelText: 'Expiration Date',

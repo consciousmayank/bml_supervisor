@@ -215,7 +215,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                       : Container(),
 
                                   // selectDuration(viewModel: viewModel),
-                                  /// I am here
                                   ///Bar chart
                                   BarChartView(),
                                   Padding(

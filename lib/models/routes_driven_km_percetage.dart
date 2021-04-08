@@ -21,6 +21,8 @@ class RoutesDrivenKmPercentage {
     this.trips,
     this.color = const Color(0xff68cfc6),
     this.routeTitle,
+    this.eYear,
+    this.eMonth,
   });
 
   int drivenKm;
@@ -29,6 +31,8 @@ class RoutesDrivenKmPercentage {
   String entryDate;
   String routeTitle;
   int trips;
+  int eMonth;
+  int eYear;
   final Color color;
 
   factory RoutesDrivenKmPercentage.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +43,8 @@ class RoutesDrivenKmPercentage {
         entryDate: json["entryDate"],
         trips: json["trips"],
         routeTitle: json["routeTitle"],
+        eYear: json["eYear"],
+        eMonth: json["eMonth"],
       );
 
   RoutesDrivenKmPercentage copyWith({
@@ -49,6 +55,8 @@ class RoutesDrivenKmPercentage {
     int trips,
     Color color,
     String routeTitle,
+    int eMonth,
+    int eYear,
   }) =>
       RoutesDrivenKmPercentage(
         routeId: routeId ?? this.routeId,
@@ -58,6 +66,8 @@ class RoutesDrivenKmPercentage {
         trips: trips ?? this.trips,
         color: color ?? this.color,
         routeTitle: routeTitle ?? this.routeTitle,
+        eMonth: eMonth ?? this.eMonth,
+        eYear: eYear ?? this.eYear,
       );
 
   Map<String, dynamic> toJson() => {
@@ -67,5 +77,7 @@ class RoutesDrivenKmPercentage {
         "entryDate": entryDate,
         "trips": trips,
         "routeTitle": routeTitle,
+        "eMonth": eMonth,
+        "eYear": eYear,
       };
 }

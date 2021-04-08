@@ -14,6 +14,7 @@ class ConfirmConsignmentView extends StatelessWidget {
   final SearchByRegNoResponse validatedRegistrationNumber;
   final GetClientsResponse selectedClient;
   final FetchRoutesResponse selectedRoute;
+  final String itemUnit;
   final Function onSubmitClicked;
   final bool isShowSubmitButton;
 
@@ -24,6 +25,7 @@ class ConfirmConsignmentView extends StatelessWidget {
     @required this.selectedClient,
     @required this.selectedRoute,
     @required this.onSubmitClicked,
+    @required this.itemUnit,
     this.isShowSubmitButton = true,
   }) : super(key: key);
 
@@ -37,60 +39,136 @@ class ConfirmConsignmentView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: AppTextStyles.latoMedium14Black,
-                children: <TextSpan>[
-                  TextSpan(text: "Consignment for "),
-                  TextSpan(
-                    text: '${selectedClient.clientId} ',
-                    style: AppTextStyles.latoBold12Black.copyWith(
-                      color: AppColors.black,
-                    ),
-                  ),
-                  TextSpan(text: 'for'),
-                  TextSpan(
-                      text: ' ${selectedRoute.routeTitle} ',
-                      style: AppTextStyles.latoBold12Black.copyWith(
-                        color: AppColors.black,
-                      )),
-                  TextSpan(text: ' route dated,  '),
-                  TextSpan(
-                    text: '${consignmentRequest.entryDate}.',
-                    style: AppTextStyles.latoBold12Black.copyWith(
-                      color: AppColors.black,
-                    ),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                "SUMMARY",
+                style: AppTextStyles.latoBold16White
+                    .copyWith(color: AppColors.primaryColorShade5),
               ),
             ),
-            hSizedBox(20),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: AppTextStyles.latoMedium14Black,
-                children: <TextSpan>[
-                  TextSpan(text: "The Vehicle selected is "),
-                  TextSpan(
-                    text: '${validatedRegistrationNumber.registrationNumber} ',
-                    style: AppTextStyles.latoBold12Black.copyWith(
-                      color: AppColors.black,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Client'),
+                      Text(selectedClient.clientId),
+                    ],
                   ),
-                  TextSpan(text: ', driven by '),
-                  TextSpan(
-                    text: ' ${validatedRegistrationNumber.ownerName} ',
-                    style: AppTextStyles.latoBold12Black.copyWith(
-                      color: AppColors.black,
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('Date'),
+                      Text(consignmentRequest.entryDate),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Route'),
+                      Text(consignmentRequest.routeTitle),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('Vehicle'),
+                      Text(consignmentRequest.vehicleId),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text('Items ($itemUnit)'),
+                ),
+              ],
+            ),
+            // RichText(
+            //   textAlign: TextAlign.center,
+            //   text: TextSpan(
+            //     style: AppTextStyles.latoMedium14Black,
+            //     children: <TextSpan>[
+            //       TextSpan(text: "Consignment for "),
+            //       TextSpan(
+            //         text: '${selectedClient.clientId} ',
+            //         style: AppTextStyles.latoBold12Black.copyWith(
+            //           color: AppColors.black,
+            //         ),
+            //       ),
+            //       TextSpan(text: 'for'),
+            //       TextSpan(
+            //           text: ' ${selectedRoute.routeTitle} ',
+            //           style: AppTextStyles.latoBold12Black.copyWith(
+            //             color: AppColors.black,
+            //           )),
+            //       TextSpan(text: ' route dated,  '),
+            //       TextSpan(
+            //         text: '${consignmentRequest.entryDate}.',
+            //         style: AppTextStyles.latoBold12Black.copyWith(
+            //           color: AppColors.black,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // hSizedBox(20),
+            // RichText(
+            //   textAlign: TextAlign.center,
+            //   text: TextSpan(
+            //     style: AppTextStyles.latoMedium14Black,
+            //     children: <TextSpan>[
+            //       TextSpan(text: "The Vehicle selected is "),
+            //       TextSpan(
+            //         text: '${validatedRegistrationNumber.registrationNumber} ',
+            //         style: AppTextStyles.latoBold12Black.copyWith(
+            //           color: AppColors.black,
+            //         ),
+            //       ),
+            //       TextSpan(text: ', driven by '),
+            //       TextSpan(
+            //         text: ' ${validatedRegistrationNumber.ownerName} ',
+            //         style: AppTextStyles.latoBold12Black.copyWith(
+            //           color: AppColors.black,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             hSizedBox(10),
-            Text(
-              "Consignment Items Details",
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Consignment Items Details",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.latoBold16White
+                      .copyWith(color: AppColors.primaryColorShade5),
+                ),
+              ],
             ),
             hSizedBox(10),
             Expanded(
