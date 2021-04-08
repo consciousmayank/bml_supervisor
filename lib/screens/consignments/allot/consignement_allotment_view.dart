@@ -1,7 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/enums/dialog_type.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
@@ -391,10 +391,12 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                                           message:
                                                               "Please Select Item Unit");
                                                 } else {
-                                                  locator<DialogService>()
-                                                      .showCustomDialog(
-                                                    variant: DialogType
-                                                        .CREATE_CONSIGNMENT,
+                                                  locator<BottomSheetService>()
+                                                      .showCustomSheet(
+                                                    isScrollControlled: true,
+                                                    barrierDismissible: true,
+                                                    variant: BottomSheetType
+                                                        .createConsignmentSummary,
                                                     // Which builder you'd like to call that was assigned in the builders function above.
                                                     customData:
                                                         ConsignmentDialogParams(
