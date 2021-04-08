@@ -323,6 +323,13 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, fatherNameFocusNode, mobileNumberFocusNode);
       },
+      validator: (value) {
+        if (value.isEmpty) {
+          return textRequired;
+        } else {
+          return null;
+        }
+      },
     );
   }
 

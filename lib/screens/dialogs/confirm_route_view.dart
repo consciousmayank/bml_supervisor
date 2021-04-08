@@ -62,35 +62,38 @@ class ConfirmRouteView extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(4),
                   child: Card(
                       color: AppColors.white,
                       elevation: 4,
                       shape: getCardShape(),
-                      child: Column(
-                        children: [
-                          buildHubDetails(
-                            label: "Sequence",
-                            value: routeRequest.hubs[index].sequence,
-                          ),
-                          hSizedBox(10),
-                          buildHubDetails(
-                            label: "Hub ID",
-                            value: routeRequest.hubs[index].hub,
-                          ),
-                          hSizedBox(10),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            buildHubDetails(
+                              label: "Sequence",
+                              value: routeRequest.hubs[index].sequence,
+                            ),
+                            hSizedBox(5),
+                            buildHubDetails(
+                              label: "Hub ID",
+                              value: routeRequest.hubs[index].hub,
+                            ),
+                            hSizedBox(5),
 
-                          buildHubDetails(
-                            label: "Kms",
-                            value: routeRequest.hubs[index].kms,
-                          ),
-                          hSizedBox(10),
-                          buildHubDetails(
-                            label: "Flag",
-                            value: routeRequest.hubs[index].flag,
-                          ),
-                          // hSizedBox(10),
-                        ],
+                            buildHubDetails(
+                              label: "Kms",
+                              value: routeRequest.hubs[index].kms,
+                            ),
+                            hSizedBox(5),
+                            buildHubDetails(
+                              label: "Flag",
+                              value: routeRequest.hubs[index].flag,
+                            ),
+                            // hSizedBox(10),
+                          ],
+                        ),
                       )),
                 );
               },
@@ -167,7 +170,7 @@ class ConfirmRouteView extends StatelessWidget {
                   label,
                   style: AppTextStyles.whiteRegular,
                 ),
-          value is String
+          value == null
               ? Text('NA', style: AppTextStyles.whiteRegular)
               : Text(value.toString(), style: AppTextStyles.whiteRegular),
         ],
