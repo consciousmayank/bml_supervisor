@@ -57,6 +57,7 @@ const String vehicleFuelTypeHint = "Select Fuel Type";
 const String vehicleEmissionTypeHint = "Select Emmision Type";
 const String vehicleSeatingCapacityHint = "Select Vehicle Seating Capacity";
 const String drRegNoHint = "Vehicle Number";
+const String totalWeightHint = "Total Weight (Kg)";
 const String consignmentTitleHint = "Enter Consignment Title";
 const String searchPageTitleHint = "Enter Registration Number";
 const String fuelMeterReadingError =
@@ -182,7 +183,9 @@ const List<String> selectDurationList = [
 ];
 const List<String> selectItemUnit = [
   "Crate",
-  "Kilogram",
+  "Docket",
+  "Carton",
+  "Pieces",
 ];
 
 const String selectDurationTabWidgetTitle = 'Select Duration';

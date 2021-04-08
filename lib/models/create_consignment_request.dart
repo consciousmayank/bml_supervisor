@@ -17,6 +17,7 @@ class CreateConsignmentRequest {
     this.title = 'NA',
     this.routeTitle,
     this.items,
+    this.weight,
   });
 
   final String clientId;
@@ -30,32 +31,37 @@ class CreateConsignmentRequest {
   final double payment;
   final List<Item> items;
   final String itemUnit;
+  final double weight;
 
-  CreateConsignmentRequest copyWith(
-          {int id,
-          String clientId,
-          int routeId,
-          dynamic vehicleId,
-          String entryDate,
-          String title,
-          String routeTitle,
-          List<Item> items,
-          final int dropOff,
-          final int collect,
-          final double payment,
-          final String itemUnit}) =>
+  CreateConsignmentRequest copyWith({
+    int id,
+    String clientId,
+    int routeId,
+    dynamic vehicleId,
+    String entryDate,
+    String title,
+    String routeTitle,
+    List<Item> items,
+    final int dropOff,
+    final int collect,
+    final double payment,
+    final String itemUnit,
+    final double weight,
+  }) =>
       CreateConsignmentRequest(
-          clientId: clientId ?? this.clientId,
-          routeId: routeId ?? this.routeId,
-          vehicleId: vehicleId ?? this.vehicleId,
-          entryDate: entryDate ?? this.entryDate,
-          title: title ?? this.title,
-          routeTitle: routeTitle ?? this.routeTitle,
-          items: items ?? this.items,
-          collect: collect ?? this.collect,
-          payment: payment ?? this.payment,
-          dropOff: dropOff ?? this.dropOff,
-          itemUnit: itemUnit ?? this.itemUnit);
+        clientId: clientId ?? this.clientId,
+        routeId: routeId ?? this.routeId,
+        vehicleId: vehicleId ?? this.vehicleId,
+        entryDate: entryDate ?? this.entryDate,
+        title: title ?? this.title,
+        routeTitle: routeTitle ?? this.routeTitle,
+        items: items ?? this.items,
+        collect: collect ?? this.collect,
+        payment: payment ?? this.payment,
+        dropOff: dropOff ?? this.dropOff,
+        itemUnit: itemUnit ?? this.itemUnit,
+        weight: weight ?? this.weight,
+      );
 
   factory CreateConsignmentRequest.fromJson(String str) =>
       CreateConsignmentRequest.fromMap(json.decode(str));
@@ -74,6 +80,7 @@ class CreateConsignmentRequest {
         collect: json['collect'],
         payment: json['payment'],
         itemUnit: json['itemUnit'],
+        weight: json['weight'],
         items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
       );
 
@@ -88,6 +95,7 @@ class CreateConsignmentRequest {
         "title": title,
         "routeTitle": routeTitle,
         "itemUnit": itemUnit,
+        "weight": weight,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }

@@ -1,1 +1,6 @@
-enum BottomSheetType { floating, viewEntry, consignmentList }
+enum BottomSheetType {
+  floating,
+  viewEntry,
+  consignmentList,
+  createConsignmentSummary
+}
