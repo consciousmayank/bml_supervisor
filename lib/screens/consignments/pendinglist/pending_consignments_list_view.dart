@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -28,7 +29,7 @@ class _PendingConsignmentsListViewState
               child: Scaffold(
                 appBar: AppBar(
                   title: Text(
-                    'Pending Consignments',
+                    'Pending Consignments - ${MyPreferences().getSelectedClient().clientId}',
                     style: AppTextStyles.appBarTitleStyle,
                   ),
                   centerTitle: true,
@@ -134,6 +135,10 @@ class __MainBodyState extends State<_MainBody> {
           drop: viewModel
               .getConsolidatedData(outerIndex)[index]
               .dropOff
+              .toString(),
+          vehicleId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .vehicleId
               .toString(),
           routeTitle: viewModel
               .getConsolidatedData(outerIndex)[index]

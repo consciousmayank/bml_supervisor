@@ -29,16 +29,16 @@ dependencies:
   characters: ^1.0.0
   dio: ^3.0.8
   font_awesome_flutter: ^8.10.0
-  get_it: ^4.0.2
+  get_it: ^6.0.0
   google_fonts: ^1.1.0
   http: ^0.12.2
   intl: ^0.16.1
   observable_ish: ^2.1.4
-  provider: ^4.0.1
+  provider: ^5.0.0
   responsive_builder: ^0.3.0
   shared_preferences: ^0.5.7
-  stacked: ^1.7.5
-  stacked_services: ^0.6.2
+  stacked: ^2.0.2
+  stacked_services: ^0.8.2
   string_validator: ^0.1.4
   flutter_svg: ^0.19.1
   timeline_list: ^0.0.3

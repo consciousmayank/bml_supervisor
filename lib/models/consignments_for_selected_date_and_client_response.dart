@@ -2,56 +2,57 @@
 //
 //     final consignmentsForSelectedDateAndClientResponse = consignmentsForSelectedDateAndClientResponseFromMap(jsonString);
 
-import 'dart:convert';
-
-List<ConsignmentsForSelectedDateAndClientResponse>
-consignmentsForSelectedDateAndClientResponseFromMap(String str) =>
-    List<ConsignmentsForSelectedDateAndClientResponse>.from(json
-        .decode(str)
-        .map((x) =>
-        ConsignmentsForSelectedDateAndClientResponse.fromMap(x)));
-
-String consignmentsForSelectedDateAndClientResponseToMap(
-    List<ConsignmentsForSelectedDateAndClientResponse> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
+//
+// List<ConsignmentsForSelectedDateAndClientResponse>
+//     consignmentsForSelectedDateAndClientResponseFromMap(String str) =>
+//         List<ConsignmentsForSelectedDateAndClientResponse>.from(json
+//             .decode(str)
+//             .map((x) =>
+//                 ConsignmentsForSelectedDateAndClientResponse.fromMap(x)));
+//
+// String consignmentsForSelectedDateAndClientResponseToMap(
+//         List<ConsignmentsForSelectedDateAndClientResponse> data) =>
+//     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
 class ConsignmentsForSelectedDateAndClientResponse {
-  ConsignmentsForSelectedDateAndClientResponse(
-      {this.routeTitle,
-        this.consigmentId,
-        this.routeId,
-        this.vehicleId,
-        this.payment,
-        this.collect,
-        this.dropOff});
+  ConsignmentsForSelectedDateAndClientResponse({
+    this.entryDate,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.routeTitle,
+    this.consigmentId,
+    this.routeId,
+    this.vehicleId,
+  });
 
-  String routeTitle;
-  int consigmentId;
-  int routeId;
-  int dropOff;
-  int collect;
-  double payment;
-  String vehicleId;
+  final String routeTitle, entryDate;
+  final int consigmentId;
+  final int routeId, dropOff, collect;
+  final double payment;
+  final String vehicleId;
 
   factory ConsignmentsForSelectedDateAndClientResponse.fromMap(
-      Map<String, dynamic> json) =>
+          Map<String, dynamic> json) =>
       ConsignmentsForSelectedDateAndClientResponse(
         routeTitle: json["routeTitle"],
         consigmentId: json["consigmentId"],
         routeId: json["routeId"],
         vehicleId: json["vehicleId"],
-        collect: json["collect"],
+        entryDate: json["entryDate"],
         dropOff: json["dropOff"],
+        collect: json["collect"],
         payment: json["payment"],
       );
 
   Map<String, dynamic> toMap() => {
-    "routeTitle": routeTitle,
-    "consigmentId": consigmentId,
-    "routeId": routeId,
-    "vehicleId": vehicleId,
-    "collect": collect,
-    "dropOff": dropOff,
-    "payment": payment,
-  };
+        "routeTitle": routeTitle,
+        "consigmentId": consigmentId,
+        "routeId": routeId,
+        "vehicleId": vehicleId,
+        "entryDate": entryDate,
+        "dropOff": dropOff,
+        "collect": collect,
+        "payment": payment,
+      };
 }
