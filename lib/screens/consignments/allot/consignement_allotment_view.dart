@@ -11,12 +11,10 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -105,47 +103,21 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           viewModel.consignmentsList.length > 0
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: ClickableWidget(
-                    childColor: AppColors.white,
-                    borderRadius: getBorderRadius(),
-                    onTap: () {
-                      viewModel.consignmentsListBottomSheet();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        children: [
-                          IconBlueBackground(
-                            iconName: consignmentIcon,
-                          ),
-                          wSizedBox(20),
-                          Expanded(
-                            child: Text(
-                              '${viewModel.consignmentsList.length} ${getConsignment(viewModel.consignmentsList.length)} for ${getDateString(viewModel.entryDate)} date',
-                              style: AppTextStyles.latoMedium12Black.copyWith(
-                                  color: AppColors.primaryColorShade5,
-                                  fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          viewModel.consignmentsListBottomSheet();
+                        },
+                        child: Text(
+                          'No. of ${getConsignment(viewModel.consignmentsList.length)} (${viewModel.consignmentsList.length}) ',
+                          style: AppTextStyles.hyperLinkStyle,
+                        ),
+                      )
+                    ],
                   ),
                 )
-
-              // Container(
-              //         height: 50,
-              //         decoration: BoxDecoration(
-              //           color: AppColors.primaryColorShade5,
-              //           borderRadius: BorderRadius.all(
-              //             Radius.circular(defaultBorder),
-              //           ),
-              //         ),
-              //         child: Center(
-              //           child: Text(
-              //               '${viewModel.consignmentsList.length} consignments for ${getDateString(viewModel.entryDate)} date'),
-              //         ),
-              //       )
               : Container(),
 
           viewModel.entryDate == null
@@ -185,13 +157,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
               ? Container()
               : consignmentTextField(viewModel: viewModel),
 
-          viewModel.validatedRegistrationNumber == null
-              ? Container()
-              : Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                      "${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model}"),
-                ),
           viewModel.validatedRegistrationNumber == null
               ? Container()
               : AppDropDown(
@@ -619,6 +584,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   registrationNumberTextField(ConsignmentAllotmentViewModel viewModel) {
     return appTextFormField(
+        vehicleOwnerName: viewModel.validatedRegistrationNumber == null
+            ? null
+            : "(${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model})",
         enabled: true,
         controller: selectedRegNoController,
         focusNode: selectedRegNoFocusNode,
@@ -674,8 +642,11 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
       enabled: false,
       controller: selectedDateController,
       focusNode: selectedDateFocusNode,
-      hintText: "Entry Date",
-      labelText: "Entry Date",
+      inputDecoration: InputDecoration(
+          contentPadding:
+              EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+          hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
+          hintText: 'Entry Date'),
       keyboardType: TextInputType.text,
     );
   }
@@ -1008,9 +979,9 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   getConsignment(int length) {
     if (length == 1) {
-      return 'consignment';
+      return 'Consignment';
     } else {
-      return 'consignments';
+      return 'Consignments';
     }
   }
 }

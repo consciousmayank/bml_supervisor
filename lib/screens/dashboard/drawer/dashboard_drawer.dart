@@ -118,22 +118,45 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
               ),
               drawerList(
                 imageName: consignmentIcon,
-                text: "Allot Consignment",
+                text: "Consignments",
                 onTap: () {
                   widget.dashBoardScreenViewModel
-                      .onAllotConsignmentsDrawerTileClicked();
+                      .changeConsignmentGroupVisibility();
                 },
               ),
-              drawerList(
-                imageName: review_consig_Icon,
-                text: "Review Consignment",
-                onTap: () {
-                  // widget.dashBoardScreenViewModel
-                  //     .onReviewConsignmentsDrawerTileClicked();
+              AnimatedOpacity(
+                duration: Duration(milliseconds: 800),
+                opacity: widget.dashBoardScreenViewModel.openConsignmentGroup
+                    ? 1.0
+                    : 0.0,
+                child: widget.dashBoardScreenViewModel.openConsignmentGroup
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: Column(
+                          children: [
+                            drawerList(
+                              imageName: consignmentIcon,
+                              text: "Create",
+                              onTap: () {
+                                widget.dashBoardScreenViewModel
+                                    .onAllotConsignmentsDrawerTileClicked();
+                              },
+                            ),
+                            drawerList(
+                              imageName: review_consig_Icon,
+                              text: "Review",
+                              onTap: () {
+                                // widget.dashBoardScreenViewModel
+                                //     .onReviewConsignmentsDrawerTileClicked();
 
-                  widget.dashBoardScreenViewModel
-                      .onPendingConsignmentsListDrawerTileClicked();
-                },
+                                widget.dashBoardScreenViewModel
+                                    .onPendingConsignmentsListDrawerTileClicked();
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
               ),
               drawerList(
                 imageName: routesIcon,

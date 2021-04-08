@@ -13,6 +13,8 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
+  bool openConsignmentGroup = false;
+
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
 
   PreferencesSavedUser _savedUser;
@@ -256,5 +258,10 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
     navigationService.navigateTo(viewExpensesPageRoute).then(
           (value) => reloadPage(),
         );
+  }
+
+  void changeConsignmentGroupVisibility() {
+    openConsignmentGroup = !openConsignmentGroup;
+    notifyListeners();
   }
 }

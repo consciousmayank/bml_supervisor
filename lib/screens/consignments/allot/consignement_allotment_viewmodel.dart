@@ -273,7 +273,6 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   getConsignmentListWithDate() async {
     setBusy(true);
     consignmentsList = [];
-    print(getDateString(entryDate));
     List<ConsignmentsForSelectedDateAndClientResponse> response =
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
             date: getDateString(entryDate), clientId: selectedClient.clientId);
@@ -286,6 +285,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
   Future consignmentsListBottomSheet() async {
     var sheetResponse = await bottomSheetService.showCustomSheet(
+      isScrollControlled: true,
       barrierDismissible: true,
       customData: consignmentsList,
       variant: BottomSheetType.consignmentList,

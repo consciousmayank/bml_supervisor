@@ -38,10 +38,21 @@ class SingleConsignmentItem extends StatelessWidget {
                     ),
                     backgroundColor: AppColors.primaryColorShade5,
                   ),
-                  Text(
-                    "(R# ${args.routeId} ${args.routeTitle})",
-                    style: AppTextStyles.latoMedium14Black.copyWith(
-                        fontSize: 14, color: AppColors.primaryColorShade5),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "(R# ${args.routeId} ${args.routeTitle})",
+                        style: AppTextStyles.latoMedium14Black.copyWith(
+                            fontSize: 14, color: AppColors.primaryColorShade5),
+                      ),
+                      Text(
+                        "${args.vehicleId}",
+                        style: AppTextStyles.latoMedium14Black.copyWith(
+                            fontSize: 12, color: AppColors.primaryColorShade5),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -78,7 +89,13 @@ class SingleConsignmentItem extends StatelessWidget {
 }
 
 class SingleConsignmentItemArguments {
-  final String consignmentId, routeId, routeTitle, collect, drop, payment;
+  final String consignmentId,
+      routeId,
+      routeTitle,
+      collect,
+      drop,
+      payment,
+      vehicleId;
   final Function onTap;
 
   SingleConsignmentItemArguments({
@@ -89,5 +106,6 @@ class SingleConsignmentItemArguments {
     @required this.collect,
     @required this.drop,
     @required this.payment,
+    @required this.vehicleId,
   });
 }

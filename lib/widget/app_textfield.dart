@@ -1,8 +1,10 @@
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Widget appTextFormField({
+  String vehicleOwnerName, //required only in create consignment
   bool showRupeesSymbol = false,
   TextEditingController controller,
   FocusNode focusNode,
@@ -27,12 +29,28 @@ Widget appTextFormField({
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      hintText!=null
-          ? Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Text(hintText ?? "Null"),
-            )
-          : Container(),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          hintText != null
+              ? Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(hintText ?? "Null"),
+                )
+              : Container(),
+          vehicleOwnerName != null
+              ? Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    vehicleOwnerName,
+                    style: AppTextStyles.latoMedium16Primary5
+                        .copyWith(fontSize: 10, color: Colors.green),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
       Card(
         elevation: 2,
         child: Padding(
