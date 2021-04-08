@@ -171,7 +171,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                           ),
                                         )
                                             .then((value) {
-                                          print(value);
+                                          // print(value);
                                           if (widget.userProfileViewModel
                                               .isEmailUpdate) {
                                             widget.userProfileViewModel

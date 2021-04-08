@@ -122,7 +122,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
     bezierLineList = [];
     dataForLineChart.forEach((singleLineData) {
       List<DataPoint<DateTime>> dataList = [];
-      print("Colors :: ${dataForLineChart.indexOf(singleLineData)}");
+      // print("Colors :: ${dataForLineChart.indexOf(singleLineData)}");
       singleLineData.forEach((element) {
         dataList.add(DataPoint<DateTime>(
             value: element.drivenKmG.toDouble(), xAxis: element.entryDateTime));

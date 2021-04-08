@@ -339,17 +339,17 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                 hSizedBox(10),
                                 Text(
                                   "${viewModel.hubsList[index].contactPerson}",
-                                  style:
-                                      AppTextStyles.latoMedium14Black.copyWith(
-                                    color: AppColors.primaryColorShade5,
-                                        fontSize: 15
-                                  ),
+                                  style: AppTextStyles.latoMedium14Black
+                                      .copyWith(
+                                          color: AppColors.primaryColorShade5,
+                                          fontSize: 15),
                                 ),
                                 hSizedBox(10),
                                 Text(
                                   viewModel.hubsList[index].city,
                                   style: AppTextStyles.latoMedium14Black
-                                      .copyWith(color: AppColors.primaryColorShade5),
+                                      .copyWith(
+                                          color: AppColors.primaryColorShade5),
                                 ),
                               ],
                             ),

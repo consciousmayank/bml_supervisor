@@ -96,7 +96,7 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void createRouteConfirmed(CreateRouteRequest request) async {
-    print('Request is ${request.toJson()}');
+    // print('Request is ${request.toJson()}');
     ApiResponse _apiResponse = await _routesApis.addRoute(request: request);
     dialogService
         .showConfirmationDialog(

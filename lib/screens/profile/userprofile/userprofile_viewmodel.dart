@@ -53,7 +53,6 @@ class UserProfileViewModel extends GeneralisedBaseViewModel {
       userProfile = profileResponse;
       image = getImageFromBase64String(base64String: userProfile.photo);
     }
-    print(' whats app: ${userProfile.whatsApp}');
     notifyListeners();
     setBusy(false);
   }

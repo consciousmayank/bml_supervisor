@@ -25,9 +25,6 @@ class _PickHubsViewState extends State<PickHubsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<PickHubsViewModel>.reactive(
         onModelReady: (viewModel) {
-          print('pick hubs onModelReady');
-          print(widget.args.routeTitle);
-          print(widget.args.remarks);
         },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
@@ -164,7 +161,6 @@ class _PickHubsViewState extends State<PickHubsView> {
               value: widget.args.hubsList[index].isCheck,
               onChanged: (value) {
                 setState(() {
-                  print(value);
                   if (value == true) {
                     viewModel.selectedHubsList.add(widget.args.hubsList[index]);
                     // print('selected hubs : ${viewModel.selectedHubsList.length}');
