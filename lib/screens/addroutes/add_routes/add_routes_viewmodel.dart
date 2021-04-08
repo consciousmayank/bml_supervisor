@@ -86,9 +86,6 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToPickHubsPage({String routeTitle, String remarks}) {
-    print('add routes');
-    print(routeTitle);
-    print(remarks);
     navigationService.navigateTo(pickHubsPageRoute,
         arguments: PickHubsArguments(
           hubsList: hubsList,

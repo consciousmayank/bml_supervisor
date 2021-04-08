@@ -86,7 +86,6 @@ class __MainBodyState extends State<_MainBody> {
                 ),
                 child: Column(
                   children: [
-                    // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
                     Container(
                       decoration: BoxDecoration(
                         color: ThemeConfiguration.primaryBackground,

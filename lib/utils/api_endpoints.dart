@@ -22,6 +22,9 @@ final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
 final GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT = (clientId, pageIndex) =>
     "/consignment/list/assess/false/client/$clientId/page/$pageIndex";
 
+final GET_CONSIGNMENT_LIST_PAGE_WISE =
+    (clientId, pageIndex) => "/consignment/list/client/$clientId/page/$pageIndex";
+
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 

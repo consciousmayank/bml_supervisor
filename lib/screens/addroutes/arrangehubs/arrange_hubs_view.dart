@@ -146,7 +146,6 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
               bool isKmEmpty = false;
 
               viewModel.selectedHubList.forEach((element) {
-                // print('hub km ${element.kiloMeters}');
                 if (element.kiloMeters == null) {
                   isKmEmpty = true;
                 }
@@ -195,7 +194,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
     //   print('uncheck');
     // }
     // print(viewModel.selectedHubList.length);
-    print('args list length ${widget.args.newHubsList.length}');
+    // print('args list length ${widget.args.newHubsList.length}');
     // print(widget.args.newHubsList.length);
     // print(viewModel.isReturnList);
     return Expanded(

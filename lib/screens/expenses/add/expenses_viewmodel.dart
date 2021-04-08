@@ -208,7 +208,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     } else {
       SearchByRegNoResponse singleSearchResult =
           SearchByRegNoResponse.fromMap(entryLog.data);
-      print('init reading - ${singleSearchResult.initReading}');
+      // print('init reading - ${singleSearchResult.initReading}');
       isRegNumCorrect = true;
       // vehicleLog = EntryLog.fromMap(entryLog.data);
 

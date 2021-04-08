@@ -147,6 +147,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
           (value) => reloadPage(),
         );
   }
+  void onListConsignmentTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(consignmentListByDatePageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
 
   void onReviewConsignmentsDrawerTileClicked() {
     navigationService.back();

@@ -185,7 +185,7 @@ class _BodyWidgetState extends State<BodyWidget> {
 
   Widget passwordTextField({ChangePasswordViewModel viewModel}) {
     return loginTextFormField(
-showSuffix: true,
+      showSuffix: true,
       obscureText: viewModel.passwordVisible,
       controller: passwordController,
       focusNode: passwordNode,

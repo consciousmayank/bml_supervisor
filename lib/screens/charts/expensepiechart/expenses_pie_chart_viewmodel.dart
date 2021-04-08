@@ -121,7 +121,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
               ),
             );
             uniqueExpenseTypes.forEach((element) {
-              print(element);
+              // print(element);
             });
           }
         }

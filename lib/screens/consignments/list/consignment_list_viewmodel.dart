@@ -21,7 +21,7 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
   void takeToConsignmentDetailsRoute(
       {@required ConsignmentDetailsArgument args}) {
     navigationService.navigateTo(
-      consignmentListPageRoute,
+      consignmentDetailsPageRoute,
       arguments: args,
     );
   }

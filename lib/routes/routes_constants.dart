@@ -33,5 +33,6 @@ const String userProfileRoute = '/userProfileRoute';
 const String addHubRoute = '/addHubRoute';
 const String addRoutesPageRoute = '/addRoutesPageRoute';
 const String pickHubsPageRoute = '/pickHubsPageRoute';
-const String consignmentListPageRoute = '/consignmentListPageRoute';
+const String consignmentDetailsPageRoute = '/consignmentDetailsPageRoute';
 const String arrangeHubsPageRoute = '/arrangeHubsPageRoute';
+const String consignmentListByDatePageRoute = '/consignmentListByDatePageRoute';

@@ -31,6 +31,7 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
   }
 
   String _itemUnit;
+
   String get itemUnit => _itemUnit;
 
   set itemUnit(String itemUnit) {
