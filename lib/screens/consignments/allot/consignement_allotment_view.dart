@@ -917,46 +917,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  getInputBorder2({String hintText}) {
-    return InputDecoration(
-      alignLabelWithHint: true,
-      errorStyle: TextStyle(
-        fontSize: 14,
-      ),
-      helperStyle: TextStyle(
-        fontSize: 14,
-      ),
-      helperText: ' ',
-      labelText: hintText,
-      labelStyle: TextStyle(color: AppColors.white, fontSize: 14),
-      fillColor: AppColors.primaryColorShade5,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
-        ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade1,
-        ),
-      ),
-    );
-  }
-
   getInputBorder({@required String hintText}) {
     return InputDecoration(
       alignLabelWithHint: true,
@@ -980,6 +940,18 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         borderSide: BorderSide(
           color: AppColors.primaryColorShade5,
           // width: 2.0,
+        ),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultBorder),
+        borderSide: BorderSide(
+          color: AppColors.primaryColorShade5,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultBorder),
+        borderSide: BorderSide(
+          color: AppColors.primaryColorShade5,
         ),
       ),
     );
