@@ -176,7 +176,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return viewModel.consignmentDetailResponseNew != null
         ? SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height - 150,
+              height: MediaQuery.of(context).size.height - 100,
               child: Stack(
                 children: [
                   PageView.builder(
