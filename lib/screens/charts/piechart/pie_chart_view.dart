@@ -41,7 +41,8 @@ class _PieChartViewState extends State<PieChartView> {
                           children: <Widget>[
                             buildChartTitle(
                                 title: 'Route Driven Kilometers (%)'),
-                            buildChartSubTitle(time: viewModel?.selectedDate),
+                            viewModel.buildChartSubTitleNew(),
+                            // buildChartSubTitle(time: viewModel?.selectedDate),
                             hSizedBox(5),
                             SizedBox(
                               height: MediaQuery.of(context).size.width,

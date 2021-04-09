@@ -26,8 +26,7 @@ class ConsignmentListByDateView extends StatefulWidget {
 }
 
 class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
-  TextEditingController selectedDateController =
-      TextEditingController();
+  TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
 
   @override
@@ -74,34 +73,10 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       children: [
         dateSelector(context: context, viewModel: viewModel),
         hSizedBox(4),
-        // viewModel.consignmentsList.length > 0
-        //     ? Row(
-        //   children: [
-        //     Expanded(
-        //       child: AppTiles(
-        //         value: viewModel.consignmentsList.length.toString(),
-        //         title: 'Total Consignments',
-        //         iconName: totalConsignmentIcon,
-        //       ),
-        //       flex: 1,
-        //     ),
-        //     Expanded(
-        //       child: AppTiles(
-        //         value: viewModel.grandPayment.toString(),
-        //         title: 'Total Amount',
-        //         iconName: rupeesIcon,
-        //       ),
-        //       flex: 1,
-        //     )
-        //   ],
-        // )
-        //     : Container(),
-        // hSizedBox(4),
         viewModel.consignmentsList.length == 0
-            ?
-            /// show recent consignment here in place of Container
-            Expanded(child: createPendingConsignmentList(viewModel))
-            // Container()
+            ? Expanded(
+                child: createPreviousConsignmentsList(viewModel),
+              )
             : Expanded(
                 child: createConsignmentList(viewModel),
               ),
@@ -109,7 +84,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
     );
   }
 
-  Widget createPendingConsignmentList(
+  Widget createPreviousConsignmentsList(
       ConsignmentListByDateViewModel viewModel) {
     return LazyLoadScrollView(
       scrollOffset: 300,
@@ -158,7 +133,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                       ),
                     ),
                     Column(
-                      children: buildSinglePendingConsignment(viewModel, index),
+                      children: buildSingleConsignment(viewModel, index),
                     )
                   ],
                 ),
@@ -171,12 +146,16 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
     );
   }
 
-  List<Widget> buildSinglePendingConsignment(
+  List<Widget> buildSingleConsignment(
       ConsignmentListByDateViewModel viewModel, int outerIndex) {
     return List.generate(
       viewModel.getConsolidatedData(outerIndex).length,
       (index) => SingleConsignmentItem(
         args: SingleConsignmentItemArguments(
+          vehicleId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .vehicleId
+              .toString(),
           drop: viewModel
               .getConsolidatedData(outerIndex)[index]
               .dropOff
@@ -204,14 +183,21 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
           onTap: () {
             viewModel.takeToConsignmentDetailPage(
               args: ConsignmentDetailsArgument(
-                vehicleId: viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
+                vehicleId:
+                    viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
                 callingScreen: CallingScreen.CONSIGNMENT_LIST,
-                consignmentId: viewModel.getConsolidatedData(outerIndex)[index].consigmentId
+                consignmentId: viewModel
+                    .getConsolidatedData(outerIndex)[index]
+                    .consigmentId
                     .toString(),
-                routeId:
-                viewModel.getConsolidatedData(outerIndex)[index].routeId.toString(),
-                routeName: viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
-                entryDate: viewModel.getConsolidatedData(outerIndex)[index].entryDate,
+                routeId: viewModel
+                    .getConsolidatedData(outerIndex)[index]
+                    .routeId
+                    .toString(),
+                routeName:
+                    viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
+                entryDate:
+                    viewModel.getConsolidatedData(outerIndex)[index].entryDate,
               ),
             );
           },
@@ -265,11 +251,22 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                     ),
                     backgroundColor: AppColors.primaryColorShade5,
                   ),
-                  Text(
-                    "(R# ${viewModel.consignmentsList[index].routeId} ${viewModel.consignmentsList[index].routeTitle})",
-                    style: AppTextStyles.latoMedium14Black.copyWith(
-                        fontSize: 14, color: AppColors.primaryColorShade5),
-                  )
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "(R# ${viewModel.consignmentsList[index].routeId} ${viewModel.consignmentsList[index].routeTitle})",
+                        style: AppTextStyles.latoMedium14Black.copyWith(
+                            fontSize: 14, color: AppColors.primaryColorShade5),
+                      ),
+                      Text(
+                        "${viewModel.consignmentsList[index].vehicleId}",
+                        style: AppTextStyles.latoMedium14Black.copyWith(
+                            fontSize: 12, color: AppColors.primaryColorShade5),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               hSizedBox(14),

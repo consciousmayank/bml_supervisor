@@ -26,12 +26,18 @@ class ConsignmentDetailResponseNew {
     this.collect,
     this.payment,
     this.routeTitle,
+    this.itemUnit,
+    this.driverId,
+    this.weight,
   });
 
   int id;
   String clientId;
   String createBy;
   String assessBy;
+  String driverId;
+  String itemUnit;
+  double weight;
   int routeId;
   String vehicleId;
   String entryDate;
@@ -49,6 +55,9 @@ class ConsignmentDetailResponseNew {
           String clientId,
           String createBy,
           String assessBy,
+          String driverId,
+          String itemUnit,
+          double weight,
           int routeId,
           String vehicleId,
           String entryDate,
@@ -76,12 +85,18 @@ class ConsignmentDetailResponseNew {
         collect: collect ?? this.collect,
         payment: payment ?? this.payment,
         dropOff: dropOff ?? this.dropOff,
+        driverId: driverId??this.driverId,
+        itemUnit: itemUnit??this.itemUnit,
+        weight: weight??this.weight,
       );
 
   factory ConsignmentDetailResponseNew.fromJson(Map<String, dynamic> json) =>
       ConsignmentDetailResponseNew(
         id: json["id"],
         clientId: json["clientId"],
+        itemUnit: json["itemUnit"],
+        weight: json["weight"],
+        driverId: json["driverId"],
         createBy: json["createBy"],
         assessBy: json["assessBy"],
         routeId: json["routeId"],
@@ -303,36 +318,36 @@ class ItemForCard {
       );
 
   factory ItemForCard.fromJson(Map<String, dynamic> json) => ItemForCard(
-    consignmentId: json["consignmentId"],
-    hubId: json["hubId"],
-    sequence: json["sequence"],
-    title: json["title"],
-    dropOff: json["dropOff"],
-    collect: json["collect"],
-    payment: json["payment"],
-    paymentMode: json["paymentMode"],
-    paymentId: json["paymentId"],
-    remarks: json["remarks"],
-    flag: json["flag"],
-    lastupdated: json["lastupdated"],
-    hubTitle: json["hubTitle"],
-    hubCity: json["hubCity"],
-  );
+        consignmentId: json["consignmentId"],
+        hubId: json["hubId"],
+        sequence: json["sequence"],
+        title: json["title"],
+        dropOff: json["dropOff"],
+        collect: json["collect"],
+        payment: json["payment"],
+        paymentMode: json["paymentMode"],
+        paymentId: json["paymentId"],
+        remarks: json["remarks"],
+        flag: json["flag"],
+        lastupdated: json["lastupdated"],
+        hubTitle: json["hubTitle"],
+        hubCity: json["hubCity"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "consignmentId": consignmentId,
-    "hubId": hubId,
-    "sequence": sequence,
-    "title": title,
-    "dropOff": dropOff,
-    "collect": collect,
-    "payment": payment,
-    "paymentMode": paymentMode,
-    "paymentId": paymentId,
-    "remarks": remarks,
-    "flag": flag,
-    "lastupdated": lastupdated,
-    "hubTitle": hubTitle,
-    "hubCity": hubCity,
-  };
+        "consignmentId": consignmentId,
+        "hubId": hubId,
+        "sequence": sequence,
+        "title": title,
+        "dropOff": dropOff,
+        "collect": collect,
+        "payment": payment,
+        "paymentMode": paymentMode,
+        "paymentId": paymentId,
+        "remarks": remarks,
+        "flag": flag,
+        "lastupdated": lastupdated,
+        "hubTitle": hubTitle,
+        "hubCity": hubCity,
+      };
 }

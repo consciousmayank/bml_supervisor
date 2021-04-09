@@ -14,8 +14,11 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/recent_consignment_list.dart';
+import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -69,6 +72,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     return ViewModelBuilder<ConsignmentAllotmentViewModel>.reactive(
       onModelReady: (viewModel) {
         viewModel.getClients();
+        viewModel.getRecentConsignmentsForCreateConsignment();
       },
       builder: (context, viewModel, child) => SafeArea(
           left: false,
@@ -100,7 +104,16 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           dateSelector(context: context, viewModel: viewModel),
-
+          viewModel.entryDate == null
+              ? viewModel.recentConsignmentsList.length > 0
+                  ? SizedBox(
+                      // height: MediaQuery.of(context).size.height-100,
+                      height: 550,
+                      child: RecentConsignmentList(),
+                    )
+                  // Text('${viewModel.recentConsignmentsList.first.entryDate}')
+                  : Container()
+              : Container(),
           viewModel.consignmentsList.length > 0
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -120,7 +133,6 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   ),
                 )
               : Container(),
-
           viewModel.entryDate == null
               ? Container()
               : RoutesDropDown(
@@ -147,16 +159,12 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                       ? null
                       : viewModel.selectedRoute,
                 ),
-
-          // getConsignments
-
           viewModel.hubsList.length < 1
               ? Container()
               : registrationSelector(context: context, viewModel: viewModel),
           viewModel.hubsList.length < 1
               ? Container()
               : consignmentTextField(viewModel: viewModel),
-
           viewModel.validatedRegistrationNumber == null
               ? Container()
               : AppDropDown(
@@ -179,13 +187,126 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                   height: createConsignmentCardHeight,
                   child: _hubsPageView(viewModel),
                 ),
-
-          // viewModel.validatedRegistrationNumber == null
-          //     ? Container()
-          //     : createConsignmentButton(viewModel: viewModel)
         ],
       ),
     );
+  }
+
+  Widget createRecentConsignmentList(ConsignmentAllotmentViewModel viewModel) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: AlwaysScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ClipRRect(
+            borderRadius: getBorderRadius(),
+            child: Container(
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: AppColors.primaryColorShade5, width: 1),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: ThemeConfiguration.primaryBackground,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
+                    ),
+                    height: 50.0,
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Date',
+                          style: AppTextStyles.latoBold16White,
+                        ),
+                        Text(
+                          viewModel.recentConsignmentsDateList.elementAt(index),
+                          style: AppTextStyles.latoBold16White,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: buildSingleConsignment(viewModel, index),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      itemCount: viewModel.recentConsignmentsDateList.length,
+    );
+  }
+
+  List<Widget> buildSingleConsignment(
+      ConsignmentAllotmentViewModel viewModel, int outerIndex) {
+    return List.generate(
+      viewModel.getConsolidatedData(outerIndex).length,
+      (index) => SingleConsignmentItem(
+        args: SingleConsignmentItemArguments(
+          vehicleId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .vehicleId
+              .toString(),
+          drop: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .dropOff
+              .toString(),
+          routeTitle: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .routeTitle
+              .toString(),
+          collect: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .collect
+              .toString(),
+          payment: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .payment
+              .toString(),
+          routeId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .routeId
+              .toString(),
+          consignmentId: viewModel
+              .getConsolidatedData(outerIndex)[index]
+              .consigmentId
+              .toString(),
+          // onTap: () {
+          //   viewModel.takeToConsignmentDetailPage(
+          //     args: ConsignmentDetailsArgument(
+          //       vehicleId:
+          //       viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
+          //       callingScreen: CallingScreen.CONSIGNMENT_LIST,
+          //       consignmentId: viewModel
+          //           .getConsolidatedData(outerIndex)[index]
+          //           .consigmentId
+          //           .toString(),
+          //       routeId: viewModel
+          //           .getConsolidatedData(outerIndex)[index]
+          //           .routeId
+          //           .toString(),
+          //       routeName:
+          //       viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
+          //       entryDate:
+          //       viewModel.getConsolidatedData(outerIndex)[index].entryDate,
+          //     ),
+          //   );
+          // },
+        ),
+      ),
+    ).toList();
   }
 
   PageView _hubsPageView(ConsignmentAllotmentViewModel viewModel) {
@@ -410,6 +531,8 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                                               .consignmentRequest,
                                                       selectedRoute: viewModel
                                                           .selectedRoute,
+                                                      itemUnit:
+                                                          viewModel.itemUnit,
                                                     ),
                                                   )
                                                       .then((value) {
@@ -676,7 +799,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
           child: child,
         );
       },
-      helpText: 'Registration Expires on',
+      helpText: 'Select Date',
       errorFormatText: 'Enter valid date',
       errorInvalidText: 'Enter date in valid range',
       fieldLabelText: 'Expiration Date',
