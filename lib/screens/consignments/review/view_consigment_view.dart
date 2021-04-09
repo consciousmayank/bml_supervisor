@@ -196,9 +196,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                     iconName: rupeesIcon,
                     title: 'Total Payment',
                     value: viewModel.consignmentDetailResponseNew.payment == 0
-                        ? viewModel
-                            .consignmentDetailResponseNew.items.last.collect
-                            .toString()
+                        ? viewModel.consignmentDetailResponseNew.items.length >
+                                0
+                            ? viewModel
+                                .consignmentDetailResponseNew.items.last.collect
+                                .toString()
+                            : '0'
                         : viewModel.consignmentDetailResponseNew.payment
                             .toString(),
                   ),
@@ -211,8 +214,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       .consignmentDetailResponseNew.collect ==
                                   0
                               ? viewModel.consignmentDetailResponseNew.items
-                                  .first.collect
-                                  .toString()
+                                          .length >
+                                      0
+                                  ? viewModel.consignmentDetailResponseNew.items
+                                      .first.collect
+                                      .toString()
+                                  : '0'
                               : viewModel.consignmentDetailResponseNew.collect
                                   .toString(),
                           iconName: collectIcon,
@@ -225,14 +232,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       .consignmentDetailResponseNew.dropOff ==
                                   0
                               ? viewModel.consignmentDetailResponseNew.items
-                                  .last.dropOff
-                                  .toString()
+                                          .length >
+                                      0
+                                  ? viewModel.consignmentDetailResponseNew.items
+                                      .last.dropOff
+                                      .toString()
+                                  : '0'
                               : viewModel.consignmentDetailResponseNew.dropOff
                                   .toString(),
                           iconName: dropIcon,
                         ),
                       ),
-
                     ],
                   ),
                   // Row(
