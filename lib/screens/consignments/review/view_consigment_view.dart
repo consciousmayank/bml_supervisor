@@ -192,6 +192,40 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
               height: 850,
               child: Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4, top: 8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColorShade5,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(defaultBorder)),
+                      ),
+                      height: buttonHeight,
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      width: double.infinity,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'C#${viewModel.consignmentDetailResponseNew.id}',
+                            style: AppTextStyles.latoBold14Black.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                          Text(
+                              '(R#${viewModel.consignmentDetailResponseNew.routeId} ${viewModel.consignmentDetailResponseNew.routeTitle})',
+                              // '(R#${viewModel.consignmentDetailResponse.routeId} ${viewModel.consignmentDetailResponse.routeTitle})',
+                              style: AppTextStyles.latoMedium12Black.copyWith(
+                                color: AppColors.white,
+                              ))
+                        ],
+                      ),
+                    ),
+                  ),
                   AppTiles(
                     iconName: rupeesIcon,
                     title: 'Total Payment',
@@ -245,59 +279,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text('Total Collect'),
-                  //           viewModel.consignmentDetailResponseNew.collect == 0
-                  //               ? Text(viewModel.consignmentDetailResponseNew
-                  //                   .items.first.collect
-                  //                   .toString())
-                  //               : Text(viewModel
-                  //                   .consignmentDetailResponseNew.collect
-                  //                   .toString()),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text('Payment'),
-                  //           viewModel.consignmentDetailResponseNew.payment == 0
-                  //               ? Text(viewModel.consignmentDetailResponseNew
-                  //                   .items.last.collect
-                  //                   .toString())
-                  //               : Text(viewModel
-                  //                   .consignmentDetailResponseNew.payment
-                  //                   .toString()),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.all(10.0),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.end,
-                  //         children: [
-                  //           Text('Total Drop'),
-                  //           viewModel.consignmentDetailResponseNew.dropOff == 0
-                  //               ? Text(viewModel.consignmentDetailResponseNew
-                  //                   .items.last.collect
-                  //                   .toString())
-                  //               : Text(viewModel
-                  //                   .consignmentDetailResponseNew.dropOff
-                  //                   .toString()),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+
                   Expanded(
                     child: PageView.builder(
                       onPageChanged: (index) {
