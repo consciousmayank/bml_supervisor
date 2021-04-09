@@ -25,6 +25,8 @@ final GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT = (clientId, pageIndex) =>
 final GET_CONSIGNMENT_LIST_PAGE_WISE =
     (clientId, pageIndex) => "/consignment/list/client/$clientId/page/$pageIndex";
 
+final GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT = (clientId) => "/consignment/list/recent/client/$clientId";
+
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 

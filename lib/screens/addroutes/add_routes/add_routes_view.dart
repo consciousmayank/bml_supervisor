@@ -112,19 +112,6 @@ class _AddRoutesViewState extends State<AddRoutesView> {
     );
   }
 
-  // Widget selectClientForDashboardStats({AddRoutesViewModel viewModel}) {
-  //   return ClientsDropDown(
-  //     optionList: viewModel.clientsList,
-  //     hint: "Select Client",
-  //     onOptionSelect: (GetClientsResponse selectedValue) {
-  //       viewModel.selectedClient = selectedValue;
-  //       // viewModel.getDistributors(selectedClient: selectedValue);
-  //     },
-  //     selectedClient:
-  //         viewModel.selectedClient == null ? null : viewModel.selectedClient,
-  //   );
-  // }
-
   Widget buildNextButton({BuildContext context, AddRoutesViewModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
@@ -134,24 +121,22 @@ class _AddRoutesViewState extends State<AddRoutesView> {
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
             if (routeTitleController.text.length > 0) {
-
-              if(routeTitleController.text.length>=6)
-              {
+              if (routeTitleController.text.length >= 6) {
                 viewModel
                     .getHubsForSelectedClient(
-                    selectedClient: MyPreferences().getSelectedClient())
-                    .then((value) =>
-                    viewModel.takeToPickHubsPage(
-                      remarks: remarkController.text,
-                      routeTitle: routeTitleController.text,
-                    ));
+                        selectedClient: MyPreferences().getSelectedClient())
+                    .then((value) => viewModel.takeToPickHubsPage(
+                          remarks: remarkController.text,
+                          routeTitle: routeTitleController.text,
+                        ));
+              } else {
+                viewModel.snackBarService.showSnackbar(
+                    message:
+                        'Please enter route title with at least 6 characters');
               }
-              else{
-                viewModel.snackBarService.showSnackbar(message: 'Please enter route title with at least 6 characters');
-              }
-            }
-            else{
-              viewModel.snackBarService.showSnackbar(message: 'Please enter route title');
+            } else {
+              viewModel.snackBarService
+                  .showSnackbar(message: 'Please enter route title');
             }
           },
           background: AppColors.primaryColorShade5,

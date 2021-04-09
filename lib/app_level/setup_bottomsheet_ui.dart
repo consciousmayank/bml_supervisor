@@ -152,6 +152,7 @@ class _CreateConsignmentDialog extends StatelessWidget {
               selectedClient: args.selectedClient,
               consignmentRequest: args.consignmentRequest,
               selectedRoute: args.selectedRoute,
+              itemUnit: args.itemUnit,
               validatedRegistrationNumber: args.validatedRegistrationNumber,
               onSubmitClicked: (bool value) {
                 completer(SheetResponse(confirmed: value));

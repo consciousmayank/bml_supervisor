@@ -9,6 +9,7 @@ import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -116,6 +117,9 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
     _routesList = value;
     notifyListeners();
   }
+
+  List<SinglePendingConsignmentListItem> recentConsignmentsList = [];
+  Set<String> recentConsignmentsDateList = Set();
 
   FetchRoutesResponse get selectedRoute => _selectedRoute;
 
@@ -293,6 +297,31 @@ class ConsignmentAllotmentViewModel extends GeneralisedBaseViewModel {
 
     setBusy(false);
     notifyListeners();
+  }
+
+  getRecentConsignmentsForCreateConsignment() async {
+    setBusy(true);
+    recentConsignmentsList = [];
+    recentConsignmentsDateList = Set();
+    List<SinglePendingConsignmentListItem> response =
+        await _consignmentApis.getRecentConsignmentsForCreateConsignment(
+            clientId: MyPreferences().getSelectedClient().clientId);
+
+    response.forEach((element) {
+      recentConsignmentsDateList.add(element.entryDate);
+    });
+
+    recentConsignmentsList = copyList(response);
+
+    setBusy(false);
+    notifyListeners();
+  }
+
+  List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {
+    return recentConsignmentsList
+        .where((element) =>
+            element.entryDate == recentConsignmentsDateList.elementAt(index))
+        .toList();
   }
 
   Future consignmentsListBottomSheet() async {

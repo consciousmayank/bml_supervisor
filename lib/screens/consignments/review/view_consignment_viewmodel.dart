@@ -63,6 +63,15 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  String _itemUnitG;
+
+  String get itemUnitG => _itemUnitG;
+
+  set itemUnitG(String itemUnitG) {
+    _itemUnitG = itemUnitG;
+    notifyListeners();
+  }
+
   List<GlobalKey<FormState>> _formKeyList = [];
 
   List<GlobalKey<FormState>> get formKeyList => _formKeyList;

@@ -303,6 +303,23 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getRecentConsignmentsForCreateConsignment({
+    @required String clientId,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+
+
 
 
   ///Get the Consignment details with the help of consignmentId.
