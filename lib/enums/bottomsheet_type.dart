@@ -2,5 +2,7 @@ enum BottomSheetType {
   floating,
   viewEntry,
   consignmentList,
-  createConsignmentSummary
+  createConsignmentSummary,
+  expenseFilters,
+  clientSelect
 }

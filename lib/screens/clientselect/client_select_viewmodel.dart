@@ -9,6 +9,15 @@ class ClientSelectViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   List<GetClientsResponse> _clientsList = [];
 
+  GetClientsResponse _preSelectedClient;
+
+  GetClientsResponse get preSelectedClient => _preSelectedClient;
+
+  set preSelectedClient(GetClientsResponse value) {
+    _preSelectedClient = value;
+    notifyListeners();
+  }
+
   List<GetClientsResponse> get clientsList => _clientsList;
 
   set clientsList(List<GetClientsResponse> value) {

@@ -25,17 +25,22 @@ class LoginViewModel extends GeneralisedBaseViewModel {
         await _loginApi.login(getBase64String(value: '$userName:$password'));
 
     if (loginResponse != null) {
-      PreferencesSavedUser preferencesSavedUser;
-      preferencesSavedUser = PreferencesSavedUser(
-          isUserLoggedIn: true,
-          userRole: loginResponse.userRole,
-          userName: '${loginResponse.firstName} ${loginResponse.lastName}');
-      MyPreferences().setLoggedInUser(preferencesSavedUser);
-      MyPreferences().saveCredentials(
-        getBase64String(value: '$userName:$password'),
-      );
-      // locator<DioConfig>().configureDio();
-      takeToClientSelect();
+      if (loginResponse.userRole == 'ROLE_MANAGER') {
+        PreferencesSavedUser preferencesSavedUser;
+        preferencesSavedUser = PreferencesSavedUser(
+            isUserLoggedIn: true,
+            userRole: loginResponse.userRole,
+            userName: '${loginResponse.firstName} ${loginResponse.lastName}');
+        MyPreferences().setLoggedInUser(preferencesSavedUser);
+        MyPreferences().saveCredentials(
+          getBase64String(value: '$userName:$password'),
+        );
+        // locator<DioConfig>().configureDio();
+        takeToClientSelect();
+      } else {
+        snackBarService.showSnackbar(
+            message: 'You do not have access to use this app.');
+      }
     }
     setBusy(false);
   }

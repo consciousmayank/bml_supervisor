@@ -55,6 +55,13 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
   }
 
   String _selectedGender = '';
+  String _selectedBloodGroup = '';
+
+  String get selectedBloodGroup => _selectedBloodGroup;
+
+  set selectedBloodGroup(String value) {
+    _selectedBloodGroup = value;
+  }
 
   CitiesResponse _selectedCity;
 

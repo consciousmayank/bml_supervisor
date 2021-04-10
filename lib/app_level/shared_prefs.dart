@@ -111,6 +111,10 @@ class PreferencesSavedUser {
         .capitalizeFirstLetter();
   }
 
+  String getUnEditedRole() {
+    return userRole;
+  }
+
   factory PreferencesSavedUser.fromJson(String str) =>
       PreferencesSavedUser.fromMap(json.decode(str));
 

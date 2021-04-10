@@ -4,7 +4,6 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
@@ -37,6 +36,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
+          viewModel.getUserProfile();
           viewModel.selectedClient = MyPreferences().getSelectedClient();
           viewModel.getClientDashboardStats();
           viewModel.selectedDuration = MyPreferences().getSelectedDuration();
@@ -58,9 +58,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                     actions: [
                       InkWell(
                         onTap: () {
-                          MyPreferences().saveSelectedClient(null);
-                          viewModel.navigationService
-                              .clearStackAndShow(clientSelectPageRoute);
+                          viewModel.showClientSelectBottomSheet();
+
+                          // MyPreferences().saveSelectedClient(null);
+                          // viewModel.navigationService
+                          //     .clearStackAndShow(clientSelectPageRoute);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -142,7 +144,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: viewModel.singleClientTileData.totalKmVariance,
+                                                percentage: viewModel
+                                                    .singleClientTileData
+                                                    .totalKmVariance,
                                                 title: 'Total Kilometer',
                                                 value: viewModel
                                                     .singleClientTileData
@@ -180,7 +184,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                             Expanded(
                                               flex: 1,
                                               child: AppTiles(
-                                                percentage: viewModel.singleClientTileData.totalExpenseVariance,
+                                                percentage: viewModel
+                                                    .singleClientTileData
+                                                    .totalExpenseVariance,
                                                 title: 'Total Expense',
                                                 value: viewModel
                                                     .singleClientTileData

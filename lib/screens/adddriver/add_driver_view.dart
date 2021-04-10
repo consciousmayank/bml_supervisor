@@ -122,11 +122,12 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildVehicleTextFormField(),
               buildDlTextFormField(),
               buildAadhaarTextFormField(),
+              hSizedBox(2),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: AppDropDown(
                       optionList: genders,
                       hint: 'Select Gender',
@@ -135,16 +136,26 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                           : widget.viewModel.selectedGender,
                       onOptionSelect: (String selectedValue) {
                         widget.viewModel.selectedGender = selectedValue;
-                        fNameFocusNode.requestFocus();
                       },
                     ),
                   ),
                   Expanded(
-                    flex: 3,
-                    child: buildFirstNameTextFormField(),
+                    flex: 1,
+                    child: AppDropDown(
+                      optionList: bloodGroup,
+                      hint: 'Select Blood Group',
+                      selectedValue: widget.viewModel.selectedBloodGroup.isEmpty
+                          ? null
+                          : widget.viewModel.selectedBloodGroup,
+                      onOptionSelect: (String selectedValue) {
+                        widget.viewModel.selectedBloodGroup = selectedValue;
+                        fNameFocusNode.requestFocus();
+                      },
+                    ),
                   ),
                 ],
               ),
+              buildFirstNameTextFormField(),
               buildLastNameTextFormField(),
               buildDobView(),
               buildFatherNameTextFormField(),
@@ -706,6 +717,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
             if (_formKey.currentState.validate()) {
               widget.viewModel.addDriver(
                   newDriverObject: AddDriverRequest(
+                      bloodGroup: widget.viewModel.selectedBloodGroup,
                       salutation: widget.viewModel.getSalutation(),
                       firstName: fNameController.text,
                       lastName: lNameController.text,

@@ -5,7 +5,7 @@ import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignement_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -15,22 +15,19 @@ import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list.dart';
-import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import 'consignment_dialog_params.dart';
+import 'create_consignment_params.dart';
 
-class ConsignmentAllotmentView extends StatefulWidget {
+class CreateConsignmentView extends StatefulWidget {
   @override
-  _ConsignmentAllotmentViewState createState() =>
-      _ConsignmentAllotmentViewState();
+  _CreateConsignmentViewState createState() => _CreateConsignmentViewState();
 }
 
-class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
+class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   bool isEditAllowed = true;
   ScrollController _scrollController = ScrollController();
   TextEditingController selectedDateController = TextEditingController();
@@ -69,10 +66,10 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ConsignmentAllotmentViewModel>.reactive(
+    return ViewModelBuilder<CreateConsignmentModel>.reactive(
       onModelReady: (viewModel) {
         viewModel.getClients();
-        viewModel.getRecentConsignmentsForCreateConsignment();
+        // viewModel.getRecentConsignmentsForCreateConsignment();
       },
       builder: (context, viewModel, child) => SafeArea(
           left: false,
@@ -92,224 +89,108 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                     child: body(context, viewModel),
                   ),
           )),
-      viewModelBuilder: () => ConsignmentAllotmentViewModel(),
+      viewModelBuilder: () => CreateConsignmentModel(),
     );
   }
 
-  Widget body(BuildContext context, ConsignmentAllotmentViewModel viewModel) {
-    return SingleChildScrollView(
-      controller: _scrollController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          dateSelector(context: context, viewModel: viewModel),
-          viewModel.entryDate == null
-              ? viewModel.recentConsignmentsList.length > 0
-                  ? SizedBox(
-                      // height: MediaQuery.of(context).size.height-100,
-                      height: 550,
-                      child: RecentConsignmentList(),
-                    )
-                  // Text('${viewModel.recentConsignmentsList.first.entryDate}')
-                  : Container()
-              : Container(),
-          viewModel.consignmentsList.length > 0
-              ? Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          viewModel.consignmentsListBottomSheet();
-                        },
-                        child: Text(
-                          'No. of ${getConsignment(viewModel.consignmentsList.length)} (${viewModel.consignmentsList.length}) ',
-                          style: AppTextStyles.hyperLinkStyle,
+  Widget body(BuildContext context, CreateConsignmentModel viewModel) {
+    return viewModel.entryDate == null
+        ? Column(
+            children: [
+              dateSelector(context: context, viewModel: viewModel),
+              Expanded(
+                child: RecentConsignmentList(),
+              ),
+            ],
+          )
+        : SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                dateSelector(context: context, viewModel: viewModel),
+                viewModel.consignmentsList.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                viewModel.consignmentsListBottomSheet();
+                              },
+                              child: Text(
+                                'No. of ${getConsignment(viewModel.consignmentsList.length)} (${viewModel.consignmentsList.length}) ',
+                                style: AppTextStyles.hyperLinkStyle,
+                              ),
+                            )
+                          ],
                         ),
                       )
-                    ],
-                  ),
-                )
-              : Container(),
-          viewModel.entryDate == null
-              ? Container()
-              : RoutesDropDown(
-                  optionList: viewModel.routesList,
-                  hint: "Select Routes",
-                  onOptionSelect: (FetchRoutesResponse selectedValue) {
-                    viewModel.selectedRoute = selectedValue;
+                    : Container(),
+                viewModel.entryDate == null
+                    ? Container()
+                    : RoutesDropDown(
+                        optionList: viewModel.routesList,
+                        hint: "Select Routes",
+                        onOptionSelect: (FetchRoutesResponse selectedValue) {
+                          viewModel.selectedRoute = selectedValue;
 
-                    selectedRegNoController.clear();
-                    consignmentTitleController.clear();
-                    viewModel.validatedRegistrationNumber = null;
-                    viewModel.consignmentRequest = null;
+                          selectedRegNoController.clear();
+                          consignmentTitleController.clear();
+                          viewModel.validatedRegistrationNumber = null;
+                          viewModel.consignmentRequest = null;
 
-                    viewModel.getHubs();
-                    consignmentTitleController.clear();
-                    hubTitleController.clear();
-                    dropController.clear();
-                    collectController.clear();
-                    paymentController.clear();
-                    remarksController.clear();
-                    viewModel.resetControllerBoolValue();
-                  },
-                  selectedValue: viewModel.selectedRoute == null
-                      ? null
-                      : viewModel.selectedRoute,
-                ),
-          viewModel.hubsList.length < 1
-              ? Container()
-              : registrationSelector(context: context, viewModel: viewModel),
-          viewModel.hubsList.length < 1
-              ? Container()
-              : consignmentTextField(viewModel: viewModel),
-          viewModel.validatedRegistrationNumber == null
-              ? Container()
-              : AppDropDown(
-                  showUnderLine: true,
-                  selectedValue:
-                      viewModel.itemUnit != null ? viewModel.itemUnit : null,
-                  hint: "Item Unit",
-                  onOptionSelect: (selectedValue) {
-                    viewModel.itemUnit = selectedValue;
-                    totalWeightFocusNode.requestFocus();
-                  },
-                  optionList: selectItemUnit,
-                ),
-          viewModel.validatedRegistrationNumber != null
-              ? totalWeightTextField(viewModel)
-              : Container(),
-          viewModel.validatedRegistrationNumber == null
-              ? Container()
-              : SizedBox(
-                  height: createConsignmentCardHeight,
-                  child: _hubsPageView(viewModel),
-                ),
-        ],
-      ),
-    );
-  }
-
-  Widget createRecentConsignmentList(ConsignmentAllotmentViewModel viewModel) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: AlwaysScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: getBorderRadius(),
-            child: Container(
-              decoration: BoxDecoration(
-                border:
-                    Border.all(color: AppColors.primaryColorShade5, width: 1),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: ThemeConfiguration.primaryBackground,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        topRight: Radius.circular(5),
+                          viewModel.getHubs();
+                          consignmentTitleController.clear();
+                          hubTitleController.clear();
+                          dropController.clear();
+                          collectController.clear();
+                          paymentController.clear();
+                          remarksController.clear();
+                          viewModel.resetControllerBoolValue();
+                        },
+                        selectedValue: viewModel.selectedRoute == null
+                            ? null
+                            : viewModel.selectedRoute,
                       ),
-                    ),
-                    height: 50.0,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Date',
-                          style: AppTextStyles.latoBold16White,
-                        ),
-                        Text(
-                          viewModel.recentConsignmentsDateList.elementAt(index),
-                          style: AppTextStyles.latoBold16White,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: buildSingleConsignment(viewModel, index),
-                  )
-                ],
-              ),
+                viewModel.hubsList.length < 1
+                    ? Container()
+                    : registrationSelector(
+                        context: context, viewModel: viewModel),
+                viewModel.hubsList.length < 1
+                    ? Container()
+                    : consignmentTextField(viewModel: viewModel),
+                viewModel.validatedRegistrationNumber == null
+                    ? Container()
+                    : AppDropDown(
+                        showUnderLine: true,
+                        selectedValue: viewModel.itemUnit != null
+                            ? viewModel.itemUnit
+                            : null,
+                        hint: "Item Unit",
+                        onOptionSelect: (selectedValue) {
+                          viewModel.itemUnit = selectedValue;
+                          totalWeightFocusNode.requestFocus();
+                        },
+                        optionList: selectItemUnit,
+                      ),
+                viewModel.validatedRegistrationNumber != null
+                    ? totalWeightTextField(viewModel)
+                    : Container(),
+                viewModel.validatedRegistrationNumber == null
+                    ? Container()
+                    : SizedBox(
+                        height: createConsignmentCardHeight,
+                        child: _hubsPageView(viewModel),
+                      ),
+              ],
             ),
-          ),
-        );
-      },
-      itemCount: viewModel.recentConsignmentsDateList.length,
-    );
+          );
   }
 
-  List<Widget> buildSingleConsignment(
-      ConsignmentAllotmentViewModel viewModel, int outerIndex) {
-    return List.generate(
-      viewModel.getConsolidatedData(outerIndex).length,
-      (index) => SingleConsignmentItem(
-        args: SingleConsignmentItemArguments(
-          vehicleId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .vehicleId
-              .toString(),
-          drop: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .dropOff
-              .toString(),
-          routeTitle: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeTitle
-              .toString(),
-          collect: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .collect
-              .toString(),
-          payment: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .payment
-              .toString(),
-          routeId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeId
-              .toString(),
-          consignmentId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .consigmentId
-              .toString(),
-          // onTap: () {
-          //   viewModel.takeToConsignmentDetailPage(
-          //     args: ConsignmentDetailsArgument(
-          //       vehicleId:
-          //       viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
-          //       callingScreen: CallingScreen.CONSIGNMENT_LIST,
-          //       consignmentId: viewModel
-          //           .getConsolidatedData(outerIndex)[index]
-          //           .consigmentId
-          //           .toString(),
-          //       routeId: viewModel
-          //           .getConsolidatedData(outerIndex)[index]
-          //           .routeId
-          //           .toString(),
-          //       routeName:
-          //       viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
-          //       entryDate:
-          //       viewModel.getConsolidatedData(outerIndex)[index].entryDate,
-          //     ),
-          //   );
-          // },
-        ),
-      ),
-    ).toList();
-  }
-
-  PageView _hubsPageView(ConsignmentAllotmentViewModel viewModel) {
+  PageView _hubsPageView(CreateConsignmentModel viewModel) {
     return PageView.builder(
       onPageChanged: (index) {
         setValueAt(
@@ -520,7 +401,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
                                                         .createConsignmentSummary,
                                                     // Which builder you'd like to call that was assigned in the builders function above.
                                                     customData:
-                                                        ConsignmentDialogParams(
+                                                        CreateConsignmentDialogParams(
                                                       selectedClient: viewModel
                                                           .selectedClient,
                                                       validatedRegistrationNumber:
@@ -591,7 +472,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  Widget createConsignmentButton({ConsignmentAllotmentViewModel viewModel}) {
+  Widget createConsignmentButton({CreateConsignmentModel viewModel}) {
     return SizedBox(
       height: buttonHeight,
       width: double.infinity,
@@ -668,7 +549,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   // }
 
   registrationSelector(
-      {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
+      {BuildContext context, CreateConsignmentModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -681,7 +562,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  registrationNumberTextField(ConsignmentAllotmentViewModel viewModel) {
+  registrationNumberTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
         vehicleOwnerName: viewModel.validatedRegistrationNumber == null
             ? null
@@ -696,7 +577,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         });
   }
 
-  totalWeightTextField(ConsignmentAllotmentViewModel viewModel) {
+  totalWeightTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
         enabled: true,
         controller: totalWeightController,
@@ -708,7 +589,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         });
   }
 
-  consignmentTextField({ConsignmentAllotmentViewModel viewModel}) {
+  consignmentTextField({CreateConsignmentModel viewModel}) {
     return appTextFormField(
         enabled: true,
         onTextChange: (_) {
@@ -721,8 +602,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
         onFieldSubmitted: (value) => consignmentTitleFocusNode.unfocus());
   }
 
-  selectRegButton(
-      BuildContext context, ConsignmentAllotmentViewModel viewModel) {
+  selectRegButton(BuildContext context, CreateConsignmentModel viewModel) {
     return SizedBox(
       height: 58,
       child: Padding(
@@ -737,8 +617,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  dateSelector(
-      {BuildContext context, ConsignmentAllotmentViewModel viewModel}) {
+  dateSelector({BuildContext context, CreateConsignmentModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -748,7 +627,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  selectedDateTextField(ConsignmentAllotmentViewModel viewModel) {
+  selectedDateTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
       enabled: false,
       controller: selectedDateController,
@@ -762,8 +641,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     );
   }
 
-  selectDateButton(
-      BuildContext context, ConsignmentAllotmentViewModel viewModel) {
+  selectDateButton(BuildContext context, CreateConsignmentModel viewModel) {
     return SizedBox(
       height: 56,
       child: Padding(
@@ -814,9 +692,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget hubTitle(
-      {BuildContext context,
-      ConsignmentAllotmentViewModel viewModel,
-      int index}) {
+      {BuildContext context, CreateConsignmentModel viewModel, int index}) {
     if (!viewModel.isHubTitleEdited) {
       hubTitleController.text =
           viewModel?.consignmentRequest?.items[index]?.title?.toString();
@@ -866,9 +742,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget remarksInput(
-      {BuildContext context,
-      ConsignmentAllotmentViewModel viewModel,
-      int index}) {
+      {BuildContext context, CreateConsignmentModel viewModel, int index}) {
     if (!viewModel.isRemarksEdited) {
       remarksController.text =
           viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
@@ -892,9 +766,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget dropInput(
-      {BuildContext context,
-      ConsignmentAllotmentViewModel viewModel,
-      int index}) {
+      {BuildContext context, CreateConsignmentModel viewModel, int index}) {
     if (!viewModel.isDropCratesEdited) {
       dropController.text =
           viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
@@ -927,9 +799,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   Widget collectInput(
-      {BuildContext context,
-      ConsignmentAllotmentViewModel viewModel,
-      int index}) {
+      {BuildContext context, CreateConsignmentModel viewModel, int index}) {
     if (!viewModel.isCollectCratesEdited) {
       collectController.text =
           viewModel?.consignmentRequest?.items[index]?.collect?.toString();
@@ -963,7 +833,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
 
   Widget paymentInput({
     BuildContext context,
-    ConsignmentAllotmentViewModel viewModel,
+    CreateConsignmentModel viewModel,
     bool enabled,
     int index,
   }) {
@@ -1044,7 +914,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
   }
 
   void updateData(
-      {ConsignmentAllotmentViewModel viewModel,
+      {CreateConsignmentModel viewModel,
       int index,
       bool goForward = true,
       bool skip = false}) {
@@ -1084,7 +954,7 @@ class _ConsignmentAllotmentViewState extends State<ConsignmentAllotmentView> {
     }
   }
 
-  void validateRegistrationNumber({ConsignmentAllotmentViewModel viewModel}) {
+  void validateRegistrationNumber({CreateConsignmentModel viewModel}) {
     if (viewModel.selectedClient == null) {
       viewModel.snackBarService.showSnackbar(message: 'Please provide Client');
     } else if (selectedRegNoController.text.length == 0) {

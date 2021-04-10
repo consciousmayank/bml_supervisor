@@ -10,8 +10,9 @@ import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
+import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
@@ -68,19 +69,17 @@ class _BodyWidgetState extends State<BodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40),
-      child: widget.userProfileViewModel.isBusy
-          ? SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ShimmerContainer(
-                itemCount: 15,
-              ),
-            )
-          : Card(
+    return widget.userProfileViewModel.isBusy
+        ? SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: ShimmerContainer(
+              itemCount: 15,
+            ),
+          )
+        : Card(
             color: AppColors.appScaffoldColor,
-            // elevation: defaultElevation,
+            elevation: defaultElevation,
             shape: getCardShape(),
             child: SingleChildScrollView(
               child: Column(
@@ -89,29 +88,8 @@ class _BodyWidgetState extends State<BodyWidget> {
                     tag: 'test',
                     child: Transform.translate(
                       offset: Offset(0, -40),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: AppColors.white,
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.primaryColorShade5,
-                                width: 3),
-                            borderRadius: BorderRadius.circular(40),
-                            color: AppColors.appScaffoldColor,
-                          ),
-                          child: Image.memory(
-                            widget.userProfileViewModel.image,
-                            fit: BoxFit.cover,
-                            height: 40,
-                            width: 40,
-                          ),
-                        ),
-                      ),
+                      child: ProfileImageWidget(
+                          image: widget.userProfileViewModel.image),
                     ),
                   ),
                   Text(
@@ -133,8 +111,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                   ),
                   buildListTile(
                     title: 'Email',
-                    subTitle:
-                        widget.userProfileViewModel.userProfile.emailId,
+                    subTitle: widget.userProfileViewModel.userProfile.emailId,
                     trailingText: 'Update',
                     iconName: email,
                     onTap: () {
@@ -146,8 +123,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                             title: Text("Enter New Email ID"),
                             content: SizedBox(
                               height: 100,
-                              width:
-                                  MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.8,
                               child: Column(
                                 children: [
                                   getUserEmailTextField(
@@ -172,8 +148,8 @@ class _BodyWidgetState extends State<BodyWidget> {
                                     )
                                         .then((value) {
                                       // print(value);
-                                      if (widget.userProfileViewModel
-                                          .isEmailUpdate) {
+                                      if (widget
+                                          .userProfileViewModel.isEmailUpdate) {
                                         widget.userProfileViewModel
                                             .getUserProfile();
                                         emailController.clear();
@@ -186,8 +162,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                       }
                                     });
                                   } else {
-                                    widget.userProfileViewModel
-                                        .snackBarService
+                                    widget.userProfileViewModel.snackBarService
                                         .showSnackbar(
                                             message: 'Please fill email');
                                   }
@@ -208,12 +183,11 @@ class _BodyWidgetState extends State<BodyWidget> {
                       );
                     },
                   ),
-                  _BuildDivider(),
+                  DottedDivider(),
 
                   buildListTile(
                     title: 'Mobile',
-                    subTitle:
-                        widget.userProfileViewModel.userProfile.mobile,
+                    subTitle: widget.userProfileViewModel.userProfile.mobile,
                     trailingText: 'Update',
                     iconName: phoneNumber,
                     onTap: () {
@@ -225,8 +199,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                             title: Text("Enter New Mobile Number"),
                             content: SizedBox(
                               height: 100,
-                              width:
-                                  MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.8,
                               child: Column(
                                 children: [
                                   getMobileNumberTextField(
@@ -242,13 +215,12 @@ class _BodyWidgetState extends State<BodyWidget> {
                               ElevatedButton(
                                 child: new Text("Update"),
                                 onPressed: () {
-                                  if (mobileNumberController.text.length >
-                                      0) {
+                                  if (mobileNumberController.text.length > 0) {
                                     widget.userProfileViewModel
                                         .updateMobileNumber(
                                       request: UpdateUserRequest(
-                                        mobile: mobileNumberController.text
-                                            .trim(),
+                                        mobile:
+                                            mobileNumberController.text.trim(),
                                       ),
                                     )
                                         .then((value) {
@@ -266,8 +238,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                       }
                                     });
                                   } else {
-                                    widget.userProfileViewModel
-                                        .snackBarService
+                                    widget.userProfileViewModel.snackBarService
                                         .showSnackbar(
                                             message:
                                                 'Please fill mobile number');
@@ -289,14 +260,14 @@ class _BodyWidgetState extends State<BodyWidget> {
                       );
                     },
                   ),
-                  _BuildDivider(), buildListTile(
+                  DottedDivider(),
+                  buildListTile(
                     title: 'WhatsApp Number',
-                    subTitle:
-                        widget.userProfileViewModel.userProfile.whatsApp,
+                    subTitle: widget.userProfileViewModel.userProfile.whatsApp,
                     // trailingText: 'Update',
                     iconName: whatsAppIcon,
                   ),
-                  _BuildDivider(),
+                  DottedDivider(),
 
                   buildListTile(
                       title: 'Change Password',
@@ -305,7 +276,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                         widget.userProfileViewModel.navigationService
                             .navigateTo(changePasswordRoute);
                       }),
-                  _BuildDivider(),
+                  DottedDivider(),
 
                   buildListTile(
                       title: 'Log Out',
@@ -350,8 +321,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                 ],
               ),
             ),
-          ),
-    );
+          );
   }
 
   getMobileNumberTextField({
@@ -452,53 +422,5 @@ class _BodyWidgetState extends State<BodyWidget> {
             ),
           ),
         ));
-  }
-}
-
-class _BuildDivider extends StatelessWidget {
-  const _BuildDivider({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Divider(
-        height: 1,
-        thickness: 1,
-        color: AppColors.primaryColorShade5,
-      ),
-    );
-  }
-}
-
-class _ProfileTile extends StatelessWidget {
-  final String title;
-  final Function onTap;
-
-  const _ProfileTile({
-    Key key,
-    @required this.title,
-    @required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: buttonHeight,
-        child: ClickableWidget(
-          elevation: defaultElevation,
-          borderRadius: getBorderRadius(),
-          onTap: () {
-            onTap.call();
-          },
-          child: Center(child: Text(title)),
-        ),
-      ),
-    );
   }
 }

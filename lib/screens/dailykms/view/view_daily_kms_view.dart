@@ -4,7 +4,7 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_viewmodel.dart';
+import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -17,12 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
 
-class ViewVehicleEntryView extends StatefulWidget {
+class ViewDailyKmsView extends StatefulWidget {
   @override
-  _ViewVehicleEntryViewState createState() => _ViewVehicleEntryViewState();
+  _ViewDailyKmsViewState createState() => _ViewDailyKmsViewState();
 }
 
-class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
+class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
   final myController = TextEditingController();
@@ -37,7 +37,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ViewVehicleEntryViewModel>.reactive(
+    return ViewModelBuilder<ViewDailyKmsViewModel>.reactive(
       onModelReady: (viewModel) {
         viewModel.getClients();
         getDailyEntry(
@@ -58,7 +58,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'View Entry - ${MyPreferences().getSelectedClient().clientId}',
+                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
             actions: [
@@ -111,12 +111,12 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
           ),
         );
       },
-      viewModelBuilder: () => ViewVehicleEntryViewModel(),
+      viewModelBuilder: () => ViewDailyKmsViewModel(),
     );
   }
 
   registrationSelector(
-      {BuildContext context, ViewVehicleEntryViewModel viewModel}) {
+      {BuildContext context, ViewDailyKmsViewModel viewModel}) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -128,7 +128,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
     );
   }
 
-  registrationNumberTextField(ViewVehicleEntryViewModel viewModel) {
+  registrationNumberTextField(ViewDailyKmsViewModel viewModel) {
     return appTextFormField(
       inputDecoration: InputDecoration(
         hintText: 'Vehicle Number',
@@ -155,14 +155,14 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
   }
 
   void getDailyEntry(
-      {ViewVehicleEntryViewModel viewModel, String registrationNumber}) {
+      {ViewDailyKmsViewModel viewModel, String registrationNumber}) {
     viewModel.vehicleEntrySearch(
       regNum: registrationNumber,
       clientId: viewModel.selectedClient.clientId,
     );
   }
 
-  searchResults({@required ViewVehicleEntryViewModel viewModel}) {
+  searchResults({@required ViewDailyKmsViewModel viewModel}) {
     return ListView.builder(
         // controller: _scrollController,
         itemBuilder: (context, index) {
@@ -180,7 +180,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
         itemCount: viewModel.vehicleEntrySearchResponseList.length + 1);
   }
 
-  Widget _buildChip({@required ViewVehicleEntryViewModel viewModel}) {
+  Widget _buildChip({@required ViewDailyKmsViewModel viewModel}) {
     return Padding(
       padding: getSidePadding(context: context),
       child: Column(
@@ -195,7 +195,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                   iconName: totalKmIcon,
                 ),
               ),
-              wSizedBox(10),
               Expanded(
                 flex: 1,
                 child: buildViewEntrySummary(
@@ -216,7 +215,6 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
                   iconName: fuelIcon,
                 ),
               ),
-              wSizedBox(10),
               Expanded(
                 flex: 1,
                 child: buildViewEntrySummary(
@@ -271,7 +269,7 @@ class _ViewVehicleEntryViewState extends State<ViewVehicleEntryView> {
 }
 
 class _SingleEntryWidget extends StatelessWidget {
-  final ViewVehicleEntryViewModel viewModel;
+  final ViewDailyKmsViewModel viewModel;
   final int index;
 
   const _SingleEntryWidget({
@@ -287,6 +285,7 @@ class _SingleEntryWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: getBorderRadius(),
         child: Card(
+          color: AppColors.appScaffoldColor,
           elevation: 4,
           shape: getCardShape(),
           child: Column(

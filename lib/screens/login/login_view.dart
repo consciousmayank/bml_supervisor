@@ -110,12 +110,14 @@ class _LoginViewState extends State<LoginView> {
                           onTap: () {
                             if (_formKey.currentState.validate()) {
                               viewModel.login(
-                                  userName: userNameController.text,
-                                  password: passwordController.text);
+                                userName: userNameController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
                             }
                           },
                           background: AppColors.primaryColorShade5,
-                          buttonText: 'Log In'),
+                          buttonText: 'Log In',
+                        ),
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.all(32.0),
