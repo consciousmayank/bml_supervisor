@@ -1,21 +1,41 @@
-import 'package:bml_supervisor/app_level/generalised_indextracking_view_model.dart';
+import 'dart:typed_data';
+
+import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
+import 'package:bml_supervisor/screens/profile/profile_apis.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
+class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   bool openConsignmentGroup = false;
-
+  ProfileApi _profileApi = locator<ProfileApisImpl>();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
+  UserProfileResponse _userProfile;
+  Uint8List _image;
+
+  Uint8List get image => _image;
+
+  set image(Uint8List value) {
+    _image = value;
+  }
+
+  UserProfileResponse get userProfile => _userProfile;
+
+  set userProfile(UserProfileResponse value) {
+    _userProfile = value;
+  }
 
   PreferencesSavedUser _savedUser;
 
@@ -130,6 +150,13 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   void onDailyKilometersDrawerTileClicked() {
     navigationService.back();
     navigationService.navigateTo(viewEntryLogPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onUserProfileTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(userProfileRoute).then(
           (value) => reloadPage(),
         );
   }
@@ -270,5 +297,34 @@ class DashBoardScreenViewModel extends GeneralisedIndexTrackingViewModel {
   void changeConsignmentGroupVisibility() {
     openConsignmentGroup = !openConsignmentGroup;
     notifyListeners();
+  }
+
+  Future getUserProfile() async {
+    setBusy(true);
+    UserProfileResponse profileResponse = await _profileApi.getUserProfile();
+    if (profileResponse != null) {
+      userProfile = profileResponse;
+      image = getImageFromBase64String(base64String: userProfile.photo);
+    }
+    notifyListeners();
+    setBusy(false);
+  }
+
+  void showClientSelectBottomSheet() async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      isScrollControlled: true,
+      barrierDismissible: true,
+      customData: MyPreferences().getSelectedClient(),
+      variant: BottomSheetType.clientSelect,
+    );
+
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        GetClientsResponse bottomSheetSelectedClient =
+            sheetResponse.responseData;
+        selectedClient = bottomSheetSelectedClient;
+        reloadPage();
+      }
+    }
   }
 }

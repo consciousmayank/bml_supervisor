@@ -3,7 +3,9 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
@@ -76,22 +78,18 @@ class __MainBodyState extends State<_MainBody> {
             padding: const EdgeInsets.all(8.0),
             child: ClipRRect(
               borderRadius: getBorderRadius(),
-              child: Container(
-                decoration: BoxDecoration(
-                  border:
-                      Border.all(color: AppColors.primaryColorShade5, width: 1),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
+              child: Card(
+                color: AppColors.appScaffoldColor,
+                elevation: defaultElevation,
+                shape: getCardShape(),
                 child: Column(
                   children: [
                     Container(
                       decoration: BoxDecoration(
                         color: ThemeConfiguration.primaryBackground,
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
+                          topLeft: Radius.circular(defaultBorder),
+                          topRight: Radius.circular(defaultBorder),
                         ),
                       ),
                       height: 50.0,
@@ -130,42 +128,47 @@ class __MainBodyState extends State<_MainBody> {
       PendingConsignmentsListViewModel viewModel, int outerIndex) {
     return List.generate(
       viewModel.getConsolidatedData(outerIndex).length,
-      (index) => SingleConsignmentItem(
-        args: SingleConsignmentItemArguments(
-          drop: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .dropOff
-              .toString(),
-          vehicleId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .vehicleId
-              .toString(),
-          routeTitle: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeTitle
-              .toString(),
-          collect: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .collect
-              .toString(),
-          payment: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .payment
-              .toString(),
-          routeId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeId
-              .toString(),
-          consignmentId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .consigmentId
-              .toString(),
-          onTap: () {
-            viewModel.takeToReviewConsignment(
-                selectedConsignment:
-                    viewModel.getConsolidatedData(outerIndex)[index]);
-          },
-        ),
+      (index) => Column(
+        children: [
+          index == 0 ? Container() : DottedDivider(),
+          SingleConsignmentItem(
+            args: SingleConsignmentItemArguments(
+              drop: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .dropOff
+                  .toString(),
+              vehicleId: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .vehicleId
+                  .toString(),
+              routeTitle: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .routeTitle
+                  .toString(),
+              collect: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .collect
+                  .toString(),
+              payment: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .payment
+                  .toString(),
+              routeId: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .routeId
+                  .toString(),
+              consignmentId: viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .consigmentId
+                  .toString(),
+              onTap: () {
+                viewModel.takeToReviewConsignment(
+                    selectedConsignment:
+                        viewModel.getConsolidatedData(outerIndex)[index]);
+              },
+            ),
+          ),
+        ],
       ),
     ).toList();
   }

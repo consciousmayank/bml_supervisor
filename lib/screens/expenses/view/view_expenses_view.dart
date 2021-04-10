@@ -5,18 +5,15 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/select_duration_tab.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -90,75 +87,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                     width: 20,
                   ),
                   onPressed: () {
-                    // print('bottom sheet');
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      isDismissible: false,
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(defaultBorder),
-                          topRight: Radius.circular(defaultBorder),
-                        ),
-                      ),
-                      context: context,
-                      builder: (_) {
-                        return Container(
-                          height: MediaQuery.of(context).size.height*0.8,
-                          child: Wrap(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  // Container(),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Close',
-                                        style: AppTextStyles.latoMedium12PrimaryShade5,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: List.generate(
-                                  viewModel.expenseTypes.length,
-                                  (index) => ListTile(
-                                    onTap: () {
-                                      viewModel.selectedExpenseType =
-                                          viewModel.expenseTypes[index];
-                                      if (index == 0) {
-                                        viewModel.viewExpensesResponse = copyList(
-                                            viewModel
-                                                .expensePieChartResponseListAll);
-                                      } else {
-                                        filterList(viewModel, index);
-                                      }
-                                      viewModel.notifyListeners();
-                                      viewModel.navigationService.back();
-                                    },
-                                    title: Text(
-                                      '${viewModel.expenseTypes[index]}',
-                                    ),
-                                    selectedTileColor:
-                                        AppColors.primaryColorShade4,
-
-                                    selected: viewModel.selectedExpenseType ==
-                                        viewModel.expenseTypes[index],
-                                  ),
-                                ).toList(),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    viewModel.showFiltersBottomSheet();
                   })
             ],
           ),
@@ -186,19 +115,6 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
       },
       viewModelBuilder: () => ViewExpensesViewModel(),
     );
-  }
-
-  void filterList(ViewExpensesViewModel viewModel, int index) {
-    List<ExpensePieChartResponse> tempList = [];
-
-    viewModel.expensePieChartResponseListAll.forEach((element) {
-      if (element.eType == viewModel.expenseTypes[index]) {
-        tempList.add(element);
-      }
-    });
-
-    viewModel.viewExpensesResponse.clear();
-    viewModel.viewExpensesResponse = copyList(tempList);
   }
 
   // Widget selectDuration({ViewExpensesViewModel viewModel}) {

@@ -2,7 +2,7 @@ import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:flutter/cupertino.dart';
 
-class AddEntryArguments {
+class AddDailyKmsArguments {
   final DateTime entryDate;
   final EntryLog vehicleLog;
   final int flagForSearch;
@@ -10,7 +10,7 @@ class AddEntryArguments {
   final RoutesForSelectedClientAndDateResponse selectedRoute;
   final String registrationNumber;
 
-  AddEntryArguments({
+  AddDailyKmsArguments({
     @required this.entryDate,
     @required this.vehicleLog,
     @required this.flagForSearch,

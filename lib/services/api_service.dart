@@ -93,7 +93,7 @@ class ApiService {
   }
 
   ///Get vehicle details to show in
-  ///1. Allot Consignment
+  ///1. Create Consignment
   ///
   /// By sending registrationNumber
   Future<ParentApiResponse> getVehicleDetails(String registrationNumber) async {
@@ -318,10 +318,6 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-
-
-
-
   ///Get the Consignment details with the help of consignmentId.
   Future<ParentApiResponse> getConsignmentWithId({String consignmentId}) async {
     Response response;
@@ -474,10 +470,6 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
-
-
-
-
 
   Future<ParentApiResponse> changePassword(
       {@required String userName, @required String newPassword}) async {

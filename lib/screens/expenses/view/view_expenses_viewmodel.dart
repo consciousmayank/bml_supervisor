@@ -3,15 +3,16 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/models/view_expenses_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../expenses_api.dart';
+import 'expenses_filter_bottom_sheet.dart';
 
 class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
@@ -27,13 +28,16 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   List<ExpensePieChartResponse> viewExpensesResponse = [];
   SearchByRegNoResponse _selectedSearchVehicle;
+
   SearchByRegNoResponse get selectedSearchVehicle => _selectedSearchVehicle;
+
   set selectedSearchVehicle(SearchByRegNoResponse selectedSearchVehicle) {
     _selectedSearchVehicle = selectedSearchVehicle;
     notifyListeners();
   }
 
   String _selectedDuration = "";
+
   String get selectedDuration => _selectedDuration;
 
   set selectedDuration(String selectedDuration) {
@@ -42,7 +46,9 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   }
 
   String _vehicleRegNumber;
+
   String get vehicleRegNumber => _vehicleRegNumber;
+
   set vehicleRegNumber(String vehicleRegNumber) {
     _vehicleRegNumber = vehicleRegNumber;
     notifyListeners();
@@ -60,6 +66,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   String _expenseEntryDate;
 
   String get expenseEntryDate => _expenseEntryDate;
+
   set expenseEntryDate(String expenseEntryDate) {
     _expenseEntryDate = expenseEntryDate;
     notifyListeners();
@@ -98,27 +105,34 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   List<String> uniqueDates = [];
 
   String _expenseAmount;
+
   String get expenseAmount => _expenseAmount;
+
   set expenseAmount(String expenseAmount) {
     _expenseAmount = expenseAmount;
     notifyListeners();
   }
 
   String _expenseDesc;
+
   String get expenseDesc => _expenseDesc;
+
   set expenseDesc(String expenseDesc) {
     _expenseDesc = expenseDesc;
     notifyListeners();
   }
 
   DateTime _fromDate;
+
   DateTime get fromDate => _fromDate;
+
   set fromDate(DateTime fromDate) {
     _fromDate = fromDate;
     notifyListeners();
   }
 
   bool _emptyDateSelector = false;
+
   bool get emptyDateSelector => _emptyDateSelector;
 
   set emptyDateSelector(bool emptyDateSelector) {
@@ -126,6 +140,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
   }
 
   GetClientsResponse _selectedClient;
+
   GetClientsResponse get selectedClient => _selectedClient;
 
   set selectedClient(GetClientsResponse selectedClient) {
@@ -144,8 +159,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void getExpensesList(
-      {String regNum, String clientId}) async {
+  void getExpensesList({String regNum, String clientId}) async {
     expenseCount = 0;
     uniqueDates.clear();
     _expenseTypes.clear();
@@ -163,14 +177,11 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     viewExpensesResponse.forEach((element) {
       // expensePieChartResponseList
       //     .add(element);
-      expensePieChartResponseListAll
-          .add(element);
-      if (!uniqueDates
-          .contains(element.eDate)) {
+      expensePieChartResponseListAll.add(element);
+      if (!uniqueDates.contains(element.eDate)) {
         uniqueDates.add(element.eDate);
       }
-      if (!_expenseTypes
-          .contains(element.eType)) {
+      if (!_expenseTypes.contains(element.eType)) {
         _expenseTypes.add(element.eType);
       }
       totalExpenses += element.eAmount;
@@ -188,24 +199,40 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         .toList();
   }
 
-  // void takeToViewExpenseDetailedPage() {
-  //   print(
-  //       'before sending - expense type: $viewExpensesResponse[0].expenseType');
-  //
-  //   navigationService.navigateTo(
-  //     viewExpensesDetailedViewPageRoute,
-  //     arguments: {
-  //       'viewExpensesDetailedList': viewExpensesResponse,
-  //       'totalExpenses': _totalExpenses,
-  //       'selectedClient':
-  //           selectedClient == null ? 'All Clients' : selectedClient.clientId
-  //     },
-  //   ).then((value) {
-  //     vehicleRegNumber = null;
-  //     _totalExpenses = 0.0;
-  //     // selectedDuration = null;
-  //   });
-  // }
+  void showFiltersBottomSheet() async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: true,
+      isScrollControlled: true,
+      customData: ExpensesFilterBottomSheetInputArgs(
+          expenseTypes: expenseTypes, selectedExpense: selectedExpenseType),
+      variant: BottomSheetType.expenseFilters,
+    );
 
-  // double get totalExpenses => _totalExpenses;
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        ExpensesFilterBottomSheetOutputArgs args = sheetResponse.responseData;
+        selectedExpenseType = args.selectedExpense;
+        if (args.index == 0) {
+          viewExpensesResponse = copyList(expensePieChartResponseListAll);
+        } else {
+          filterList(args.index);
+        }
+        notifyListeners();
+        // viewModel.navigationService.back();
+      }
+    }
+  }
+
+  void filterList(int index) {
+    List<ExpensePieChartResponse> tempList = [];
+
+    expensePieChartResponseListAll.forEach((element) {
+      if (element.eType == expenseTypes[index]) {
+        tempList.add(element);
+      }
+    });
+
+    viewExpensesResponse.clear();
+    viewExpensesResponse = copyList(tempList);
+  }
 }

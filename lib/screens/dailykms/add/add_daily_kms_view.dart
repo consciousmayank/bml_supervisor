@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
-import 'add_entry_logs_viewmodel.dart';
+import 'add_daily_kms_viewmodel.dart';
 
 class AddVehicleEntryView extends StatefulWidget {
   @override
@@ -35,7 +35,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-              "Add Entry - ${MyPreferences().getSelectedClient().clientId}",
+              "Add Daily Kms - ${MyPreferences().getSelectedClient().clientId}",
               style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy

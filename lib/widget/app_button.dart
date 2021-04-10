@@ -20,7 +20,7 @@ class AppButton extends StatelessWidget {
     this.onLongPressed,
     @required this.background,
     @required this.buttonText,
-    @required this.fontSize,
+    this.fontSize = 16,
   }) : super(key: key);
 
   @override
@@ -74,7 +74,8 @@ class AppButton extends StatelessWidget {
               child: Center(
                 child: Text(
                   buttonText,
-                  style: AppTextStyles.latoMedium18White.copyWith(fontSize: fontSize),
+                  style: AppTextStyles.latoMedium18White
+                      .copyWith(fontSize: fontSize),
                   // style: TextStyle(),
                 ),
               ),

@@ -23,9 +23,11 @@ class AddDriverRequest {
     this.workExperienceYr,
     this.remarks,
     this.vehicleId,
+    this.bloodGroup,
   });
 
   final String salutation;
+  final String bloodGroup;
   final String firstName;
   final String lastName;
   final String dob;
@@ -61,6 +63,7 @@ class AddDriverRequest {
     int workExperienceYr,
     String remarks,
     String vehicleId,
+    String bloodGroup,
   }) =>
       AddDriverRequest(
         salutation: salutation ?? this.salutation,
@@ -80,6 +83,7 @@ class AddDriverRequest {
         workExperienceYr: workExperienceYr ?? this.workExperienceYr,
         remarks: remarks ?? this.remarks,
         vehicleId: vehicleId ?? this.vehicleId,
+        bloodGroup: bloodGroup ?? this.bloodGroup,
       );
 
   factory AddDriverRequest.fromJson(String str) =>
@@ -107,6 +111,7 @@ class AddDriverRequest {
         workExperienceYr: json["workExperienceYr"],
         remarks: json["remarks"],
         vehicleId: json["vehicleId"],
+        bloodGroup: json['bloodGroup'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -127,6 +132,7 @@ class AddDriverRequest {
         "workExperienceYr": workExperienceYr,
         "remarks": remarks,
         "vehicleId": vehicleId,
+        "bloodGroup": bloodGroup,
       };
 }
 

@@ -1,8 +1,10 @@
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/screens/consignments/allot/consignment_dialog_params.dart';
-import 'package:bml_supervisor/screens/consignments/allot/existing_consignment_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignment_params.dart';
+import 'package:bml_supervisor/screens/consignments/create/existing_consignment_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
-import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +20,17 @@ void setupBottomSheetUi() {
     BottomSheetType.floating: (context, sheetRequest, completer) =>
         _FloatingBoxBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.viewEntry: (context, sheetRequest, completer) =>
-        ViewEntryBottomSheet(request: sheetRequest, completer: completer),
+        DailyKmsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.consignmentList: (context, sheetRequest, completer) =>
         ExistingConsignmentBottomSheet(
             request: sheetRequest, completer: completer),
     BottomSheetType.createConsignmentSummary: (context, sheetRequest,
             completer) =>
         _CreateConsignmentDialog(request: sheetRequest, completer: completer),
+    BottomSheetType.expenseFilters: (context, sheetRequest, completer) =>
+        ExpensesFilterBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.clientSelect: (context, sheetRequest, completer) =>
+        SelectClientBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
@@ -105,7 +111,7 @@ class _FloatingBoxBottomSheet extends StatelessWidget {
 class _CreateConsignmentDialog extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  ConsignmentDialogParams args;
+  CreateConsignmentDialogParams args;
 
   _CreateConsignmentDialog({
     Key key,

@@ -101,8 +101,8 @@ RoundedRectangleBorder getSelectedCardShape({@required Color color}) {
   );
 }
 
-BorderRadiusGeometry getBorderRadius() {
-  return BorderRadius.circular(defaultBorder);
+BorderRadiusGeometry getBorderRadius({double borderRadius = defaultBorder}) {
+  return BorderRadius.circular(borderRadius);
 }
 
 LinearProgressIndicator getLinearProgress() {

@@ -6,11 +6,11 @@ import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
-class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
+class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
   int _totalKm = 0;
   Set _datesSet = Set();
@@ -139,6 +139,7 @@ class ViewVehicleEntryViewModel extends GeneralisedBaseViewModel {
   Future showMonthYearBottomSheet() async {
     var sheetResponse = await bottomSheetService.showCustomSheet(
       barrierDismissible: true,
+      isScrollControlled: true,
       customData: tempList,
       variant: BottomSheetType.viewEntry,
     );

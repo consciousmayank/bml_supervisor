@@ -8,7 +8,6 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
@@ -382,40 +381,39 @@ class _PaymentsViewState extends State<PaymentsView> {
           onPressed: () {
             //* hit add transaction api
             if (_formKey.currentState.validate()) {
-              if (viewModel.selectedClientForNewTransaction != null) {
-                if (viewModel.emptyDateSelector) {
-                  viewModel
-                      .addNewPayment(
-                    SavePaymentRequest(
-                      clientId:
-                          viewModel.selectedClientForNewTransaction.clientId,
-                      entryDate:
-                          DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
-                      remarks: remarksController.text,
-                      amount: double.parse(totalAmountController.text),
-                      kilometers: double.parse(totalKmController.text),
-                    ),
-                  )
-                      .then((value) {
-                    totalAmountController.clear();
-                    totalKmController.clear();
-                    viewModel.selectedClientForNewTransaction = null;
-                    selectedDateController.clear();
-                    remarksController.clear();
-                    //* call payment history api
-                    viewModel.getPaymentHistory(
-                        viewModel.selectedClientForTransactionList.clientId);
-                    // * update the payment history list with the newly added transaction
-                  });
-                  Navigator.of(context).pop();
-                } else {
-                  viewModel.snackBarService
-                      .showSnackbar(message: "Please Select Date");
-                }
+              // if (viewModel.selectedClientForNewTransaction != null) {
+              if (viewModel.emptyDateSelector) {
+                viewModel
+                    .addNewPayment(
+                  SavePaymentRequest(
+                    clientId:
+                        viewModel.selectedClientForTransactionList.clientId,
+                    entryDate:
+                        DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
+                    remarks: remarksController.text,
+                    amount: double.parse(totalAmountController.text),
+                    kilometers: double.parse(totalKmController.text),
+                  ),
+                )
+                    .then((value) {
+                  totalAmountController.clear();
+                  totalKmController.clear();
+                  selectedDateController.clear();
+                  remarksController.clear();
+                  //* call payment history api
+                  viewModel.getPaymentHistory(
+                      viewModel.selectedClientForTransactionList.clientId);
+                  // * update the payment history list with the newly added transaction
+                });
+                Navigator.of(context).pop();
               } else {
                 viewModel.snackBarService
-                    .showSnackbar(message: "Please Select Client");
+                    .showSnackbar(message: "Please Select Date");
               }
+              // } else {
+              //   viewModel.snackBarService
+              //       .showSnackbar(message: "Please Select Client");
+              // }
             }
           },
         ),
@@ -479,20 +477,6 @@ class _PaymentsViewState extends State<PaymentsView> {
           return null;
         }
       },
-    );
-  }
-
-  Widget selectDuration({PaymentsViewModel viewModel}) {
-    return AppDropDown(
-      optionList: selectDurationList,
-      hint: "Select Duration",
-      onOptionSelect: (selectedValue) {
-        viewModel.selectedDuration = selectedValue;
-        // print(viewModel.selectedDuration);
-      },
-      selectedValue: viewModel.selectedDuration.isEmpty
-          ? null
-          : viewModel.selectedDuration,
     );
   }
 

@@ -1,6 +1,6 @@
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app_level/colors.dart';
@@ -39,9 +39,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 childColor: AppColors.white,
                 borderRadius: getBorderRadius(),
                 onTap: () {
-                  widget.dashBoardScreenViewModel.navigationService.back();
-                  widget.dashBoardScreenViewModel.navigationService
-                      .navigateTo(userProfileRoute);
+                  widget.dashBoardScreenViewModel.onUserProfileTileClicked();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -49,17 +47,9 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: AppColors.primaryColorShade5),
-                        child: Image.asset(
-                          bmlIcon,
-                          height: bmlIconDrawerIconHeight,
-                          width: bmlIconDrawerIconWidth,
-                        ),
-                      ),
+                      ProfileImageWidget(
+                          size: 60,
+                          image: widget.dashBoardScreenViewModel.image),
                       SizedBox(
                         width: 10,
                       ),

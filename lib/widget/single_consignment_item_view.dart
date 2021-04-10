@@ -9,13 +9,15 @@ import 'clickable_widget.dart';
 
 class SingleConsignmentItem extends StatelessWidget {
   final SingleConsignmentItemArguments args;
-
-  const SingleConsignmentItem({Key key, @required this.args}) : super(key: key);
+  final double cardElevation;
+  const SingleConsignmentItem(
+      {Key key, @required this.args, this.cardElevation = 0})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: defaultElevation,
+      elevation: cardElevation,
       shape: getCardShape(),
       child: ClickableWidget(
         borderRadius: getBorderRadius(),
