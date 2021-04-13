@@ -5,7 +5,6 @@ import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
@@ -77,250 +76,207 @@ class _BodyWidgetState extends State<BodyWidget> {
               itemCount: 15,
             ),
           )
-        : Card(
-            color: AppColors.appScaffoldColor,
-            elevation: defaultElevation,
-            shape: getCardShape(),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Hero(
-                    tag: 'test',
-                    child: Transform.translate(
-                      offset: Offset(0, -40),
-                      child: ProfileImageWidget(
-                          image: widget.userProfileViewModel.image),
-                    ),
-                  ),
-                  Text(
-                    MyPreferences().getUserLoggedIn().userName,
-                    style: AppTextStyles.latoBold18PrimaryShade5
-                        .copyWith(color: AppColors.primaryColorShade5),
-                  ),
-                  hSizedBox(8),
-                  Text(
-                    '( ${MyPreferences().getUserLoggedIn().role} )',
-                    style: AppTextStyles.latoBold18PrimaryShade5
-                        .copyWith(fontSize: 10),
-                  ),
-                  hSizedBox(32),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: AppColors.primaryColorShade5,
-                  ),
-                  buildListTile(
-                    title: 'Email',
-                    subTitle: widget.userProfileViewModel.userProfile.emailId,
-                    trailingText: 'Update',
-                    iconName: email,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          // return object of type Dialog
-                          return AlertDialog(
-                            title: Text("Enter New Email ID"),
-                            content: SizedBox(
-                              height: 100,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Column(
-                                children: [
-                                  getUserEmailTextField(
-                                    context: context,
-                                    viewModel: widget.userProfileViewModel,
-                                    // node: node,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              // usually buttons at the bottom of the dialog
-                              ElevatedButton(
-                                child: new Text("Update"),
-                                onPressed: () {
-                                  if (emailController.text.length > 0) {
-                                    widget.userProfileViewModel
-                                        .updateEmail(
-                                      request: UpdateUserRequest(
-                                        email: emailController.text.trim(),
-                                      ),
-                                    )
-                                        .then((value) {
-                                      // print(value);
-                                      if (widget
-                                          .userProfileViewModel.isEmailUpdate) {
-                                        widget.userProfileViewModel
-                                            .getUserProfile();
-                                        emailController.clear();
-                                        widget.userProfileViewModel
-                                            .navigationService
-                                            .back();
-                                        widget.userProfileViewModel
-                                            .navigationService
-                                            .back();
-                                      }
-                                    });
-                                  } else {
-                                    widget.userProfileViewModel.snackBarService
-                                        .showSnackbar(
-                                            message: 'Please fill email');
-                                  }
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: ElevatedButton(
-                                  child: new Text("Exit"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  DottedDivider(),
-
-                  buildListTile(
-                    title: 'Mobile',
-                    subTitle: widget.userProfileViewModel.userProfile.mobile,
-                    trailingText: 'Update',
-                    iconName: phoneNumber,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          // return object of type Dialog
-                          return AlertDialog(
-                            title: Text("Enter New Mobile Number"),
-                            content: SizedBox(
-                              height: 100,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Column(
-                                children: [
-                                  getMobileNumberTextField(
-                                    context: context,
-                                    viewModel: widget.userProfileViewModel,
-                                    // node: node,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              // usually buttons at the bottom of the dialog
-                              ElevatedButton(
-                                child: new Text("Update"),
-                                onPressed: () {
-                                  if (mobileNumberController.text.length > 0) {
-                                    widget.userProfileViewModel
-                                        .updateMobileNumber(
-                                      request: UpdateUserRequest(
-                                        mobile:
-                                            mobileNumberController.text.trim(),
-                                      ),
-                                    )
-                                        .then((value) {
-                                      if (widget.userProfileViewModel
-                                          .isMobileUpdated) {
-                                        widget.userProfileViewModel
-                                            .navigationService
-                                            .back();
-                                        widget.userProfileViewModel
-                                            .navigationService
-                                            .back();
-                                        widget.userProfileViewModel
-                                            .getUserProfile();
-                                        mobileNumberController.clear();
-                                      }
-                                    });
-                                  } else {
-                                    widget.userProfileViewModel.snackBarService
-                                        .showSnackbar(
-                                            message:
-                                                'Please fill mobile number');
-                                  }
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: ElevatedButton(
-                                  child: new Text("Exit"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  DottedDivider(),
-                  buildListTile(
-                    title: 'WhatsApp Number',
-                    subTitle: widget.userProfileViewModel.userProfile.whatsApp,
-                    // trailingText: 'Update',
-                    iconName: whatsAppIcon,
-                  ),
-                  DottedDivider(),
-
-                  buildListTile(
-                      title: 'Change Password',
-                      iconName: profile,
-                      onTap: () {
-                        widget.userProfileViewModel.navigationService
-                            .navigateTo(changePasswordRoute);
-                      }),
-                  DottedDivider(),
-
-                  buildListTile(
-                      title: 'Log Out',
-                      iconName: logout,
-                      onTap: () {
-                        MyPreferences().setLoggedInUser(null);
-                        MyPreferences().saveCredentials(null);
-                        MyPreferences().saveSelectedClient(null);
-                        widget.userProfileViewModel.navigationService
-                            .clearStackAndShow(logInPageRoute);
-                      }),
-                  // Expanded(
-                  //   child: Column(
-                  //     mainAxisSize: MainAxisSize.max,
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       _ProfileTile(
-                  //           title: "Change Password",
-                  //           onTap: () {
-                  //             widget.userProfileViewModel.navigationService
-                  //                 .navigateTo(changePasswordRoute);
-                  //           }),
-                  //       // _ProfileTile(
-                  //       //     title: "Change Client",
-                  //       //     onTap: () {
-                  //       //       MyPreferences().saveSelectedClient(null);
-                  //       //       widget.userProfileViewModel.navigationService
-                  //       //           .clearStackAndShow(clientSelectPageRoute);
-                  //       //     }),
-                  //       _ProfileTile(
-                  //           title: "Logout",
-                  //           onTap: () {
-                  //             MyPreferences().setLoggedInUser(null);
-                  //             MyPreferences().saveCredentials(null);
-                  //             MyPreferences().saveSelectedClient(null);
-                  //             widget.userProfileViewModel.navigationService
-                  //                 .clearStackAndShow(logInPageRoute);
-                  //           }),
-                  //     ],
-                  //   ),
-                  // ),
-                ],
+        : Column(
+            children: [
+              hSizedBox(20),
+              Hero(
+                tag: 'test',
+                child: ProfileImageWidget(
+                    image: widget.userProfileViewModel.image),
               ),
-            ),
+              hSizedBox(20),
+              Text(
+                MyPreferences().getUserLoggedIn().userName,
+                style: AppTextStyles.latoBold18PrimaryShade5
+                    .copyWith(color: AppColors.primaryColorShade5),
+              ),
+              hSizedBox(8),
+              Text(
+                '( ${MyPreferences().getUserLoggedIn().role} )',
+                style: AppTextStyles.latoBold18PrimaryShade5
+                    .copyWith(fontSize: 10),
+              ),
+              hSizedBox(32),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.primaryColorShade5,
+              ),
+              buildListTile(
+                title: 'Email',
+                subTitle:
+                    widget.userProfileViewModel.userProfile.emailId ?? 'NA',
+                trailingText: 'Update',
+                iconName: email,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      // return object of type Dialog
+                      return AlertDialog(
+                        title: Text("Enter New Email ID"),
+                        content: SizedBox(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Column(
+                            children: [
+                              getUserEmailTextField(
+                                context: context,
+                                viewModel: widget.userProfileViewModel,
+                                // node: node,
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          // usually buttons at the bottom of the dialog
+                          ElevatedButton(
+                            child: new Text("Update"),
+                            onPressed: () {
+                              if (emailController.text.length > 0) {
+                                widget.userProfileViewModel
+                                    .updateEmail(
+                                  request: UpdateUserRequest(
+                                    email: emailController.text.trim(),
+                                  ),
+                                )
+                                    .then((value) {
+                                  // print(value);
+                                  if (widget
+                                      .userProfileViewModel.isEmailUpdate) {
+                                    widget.userProfileViewModel
+                                        .getUserProfile();
+                                    emailController.clear();
+                                    widget
+                                        .userProfileViewModel.navigationService
+                                        .back();
+                                    widget
+                                        .userProfileViewModel.navigationService
+                                        .back();
+                                  }
+                                });
+                              } else {
+                                widget.userProfileViewModel.snackBarService
+                                    .showSnackbar(message: 'Please fill email');
+                              }
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: ElevatedButton(
+                              child: new Text("Exit"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+              DottedDivider(),
+              buildListTile(
+                title: 'Mobile',
+                subTitle: widget.userProfileViewModel.userProfile.mobile,
+                trailingText: 'Update',
+                iconName: phoneNumber,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      // return object of type Dialog
+                      return AlertDialog(
+                        title: Text("Enter New Mobile Number"),
+                        content: SizedBox(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Column(
+                            children: [
+                              getMobileNumberTextField(
+                                context: context,
+                                viewModel: widget.userProfileViewModel,
+                                // node: node,
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          // usually buttons at the bottom of the dialog
+                          ElevatedButton(
+                            child: new Text("Update"),
+                            onPressed: () {
+                              if (mobileNumberController.text.length > 0) {
+                                widget.userProfileViewModel
+                                    .updateMobileNumber(
+                                  request: UpdateUserRequest(
+                                    mobile: mobileNumberController.text.trim(),
+                                  ),
+                                )
+                                    .then((value) {
+                                  if (widget
+                                      .userProfileViewModel.isMobileUpdated) {
+                                    widget
+                                        .userProfileViewModel.navigationService
+                                        .back();
+                                    widget
+                                        .userProfileViewModel.navigationService
+                                        .back();
+                                    widget.userProfileViewModel
+                                        .getUserProfile();
+                                    mobileNumberController.clear();
+                                  }
+                                });
+                              } else {
+                                widget.userProfileViewModel.snackBarService
+                                    .showSnackbar(
+                                        message: 'Please fill mobile number');
+                              }
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: ElevatedButton(
+                              child: new Text("Exit"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+              DottedDivider(),
+              buildListTile(
+                title: 'WhatsApp Number',
+                subTitle: widget.userProfileViewModel.userProfile.whatsApp,
+                // trailingText: 'Update',
+                iconName: whatsAppIcon,
+              ),
+              DottedDivider(),
+              buildListTile(
+                  title: 'Change Password',
+                  iconName: profile,
+                  onTap: () {
+                    widget.userProfileViewModel.navigationService
+                        .navigateTo(changePasswordRoute);
+                  }),
+              DottedDivider(),
+              buildListTile(
+                  title: 'Log Out',
+                  iconName: logout,
+                  onTap: () {
+                    MyPreferences().setLoggedInUser(null);
+                    MyPreferences().saveCredentials(null);
+                    MyPreferences().saveSelectedClient(null);
+                    widget.userProfileViewModel.navigationService
+                        .clearStackAndShow(logInPageRoute);
+                  }),
+            ],
           );
   }
 

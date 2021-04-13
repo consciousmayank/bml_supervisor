@@ -26,6 +26,8 @@ class ProfileImageWidget extends StatelessWidget {
         child: image == null
             ? Image.asset(
                 profileIcon,
+                color: AppColors.primaryColorShade5,
+                fit: BoxFit.cover,
                 height: size,
                 width: size,
               )

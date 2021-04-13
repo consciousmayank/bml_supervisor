@@ -7,7 +7,6 @@ import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -15,7 +14,6 @@ import '../expenses_api.dart';
 import 'expenses_filter_bottom_sheet.dart';
 
 class ViewExpensesViewModel extends GeneralisedBaseViewModel {
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
   double _totalExpenses = 0.0;
 

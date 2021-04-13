@@ -4,6 +4,7 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -73,63 +74,75 @@ class BodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      // Create a grid with 2 columns. If you change the scrollDirection to
-      // horizontal, this produces 2 rows.
-      crossAxisCount: 2,
-      // Generate 100 widgets that display their index in the List.
-      children: List.generate(viewModel.clientsList.length, (index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
-            shape: getCardShape(),
-            elevation: defaultElevation,
-            child: InkWell(
-              onTap: () {
-                Future.delayed(Duration(milliseconds: 500), () {
-                  MyPreferences()
-                      .saveSelectedClient(viewModel.clientsList[index]);
-                  if (isCalledFromBottomSheet) {
-                    onClientSelected(viewModel.clientsList[index]);
-                  } else {
-                    viewModel.takeToDashBoard();
-                  }
-                });
-                viewModel.preSelectedClient = viewModel.clientsList[index];
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    viewModel.preSelectedClient != null
-                        ? Radio<GetClientsResponse>(
-                            value: viewModel.preSelectedClient.clientId ==
-                                    viewModel.clientsList[index].clientId
-                                ? viewModel.preSelectedClient
-                                : viewModel.clientsList[index],
-                            onChanged: (GetClientsResponse value) {
-                              viewModel.preSelectedClient = value;
-                            },
-                            groupValue: viewModel.preSelectedClient,
-                          )
-                        : Container(),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
+      children: [
+        appTextFormField(
+          enabled: true,
+          inputDecoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+              hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
+              hintText: 'Enter Client Name'),
+          keyboardType: TextInputType.text,
+        ),
+        Expanded(
+          child: GridView.count(
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount: 2,
+            // Generate 100 widgets that display their index in the List.
+            children: List.generate(viewModel.clientsList.length, (index) {
+              return Card(
+                shape: getCardShape(),
+                elevation: defaultElevation,
+                child: InkWell(
+                  onTap: () {
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      MyPreferences()
+                          .saveSelectedClient(viewModel.clientsList[index]);
+                      if (isCalledFromBottomSheet) {
+                        onClientSelected(viewModel.clientsList[index]);
+                      } else {
+                        viewModel.takeToDashBoard();
+                      }
+                    });
+                    viewModel.preSelectedClient = viewModel.clientsList[index];
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
                       children: [
-                        Image.asset(loginIconIcon),
-                        Text(viewModel.clientsList[index].clientId),
+                        viewModel.preSelectedClient != null
+                            ? Radio<GetClientsResponse>(
+                                value: viewModel.preSelectedClient.clientId ==
+                                        viewModel.clientsList[index].clientId
+                                    ? viewModel.preSelectedClient
+                                    : viewModel.clientsList[index],
+                                onChanged: (GetClientsResponse value) {
+                                  viewModel.preSelectedClient = value;
+                                },
+                                groupValue: viewModel.preSelectedClient,
+                              )
+                            : Container(),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(loginIconIcon),
+                            Text(viewModel.clientsList[index].clientId),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
-        );
-      }),
+        ),
+      ],
     );
   }
 }

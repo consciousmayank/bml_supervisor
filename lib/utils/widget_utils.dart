@@ -317,8 +317,10 @@ int collectionLength(Iterable iterable) {
 }
 
 Uint8List getImageFromBase64String({@required String base64String}) {
-  return Base64Codec()
-      .decode((base64String.split(',')[1]).replaceAll("\\n", "").trim());
+  return base64String == null
+      ? null
+      : Base64Codec()
+          .decode((base64String.split(',')[1]).replaceAll("\\n", "").trim());
 }
 
 List<T> copyList<T>(List<T> items) {
