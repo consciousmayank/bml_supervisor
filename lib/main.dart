@@ -6,6 +6,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'app_level/locator.dart';
+import 'app_level/setup_bottomsheet_ui.dart';
 import 'app_level/setup_dialogs_ui.dart';
 import 'app_level/shared_prefs.dart';
 import 'app_level/themes.dart';
@@ -15,6 +16,7 @@ void main() async {
   await MyPreferences().init();
   declareDependencies();
   setupDialogUi();
+  setupBottomSheetUi();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(
     ScreenBreakpoints(
       desktop: 800,

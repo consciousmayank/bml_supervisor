@@ -1,9 +1,10 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
+import '../utils/api_endpoints.dart';
 import 'configuration.dart';
 
 class DioConfig {
@@ -17,9 +18,7 @@ class DioConfig {
 
   configureDio() {
     _dio.options
-      // ..baseUrl = baseSecureUrl
-      // ..baseUrl = baseSecureUrlBmlApp
-      ..baseUrl = baseRestUrlProduction
+      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrlBmlApp
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
@@ -43,6 +42,7 @@ class DioConfig {
     print("${options.request.baseUrl}${options.request.path}");
     print("${options.data.toString()}");
     print('${options.request.method}');
+    print('${options.request.data}');
     print('${options.request.headers.toString()}');
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     return options;

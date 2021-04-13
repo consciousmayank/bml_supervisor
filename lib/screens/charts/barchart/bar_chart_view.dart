@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -14,8 +15,8 @@ class BarChartView extends StatefulWidget {
   final String selectedDuration;
 
   BarChartView({
-    @required this.clientId,
-    @required this.selectedDuration,
+     this.clientId,
+     this.selectedDuration,
   });
 
   @override
@@ -27,8 +28,7 @@ class _BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
-        clientId: widget.clientId,
-        selectedDuration: widget.selectedDuration,
+        clientId: MyPreferences().getSelectedClient().clientId,
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy
@@ -45,7 +45,9 @@ class _BarChartViewState extends State<BarChartView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             buildChartTitle(title: "Driven Kilometers"),
-                            buildChartSubTitle(time: viewModel?.selectedDate),
+                            // buildChartSubTitle(time: viewModel?.selectedDate),
+                            buildChartSubTitleNew(
+                                date: viewModel.chartDate),
                             hSizedBox(10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -6,6 +6,7 @@ import 'dart:convert';
 
 class CreateConsignmentRequest {
   CreateConsignmentRequest({
+    this.itemUnit,
     this.dropOff,
     this.collect,
     this.payment,
@@ -16,6 +17,7 @@ class CreateConsignmentRequest {
     this.title = 'NA',
     this.routeTitle,
     this.items,
+    this.weight,
   });
 
   final String clientId;
@@ -28,6 +30,8 @@ class CreateConsignmentRequest {
   final int collect;
   final double payment;
   final List<Item> items;
+  final String itemUnit;
+  final double weight;
 
   CreateConsignmentRequest copyWith({
     int id,
@@ -41,6 +45,8 @@ class CreateConsignmentRequest {
     final int dropOff,
     final int collect,
     final double payment,
+    final String itemUnit,
+    final double weight,
   }) =>
       CreateConsignmentRequest(
         clientId: clientId ?? this.clientId,
@@ -53,6 +59,8 @@ class CreateConsignmentRequest {
         collect: collect ?? this.collect,
         payment: payment ?? this.payment,
         dropOff: dropOff ?? this.dropOff,
+        itemUnit: itemUnit ?? this.itemUnit,
+        weight: weight ?? this.weight,
       );
 
   factory CreateConsignmentRequest.fromJson(String str) =>
@@ -71,6 +79,8 @@ class CreateConsignmentRequest {
         dropOff: json['dropOff'],
         collect: json['collect'],
         payment: json['payment'],
+        itemUnit: json['itemUnit'],
+        weight: json['weight'],
         items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
       );
 
@@ -84,6 +94,8 @@ class CreateConsignmentRequest {
         "dropOff": dropOff,
         "title": title,
         "routeTitle": routeTitle,
+        "itemUnit": itemUnit,
+        "weight": weight,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }

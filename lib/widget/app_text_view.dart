@@ -3,14 +3,13 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
 
-///
-///
 class AppTextView extends StatelessWidget {
   final String hintText, value;
   final int lines;
   final TextAlign textAlign;
   final bool isUnderLined;
-  final double underLinedTextFontSize;
+  /// font size is introduced due to less space for Vehicle Number in View Expense
+  final double underLinedTextFontSize, fontSize;
 
   const AppTextView({
     Key key,
@@ -20,11 +19,13 @@ class AppTextView extends StatelessWidget {
     this.lines = 1,
     this.isUnderLined = false,
     this.underLinedTextFontSize = 16.00,
+    this.fontSize = 16,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+
       maxLines: lines,
       textAlign: textAlign,
       style: isUnderLined
@@ -33,7 +34,7 @@ class AppTextView extends StatelessWidget {
               fontSize: underLinedTextFontSize,
               fontWeight: FontWeight.bold,
             )
-          : AppTextStyles.latoMedium16Primary5,
+          : AppTextStyles.latoMedium16Primary5.copyWith(fontSize: fontSize),
       decoration: getInputBorder(hint: hintText),
       enabled: false,
       controller: TextEditingController(text: value),
@@ -44,7 +45,7 @@ class AppTextView extends StatelessWidget {
     return InputDecoration(
       filled: true,
       fillColor: AppColors.appScaffoldColor,
-      contentPadding: EdgeInsets.only(top: 16, left: 4, right: 4, bottom: 8),
+      contentPadding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 8),
       labelText: hint,
       labelStyle: TextStyle(
         color: AppColors.primaryColorShade5,

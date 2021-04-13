@@ -4,13 +4,16 @@ import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
+import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
@@ -90,7 +93,7 @@ class ApiService {
   }
 
   ///Get vehicle details to show in
-  ///1. Allot Consignment
+  ///1. Create Consignment
   ///
   /// By sending registrationNumber
   Future<ParentApiResponse> getVehicleDetails(String registrationNumber) async {
@@ -148,6 +151,17 @@ class ApiService {
       _error = e;
     }
     return ParentApiResponse(error: _error, response: _response);
+  }
+
+  Future getRecentDrivenKm({String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_LAST_SEVEN_ENTRIES(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
   }
 
   Future<ParentApiResponse> submitVehicleEntry({
@@ -214,13 +228,13 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRoutesDrivenKmPercentage(
-      {String clientId, int period}) async {
+      {String clientId}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient
           .getDio()
-          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId, period));
+          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -251,6 +265,53 @@ class ApiService {
       response = await dioClient
           .getDio()
           .get(GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE(clientId, entryDate));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getPendingConsignmentsList({
+    @required String clientId,
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getConsignmentListPageWise({
+    @required String clientId,
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_CONSIGNMENT_LIST_PAGE_WISE(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getRecentConsignmentsForCreateConsignment({
+    @required String clientId,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -316,7 +377,6 @@ class ApiService {
 
   Future<ParentApiResponse> getExpensesList({
     String registrationNumber,
-    String duration,
     String clientId,
   }) async {
     Response response;
@@ -325,9 +385,6 @@ class ApiService {
       var request = new Map();
       if (registrationNumber != null) {
         request['vehicleId'] = registrationNumber;
-      }
-      if (duration != null) {
-        request['period'] = duration;
       }
       if (clientId != null) {
         request['clientId'] = clientId;
@@ -373,6 +430,41 @@ class ApiService {
     DioError error;
     try {
       response = await dioClient.getDio().get(GET_DISTRIBUTORS(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> getUserProfile() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_USER);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future updateUserMobile({UpdateUserRequest request}) async {
+    String body = request.toJson();
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().put(UPDATE_USER_MOBILE, data: body);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future updateUserEmail({UpdateUserRequest request}) async {
+    String body = request.toJson();
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().put(UPDATE_USER_EMAIL, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -443,6 +535,43 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> addRoute(
+      {@required CreateRouteRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().post(ADD_ROUTE, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> addHub({@required AddHubRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().post(ADD_HUB, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
+      {String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

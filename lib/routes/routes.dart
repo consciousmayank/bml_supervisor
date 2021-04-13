@@ -1,14 +1,27 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
+import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_arguments.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_form_view.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/add_entry_logs_view.dart';
-import 'package:bml_supervisor/screens/consignments/allot/consignement_allotment_view.dart';
+import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_view.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
+import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
+import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignement_view.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
+import 'package:bml_supervisor/screens/consignments/details/consignment_details_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_by_date_view.dart';
+import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_view.dart';
+import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
+import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_view.dart';
+import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:bml_supervisor/screens/distributors/distributors_view.dart';
@@ -16,6 +29,7 @@ import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
+import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
@@ -24,8 +38,6 @@ import 'package:bml_supervisor/screens/splash/splash_screen.dart';
 import 'package:bml_supervisor/screens/viewhubs/hubs_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
-import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_detailed_view.dart';
-import 'package:bml_supervisor/screens/viewvehicleentry/view_entry_view.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -50,6 +62,13 @@ class AppRouter {
           ),
         );
 
+      case clientSelectPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: ClientSelectView(),
+          ),
+        );
+
       case searchPageRoute:
         bool showVehicleDetails =
             settings.arguments != null ? settings.arguments : false;
@@ -65,23 +84,61 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddVehicleEntryView(),
-                ) //EntryLogsView(),
-            );
+                ));
 
       case viewEntryLogPageRoute:
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
-                  child: ViewVehicleEntryView(),
-                ) //ViewEntryView(),
-            );
+                  child: ViewDailyKmsView(),
+                ));
 
-      case viewEntryDetailedView2PointOPageRoute:
-        Map<String, dynamic> args = settings.arguments;
+      case pickHubsPageRoute:
+        PickHubsArguments args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: PickHubsView(
+                    args: args,
+                  ),
+                ));
+
+      case consignmentDetailsPageRoute:
+        ConsignmentDetailsArgument args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) =>
+              NetworkSensitive(child: ConsignmentDetailsView(args: args)),
+        );
+
+      case consignmentListByDatePageRoute:
+        // ConsignmentDetailsArgument args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(child: ConsignmentListByDateView()),
+        );
+
+      case arrangeHubsPageRoute:
+        ArrangeHubsArguments args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ViewEntryDetailedView(arguments: args),
-          ),
+              child: ArrangeHubsView(
+            args: args,
+          )),
         );
+
+      case addHubRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: AddHubsView(),
+                ) //EntryLogsView(),
+            );
+
+      case addRoutesPageRoute:
+        AddRoutesArguments args = settings.arguments;
+        List<GetDistributorsResponse> newHubsList = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: AddRoutesView(
+                    args: args,
+                  ),
+                ));
 
       case viewAllConsignmentsViewPageRoute:
         List<RecentConginmentResponse> args = settings.arguments;
@@ -131,7 +188,7 @@ class AppRouter {
       case allotConsignmentsPageRoute:
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ConsignmentAllotmentView(),
+            child: CreateConsignmentView(),
           ),
         );
 
@@ -149,23 +206,35 @@ class AppRouter {
             );
 
       case viewConsignmentsPageRoute:
+        ReviewConsignmentArgs reviewConsignmentArgs = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ViewConsignmentView(),
+            child: ViewConsignmentView(
+              reviewConsignmentArgs: reviewConsignmentArgs,
+            ),
           ),
         );
 
-      case addEntry2PointOFormViewPageRoute:
-        AddEntryArguments args = settings.arguments;
+      case pendingConsignmentsListPageRoute:
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: AddVehicleEntryFormView(arguments: args),
+            child: PendingConsignmentsListView(),
           ),
         );
+
+      // case addEntry2PointOFormViewPageRoute:
+      //   AddDailyKmsArguments args = settings.arguments;
+      //   return MaterialPageRoute(
+      //     builder: (_) => NetworkSensitive(
+      //       child: AddVehicleEntryFormView(arguments: args),
+      //     ),
+      //   );
 
       case paymentsPageRoute:
+        PaymentArgs _paymentArgs = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => NetworkSensitive(child: PaymentsView()),
+          builder: (_) =>
+              NetworkSensitive(child: PaymentsView(args: _paymentArgs)),
         );
 
       case addDriverPageRoute:
@@ -188,8 +257,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: ConsignmentListView(
-              duration: args.duration,
-              clientId: args.clientId,
               isFulPageView: args.isFulPageView,
             ),
           ),

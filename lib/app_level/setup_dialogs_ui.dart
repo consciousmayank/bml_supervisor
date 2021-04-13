@@ -1,10 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
-import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
+import 'package:bml_supervisor/models/create_route_request.dart';
+import 'package:bml_supervisor/screens/dialogs/confirm_route_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -15,15 +12,11 @@ void setupDialogUi() {
   final builders = {
     DialogType.BASIC: (context, sheetRequest, completer) =>
         _BasicDialog(request: sheetRequest, completer: completer),
-    DialogType.CREATE_CONSIGNMENT: (context, sheetRequest, completer) =>
-        _CreateConsignmentDialog(
+    DialogType.CREATE_ROUTE: (context, sheetRequest, completer) =>
+        _CreateRouteDialog(
           request: sheetRequest,
           completer: completer,
-          selectedRoute: sheetRequest.customData.selectedRoute,
-          selectedClient: sheetRequest.customData.selectedClient,
-          validatedRegistrationNumber:
-              sheetRequest.customData.validatedRegistrationNumber,
-          consignmentRequest: sheetRequest.customData.consignmentRequest,
+          routeRequest: sheetRequest.customData.routeRequest,
         ),
   };
 
@@ -43,33 +36,23 @@ class _BasicDialog extends StatelessWidget {
   }
 }
 
-class _CreateConsignmentDialog extends StatelessWidget {
+class _CreateRouteDialog extends StatelessWidget {
   final DialogRequest request;
   final Function(DialogResponse) completer;
-  final CreateConsignmentRequest consignmentRequest;
-  final SearchByRegNoResponse validatedRegistrationNumber;
-  final GetClientsResponse selectedClient;
-  final FetchRoutesResponse selectedRoute;
+  final CreateRouteRequest routeRequest;
 
-  const _CreateConsignmentDialog({
-    Key key,
+  const _CreateRouteDialog({
     this.request,
     this.completer,
-    @required this.consignmentRequest,
-    @required this.validatedRegistrationNumber,
-    @required this.selectedClient,
-    @required this.selectedRoute,
-  }) : super(key: key);
+    @required this.routeRequest,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.primaryColorShade5,
-      child: ConfirmConsignmentView(
-        selectedClient: selectedClient,
-        consignmentRequest: consignmentRequest,
-        selectedRoute: selectedRoute,
-        validatedRegistrationNumber: validatedRegistrationNumber,
+      child: ConfirmRouteView(
+        routeRequest: routeRequest,
         onSubmitClicked: (bool value) {
           completer(
             DialogResponse(confirmed: value),

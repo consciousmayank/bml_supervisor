@@ -7,6 +7,7 @@ import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
+import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -27,6 +28,17 @@ abstract class ConsignmentApis {
 
   Future<ApiResponse> updateConsignment(
       {int consignmentId, ReviewConsignmentRequest putRequest});
+
+  Future<List<SinglePendingConsignmentListItem>> getPendingConsignmentsList(
+      {@required String clientId, @required int pageIndex});
+
+  Future<List<SinglePendingConsignmentListItem>> getConsignmentListPageWise(
+      {@required String clientId, @required int pageIndex});
+
+  Future<List<SinglePendingConsignmentListItem>>
+      getRecentConsignmentsForCreateConsignment({
+    @required String clientId,
+  });
 }
 
 class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
@@ -43,7 +55,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
       //positive
 
       if (apiResponse.isNoDataFound()) {
-        _snackBarService.showSnackbar(message: apiResponse.emptyResult);
+        vehicleDetails = null;
       } else {
         vehicleDetails =
             SearchByRegNoResponse.fromMap(apiResponse.response.data);
@@ -126,6 +138,65 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
 
     if (filterResponse(apiResponse) != null) {
       response = ApiResponse.fromMap(apiResponse.response.data);
+    }
+
+    return response;
+  }
+
+  @override
+  Future<List<SinglePendingConsignmentListItem>> getPendingConsignmentsList(
+      {String clientId, int pageIndex}) async {
+    List<SinglePendingConsignmentListItem> response = [];
+    ParentApiResponse apiResponse = await _apiService
+        .getPendingConsignmentsList(clientId: clientId, pageIndex: pageIndex);
+
+    if (filterResponse(apiResponse) != null) {
+      var responseList = apiResponse.response.data as List;
+      responseList.forEach((element) {
+        SinglePendingConsignmentListItem singlePendingConsignmentListItem =
+            SinglePendingConsignmentListItem.fromMap(element);
+        response.add(singlePendingConsignmentListItem);
+      });
+    }
+
+    return response;
+  }
+
+  @override
+  Future<List<SinglePendingConsignmentListItem>> getConsignmentListPageWise({
+    String clientId,
+    int pageIndex,
+  }) async {
+    List<SinglePendingConsignmentListItem> response = [];
+    ParentApiResponse apiResponse = await _apiService
+        .getConsignmentListPageWise(clientId: clientId, pageIndex: pageIndex);
+
+    if (filterResponse(apiResponse) != null) {
+      var responseList = apiResponse.response.data as List;
+      responseList.forEach((element) {
+        SinglePendingConsignmentListItem singlePendingConsignmentListItem =
+            SinglePendingConsignmentListItem.fromMap(element);
+        response.add(singlePendingConsignmentListItem);
+      });
+    }
+
+    return response;
+  }
+
+  @override
+  Future<List<SinglePendingConsignmentListItem>>
+      getRecentConsignmentsForCreateConsignment({String clientId}) async {
+    List<SinglePendingConsignmentListItem> response = [];
+    ParentApiResponse apiResponse = await _apiService
+        .getRecentConsignmentsForCreateConsignment(clientId: clientId, );
+
+    if (filterResponse(apiResponse) != null) {
+      var responseList = apiResponse.response.data as List;
+      responseList.forEach((element) {
+        SinglePendingConsignmentListItem singlePendingConsignmentListItem =
+        SinglePendingConsignmentListItem.fromMap(element);
+        response.add(singlePendingConsignmentListItem);
+      });
     }
 
     return response;

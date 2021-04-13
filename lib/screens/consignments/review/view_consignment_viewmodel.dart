@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -9,17 +10,16 @@ import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
-  // SearchByRegNoResponse validatedRegistrationNumber;
+
+  bool isInitiallyDataSet = false;
   ReviewConsignmentRequest reviewConsignmentRequest =
       ReviewConsignmentRequest();
   bool _isConsignmentAvailable = false;
@@ -60,6 +60,15 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   set consignmentDetailResponseNew(ConsignmentDetailResponseNew value) {
     _consignmentDetailResponseNew = value;
+    notifyListeners();
+  }
+
+  String _itemUnitG;
+
+  String get itemUnitG => _itemUnitG;
+
+  set itemUnitG(String itemUnitG) {
+    _itemUnitG = itemUnitG;
     notifyListeners();
   }
 
@@ -110,20 +119,9 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
-  }
-
   getClientIds() async {
     setBusy(true);
-    List<GetClientsResponse> clientIdsResponse =
-        await _dashBoardApis.getClientList();
-    _clientsList = copyList(clientIdsResponse);
-    notifyListeners();
+    selectedClient = MyPreferences().getSelectedClient();
     setBusy(false);
   }
 
@@ -157,7 +155,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void getConsignmentWithId(String consignmentId) async {
+  Future getConsignmentWithId({@required String consignmentId}) async {
     setBusy(true);
     reviewConsignmentRequest = ReviewConsignmentRequest();
     reviewConsignmentRequest.reviewedItems = [];
@@ -187,10 +185,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   void updateConsignment() async {
     // hit the update Consignment api
-    //Todo: accessBy should be initialized by Username
-    //TODO has to be changed post security
     reviewConsignmentRequest = reviewConsignmentRequest.copyWith(
-      assessBy: 'Vikas',
+      assessBy: MyPreferences().getUserLoggedIn().userName,
     );
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(
@@ -212,7 +208,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       dialogService
           .showConfirmationDialog(
               title: apiResponse.message, description: 'Consignment Reviewed.')
-          .then((value) => navigationService.back());
+          .then((value) => navigationService.back(result: true));
       setBusy(false);
     }
   }

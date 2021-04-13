@@ -7,7 +7,7 @@ import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/addvehicledailyentry/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -208,7 +208,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     } else {
       SearchByRegNoResponse singleSearchResult =
           SearchByRegNoResponse.fromMap(entryLog.data);
-      print('init reading - ${singleSearchResult.initReading}');
+      // print('init reading - ${singleSearchResult.initReading}');
       isRegNumCorrect = true;
       // vehicleLog = EntryLog.fromMap(entryLog.data);
 

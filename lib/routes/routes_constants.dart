@@ -2,6 +2,7 @@
 
 const String searchPageRoute = '/search';
 const String dashBoardPageRoute = '/dashBoardPageRoute';
+const String clientSelectPageRoute = '/clientSelectPageRoute';
 const String mainViewRoute = '/';
 const String addExpensesPageRoute = '/addExpensesPage';
 const String blankPageRoute = '/blankPage';
@@ -13,6 +14,8 @@ const String viewEntryDetailedViewPageRoute = '/viewEntryDetailedViewPage';
 const String allotConsignmentsPageRoute = '/allotConsignmentsPage';
 const String viewRoutesPageRoute = '/viewRoutesPage';
 const String viewConsignmentsPageRoute = '/viewConsignmentPage';
+const String pendingConsignmentsListPageRoute =
+    '/pendingConsignmentsListPageRoute';
 const String addEntry2PointOLogPageRoute = '/addEntry2PointOLogPage';
 const String addEntry2PointOFormViewPageRoute = '/addEntry2PointOFormViewPage';
 const String viewEntry2PointOLogPageRoute = '/viewEntry2PointOLogPage';
@@ -27,3 +30,9 @@ const String hubsViewPageRoute = '/hubsViewPageRoute';
 const String distributorsLogPageRoute = '/distributorsLogPageRoute';
 const String changePasswordRoute = '/changePasswordRoute';
 const String userProfileRoute = '/userProfileRoute';
+const String addHubRoute = '/addHubRoute';
+const String addRoutesPageRoute = '/addRoutesPageRoute';
+const String pickHubsPageRoute = '/pickHubsPageRoute';
+const String consignmentDetailsPageRoute = '/consignmentDetailsPageRoute';
+const String arrangeHubsPageRoute = '/arrangeHubsPageRoute';
+const String consignmentListByDatePageRoute = '/consignmentListByDatePageRoute';

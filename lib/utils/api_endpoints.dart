@@ -7,21 +7,31 @@ const String SEARCH_BY_REG_NO = "/vehicle/list/";
 final FIND_LAST_ENTRY_BY_DATE =
     (vehicleId) => "/dailyKilometer/recent/entry/vehicle/$vehicleId";
 
+final GET_LAST_SEVEN_ENTRIES =
+    (clientId) => "/manager/recent/drivenKm/client/$clientId";
+
 final GET_DAILY_DRIVEN_KMS_BAR_CHART =
-    (clientId, period) => "/dailyKilometer/client/$clientId/period/$period";
+    (clientId, period) => "/dailyKilometer/client/$clientId";
 
 final GET_ROUTES_DRIVEN_KM =
-    (clientId, period) => "/route/drivenKm/client/$clientId/period/$period";
+    (clientId, period) => "/route/drivenKm/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
     (clientId, date) => "/consignment/list/client/$clientId/date/$date";
+
+final GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT = (clientId, pageIndex) =>
+    "/consignment/list/assess/false/client/$clientId/page/$pageIndex";
+
+final GET_CONSIGNMENT_LIST_PAGE_WISE =
+    (clientId, pageIndex) => "/consignment/list/client/$clientId/page/$pageIndex";
+
+final GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT = (clientId) => "/consignment/list/recent/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 
 final GET_ROUTES_DRIVEN_KM_PERCENTAGE = //06 Get Client Aggregate Driven Km (Donut Chart)
-    (clientId, period) =>
-        "/route/drivenKm/aggregate/client/$clientId/period/$period";
+    (clientId) => "/route/drivenKm/aggregate/client/$clientId";
 
 const String ADD_PUCC_FORM = "/vehicle/pucc/add/";
 const String ADD_INSURANCE_FORM = "/vehicle/insurance/add/";
@@ -58,15 +68,22 @@ final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
 final LOGIN = '/user/auth';
 
 final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
-    (clientId) => "/manager/dashboard/statistics/client/goldenharvest";
+    (clientId) => "/manager/dashboard/statistics/client/$clientId";
 
 const String GET_CLIENTS = "/manager/client/list";
+const String GET_USER = "/user/profile";
+const String UPDATE_USER_MOBILE = "/user/update/mobile";
+const String UPDATE_USER_EMAIL = "/user/update/email";
 const String CHANGE_PASSWORD = "/user/update/password";
 const String GET_APP_VERSION = "/info/get/version";
 const String GET_CITIES = "/location/city/list";
 const String ADD_DRIVER = "/manager/driver/add";
+const String ADD_ROUTE = "/route/add";
+const String ADD_HUB = "/hub/add";
 const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
 final GET_DAILY_KM_INFO = (date) => "/dailyKilometer/info/$date";
 final GET_CITY_LOCATION = (cityId) => "/location/city/$cityId";
+final GET_EXPENSE_PIE_CHART =
+    (clientId) => "/expense/aggregate/client/$clientId";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 ///////////////////////////////////////////////////////////////

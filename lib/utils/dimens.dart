@@ -33,3 +33,4 @@ const double drawerIconsWidth = 20.00;
 
 const double defaultIconIconHeight = 24;
 const double defaultIconWidth = 24;
+const double profileImageSize = 100;

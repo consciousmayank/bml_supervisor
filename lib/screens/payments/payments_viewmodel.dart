@@ -1,15 +1,14 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/payments/payments_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();
 
   double _totalAmt = 0.0;
@@ -27,15 +26,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   set noOfPayments(int value) {
     _noOfPayments = value;
-    notifyListeners();
-  }
-
-  List<GetClientsResponse> _clientsList = [];
-
-  List<GetClientsResponse> get clientsList => _clientsList;
-
-  set clientsList(List<GetClientsResponse> value) {
-    _clientsList = value;
     notifyListeners();
   }
 
@@ -59,15 +49,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  String _selectedDuration = "";
-
-  String get selectedDuration => _selectedDuration;
-
-  set selectedDuration(String selectedDuration) {
-    _selectedDuration = selectedDuration;
-    notifyListeners();
-  }
-
   GetClientsResponse _selectedClientForTransactionList;
 
   GetClientsResponse get selectedClientForTransactionList =>
@@ -81,14 +62,14 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   GetClientsResponse _selectedClientForNewTransaction;
 
-  GetClientsResponse get selectedClientForNewTransaction =>
-      _selectedClientForNewTransaction;
-
-  set selectedClientForNewTransaction(
-      GetClientsResponse selectedClientForNewTransaction) {
-    _selectedClientForNewTransaction = selectedClientForNewTransaction;
-    notifyListeners();
-  }
+  // GetClientsResponse get selectedClientForNewTransaction =>
+  //     _selectedClientForNewTransaction;
+  //
+  // set selectedClientForNewTransaction(
+  //     GetClientsResponse selectedClientForNewTransaction) {
+  //   _selectedClientForNewTransaction = selectedClientForNewTransaction;
+  //   notifyListeners();
+  // }
 
   Future addNewPayment(SavePaymentRequest savePaymentRequest) async {
     setBusy(true);
@@ -100,20 +81,20 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    clientsList = [];
-    print('selected client: $selectedClientForTransactionList');
-    _clientsList = copyList(await _dashBoardApis.getClientList());
-
+    selectedClientForTransactionList = MyPreferences().getSelectedClient();
+    // selectedClientForNewTransaction = selectedClientForTransactionList;
+    getPaymentHistory(selectedClientForTransactionList.clientId);
     setBusy(false);
     notifyListeners();
   }
 
   getPaymentHistory(String clientId) async {
+    setBusy(true);
     totalAmt = 0.0;
     noOfPayments = 0;
     paymentHistoryResponseList.clear();
     notifyListeners();
-    setBusy(true);
+
     var response = await _paymentsApis.getPaymentHistory(clientId: clientId);
     paymentHistoryResponseList = copyList(response);
 
@@ -121,7 +102,6 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
       totalAmt += element.amount;
       noOfPayments++;
     });
-
     notifyListeners();
     setBusy(false);
   }

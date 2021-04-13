@@ -55,6 +55,13 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
   }
 
   String _selectedGender = '';
+  String _selectedBloodGroup = '';
+
+  String get selectedBloodGroup => _selectedBloodGroup;
+
+  set selectedBloodGroup(String value) {
+    _selectedBloodGroup = value;
+  }
 
   CitiesResponse _selectedCity;
 
@@ -91,8 +98,10 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
         await _driverApis.addDriver(request: newDriverObject);
     dialogService
         .showConfirmationDialog(
+            title: _apiResponse.isSuccessful()
+                ? addDriverSuccessful
+                : addDriverUnSuccessful,
             description: _apiResponse.message,
-            title: _apiResponse.message,
             barrierDismissible: false)
         .then((value) {
       if (value.confirmed) {

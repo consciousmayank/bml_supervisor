@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +24,21 @@ hSizedBox(double height) {
   return SizedBox(
     height: height,
   );
+}
+
+Text buildChartSubTitleNew({String date}) {
+  return Text(
+    '(' + getChartMonth(date: date) + ', ' + getChartYear(date: date) + ')',
+    style: AppTextStyles.latoBold12Black,
+  );
+}
+
+String getChartYear({String date}) {
+  return date.split('-').last;
+}
+
+String getChartMonth({String date}) {
+  return getMonth(int.parse(date.split('-')[1]));
 }
 
 getDashboardDistributerTileBgColor() {
@@ -66,6 +83,13 @@ wSpacer() {
   );
 }
 
+void hideKeyboard(BuildContext context) {
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+    currentFocus.focusedChild.unfocus();
+  }
+}
+
 RoundedRectangleBorder getCardShape() {
   return RoundedRectangleBorder(borderRadius: getBorderRadius());
 }
@@ -77,8 +101,8 @@ RoundedRectangleBorder getSelectedCardShape({@required Color color}) {
   );
 }
 
-BorderRadiusGeometry getBorderRadius() {
-  return BorderRadius.circular(defaultBorder);
+BorderRadiusGeometry getBorderRadius({double borderRadius = defaultBorder}) {
+  return BorderRadius.circular(borderRadius);
 }
 
 LinearProgressIndicator getLinearProgress() {
@@ -87,6 +111,10 @@ LinearProgressIndicator getLinearProgress() {
     valueColor:
         new AlwaysStoppedAnimation<Color>(ThemeConfiguration.primaryBackground),
   );
+}
+
+String capitalizeFirstLetter(String title) {
+  return "${title[0].toUpperCase()}${title.substring(1)}";
 }
 
 String getDateString(DateTime date) {
@@ -288,6 +316,13 @@ int collectionLength(Iterable iterable) {
   return iterable == null ? 0 : iterable.length;
 }
 
+Uint8List getImageFromBase64String({@required String base64String}) {
+  return base64String == null
+      ? null
+      : Base64Codec()
+          .decode((base64String.split(',')[1]).replaceAll("\\n", "").trim());
+}
+
 List<T> copyList<T>(List<T> items) {
   var newItems = <T>[];
   if (items != null) {
@@ -343,28 +378,26 @@ Widget drawerList({String text, String imageName, Function onTap}) {
   return Padding(
     padding: const EdgeInsets.only(top: 2, bottom: 2),
     child: ClickableWidget(
+      childColor: AppColors.white,
       borderRadius: getBorderRadius(),
       onTap: () {
         onTap.call();
       },
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
           children: [
             imageName == null
                 ? Container()
-                : Image.asset(
-                    imageName,
-                    height: drawerIconsHeight,
-                    width: drawerIconsWidth,
-                    // color: AppColors.primaryColorShade5,
+                : IconBlueBackground(
+                    iconName: imageName,
                   ),
             imageName == null ? Container() : wSizedBox(20),
             Expanded(
               child: Text(
                 text,
-                style: AppTextStyles.latoBold14Black
-                    .copyWith(color: AppColors.primaryColorShade5),
+                style: AppTextStyles.latoMedium12Black.copyWith(
+                    color: AppColors.primaryColorShade5, fontSize: 14),
               ),
             ),
           ],

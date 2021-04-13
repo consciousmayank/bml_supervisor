@@ -122,11 +122,12 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildVehicleTextFormField(),
               buildDlTextFormField(),
               buildAadhaarTextFormField(),
+              hSizedBox(2),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: AppDropDown(
                       optionList: genders,
                       hint: 'Select Gender',
@@ -135,16 +136,26 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                           : widget.viewModel.selectedGender,
                       onOptionSelect: (String selectedValue) {
                         widget.viewModel.selectedGender = selectedValue;
-                        fNameFocusNode.requestFocus();
                       },
                     ),
                   ),
                   Expanded(
-                    flex: 3,
-                    child: buildFirstNameTextFormField(),
+                    flex: 1,
+                    child: AppDropDown(
+                      optionList: bloodGroup,
+                      hint: 'Select Blood Group',
+                      selectedValue: widget.viewModel.selectedBloodGroup.isEmpty
+                          ? null
+                          : widget.viewModel.selectedBloodGroup,
+                      onOptionSelect: (String selectedValue) {
+                        widget.viewModel.selectedBloodGroup = selectedValue;
+                        fNameFocusNode.requestFocus();
+                      },
+                    ),
                   ),
                 ],
               ),
+              buildFirstNameTextFormField(),
               buildLastNameTextFormField(),
               buildDobView(),
               buildFatherNameTextFormField(),
@@ -187,6 +198,12 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       controller: vehicleIdController,
       focusNode: vehicleIdFocusNode,
       hintText: addDriverVehicleIdHint,
+      // inputDecoration: InputDecoration(
+      //   hintText: 'Vehicle Number',
+      //   hintStyle: TextStyle(
+      //     color: Colors.grey,
+      //   ),
+      // ),
       keyboardType: TextInputType.text,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
@@ -316,6 +333,13 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, fatherNameFocusNode, mobileNumberFocusNode);
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return textRequired;
+        } else {
+          return null;
+        }
       },
     );
   }
@@ -693,6 +717,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
             if (_formKey.currentState.validate()) {
               widget.viewModel.addDriver(
                   newDriverObject: AddDriverRequest(
+                      bloodGroup: widget.viewModel.selectedBloodGroup,
                       salutation: widget.viewModel.getSalutation(),
                       firstName: fNameController.text,
                       lastName: lNameController.text,
@@ -711,15 +736,16 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       vehicleId: vehicleIdController.text,
                       address: [
                     Address(
-                        type: 'RESIDENTIAL',
-                        addressLine1: streetController.text,
-                        addressLine2: 'NA',
-                        locality: localityController.text,
-                        nearby: landmarkController.text,
-                        city: widget.viewModel.selectedCity.city,
-                        state: widget.viewModel.stateController.text,
-                        country: widget.viewModel.countryController.text,
-                        pincode: widget.viewModel.pinCodeController.text)
+                      type: 'RESIDENTIAL',
+                      addressLine1: streetController.text,
+                      addressLine2: 'NA',
+                      locality: localityController.text,
+                      nearby: landmarkController.text,
+                      city: widget.viewModel.selectedCity.city,
+                      state: widget.viewModel.stateController.text,
+                      country: widget.viewModel.countryController.text,
+                      pincode: widget.viewModel.pinCodeController.text,
+                    )
                   ]));
             }
           },

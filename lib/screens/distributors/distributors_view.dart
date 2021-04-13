@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/distributors/distributors_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -20,7 +21,8 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DistributorsScreenViewModel>.reactive(
       onModelReady: (viewModel) async {
-        viewModel.getClients();
+        viewModel.selectedClient = MyPreferences().getSelectedClient();
+        viewModel.getDistributors(selectedClient: viewModel.selectedClient);
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -40,7 +42,7 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    selectClientForDashboardStats(viewModel: viewModel),
+                    // selectClientForDashboardStats(viewModel: viewModel),
                     viewModel.distributorsResponseList.length > 0
                         ? Container(
                             color: AppColors.primaryColorShade5,

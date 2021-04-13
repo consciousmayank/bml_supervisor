@@ -26,7 +26,6 @@ class _PieChartViewState extends State<PieChartView> {
     return ViewModelBuilder<PieChartViewModel>.reactive(
         onModelReady: (viewModel) => viewModel.getRoutesDrivenKmPercentage(
               clientId: widget.clientId,
-              period: widget.selectedDuration,
             ),
         builder: (context, viewModel, child) {
           return viewModel.isBusy
@@ -42,7 +41,8 @@ class _PieChartViewState extends State<PieChartView> {
                           children: <Widget>[
                             buildChartTitle(
                                 title: 'Route Driven Kilometers (%)'),
-                            buildChartSubTitle(time: viewModel?.selectedDate),
+                            viewModel.buildChartSubTitleNew(),
+                            // buildChartSubTitle(time: viewModel?.selectedDate),
                             hSizedBox(5),
                             SizedBox(
                               height: MediaQuery.of(context).size.width,

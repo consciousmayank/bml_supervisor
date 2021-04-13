@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class KilometerReportResponse {
 
   String entryDate;
   int drivenKm;
-  charts.Color barColor = charts.ColorUtil.fromDartColor(Color(0xff04BFAE));
+  charts.Color barColor = charts.ColorUtil.fromDartColor(AppColors.primaryColorShade5);
 
   factory KilometerReportResponse.fromJson(Map<String, dynamic> json) =>
       KilometerReportResponse(

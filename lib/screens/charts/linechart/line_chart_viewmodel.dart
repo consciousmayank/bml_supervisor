@@ -4,6 +4,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/routes_driven_km.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LineChartViewModel extends GeneralisedBaseViewModel {
@@ -16,6 +17,15 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
     _selectedDateForLineChart = value;
   }
 
+  String _chartDate;
+
+  String get chartDate => _chartDate;
+
+  set chartDate(String value) {
+    _chartDate = value;
+    notifyListeners();
+  }
+
   List<RoutesDrivenKm> routesDrivenKmListForLineChart = [];
   List uniqueRoutes = [];
   List<DateTime> uniqueDatesForLineChart = [];
@@ -23,6 +33,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
 
   // List<charts.Series<RoutesDrivenKm, int>> seriesLineData = [];
   List<BezierLine> bezierLineList = [];
+  List<String> uniqueDates = [];
 
   List<Color> lineChartColorArray = [
     Color(0xff2F4B7C),
@@ -44,50 +55,58 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
 
   void getRoutesDrivenKm({
     String clientId,
-    String selectedDuration,
   }) async {
-    //line chart/graph api
-    routesDrivenKmListForLineChart.clear();
-    dataForLineChart = [];
 
-    int selectedDurationValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
-    if (selectedDurationValue == 1) {
-      selectedDateForLineChart = DateTime.now();
-    } else {
-      selectedDateForLineChart = DateTime.now().subtract(Duration(days: 30));
-    }
+      chartDate = '';
+      routesDrivenKmListForLineChart.clear();
+      dataForLineChart = [];
 
-    setBusy(true);
-    notifyListeners();
-    List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
-      clientId: clientId,
-      period: selectedDurationValue,
-    );
+      // int selectedDurationValue =
+      //     selectedDuration.contains('THIS MONTH') ? 1 : 2;
+      // if (selectedDurationValue == 1) {
+      //   selectedDateForLineChart = DateTime.now();
+      // } else {
+      //   selectedDateForLineChart = DateTime.now().subtract(Duration(days: 30));
+      // }
 
-    routesDrivenKmListForLineChart = copyList(res);
+      setBusy(true);
+      notifyListeners();
+      List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
+        clientId: clientId,
+      );
 
-    // add distinct routes and dates to uniqueRoutes and uniqueDates
-    routesDrivenKmListForLineChart.forEach(
-      (routesDrivenKmObject) {
-        if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
-          uniqueRoutes.add(routesDrivenKmObject.routeId);
-        }
-        if (!uniqueDatesForLineChart.contains(routesDrivenKmObject.entryDate)) {
-          uniqueDatesForLineChart.add(routesDrivenKmObject.entryDateTime);
-        }
-      },
-    );
+      routesDrivenKmListForLineChart = copyList(res);
 
-    uniqueRoutes.forEach(
-      (singleRouteElement) {
-        dataForLineChart.add(
-          routesDrivenKmListForLineChart
-              .where((routeDrivenKmObject) =>
-                  routeDrivenKmObject.routeId == singleRouteElement)
-              .toList(),
-        );
-      },
-    );
+      // add distinct routes and dates to uniqueRoutes and uniqueDates
+      routesDrivenKmListForLineChart.forEach(
+        (routesDrivenKmObject) {
+          if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
+            uniqueRoutes.add(routesDrivenKmObject.routeId);
+          }
+          if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
+            uniqueDates.add(routesDrivenKmObject.entryDate);
+          }
+          if (!uniqueDatesForLineChart
+              .contains(routesDrivenKmObject.entryDate)) {
+            uniqueDatesForLineChart.add(routesDrivenKmObject.entryDateTime);
+          }
+        },
+      );
+      if (uniqueDates.length > 0) {
+        chartDate = uniqueDates?.first;
+      }
+
+      uniqueRoutes.forEach(
+        (singleRouteElement) {
+          dataForLineChart.add(
+            routesDrivenKmListForLineChart
+                .where((routeDrivenKmObject) =>
+                    routeDrivenKmObject.routeId == singleRouteElement)
+                .toList(),
+          );
+        },
+      );
+
 
     notifyListeners();
     setBusy(false);
@@ -103,7 +122,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
     bezierLineList = [];
     dataForLineChart.forEach((singleLineData) {
       List<DataPoint<DateTime>> dataList = [];
-      print("Colors :: ${dataForLineChart.indexOf(singleLineData)}");
+      // print("Colors :: ${dataForLineChart.indexOf(singleLineData)}");
       singleLineData.forEach((element) {
         dataList.add(DataPoint<DateTime>(
             value: element.drivenKmG.toDouble(), xAxis: element.entryDateTime));

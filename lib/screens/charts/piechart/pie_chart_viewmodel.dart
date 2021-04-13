@@ -2,11 +2,14 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 class PieChartViewModel extends GeneralisedBaseViewModel {
+  int eMonth;
+  int eYear;
   ChartsApi _chartsApi = locator<ChartsApiImpl>();
   List<String> _uniqueRoutes = [];
 
@@ -43,15 +46,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalDrivenKmG = 0.0;
 
-  void getRoutesDrivenKmPercentage({String clientId, String period}) async {
-    int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
-
-    if (selectedPeriodValue == 1) {
-      selectedDate = DateTime.now();
-    } else {
-      selectedDate = DateTime.now().subtract(Duration(days: 30));
-    }
-
+  void getRoutesDrivenKmPercentage({String clientId}) async {
     routesDrivenKmPercentageList.clear();
     totalDrivenKmG = 0;
     setBusy(true);
@@ -60,7 +55,6 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
     List<RoutesDrivenKmPercentage> res =
         await _chartsApi.getRoutesDrivenKmPercentage(
       clientId: clientId,
-      period: selectedPeriodValue,
     );
 
     routesDrivenKmPercentageList = copyList(res);
@@ -69,6 +63,9 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
       if (!uniqueRoutes.contains(element.routeId)) {
         uniqueRoutes.add(element.routeId.toString());
       }
+      eMonth = element.eMonth;
+      eYear = element.eYear;
+      print('%%%%%%%%%%%%%eMonth ${element.eMonth}');
       totalDrivenKmG += element.drivenKmG;
     });
 
@@ -89,6 +86,13 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
 
     notifyListeners();
     setBusy(false);
+  }
+
+  Text buildChartSubTitleNew() {
+    return Text(
+      '(' + getMonth(eMonth) + ', ' + eYear.toString() + ')',
+      style: AppTextStyles.latoBold12Black,
+    );
   }
 
   String getRouteTitle(int index) {
