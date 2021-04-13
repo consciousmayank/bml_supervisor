@@ -10,7 +10,6 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 
 class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
   int eMonth;
@@ -76,10 +75,8 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     notifyListeners();
     // try {
-    ParentApiResponse apiResponse =
-        await _chartsApi.getExpensesListForPieChartAggregate(
-      clientId: clientId
-    );
+    ParentApiResponse apiResponse = await _chartsApi
+        .getExpensesListForPieChartAggregate(clientId: clientId);
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {
         // snackBarService.showSnackbar(message: apiResponse.emptyResult);
@@ -99,8 +96,8 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
                   .contains(routesDrivenKmPercentageResponse.eType)) {
                 uniqueExpenseTypes.add(routesDrivenKmPercentageResponse.eType);
               }
-              eMonth = int.parse(routesDrivenKmPercentageResponse.eMonth);
-              eYear = int.parse(routesDrivenKmPercentageResponse.eYear);
+              eMonth = routesDrivenKmPercentageResponse.eMonth;
+              eYear = routesDrivenKmPercentageResponse.eYear;
 
               ++colorArrayIndex;
               totalExpenses += routesDrivenKmPercentageResponse.eAmount;

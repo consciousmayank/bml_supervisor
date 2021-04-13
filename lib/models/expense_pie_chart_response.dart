@@ -3,6 +3,7 @@
 //     final expensePieChartResponse = expensePieChartResponseFromMap(jsonString);
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 List<ExpensePieChartResponse> expensePieChartResponseFromMap(String str) =>
@@ -27,8 +28,8 @@ class ExpensePieChartResponse {
   double eAmount;
   String vehicleId;
   String eDate;
-  String eMonth;
-  String eYear;
+  int eMonth;
+  int eYear;
   final Color color;
 
   ExpensePieChartResponse copyWith({
@@ -37,16 +38,16 @@ class ExpensePieChartResponse {
     String vehicleId,
     String eDate,
     Color color,
-    String eMonth,
-    String eYear,
+    int eMonth,
+    int eYear,
   }) =>
       ExpensePieChartResponse(
         eType: eType ?? this.eType,
         eAmount: eAmount ?? this.eAmount,
         vehicleId: vehicleId ?? this.vehicleId,
         eDate: eDate ?? this.eDate,
-        eMonth: eMonth?? this.eMonth,
-        eYear: eYear??this.eYear,
+        eMonth: eMonth ?? this.eMonth,
+        eYear: eYear ?? this.eYear,
         color: color ?? this.color,
       );
 
