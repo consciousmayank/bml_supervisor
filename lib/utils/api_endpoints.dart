@@ -22,13 +22,16 @@ final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
 final GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT = (clientId, pageIndex) =>
     "/consignment/list/assess/false/client/$clientId/page/$pageIndex";
 
-final GET_CONSIGNMENT_LIST_PAGE_WISE =
-    (clientId, pageIndex) => "/consignment/list/client/$clientId/page/$pageIndex";
+final GET_CONSIGNMENT_LIST_PAGE_WISE = (clientId, pageIndex) =>
+    "/consignment/list/client/$clientId/page/$pageIndex";
 
-final GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT = (clientId) => "/consignment/list/recent/client/$clientId";
+final GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT =
+    (clientId) => "/consignment/list/recent/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
+final GET_COMPLETED_TRIPS_BY_ID = (consignmentId, clientId) =>
+    "/manager/consignment/$consignmentId/client/$clientId/tracking/status/completed";
 
 final GET_ROUTES_DRIVEN_KM_PERCENTAGE = //06 Get Client Aggregate Driven Km (Donut Chart)
     (clientId) => "/route/drivenKm/aggregate/client/$clientId";
@@ -85,5 +88,7 @@ final GET_DAILY_KM_INFO = (date) => "/dailyKilometer/info/$date";
 final GET_CITY_LOCATION = (cityId) => "/location/city/$cityId";
 final GET_EXPENSE_PIE_CHART =
     (clientId) => "/expense/aggregate/client/$clientId";
+final GET_CONSIGNMENT_TRACKING_STATUS =
+    (clientId) => "/manager/consignment/tracking/status/client/$clientId";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 ///////////////////////////////////////////////////////////////

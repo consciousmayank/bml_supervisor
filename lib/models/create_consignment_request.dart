@@ -107,7 +107,7 @@ class Item {
     this.hubContactPerson,
     this.hubGeoLatitude,
     this.hubGeoLongitude,
-    this.id,
+    // this.id,
     this.hubId,
     this.sequence,
     this.title = 'NA',
@@ -123,7 +123,7 @@ class Item {
     this.flag,
   });
 
-  final int id;
+  // final int id;
   final int hubId;
   final int sequence;
   final dynamic title;
@@ -165,7 +165,7 @@ class Item {
     double hubGeoLongitude,
   }) =>
       Item(
-        id: id ?? this.id,
+        // id: id ?? this.id,
         hubId: hubId ?? this.hubId,
         sequence: sequence ?? this.sequence,
         title: title ?? this.title,
@@ -190,7 +190,7 @@ class Item {
   String toJson() => json.encode(toMap());
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
-        id: json["id"],
+        // id: json["id"],
         hubId: json["hubId"],
         sequence: json["sequence"],
         title: json["title"],
@@ -212,7 +212,7 @@ class Item {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        // "id": id,
         "hubId": hubId,
         "sequence": sequence,
         "title": title,

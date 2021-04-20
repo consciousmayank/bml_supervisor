@@ -9,6 +9,7 @@ Widget appTextFormField({
   TextEditingController controller,
   FocusNode focusNode,
   String hintText,
+  String initialValue,
   TextAlign textAlignment = TextAlign.start,
   TextCapitalization textCapitalization = TextCapitalization.none,
   TextInputType keyboardType,
@@ -56,6 +57,7 @@ Widget appTextFormField({
         child: Padding(
           padding: const EdgeInsets.only(top: 2, bottom: 2),
           child: TextFormField(
+              initialValue: initialValue,
               autovalidateMode: autoValidateMode,
               textAlign: textAlignment,
               onEditingComplete: onEditingComplete,

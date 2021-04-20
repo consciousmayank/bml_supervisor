@@ -52,3 +52,6 @@ final String profile = _imagePath + 'icon_profile_user.png';
 final String whatsAppIcon = _imagePath + 'whats_app_icon.png';
 final String drawerRupeeIcon = _imagePath + 'drawer_rupee_icon.png';
 final String consignmentListIcon = _imagePath + 'consignment_list_icon.png';
+final String forwardArrowIcon = _imagePath + 'forward_arrow_icon.png';
+final String blueRouteIcon = _imagePath + 'blue_route_icon.png';
+final String completedTripsIcon = _imagePath + 'completed_trips.png';

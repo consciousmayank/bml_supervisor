@@ -685,7 +685,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: new DateTime(1990),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2500),
     );
 
     return picked;

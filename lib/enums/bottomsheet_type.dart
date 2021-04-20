@@ -4,5 +4,7 @@ enum BottomSheetType {
   consignmentList,
   createConsignmentSummary,
   expenseFilters,
-  clientSelect
+  clientSelect,
+  upcomingTrips,
+  COMPLETED_TRIP_REVIEW_REMARKS
 }

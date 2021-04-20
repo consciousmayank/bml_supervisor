@@ -246,8 +246,8 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
           remarks: null,
           startReadingGround: null,
           drivenKmGround: null,
-          status: null,
-          routeId: null);
+          routeId: null,
+          consignmentId: null);
       flagForSearch = 1;
 
       // vehicleLog = EntryLog.fromMap(entryLog.data);
@@ -257,18 +257,18 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
 
   submitVehicleEntry(EntryLog entryLogRequest) async {
     setBusy(true);
-    bool apiResponse = await _dailyEntryApis.submitVehicleEntry(
-        entryLogRequest: entryLogRequest);
-
-    if (apiResponse) {
-      navigationService.back();
-    } else {
-      selectedVehicle = null;
-      entryDate = null;
-      vehicleLog = null;
-      undertakenTrips = 1;
-      isFuelEntryAdded = false;
-    }
+    // bool apiResponse = await _dailyEntryApis.submitVehicleEntry(
+    //     entryLogRequest: entryLogRequest);
+    //
+    // if (apiResponse) {
+    //   navigationService.back();
+    // } else {
+    //   selectedVehicle = null;
+    //   entryDate = null;
+    //   vehicleLog = null;
+    //   undertakenTrips = 1;
+    //   isFuelEntryAdded = false;
+    // }
     setBusy(false);
   }
 

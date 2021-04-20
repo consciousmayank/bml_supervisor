@@ -121,5 +121,6 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 14,
     color: AppColors.primaryColorShade5,
+    decoration: TextDecoration.underline,
   );
 }

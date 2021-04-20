@@ -7,7 +7,9 @@ class IconBlueBackground extends StatelessWidget {
   final String iconName;
   final double iconHeight;
   final double iconWidth;
+  final bool isSubMenu;
   const IconBlueBackground({
+    this.isSubMenu = false,
     @required this.iconName,
     this.iconWidth = drawerIconsHeight,
     this.iconHeight = drawerIconsWidth,
@@ -17,8 +19,8 @@ class IconBlueBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48,
-      width: 48,
+      height: isSubMenu ? 36 : 48,
+      width: isSubMenu ? 36 : 48,
       decoration: BoxDecoration(
         color: AppColors.drawerIconsBackgroundColor,
         borderRadius: getBorderRadius(),

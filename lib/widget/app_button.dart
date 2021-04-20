@@ -4,24 +4,28 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
-  final double borderRadius;
   final double fontSize;
+  final double borderRadius;
   final GestureTapCallback onTap;
   final GestureTapCallback onLongPressed;
   final Color background;
   final Color borderColor;
+  final double borderWidth;
   final String buttonText;
+  final FontWeight buttonTextFontWeight;
 
-  const AppButton({
-    Key key,
-    @required this.borderColor,
-    this.borderRadius = defaultBorder,
-    @required this.onTap,
-    this.onLongPressed,
-    @required this.background,
-    @required this.buttonText,
-    this.fontSize = 16,
-  }) : super(key: key);
+  const AppButton(
+      {Key key,
+      @required this.borderColor,
+      this.borderRadius = defaultBorder,
+      @required this.onTap,
+      this.onLongPressed,
+      @required this.background,
+      @required this.buttonText,
+      this.fontSize = 14,
+      this.borderWidth = 2,
+      this.buttonTextFontWeight = FontWeight.bold})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class AppButton extends StatelessWidget {
             color: background,
             border: Border.all(
               color: borderColor,
-              width: 1,
+              width: 2,
             ),
             borderRadius: BorderRadius.all(
               Radius.circular(
@@ -41,18 +45,16 @@ class AppButton extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withOpacity(
-                  0.15,
-                ),
-                blurRadius: 4,
+                color: AppColors.white,
+                blurRadius: 5,
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(1.0),
+          padding: EdgeInsets.all(borderWidth),
           child: Material(
-            elevation: defaultElevation,
+            elevation: 2,
             borderRadius: BorderRadius.circular(
               borderRadius,
             ),
@@ -74,8 +76,8 @@ class AppButton extends StatelessWidget {
               child: Center(
                 child: Text(
                   buttonText,
-                  style: AppTextStyles.latoMedium18White
-                      .copyWith(fontSize: fontSize),
+                  style: AppTextStyles.latoMedium18White.copyWith(
+                      fontSize: fontSize, fontWeight: buttonTextFontWeight),
                   // style: TextStyle(),
                 ),
               ),

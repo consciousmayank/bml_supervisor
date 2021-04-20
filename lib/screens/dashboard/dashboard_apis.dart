@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
@@ -17,6 +18,8 @@ abstract class DashBoardApis {
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
       {@required String clientId});
   Future<List<GetDistributorsResponse>> getDistributors(
+      {@required String clientId});
+  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
       {@required String clientId});
 }
 
@@ -128,6 +131,25 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
           GetDistributorsResponse singleDistributorsResponse =
               GetDistributorsResponse.fromMap(singleHub);
           _responseList.add(singleDistributorsResponse);
+        }
+      }
+    }
+    return _responseList;
+  }
+
+  @override
+  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
+      {@required String clientId}) async {
+    List<ConsignmentTrackingStatusResponse> _responseList = [];
+    ParentApiResponse response =
+        await apiService.getConsignmentTrackingStatus(clientId: clientId);
+    if (filterResponse(response) != null) {
+      var list = response.response.data as List;
+      if (list.length > 0) {
+        for (Map singleHub in list) {
+          ConsignmentTrackingStatusResponse singleItemResponse =
+              ConsignmentTrackingStatusResponse.fromMap(singleHub);
+          _responseList.add(singleItemResponse);
         }
       }
     }

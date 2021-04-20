@@ -5,6 +5,8 @@ import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,11 @@ void setupBottomSheetUi() {
         ExpensesFilterBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.clientSelect: (context, sheetRequest, completer) =>
         SelectClientBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.upcomingTrips: (context, sheetRequest, completer) =>
+        DetailedTripsBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.COMPLETED_TRIP_REVIEW_REMARKS: (context, sheetRequest,
+            completer) =>
+        ReviewRemarksBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
@@ -165,6 +172,111 @@ class _CreateConsignmentDialog extends StatelessWidget {
               },
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class BaseBottomSheet extends StatelessWidget {
+  final SheetRequest request;
+  final Function(SheetResponse) completer;
+  final Widget child;
+
+  const BaseBottomSheet(
+      {Key key,
+      @required this.request,
+      @required this.completer,
+      @required this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: EdgeInsets.all(defaultBorder),
+      // padding: EdgeInsets.all(defaultBorder),
+      height: MediaQuery.of(context).size.height * 0.84,
+      decoration: BoxDecoration(
+        color: AppColors.appScaffoldColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(defaultBorder),
+          topRight: Radius.circular(defaultBorder),
+        ),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              completer(
+                SheetResponse(confirmed: false, responseData: null),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Close',
+                    style: AppTextStyles.hyperLinkStyle,
+                  )
+                ],
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class BaseHalfScreenBottomSheet extends StatelessWidget {
+  final SheetRequest request;
+  final Function(SheetResponse) completer;
+  final Widget child;
+
+  const BaseHalfScreenBottomSheet(
+      {Key key,
+      @required this.request,
+      @required this.completer,
+      @required this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: EdgeInsets.all(defaultBorder),
+      // padding: EdgeInsets.all(defaultBorder),
+      decoration: BoxDecoration(
+        color: AppColors.appScaffoldColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(defaultBorder),
+          topRight: Radius.circular(defaultBorder),
+        ),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              completer(
+                SheetResponse(confirmed: false, responseData: null),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Close',
+                    style: AppTextStyles.hyperLinkStyle,
+                  )
+                ],
+              ),
+            ),
+          ),
+          child,
         ],
       ),
     );

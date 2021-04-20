@@ -5,7 +5,6 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -58,22 +57,22 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           }
         });
         return Scaffold(
-          floatingActionButton: AnimatedOpacity(
-            duration: Duration(milliseconds: 200),
-            opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                viewModel.navigationService
-                    .navigateTo(addExpensesPageRoute)
-                    .then(
-                      (value) => getExpenses(
-                          viewModel: viewModel,
-                          registrationNumber: selectedRegNoController.text),
-                    );
-              },
-              child: Icon(Icons.add),
-            ),
-          ),
+          // floatingActionButton: AnimatedOpacity(
+          //   duration: Duration(milliseconds: 200),
+          //   opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
+          //   child: FloatingActionButton(
+          //     onPressed: () {
+          //       viewModel.navigationService
+          //           .navigateTo(addExpensesPageRoute)
+          //           .then(
+          //             (value) => getExpenses(
+          //                 viewModel: viewModel,
+          //                 registrationNumber: selectedRegNoController.text),
+          //           );
+          //     },
+          //     child: Icon(Icons.add),
+          //   ),
+          // ),
           appBar: AppBar(
             title: Text(
               'View Expenses - ${MyPreferences().getSelectedClient().clientId}',
@@ -234,55 +233,59 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
             }
             index -= 1;
 
-            return InkWell(
-                onTap: () {
-                  // showViewEntryDetailPreview(
-                  //     context, vehicleEntrySearchResponse[index]);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ClipRRect(
-                    borderRadius: getBorderRadius(),
-                    child: Card(
-                      color: AppColors.appScaffoldColor,
-                      elevation: defaultElevation,
-                      shape: getCardShape(),
-                      child: Column(
-                        children: [
-                          // if date is same don't build new date header
-                          // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
-                          Container(
-                            decoration: BoxDecoration(
-                              color: ThemeConfiguration.primaryBackground,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5),
-                                  topRight: Radius.circular(5)),
-                            ),
-                            height: 50.0,
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Date',
-                                  style: AppTextStyles.latoBold16White,
+            return viewModel.getConsolidatedData(index).length > 0
+                ? InkWell(
+                    onTap: () {
+                      // showViewEntryDetailPreview(
+                      //     context, vehicleEntrySearchResponse[index]);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ClipRRect(
+                        borderRadius: getBorderRadius(),
+                        child: Card(
+                          color: AppColors.appScaffoldColor,
+                          elevation: defaultElevation,
+                          shape: getCardShape(),
+                          child: Column(
+                            children: [
+                              // if date is same don't build new date header
+                              // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: ThemeConfiguration.primaryBackground,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5)),
                                 ),
-                                Text(
-                                  viewModel.uniqueDates[index].toString(),
-                                  style: AppTextStyles.latoBold16White,
+                                height: 50.0,
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Date',
+                                      style: AppTextStyles.latoBold16White,
+                                    ),
+                                    Text(
+                                      viewModel.uniqueDates[index].toString(),
+                                      style: AppTextStyles.latoBold16White,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Column(
+                                children: buildNewEntryRow(viewModel, index),
+                              )
+                            ],
                           ),
-                          Column(
-                            children: buildNewEntryRow(viewModel, index),
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ));
+                  )
+                : Container();
           },
           // ! length + 1 is the compensation of including buildHeader()
           itemCount: viewModel.uniqueDates.length + 1),

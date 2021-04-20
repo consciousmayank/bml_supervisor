@@ -6,36 +6,44 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
 
 class ProfileImageWidget extends StatelessWidget {
-  const ProfileImageWidget(
-      {Key key, @required this.image, this.size = profileImageSize})
-      : super(key: key);
+  const ProfileImageWidget({
+    Key key,
+    @required this.image,
+    this.size = profileImageSize,
+    @required this.circularBorderRadius,
+    this.imageFit = BoxFit.cover,
+  }) : super(key: key);
 
   final Uint8List image;
   final double size;
+  final double circularBorderRadius;
+  final BoxFit imageFit;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.primaryColorShade5, width: 2),
-        borderRadius: BorderRadius.circular(size),
+        borderRadius: BorderRadius.circular(
+            circularBorderRadius != null ? circularBorderRadius : size),
         color: AppColors.appScaffoldColor,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(size),
+        borderRadius: BorderRadius.circular(
+            circularBorderRadius != null ? circularBorderRadius : size),
         child: image == null
             ? Image.asset(
                 profileIcon,
                 color: AppColors.primaryColorShade5,
-                fit: BoxFit.cover,
+                fit: imageFit,
                 height: size,
                 width: size,
               )
             : Image.memory(
                 image,
-                fit: BoxFit.cover,
-                height: size,
-                width: size,
+                fit: imageFit,
+                height: size == 0 ? double.infinity : size,
+                width: size == 0 ? double.infinity : size,
               ),
       ),
     );

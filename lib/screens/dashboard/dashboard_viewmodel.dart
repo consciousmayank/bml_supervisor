@@ -4,6 +4,8 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
@@ -13,12 +15,17 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
+import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
+  List<ConsignmentTrackingStatusResponse> _upcomingTrips = [];
+  List<ConsignmentTrackingStatusResponse> _ongoingTrips = [];
+
+  List<ConsignmentTrackingStatusResponse> _completedTrips = [];
   bool openConsignmentGroup = false;
   ProfileApi _profileApi = locator<ProfileApisImpl>();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
@@ -106,33 +113,20 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<String> optionsTitle = [
-    "Add Entry",
-    "View Entry",
-    "Add Expense",
-    "View Expenses",
-    "Create Consignments",
-    "View Routes",
-    "Review Consignments",
-    "Payments",
-    // "Add Entry 2.0",
-    // "View Entry 2.0",
-  ];
-
   List<RecentConginmentResponse> recentConsignmentList = [];
 
-  getClients() async {
-    setBusy(true);
-    clientsList = [];
-    //* get bar graph data too when populating the client dropdown
-
-    List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
-    this.clientsList = copyList(responseList);
-
-    this.selectedClient = clientsList.first;
-    setBusy(false);
-    notifyListeners();
-  }
+  // getClients() async {
+  //   setBusy(true);
+  //   clientsList = [];
+  //   //* get bar graph data too when populating the client dropdown
+  //
+  //   List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
+  //   this.clientsList = copyList(responseList);
+  //
+  //   this.selectedClient = clientsList.first;
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
   void getClientDashboardStats() async {
     setBusy(true);
@@ -237,8 +231,9 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   }
 
   void reloadPage() {
-    getClients();
+    // getClients();
     getClientDashboardStats();
+    getConsignmentTrackingStatus();
   }
 
   takeToDistributorsPage() {
@@ -327,4 +322,80 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
       }
     }
   }
+
+  void getConsignmentTrackingStatus() async {
+    List<ConsignmentTrackingStatusResponse> response = await _dashboardApi
+        .getConsignmentTrackingStatus(clientId: selectedClient.clientId);
+
+    var variableList =
+        response.where((element) => element.statusCode == 1).toList();
+    upcomingTrips = copyList(variableList);
+    variableList =
+        response.where((element) => element.statusCode == 2).toList();
+    ongoingTrips = copyList(variableList);
+    variableList =
+        response.where((element) => element.statusCode == 3).toList();
+    completedTrips = copyList(variableList);
+    notifyListeners();
+  }
+
+  get completedTrips => _completedTrips;
+
+  set completedTrips(value) {
+    _completedTrips = value;
+  }
+
+  get ongoingTrips => _ongoingTrips;
+
+  set ongoingTrips(value) {
+    _ongoingTrips = value;
+  }
+
+  List<ConsignmentTrackingStatusResponse> get upcomingTrips => _upcomingTrips;
+
+  set upcomingTrips(List<ConsignmentTrackingStatusResponse> value) {
+    _upcomingTrips = value;
+  }
+
+  void takeToCompletedTrips() {
+    navigationService.back();
+    navigationService
+        .navigateTo(
+          tripsDetailsPageRoute,
+          arguments: DetailedTripsViewArgs(
+            tripStatus: TripStatus.COMPLETED,
+            tripsList: completedTrips,
+          ),
+        )
+        .then((value) => reloadPage());
+  }
+
+  void takeToUpcomingTripsDetailsView({TripStatus tripStatus}) {
+    List<ConsignmentTrackingStatusResponse> tripList;
+
+    switch (tripStatus) {
+      case TripStatus.UPCOMING:
+        tripList = copyList(upcomingTrips);
+        break;
+      case TripStatus.ONGOING:
+        tripList = copyList(ongoingTrips);
+        break;
+      case TripStatus.COMPLETED:
+        tripList = copyList(completedTrips);
+        break;
+    }
+
+    navigationService
+        .navigateTo(
+          tripsDetailsPageRoute,
+          arguments: DetailedTripsViewArgs(
+              tripsList: tripList, tripStatus: tripStatus),
+        )
+        .then((value) => reloadPage());
+  }
+}
+
+class LeftDrawerItem {
+  int id;
+  String headerName;
 }

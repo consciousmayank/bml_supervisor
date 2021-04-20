@@ -8,8 +8,7 @@ import 'package:meta/meta.dart';
 
 class EntryLog {
   EntryLog({
-    this.failed,
-    this.id,
+    @required this.consignmentId,
     @required this.vehicleId,
     @required this.entryDate,
     @required this.startReading,
@@ -23,14 +22,13 @@ class EntryLog {
     @required this.loginTime,
     @required this.logoutTime,
     @required this.remarks,
-    @required this.status,
     @required this.startReadingGround,
     @required this.drivenKmGround,
     @required this.clientId,
     @required this.routeId,
   });
 
-  final int id;
+  final int consignmentId;
   final int routeId;
   final String vehicleId;
   final String entryDate;
@@ -47,12 +45,9 @@ class EntryLog {
   final String loginTime;
   final String logoutTime;
   final String remarks;
-  final bool status;
-  final String failed;
   final String clientId;
 
   EntryLog copyWith({
-    int id,
     int routeId,
     String vehicleId,
     String entryDate,
@@ -67,14 +62,12 @@ class EntryLog {
     String loginTime,
     String logoutTime,
     String remarks,
-    dynamic status,
     int startReadingHidden,
     int drivenKmHidden,
-    String failed,
     String clientId,
+    int consignmentId,
   }) =>
       EntryLog(
-        id: id ?? this.id,
         routeId: routeId ?? this.routeId,
         vehicleId: vehicleId ?? this.vehicleId,
         entryDate: entryDate ?? this.entryDate,
@@ -89,11 +82,10 @@ class EntryLog {
         loginTime: loginTime ?? this.loginTime,
         logoutTime: logoutTime ?? this.logoutTime,
         remarks: remarks ?? this.remarks,
-        status: status ?? this.status,
-        failed: failed ?? this.failed,
         startReadingGround: startReadingHidden ?? this.startReadingGround,
         drivenKmGround: drivenKmHidden ?? this.drivenKmGround,
         clientId: clientId ?? this.clientId,
+        consignmentId: consignmentId ?? this.consignmentId,
       );
 
   factory EntryLog.fromJson(String str) => EntryLog.fromMap(json.decode(str));
@@ -101,7 +93,6 @@ class EntryLog {
   String toJson() => json.encode(toMap());
 
   factory EntryLog.fromMap(Map<String, dynamic> json) => EntryLog(
-        id: json["id"],
         routeId: json["routeId"],
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
@@ -116,15 +107,13 @@ class EntryLog {
         loginTime: json["loginTime"],
         logoutTime: json["logoutTime"],
         remarks: json["remarks"],
-        status: json["status"],
         startReadingGround: json["startReadingG"],
         drivenKmGround: json["drivenKmG"],
-        failed: json["Failed"],
         clientId: json["clientId"],
+        consignmentId: json["consignmentId"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
@@ -139,10 +128,9 @@ class EntryLog {
         "loginTime": loginTime,
         "logoutTime": logoutTime,
         "remarks": remarks,
-        "status": status,
-        "Failed": failed,
         "startReadingG": startReadingGround,
         "drivenKmG": drivenKmGround,
         "clientId": clientId,
+        "consignmentId": consignmentId,
       };
 }

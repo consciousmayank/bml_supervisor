@@ -1,11 +1,13 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
+import '../app_button.dart';
 
 class RoutesView extends StatefulWidget {
   final GetClientsResponse selectedClient;
@@ -107,45 +109,14 @@ class _RoutesViewState extends State<RoutesView> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.separated(
-              // physics:
-              //     widget.isFullScreen ? null : NeverScrollableScrollPhysics(),
-              controller: _listViewController,
-              itemBuilder: (BuildContext context, int index) {
-                return buildRoutesView(viewModel, index);
-              },
-              itemCount: widget.isInDashBoard ? 6 : viewModel.routesList.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  thickness: 1,
-                  color: AppColors.primaryColorShade3,
-                );
-              },
+          Column(
+            children: getRoutesList(
+              viewModel: viewModel,
+              listLength: getListLength(
+                viewModel: viewModel,
+              ),
             ),
           ),
-          widget.isInDashBoard
-              ? InkWell(
-                  onTap: () {
-                    viewModel.takeToViewRoutesPage();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      color: AppColors.primaryColorShade5,
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    child: Text(
-                      "View More",
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
-                )
-              : Container(),
-          hSizedBox(5),
         ],
       ),
     );
@@ -205,5 +176,49 @@ class _RoutesViewState extends State<RoutesView> {
         ],
       ),
     );
+  }
+
+  List<Widget> getRoutesList(
+      {@required int listLength, @required RoutesViewModel viewModel}) {
+    return List.generate(
+      widget.isInDashBoard ? listLength + 1 : listLength,
+      (index) => index == listLength
+          ? Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 5,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 35,
+                    width: 100,
+                    child: AppButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 20,
+                      onTap: () {
+                        viewModel.takeToViewRoutesPage();
+                      },
+                      background: AppColors.primaryColorShade5,
+                      fontSize: 12,
+                      buttonText: 'View More',
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              children: [buildRoutesView(viewModel, index), DottedDivider()],
+            ),
+    ).toList();
+  }
+
+  getListLength({RoutesViewModel viewModel}) {
+    return widget.isInDashBoard
+        ? viewModel.routesList.length < 6
+            ? viewModel.routesList.length
+            : 6
+        : viewModel.routesList.length;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -20,6 +21,8 @@ import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
+import 'package:bml_supervisor/screens/dailykms/add/add_daily_km_form.dart';
+import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_arguments.dart';
 import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
@@ -35,6 +38,9 @@ import 'package:bml_supervisor/screens/profile/changepassword/changepassword_vie
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
 import 'package:bml_supervisor/screens/splash/splash_screen.dart';
+import 'package:bml_supervisor/screens/trips/reviewcompleted/review_completed_trips_view.dart';
+import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
+import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/hubs_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
@@ -222,13 +228,15 @@ class AppRouter {
           ),
         );
 
-      // case addEntry2PointOFormViewPageRoute:
-      //   AddDailyKmsArguments args = settings.arguments;
-      //   return MaterialPageRoute(
-      //     builder: (_) => NetworkSensitive(
-      //       child: AddVehicleEntryFormView(arguments: args),
-      //     ),
-      //   );
+      case addEntry2PointOFormViewPageRoute:
+        AddDailyKmsArguments args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => NetworkSensitive(
+            child: AddVehicleEntryFormView(
+              arguments: args,
+            ),
+          ),
+        );
 
       case paymentsPageRoute:
         PaymentArgs _paymentArgs = settings.arguments;
@@ -261,7 +269,17 @@ class AppRouter {
             ),
           ),
         );
+      case tripsDetailsPageRoute:
+        DetailedTripsViewArgs args = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => DetailedTripsView(args: args),
+        );
 
+      case reviewCompletedTripsPageRoute:
+        ConsignmentTrackingStatusResponse selectedTrip = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => ReviewCompletedTripsView(selectedTrip: selectedTrip),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

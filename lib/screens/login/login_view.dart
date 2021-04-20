@@ -79,6 +79,14 @@ class _LoginViewState extends State<LoginView> {
               Text(
                 "BookMyLoading",
                 style: AppTextStyles.latoMediumItalics20,
+              ),
+              hSizedBox(20),
+              Text(
+                // S.of(context).appTitle,
+                'Manager App',
+                style: AppTextStyles.latoMediumItalics20.copyWith(
+                  fontSize: 18,
+                ),
               )
             ],
           ),

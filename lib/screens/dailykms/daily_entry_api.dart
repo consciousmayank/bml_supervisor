@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
-import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
@@ -8,7 +7,6 @@ import 'package:bml_supervisor/models/routes_for_selected_client_and_date_respon
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 abstract class DailyEntryApis {
   Future<List<RoutesForSelectedClientAndDateResponse>>
@@ -18,7 +16,7 @@ abstract class DailyEntryApis {
   });
 
   Future<EntryLog> getLatestDailyEntry({@required String registrationNumber});
-  Future<bool> submitVehicleEntry({@required EntryLog entryLogRequest});
+  Future<ApiResponse> submitVehicleEntry({@required EntryLog entryLogRequest});
   Future<List<ViewEntryResponse>> getDailyEntries(
       {@required ViewEntryRequest viewEntryRequest});
   Future<List<GetDailyKilometerInfo>> getDailyKmInfo({@required String date});
@@ -70,40 +68,17 @@ class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
   }
 
   @override
-  Future<bool> submitVehicleEntry({EntryLog entryLogRequest}) async {
-    bool submitSuccessful = true;
-    ApiResponse dailyEntrySubmitResponse;
+  Future<ApiResponse> submitVehicleEntry({EntryLog entryLogRequest}) async {
+    ApiResponse dailyEntrySubmitResponse =
+        ApiResponse(status: 'failed', message: 'Something went wrong');
     ParentApiResponse apiResponse =
         await apiService.submitVehicleEntry(entryLogRequest: entryLogRequest);
 
     if (filterResponse(apiResponse) != null) {
       dailyEntrySubmitResponse = ApiResponse.fromMap(apiResponse.response.data);
-    } else {
-      return false;
     }
 
-    if (dailyEntrySubmitResponse.status == "success") {
-      var dialogResponse =
-          await locator<DialogService>().showConfirmationDialog(
-        title: 'Congratulations...',
-        description: dailyEntrySubmitResponse.message.split("!")[0],
-      );
-      if (dialogResponse == null || dialogResponse.confirmed) {
-        submitSuccessful = true;
-      }
-    } else {
-      var dialogResponse =
-          await locator<DialogService>().showConfirmationDialog(
-        title: 'Oops...',
-        description: dailyEntrySubmitResponse.message,
-      );
-
-      if (dialogResponse == null || dialogResponse.confirmed) {
-        submitSuccessful = false;
-      }
-    }
-
-    return submitSuccessful;
+    return dailyEntrySubmitResponse;
   }
 
   @override

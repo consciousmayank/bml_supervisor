@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
@@ -14,6 +15,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_notification_row.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
@@ -40,6 +42,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
           viewModel.selectedClient = MyPreferences().getSelectedClient();
           viewModel.getClientDashboardStats();
           viewModel.selectedDuration = MyPreferences().getSelectedDuration();
+          viewModel.getConsignmentTrackingStatus();
           // viewModel.getBarGraphKmReport(
           //   selectedDuration: viewModel.selectedDuration,
           // );
@@ -101,6 +104,43 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  hSizedBox(5),
+
+                                  NotificationTile(
+                                    iconName: consignmentIcon,
+                                    notificationTitle: 'Upcoming trips',
+                                    taskNumber:
+                                        viewModel?.upcomingTrips?.length,
+                                    onTap: () {
+                                      viewModel.takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.UPCOMING,
+                                      );
+                                    },
+                                  ),
+
+                                  NotificationTile(
+                                    iconName: blueRouteIcon,
+                                    notificationTitle: 'Ongoing Trips',
+                                    taskNumber: viewModel?.ongoingTrips?.length,
+                                    onTap: () {
+                                      viewModel.takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.ONGOING,
+                                      );
+                                    },
+                                  ),
+
+                                  NotificationTile(
+                                    iconName: completedTripsIcon,
+                                    notificationTitle: 'Completed Trips',
+                                    taskNumber:
+                                        viewModel?.completedTrips?.length,
+                                    onTap: () {
+                                      viewModel.takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.COMPLETED,
+                                      );
+                                    },
+                                  ),
+
                                   hSizedBox(3),
                                   viewModel.singleClientTileData != null
                                       ? Row(
@@ -277,20 +317,16 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                     borderRadius: BorderRadius.circular(20),
                                     child: Card(
                                       elevation: defaultElevation,
-                                      child: SizedBox(
-                                        height: 450,
-                                        child: RoutesView(
-                                          // selectedClient: viewModel.selectedClient,
-                                          onRoutesPageInView:
-                                              (FetchRoutesResponse
-                                                  clickedRoute) {
-                                            viewModel.takeToHubsView(
-                                                clickedRoute: clickedRoute);
-                                          },
-                                          isInDashBoard: true,
-                                          selectedClient: MyPreferences()
-                                              .getSelectedClient(),
-                                        ),
+                                      child: RoutesView(
+                                        // selectedClient: viewModel.selectedClient,
+                                        onRoutesPageInView:
+                                            (FetchRoutesResponse clickedRoute) {
+                                          viewModel.takeToHubsView(
+                                              clickedRoute: clickedRoute);
+                                        },
+                                        isInDashBoard: true,
+                                        selectedClient:
+                                            MyPreferences().getSelectedClient(),
                                       ),
                                     ),
                                   ),

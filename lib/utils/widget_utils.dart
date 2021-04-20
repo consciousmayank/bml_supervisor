@@ -374,7 +374,12 @@ Row buildChartDateLabel() {
   );
 }
 
-Widget drawerList({String text, String imageName, Function onTap}) {
+Widget drawerList(
+    {String text,
+    String imageName,
+    Function onTap,
+    bool isSubMenu = false,
+    String trailingText}) {
   return Padding(
     padding: const EdgeInsets.only(top: 2, bottom: 2),
     child: ClickableWidget(
@@ -391,6 +396,7 @@ Widget drawerList({String text, String imageName, Function onTap}) {
                 ? Container()
                 : IconBlueBackground(
                     iconName: imageName,
+                    isSubMenu: isSubMenu,
                   ),
             imageName == null ? Container() : wSizedBox(20),
             Expanded(
@@ -400,6 +406,13 @@ Widget drawerList({String text, String imageName, Function onTap}) {
                     color: AppColors.primaryColorShade5, fontSize: 14),
               ),
             ),
+            trailingText != null
+                ? Text(
+                    trailingText,
+                    style: AppTextStyles.latoMedium12Black.copyWith(
+                        color: AppColors.primaryColorShade5, fontSize: 14),
+                  )
+                : Container()
           ],
         ),
       ),

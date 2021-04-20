@@ -184,10 +184,10 @@ class ApiService {
       "drivenKmG": entryLogRequest.drivenKmGround,
       "startReadingG": entryLogRequest.startReadingGround,
       "trips": entryLogRequest.trips,
-      "loginTime": "${entryLogRequest.loginTime}:00",
-      "logoutTime": "${entryLogRequest.logoutTime}:00",
+      "loginTime": entryLogRequest.loginTime,
+      "logoutTime": entryLogRequest.logoutTime,
       "remarks": entryLogRequest.remarks,
-      "status": entryLogRequest.status
+      "consignmentId": entryLogRequest.consignmentId,
     };
     String body = json.encode(request);
     try {
@@ -326,6 +326,24 @@ class ApiService {
       response = await dioClient
           .getDio()
           .get(GET_CONSIGNMENT_LIST_BY_ID(consignmentId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ///Get the Completed Trip details with the help of consignmentId.
+  Future<ParentApiResponse> getCompletedTripsWithId(
+      {String consignmentId, String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_COMPLETED_TRIPS_BY_ID(
+              consignmentId,
+              clientId,
+            ),
+          );
     } on DioError catch (e) {
       error = e;
     }
@@ -566,6 +584,20 @@ class ApiService {
     DioError error;
     try {
       response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  Future<ParentApiResponse> getConsignmentTrackingStatus(
+      {String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_CONSIGNMENT_TRACKING_STATUS(clientId));
     } on DioError catch (e) {
       error = e;
     }
