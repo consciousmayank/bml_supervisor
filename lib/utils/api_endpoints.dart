@@ -75,8 +75,8 @@ final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
 
 const String GET_CLIENTS = "/manager/client/list";
 const String GET_USER = "/user/profile";
-const String UPDATE_USER_MOBILE = "/user/update/mobile";
-const String UPDATE_USER_EMAIL = "/user/update/email";
+const String UPDATE_USER_MOBILE = "/manager/update/mobile";
+const String UPDATE_USER_EMAIL = "/manager/update/email";
 const String CHANGE_PASSWORD = "/user/update/password";
 const String GET_APP_VERSION = "/info/get/version";
 const String GET_CITIES = "/location/city/list";
