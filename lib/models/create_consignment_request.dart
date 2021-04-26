@@ -14,6 +14,7 @@ class CreateConsignmentRequest {
     this.routeId,
     this.vehicleId,
     this.entryDate,
+    this.dispatchDateTime,
     this.title = 'NA',
     this.routeTitle,
     this.items,
@@ -24,6 +25,7 @@ class CreateConsignmentRequest {
   final int routeId;
   final dynamic vehicleId;
   final String entryDate;
+  final String dispatchDateTime;
   final String title;
   final String routeTitle;
   final int dropOff;
@@ -39,6 +41,7 @@ class CreateConsignmentRequest {
     int routeId,
     dynamic vehicleId,
     String entryDate,
+    String dispatchDateTime,
     String title,
     String routeTitle,
     List<Item> items,
@@ -53,6 +56,7 @@ class CreateConsignmentRequest {
         routeId: routeId ?? this.routeId,
         vehicleId: vehicleId ?? this.vehicleId,
         entryDate: entryDate ?? this.entryDate,
+        dispatchDateTime: dispatchDateTime ?? this.dispatchDateTime,
         title: title ?? this.title,
         routeTitle: routeTitle ?? this.routeTitle,
         items: items ?? this.items,
@@ -74,6 +78,7 @@ class CreateConsignmentRequest {
         routeId: json["routeId"],
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
+        dispatchDateTime: json["dispatchDateTime"],
         title: json["title"],
         routeTitle: json["routeTitle"],
         dropOff: json['dropOff'],
@@ -89,6 +94,7 @@ class CreateConsignmentRequest {
         "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
+        "dispatchDateTime": dispatchDateTime,
         "payment": payment,
         "collect": collect,
         "dropOff": dropOff,

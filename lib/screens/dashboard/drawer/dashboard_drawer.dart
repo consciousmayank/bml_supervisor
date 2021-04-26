@@ -1,6 +1,6 @@
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/drawerlistitem/drawer_list_item.dart';
 import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 
@@ -23,18 +23,19 @@ class DashBoardDrawer extends StatefulWidget {
 class _DashBoardDrawerState extends State<DashBoardDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      color: AppColors.white,
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
-      child: SingleChildScrollView(
-        child: Padding(
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Padding(
           padding: EdgeInsets.only(
               top: 10 + MediaQuery.of(context).padding.top,
               left: drawerContentPadding,
               right: drawerContentPadding,
               bottom: drawerContentPadding),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClickableWidget(
                 childColor: AppColors.white,
@@ -84,81 +85,41 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 thickness: 1,
                 color: AppColors.black,
               ),
-              ExpansionPanelList.radio(
-                expandedHeaderPadding: EdgeInsets.all(0),
-                elevation: 0,
-                children: [
-                  ExpansionPanelRadio(
-                    value: 1,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return drawerList(
+              Flexible(
+                fit: FlexFit.tight,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      DrawerListItem(
                         imageName: homeIcon,
                         text: "Dashboard",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onDashboardDrawerTileClicked();
                         },
-                      );
-                    },
-                    body: Container(),
-                  ),
-                  ExpansionPanelRadio(
-                    value: 3,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return drawerList(
+                      ),
+                      DrawerListItem(
                         imageName: totalKmIcon,
                         text: "Daily Kilometers",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onDailyKilometersDrawerTileClicked();
                         },
-                      );
-                    },
-                    body: Container(),
-                  ),
-                  ExpansionPanelRadio(
-                    value: 4,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return drawerList(
+                      ),
+                      DrawerListItem(
                         imageName: expensesIcon,
                         text: "Expenses",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onExpensesDrawerTileClicked();
                         },
-                      );
-                    },
-                    body: Container(),
-                  ),
-                  ExpansionPanelRadio(
-                    canTapOnHeader: true,
-                    value: 5,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Row(
-                          children: [
-                            IconBlueBackground(
-                              iconName: consignmentIcon,
-                            ),
-                            wSizedBox(20),
-                            Expanded(
-                              child: Text(
-                                'Consignment',
-                                style: AppTextStyles.latoMedium12Black.copyWith(
-                                    color: AppColors.primaryColorShade5,
-                                    fontSize: 14),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    body: Padding(
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Column(
+                      ),
+                      DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Consignment",
+                        onTap: () {},
                         children: [
-                          drawerList(
+                          DrawerListItem(
                             imageName: consignmentIcon,
                             isSubMenu: true,
                             text: "Create",
@@ -169,7 +130,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   .changeConsignmentGroupVisibility();
                             },
                           ),
-                          drawerList(
+                          DrawerListItem(
                             imageName: consignmentListIcon,
                             isSubMenu: true,
                             text: "List",
@@ -180,7 +141,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   .changeConsignmentGroupVisibility();
                             },
                           ),
-                          drawerList(
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: review_consig_Icon,
                             text: "Review",
@@ -193,61 +154,30 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  ExpansionPanelRadio(
-                    canTapOnHeader: true,
-                    value: 6,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Row(
-                          children: [
-                            IconBlueBackground(
-                              iconName: consignmentIcon,
-                            ),
-                            wSizedBox(20),
-                            Expanded(
-                              child: Text(
-                                'Tracking',
-                                style: AppTextStyles.latoMedium12Black.copyWith(
-                                    color: AppColors.primaryColorShade5,
-                                    fontSize: 14),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    body: Padding(
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Column(
+                      DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Tracking",
+                        onTap: () {},
                         children: [
-                          drawerList(
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: consignmentIcon,
-                            text: "Upcoming Trips",
-                            trailingText: widget
-                                .dashBoardScreenViewModel.upcomingTrips.length
-                                .toString(),
+                            text:
+                                "Upcoming Trips (${widget?.dashBoardScreenViewModel?.upcomingTrips?.length ?? 0})",
                             onTap: () {},
                           ),
-                          drawerList(
-                            trailingText: widget
-                                .dashBoardScreenViewModel.ongoingTrips.length
-                                .toString(),
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: consignmentListIcon,
-                            text: "OnGoing Trips",
+                            text:
+                                "OnGoing Trips (${widget?.dashBoardScreenViewModel?.ongoingTrips?.length ?? 0})",
                             onTap: () {},
                           ),
-                          drawerList(
-                            trailingText: widget
-                                .dashBoardScreenViewModel.completedTrips.length
-                                .toString(),
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: review_consig_Icon,
-                            text: "Completed Trips",
+                            text:
+                                "Completed Trips (${widget?.dashBoardScreenViewModel?.completedTrips?.length ?? 0})",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .takeToCompletedTrips();
@@ -255,37 +185,12 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  ExpansionPanelRadio(
-                    canTapOnHeader: true,
-                    value: 7,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Row(
-                          children: [
-                            IconBlueBackground(
-                              iconName: consignmentIcon,
-                            ),
-                            wSizedBox(20),
-                            Expanded(
-                              child: Text(
-                                'Add',
-                                style: AppTextStyles.latoMedium12Black.copyWith(
-                                    color: AppColors.primaryColorShade5,
-                                    fontSize: 14),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    body: Padding(
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Column(
+                      DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Add",
+                        onTap: () {},
                         children: [
-                          drawerList(
+                          DrawerListItem(
                             imageName: addDriverIcon,
                             isSubMenu: true,
                             text: "Driver",
@@ -294,7 +199,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   .onAddDriverDrawerTileClicked();
                             },
                           ),
-                          drawerList(
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: addHubIcon,
                             text: "Hubs",
@@ -303,7 +208,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   .onAddHubTileClick();
                             },
                           ),
-                          drawerList(
+                          DrawerListItem(
                             isSubMenu: true,
                             imageName: addRouteIcon,
                             text: "Route",
@@ -314,37 +219,25 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  ExpansionPanelRadio(
-                    value: 8,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return drawerList(
+                      DrawerListItem(
                         imageName: routesIcon,
                         text: "Routes List",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onViewRoutesDrawerTileClicked();
                         },
-                      );
-                    },
-                    body: Container(),
-                  ),
-                  ExpansionPanelRadio(
-                    value: 9,
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return drawerList(
+                      ),
+                      DrawerListItem(
                         imageName: drawerRupeeIcon,
                         text: "Transaction History",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onTransactionsDrawerTileClicked();
                         },
-                      );
-                    },
-                    body: Container(),
-                  )
-                ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

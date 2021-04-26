@@ -281,6 +281,10 @@ String getConvertedDate(DateTime date) {
   return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
 }
 
+String getConvertedDateWithTime(DateTime date) {
+  return DateFormat('dd-MM-yyyy').add_jms().format(date).toLowerCase();
+}
+
 String convertFrom24HoursTime(String timeString) {
   if (timeString.length == 0) {
     return ' ';

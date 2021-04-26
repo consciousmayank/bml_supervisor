@@ -50,6 +50,15 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   CreateConsignmentRequest _consignmentRequest;
   SearchByRegNoResponse _validatedRegistrationNumber;
   DateTime _entryDate;
+  TimeOfDay _dispatchTime = TimeOfDay.now();
+
+  TimeOfDay get dispatchTime => _dispatchTime;
+
+  set dispatchTime(TimeOfDay value) {
+    _dispatchTime = value;
+    notifyListeners();
+  }
+
   String _enteredTitle; //final _formKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> _formKeyList = [];
 
@@ -197,12 +206,19 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
         entryDate: getConvertedDate(entryDate),
+        dispatchDateTime: getConvertedDateWithTime(DateTime(
+            entryDate.year,
+            entryDate.month,
+            entryDate.day,
+            dispatchTime.hour,
+            dispatchTime.minute)),
         title: enteredTitle,
         routeTitle: selectedRoute.routeTitle,
         items: items);
   }
 
   void createConsignment({String consignmentTitle}) async {
+    setBusy(true);
     consignmentRequest = consignmentRequest.copyWith(
       dropOff: consignmentRequest.items.last.dropOff,
       collect: consignmentRequest.items.first.collect,

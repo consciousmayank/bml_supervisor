@@ -33,6 +33,10 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
 
+  TextEditingController selectedDispatchTimeController =
+      TextEditingController();
+  final FocusNode selectedDispatchTimeFocusNode = FocusNode();
+
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
 
@@ -129,6 +133,8 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                         ),
                       )
                     : Container(),
+                dispatchTimeSelectorSelector(
+                    context: context, viewModel: viewModel),
                 viewModel.entryDate == null
                     ? Container()
                     : RoutesDropDown(
@@ -627,6 +633,17 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     );
   }
 
+  dispatchTimeSelectorSelector(
+      {BuildContext context, CreateConsignmentModel viewModel}) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        selectedDispatchTimeField(viewModel),
+        selectDispatchTimeButton(context, viewModel),
+      ],
+    );
+  }
+
   selectedDateTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
       enabled: false,
@@ -637,6 +654,20 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
               EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
           hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
           hintText: 'Entry Date'),
+      keyboardType: TextInputType.text,
+    );
+  }
+
+  selectedDispatchTimeField(CreateConsignmentModel viewModel) {
+    return appTextFormField(
+      enabled: false,
+      controller: selectedDispatchTimeController,
+      focusNode: selectedDispatchTimeFocusNode,
+      inputDecoration: InputDecoration(
+          contentPadding:
+              EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+          hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
+          hintText: 'Dispatch Time'),
       keyboardType: TextInputType.text,
     );
   }
@@ -654,6 +685,31 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
               selectedDateController.text =
                   DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
               viewModel.entryDate = selectedDate;
+              viewModel.getConsignmentListWithDate();
+              selectedRegNoController.clear();
+              consignmentTitleController.clear();
+              viewModel.resetControllerBoolValue();
+            }
+          }),
+        ),
+      ),
+    );
+  }
+
+  selectDispatchTimeButton(
+      BuildContext context, CreateConsignmentModel viewModel) {
+    return SizedBox(
+      height: 56,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
+        child: appSuffixIconButton(
+          icon: Icon(Icons.date_range_outlined),
+          onPressed: (() async {
+            TimeOfDay selectedDispatchTime = await selectTime(context: context);
+            if (selectedDispatchTime != null) {
+              selectedDispatchTimeController.text =
+                  selectedDispatchTime.format(context).toLowerCase();
+              viewModel.dispatchTime = selectedDispatchTime;
               viewModel.getConsignmentListWithDate();
               selectedRegNoController.clear();
               consignmentTitleController.clear();
@@ -686,6 +742,16 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       initialDate: DateTime.now(),
       firstDate: new DateTime(1990),
       lastDate: DateTime(2500),
+    );
+
+    return picked;
+  }
+
+  Future<TimeOfDay> selectTime({@required BuildContext context}) async {
+    TimeOfDay picked = await showTimePicker(
+      initialEntryMode: TimePickerEntryMode.dial,
+      context: context,
+      initialTime: TimeOfDay.now(),
     );
 
     return picked;

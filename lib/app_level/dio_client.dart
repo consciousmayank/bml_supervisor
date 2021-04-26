@@ -18,7 +18,7 @@ class DioConfig {
 
   configureDio() {
     _dio.options
-      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrlBmlApp
+      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrl
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
@@ -29,6 +29,13 @@ class DioConfig {
   dynamic requestInterceptor(RequestOptions options) async {
     bool result = await DataConnectionChecker().hasConnection;
     if (result == true) {
+      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print("${options.baseUrl}${options.path}");
+      print("${options.data.toString()}");
+      print('${options.method}');
+      print('${options.data}');
+      print('${options.headers.toString()}');
+      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
       String credentials = MyPreferences().getCredentials();
       if (options.path != GET_APP_VERSION) {
         options.headers.addAll(getAuthHeader(base64String: credentials));
