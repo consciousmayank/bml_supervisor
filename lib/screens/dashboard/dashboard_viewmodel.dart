@@ -333,8 +333,12 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     variableList =
         response.where((element) => element.statusCode == 2).toList();
     ongoingTrips = copyList(variableList);
-    variableList =
-        response.where((element) => element.statusCode == 3).toList();
+    variableList = response
+        .where((element) =>
+            element.statusCode == 3 ||
+            element.statusCode == 4 ||
+            element.statusCode == 5)
+        .toList();
     completedTrips = copyList(variableList);
     notifyListeners();
   }

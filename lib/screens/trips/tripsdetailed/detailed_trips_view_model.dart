@@ -68,9 +68,12 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         await _dashboardApi.getConsignmentTrackingStatus(
             clientId: MyPreferences().getSelectedClient().clientId);
 
-    var variableList =
-        response.where((element) => element.statusCode == 1).toList();
-    response.where((element) => element.statusCode == 3).toList();
+    var variableList = response
+        .where((element) =>
+            element.statusCode == 3 ||
+            element.statusCode == 4 ||
+            element.statusCode == 5)
+        .toList();
     trips = copyList(variableList);
     if (trips.isEmpty) {
       navigationService.back();
