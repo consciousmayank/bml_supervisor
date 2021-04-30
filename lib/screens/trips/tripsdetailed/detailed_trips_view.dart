@@ -48,14 +48,12 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
                   ) {},
                   singleListItem: viewModel.trips[index],
                   onTap: () {
-                    switch (widget.args.tripStatus) {
-                      case TripStatus.UPCOMING:
-                      case TripStatus.ONGOING:
-                        viewModel.openBottomSheet(trip: viewModel.trips[index]);
-                        break;
-                      case TripStatus.COMPLETED:
-                        viewModel.reviewTrip(trip: viewModel.trips[index]);
-                        break;
+                    if (widget.args.tripsList[index].statusCode == 1 ||
+                        widget.args.tripsList[index].statusCode == 2 ||
+                        widget.args.tripsList[index].statusCode == 4) {
+                      viewModel.openBottomSheet(trip: viewModel.trips[index]);
+                    } else if (widget.args.tripsList[index].statusCode == 3) {
+                      viewModel.reviewTrip(trip: viewModel.trips[index]);
                     }
                   },
                 ),

@@ -74,7 +74,7 @@ final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
     (clientId) => "/manager/dashboard/statistics/client/$clientId";
 
 const String GET_CLIENTS = "/manager/client/list";
-const String GET_USER = "/user/profile";
+const String GET_USER = "/manager/profile";
 const String UPDATE_USER_MOBILE = "/manager/update/mobile";
 const String UPDATE_USER_EMAIL = "/manager/update/email";
 const String CHANGE_PASSWORD = "/user/update/password";
@@ -91,4 +91,6 @@ final GET_EXPENSE_PIE_CHART =
 final GET_CONSIGNMENT_TRACKING_STATUS =
     (clientId) => "/manager/consignment/tracking/status/client/$clientId";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
+final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
+    (consignmentId) => '/consignment/$consignmentId/discard';
 ///////////////////////////////////////////////////////////////

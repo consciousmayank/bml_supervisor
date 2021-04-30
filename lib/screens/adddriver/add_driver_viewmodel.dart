@@ -10,6 +10,23 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class AddDriverViewModel extends GeneralisedBaseViewModel {
+  String _alternatePhNo = '';
+  String _whatsAppNo = '';
+
+  String get whatsAppNo => _whatsAppNo;
+
+  set whatsAppNo(String value) {
+    _whatsAppNo = value;
+    notifyListeners();
+  }
+
+  String get alternatePhNo => _alternatePhNo;
+
+  set alternatePhNo(String value) {
+    _alternatePhNo = value;
+    notifyListeners();
+  }
+
   TextEditingController pinCodeController = TextEditingController();
   FocusNode pinCodeFocusNode = FocusNode();
 

@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/adddriver/add_driver_viewmodel.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
@@ -195,35 +196,26 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   Widget buildVehicleTextFormField() {
     return appTextFormField(
       enabled: true,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().alphaNumericFormatter,
+      ],
       controller: vehicleIdController,
       focusNode: vehicleIdFocusNode,
       hintText: addDriverVehicleIdHint,
-      // inputDecoration: InputDecoration(
-      //   hintText: 'Vehicle Number',
-      //   hintStyle: TextStyle(
-      //     color: Colors.grey,
-      //   ),
-      // ),
       keyboardType: TextInputType.text,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, vehicleIdFocusNode, drivingLicenseFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
   Widget buildDlTextFormField() {
     return appTextFormField(
       formatter: <TextInputFormatter>[
-        LengthLimitingTextInputFormatter(16),
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
+        TextFieldInputFormatter().alphaNumericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 16),
       ],
       enabled: true,
       controller: drivingLicenseController,
@@ -234,20 +226,16 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, drivingLicenseFocusNode, aadhaarFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
   Widget buildAadhaarTextFormField() {
     return appTextFormField(
       enabled: true,
-      formatter: <TextInputFormatter>[LengthLimitingTextInputFormatter(16)],
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().numericFormatter,
+      ],
       controller: aadhaarController,
       focusNode: aadhaarFocusNode,
       hintText: addDriverAadhaarHint,
@@ -256,13 +244,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, aadhaarFocusNode, fNameFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().aadhaarCardNumberValidator,
     );
   }
 
@@ -273,7 +255,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       textCapitalization: TextCapitalization.words,
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
+        TextFieldInputFormatter().alphabeticFormatter,
       ],
       controller: fNameController,
       focusNode: fNameFocusNode,
@@ -283,40 +265,27 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, fNameFocusNode, lNameFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
   Widget buildLastNameTextFormField() {
     return appTextFormField(
-      enabled: true,
-      textCapitalization: TextCapitalization.words,
-      formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
-      ],
-      controller: lNameController,
-      focusNode: lNameFocusNode,
-      hintText: addDriverLastNameHint,
-      keyboardType: TextInputType.name,
-      onTextChange: (String value) {},
-      onFieldSubmitted: (_) async {
-        await selectDateOfBirth();
-        // fieldFocusChange(context, lNameFocusNode, fatherNameFocusNode);
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
-    );
+        enabled: true,
+        textCapitalization: TextCapitalization.words,
+        formatter: <TextInputFormatter>[
+          TextFieldInputFormatter().alphabeticFormatter,
+        ],
+        controller: lNameController,
+        focusNode: lNameFocusNode,
+        hintText: addDriverLastNameHint,
+        keyboardType: TextInputType.name,
+        onTextChange: (String value) {},
+        onFieldSubmitted: (_) async {
+          await selectDateOfBirth();
+          // fieldFocusChange(context, lNameFocusNode, fatherNameFocusNode);
+        },
+        validator: FormValidators().normalValidator);
   }
 
   Widget buildFatherNameTextFormField() {
@@ -324,7 +293,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       enabled: true,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+        TextFieldInputFormatter().alphabeticFormatter,
       ],
       controller: fatherNameController,
       focusNode: fatherNameFocusNode,
@@ -348,8 +317,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(10)
+        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 10)
       ],
       controller: mobileNumberController,
       focusNode: mobileNumberFocusNode,
@@ -360,13 +329,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
         fieldFocusChange(
             context, mobileNumberFocusNode, alternateMobileNumberFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().mobileNumberValidator,
     );
   }
 
@@ -388,14 +351,19 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       ),
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(10)
+        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 10)
       ],
+      validator: widget.viewModel.alternatePhNo.length != 0
+          ? FormValidators().mobileNumberValidator
+          : null,
       controller: alternateMobileNumberController,
       focusNode: alternateMobileNumberFocusNode,
       hintText: addDriverAlternateMobileHint,
       keyboardType: TextInputType.phone,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.alternatePhNo = value;
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, alternateMobileNumberFocusNode,
             whatsAppMobileNumberFocusNode);
@@ -421,14 +389,19 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       ),
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(10)
+        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 10)
       ],
       controller: whatsAppMobileNumberController,
       focusNode: whatsAppMobileNumberFocusNode,
       hintText: addDriverWhatsAppMobileHint,
       keyboardType: TextInputType.phone,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.whatsAppNo = value;
+      },
+      validator: widget.viewModel.whatsAppNo.length != 0
+          ? FormValidators().mobileNumberValidator
+          : null,
       onFieldSubmitted: (_) {
         fieldFocusChange(context, whatsAppMobileNumberFocusNode,
             widget.viewModel.cityFocusNode);
@@ -440,8 +413,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(2)
+        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 2)
       ],
       controller: workExpController,
       focusNode: workExpFocusNode,
@@ -451,13 +424,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, workExpFocusNode, streetFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -465,7 +432,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: streetController,
       focusNode: streetFocusNode,
@@ -475,13 +442,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, streetFocusNode, localityFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -489,7 +450,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: localityController,
       focusNode: localityFocusNode,
@@ -499,13 +460,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, localityFocusNode, landmarkFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -513,7 +468,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: landmarkController,
       focusNode: landmarkFocusNode,
@@ -524,13 +479,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
         fieldFocusChange(
             context, landmarkFocusNode, widget.viewModel.pinCodeFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -538,8 +487,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        LengthLimitingTextInputFormatter(6)
+        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 6)
       ],
       controller: widget.viewModel.pinCodeController,
       focusNode: widget.viewModel.pinCodeFocusNode,
@@ -549,13 +498,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         widget.viewModel.pinCodeFocusNode.unfocus();
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -563,8 +506,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: false,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
-        // LengthLimitingTextInputFormatter(6)
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: widget.viewModel.stateController,
       focusNode: widget.viewModel.stateFocusNode,
@@ -574,13 +516,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         widget.viewModel.pinCodeFocusNode.unfocus();
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -588,8 +524,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: false,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
-        // LengthLimitingTextInputFormatter(6)
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: widget.viewModel.countryController,
       focusNode: widget.viewModel.countryFocusNode,
@@ -599,27 +534,20 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       onFieldSubmitted: (_) {
         widget.viewModel.countryFocusNode.unfocus();
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
   Widget buildRemarksTextFormField() {
     return appTextFormField(
       inputDecoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+        contentPadding: EdgeInsets.only(left: 16, top: 8, bottom: 4, right: 16),
         hintStyle: TextStyle(fontSize: 14, color: Colors.white),
       ),
       maxLines: 5,
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
-        // LengthLimitingTextInputFormatter(6)
+        TextFieldInputFormatter().alphaNumericFormatter,
       ],
       controller: remarksController,
       focusNode: remarksFocusNode,
@@ -649,13 +577,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       focusNode: dobFocusNode,
       hintText: addDriverDobHint,
       keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 

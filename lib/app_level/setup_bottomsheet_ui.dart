@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -35,6 +36,9 @@ void setupBottomSheetUi() {
         SelectClientBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.upcomingTrips: (context, sheetRequest, completer) =>
         DetailedTripsBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.REJECT_DRIVER_TRIP: (context, sheetRequest, completer) =>
+        ReviewRejectConfirmationBottomSheet(
+            request: sheetRequest, completer: completer),
     BottomSheetType.COMPLETED_TRIP_REVIEW_REMARKS: (context, sheetRequest,
             completer) =>
         ReviewRemarksBottomSheet(request: sheetRequest, completer: completer),
@@ -235,24 +239,31 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
   final Widget child;
+  final double height;
+  final EdgeInsets margin;
 
   const BaseHalfScreenBottomSheet(
       {Key key,
       @required this.request,
       @required this.completer,
+      @required this.height,
+      @required this.margin,
       @required this.child})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: EdgeInsets.all(defaultBorder),
-      // padding: EdgeInsets.all(defaultBorder),
+      margin: margin ?? 0,
+      padding: margin ?? 0,
+      height: height,
       decoration: BoxDecoration(
         color: AppColors.appScaffoldColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(defaultBorder),
           topRight: Radius.circular(defaultBorder),
+          bottomLeft: margin != null ? Radius.circular(defaultBorder) : 0,
+          bottomRight: margin != null ? Radius.circular(defaultBorder) : 0,
         ),
       ),
       child: Column(

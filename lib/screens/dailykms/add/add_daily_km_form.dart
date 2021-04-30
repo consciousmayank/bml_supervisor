@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_arguments.dart
 import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
@@ -18,7 +19,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 class AddVehicleEntryFormView extends StatefulWidget {
   final AddDailyKmsArguments arguments;
+
   AddVehicleEntryFormView({this.arguments});
+
   @override
   _AddVehicleEntryFormViewState createState() =>
       _AddVehicleEntryFormViewState();
@@ -473,13 +476,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
 
         fieldFocusChange(context, initialReadingFocusNode, endReadingFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -499,13 +496,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         // fieldFocusChange(
         // context, endReadingFocusNode, vehicleLoadCapacityFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -515,13 +506,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
       controller: distanceDrivenController,
       hintText: "Total Distance Driven",
       keyboardType: TextInputType.number,
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -638,17 +623,9 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               fieldFocusChange(
                   context, fuelReadingFocusNode, fuelRateFocusNode);
             },
-            validator: (value) {
-              if (viewModel.isFuelEntryAdded) {
-                if (value.isEmpty) {
-                  return textRequired;
-                } else {
-                  return null;
-                }
-              } else {
-                return null;
-              }
-            },
+            validator: viewModel.isFuelEntryAdded
+                ? FormValidators().normalValidator
+                : null,
           )
         : Container();
   }
@@ -672,19 +649,9 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               fieldFocusChange(
                   context, fuelRateFocusNode, fuelMeterReadingFocusNode);
             },
-            validator: (value) {
-              if (viewModel.isFuelEntryAdded) {
-                if (value.isEmpty) {
-                  return textRequired;
-                } else if (double.parse(value) == 0) {
-                  return "cannot be 0";
-                } else {
-                  return null;
-                }
-              } else {
-                return null;
-              }
-            },
+            validator: viewModel.isFuelEntryAdded
+                ? FormValidators().normalValidator
+                : null,
           )
         : Container();
   }

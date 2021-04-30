@@ -14,6 +14,15 @@ import '../adddriver/driver_apis.dart';
 import '../dashboard/dashboard_apis.dart';
 
 class AddHubsViewModel extends GeneralisedBaseViewModel {
+  String _alternateMobileNumber = '';
+
+  String get alternateMobileNumber => _alternateMobileNumber;
+
+  set alternateMobileNumber(String value) {
+    _alternateMobileNumber = value;
+    notifyListeners();
+  }
+
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   DriverApis _driverApis = locator<DriverApisImpl>();
   AddHubsApis _addHubsApis = locator<AddHubApisImpl>();
@@ -104,13 +113,15 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void addHub({AddHubRequest newHubObject}) async {
-
     ApiResponse _apiResponse = await _addHubsApis.addHub(request: newHubObject);
-    dialogService.showConfirmationDialog(
-        title:
-            _apiResponse.isSuccessful() ? addHubSuccessful : addHubUnSuccessful,
-        description: _apiResponse.message,
-        barrierDismissible: false).then((value) {
+    dialogService
+        .showConfirmationDialog(
+            title: _apiResponse.isSuccessful()
+                ? addHubSuccessful
+                : addHubUnSuccessful,
+            description: _apiResponse.message,
+            barrierDismissible: false)
+        .then((value) {
       if (value.confirmed) {
         if (_apiResponse.isSuccessful()) {
           navigationService.back();
@@ -125,7 +136,7 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     //* get bar graph data too when populating the client dropdown
 
     List<GetClientsResponse> responseList =
-    await _dashBoardApis.getClientList();
+        await _dashBoardApis.getClientList();
     this.clientsList = copyList(responseList);
 
     setBusy(false);

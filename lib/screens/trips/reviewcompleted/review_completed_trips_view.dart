@@ -128,41 +128,70 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                         viewModel.completedTripsDetails.endReading.toString(),
                   ),
                   hSizedBox(10),
-                  SizedBox(
-                    height: buttonHeight,
-                    child: AppButton(
-                      borderWidth: 0,
-                      borderColor: Colors.transparent,
-                      onTap: () {
-                        viewModel.showConfirmationBottomSheet(
-                          entryLogRequest: EntryLog(
-                            consignmentId: widget.selectedTrip.consignmentId,
-                            routeId: widget.selectedTrip.routeId,
-                            clientId:
-                                MyPreferences().getSelectedClient().clientId,
-                            vehicleId: widget.selectedTrip.vehicleId,
-                            entryDate:
-                                viewModel.completedTripsDetails.entryDate,
-                            startReading: 0,
-                            endReading: viewModel.endReading,
-                            drivenKm: viewModel.getKmDiff(),
-                            fuelLtr: 0.00,
-                            fuelMeterReading: 0,
-                            ratePerLtr: 0.00,
-                            amountPaid: 0.00,
-                            trips: 1,
-                            loginTime:
-                                viewModel.completedTripsDetails.startTime,
-                            logoutTime: viewModel.completedTripsDetails.endTime,
-                            remarks: null,
-                            drivenKmGround: 0,
-                            startReadingGround: viewModel.startReading,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: buttonHeight,
+                          child: AppButton(
+                            borderWidth: 0,
+                            borderColor: Colors.transparent,
+                            onTap: () {
+                              viewModel.showRejectConfirmationBottomSheet(
+                                consignmentId:
+                                    widget.selectedTrip.consignmentId,
+                              );
+                            },
+                            background: AppColors.primaryColorShade5,
+                            buttonText: 'Reject',
                           ),
-                        );
-                      },
-                      background: AppColors.primaryColorShade5,
-                      buttonText: 'Verify',
-                    ),
+                        ),
+                      ),
+                      wSizedBox(10),
+                      Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: buttonHeight,
+                            child: AppButton(
+                              borderWidth: 0,
+                              borderColor: Colors.transparent,
+                              onTap: () {
+                                viewModel.showConfirmationBottomSheet(
+                                  entryLogRequest: EntryLog(
+                                    consignmentId:
+                                        widget.selectedTrip.consignmentId,
+                                    routeId: widget.selectedTrip.routeId,
+                                    clientId: MyPreferences()
+                                        .getSelectedClient()
+                                        .clientId,
+                                    vehicleId: widget.selectedTrip.vehicleId,
+                                    entryDate: viewModel
+                                        .completedTripsDetails.entryDate,
+                                    startReading: 0,
+                                    endReading: viewModel.endReading,
+                                    drivenKm: viewModel.getKmDiff(),
+                                    fuelLtr: 0.00,
+                                    fuelMeterReading: 0,
+                                    ratePerLtr: 0.00,
+                                    amountPaid: 0.00,
+                                    trips: 1,
+                                    loginTime: viewModel
+                                        .completedTripsDetails.startTime,
+                                    logoutTime:
+                                        viewModel.completedTripsDetails.endTime,
+                                    remarks: null,
+                                    drivenKmGround: 0,
+                                    startReadingGround: viewModel.startReading,
+                                  ),
+                                );
+                              },
+                              background: AppColors.primaryColorShade5,
+                              buttonText: 'Verify',
+                            ),
+                          ))
+                    ],
                   )
                 ],
               ),

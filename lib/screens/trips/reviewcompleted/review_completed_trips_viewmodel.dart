@@ -69,11 +69,6 @@ class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
             result: ReturnDetailedTripsViewArgs(
                 success: true, tripStatus: TripStatus.COMPLETED));
       }
-    } else {
-      await locator<DialogService>().showConfirmationDialog(
-        title: 'Oops...',
-        description: apiResponse.message,
-      );
     }
     setBusy(false);
   }
@@ -97,10 +92,45 @@ class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
     }
   }
 
+  showRejectConfirmationBottomSheet({@required int consignmentId}) async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: true,
+      isScrollControlled: false,
+      variant: BottomSheetType.REJECT_DRIVER_TRIP,
+    );
+
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        rejectSelectedTrip(
+          consignmentId: consignmentId,
+        );
+      }
+    }
+  }
+
   get endReading => _endReading;
 
   set endReading(value) {
     _endReading = value;
     notifyListeners();
+  }
+
+  void rejectSelectedTrip({@required int consignmentId}) async {
+    setBusy(true);
+    ApiResponse apiResponse = await _tripsApis.rejectCompletedTripWithId(
+        consignmentId: consignmentId);
+    setBusy(false);
+    if (apiResponse.isSuccessful()) {
+      var dialogResponse =
+          await locator<DialogService>().showConfirmationDialog(
+        title: 'Congratulations...',
+        description: apiResponse.message,
+      );
+      if (dialogResponse == null || dialogResponse.confirmed) {
+        navigationService.back(
+            result: ReturnDetailedTripsViewArgs(
+                success: true, tripStatus: TripStatus.COMPLETED));
+      }
+    }
   }
 }

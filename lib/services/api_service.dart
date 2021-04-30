@@ -604,6 +604,19 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
+  Future<ParentApiResponse> rejectCompletedTripWithId(
+      {@required int consignmentId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID(consignmentId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {

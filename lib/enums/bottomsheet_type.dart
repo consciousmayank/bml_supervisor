@@ -6,5 +6,6 @@ enum BottomSheetType {
   expenseFilters,
   clientSelect,
   upcomingTrips,
-  COMPLETED_TRIP_REVIEW_REMARKS
+  COMPLETED_TRIP_REVIEW_REMARKS,
+  REJECT_DRIVER_TRIP,
 }

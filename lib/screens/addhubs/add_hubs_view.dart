@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_viewmodel.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -68,6 +69,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   FocusNode contactPersonFocusNode = FocusNode();
 
   TextEditingController contactNumberController = TextEditingController();
+
   FocusNode contactNumberFocusNode = FocusNode();
 
   TextEditingController alternateMobileNumberController =
@@ -111,7 +113,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                 buildDateOfRegistrationView(),
                 buildContactPersonView(),
                 buildContactNumberTextFormField(),
-                buildAlternateMobileNumberTextFormField(),
+                buildAlternateMobileNumberTextFormField(
+                    viewModel: widget.viewModel),
                 buildEmailTextFormField(),
                 buildStreetTextFormField(),
                 buildLocalityTextFormField(),
@@ -176,7 +179,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                     pincode: widget.viewModel.pinCodeController.text,
                     locality: localityController.text.trim(),
                     mobile: contactNumberController.text.trim(),
-                    phone: alternateMobileNumberController.text.trim(),
+                    phone: widget.viewModel.alternateMobileNumber.trim(),
                     registrationDate: doRController.text,
                     street: streetController.text.trim(),
                   ));
@@ -206,13 +209,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         hubTitleFocusNode.unfocus();
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -233,13 +230,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: doRFocusNode,
       hintText: addHubsDateOfRegistrationHint,
       keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -305,13 +296,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
         fieldFocusChange(
             context, contactPersonFocusNode, contactNumberFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -331,17 +316,12 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
         fieldFocusChange(
             context, contactNumberFocusNode, alternateMobileNumberFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().mobileNumberValidator,
     );
   }
 
-  Widget buildAlternateMobileNumberTextFormField() {
+  Widget buildAlternateMobileNumberTextFormField(
+      {@required AddHubsViewModel viewModel}) {
     return appTextFormField(
       inputDecoration: InputDecoration(
         suffix: IconButton(
@@ -354,6 +334,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             alternateMobileNumberController.selection =
                 TextSelection.fromPosition(TextPosition(
                     offset: alternateMobileNumberController.text.length));
+            widget.viewModel.alternateMobileNumber =
+                contactNumberController.text;
           },
         ),
       ),
@@ -366,7 +348,12 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: alternateMobileNumberFocusNode,
       hintText: addHubsAlternateMobileNumberHint,
       keyboardType: TextInputType.phone,
-      onTextChange: (String value) {},
+      validator: widget.viewModel.alternateMobileNumber.length != 0
+          ? FormValidators().mobileNumberNotRequiredValidator
+          : null,
+      onTextChange: (String value) {
+        widget.viewModel.alternateMobileNumber = value;
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, alternateMobileNumberFocusNode, emailFocusNode);
@@ -378,14 +365,11 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     return appTextFormField(
       enabled: true,
       textCapitalization: TextCapitalization.words,
-      //todo: regex for email verification
-      // formatter: <TextInputFormatter>[
-      //   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
-      // ],
+      validator: FormValidators().emailValidator,
       controller: emailController,
       focusNode: emailFocusNode,
       hintText: addHubsEmailHint,
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.emailAddress,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, emailFocusNode, streetFocusNode);
@@ -408,13 +392,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, streetFocusNode, localityFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -433,13 +411,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(context, localityFocusNode, landmarkFocusNode);
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -454,6 +426,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       hintText: addDriverLandmarkHint,
       keyboardType: TextInputType.text,
       onTextChange: (String value) {},
+      validator: FormValidators().normalValidator,
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, landmarkFocusNode, widget.viewModel.cityFocusNode);

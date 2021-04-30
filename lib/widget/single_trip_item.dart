@@ -136,59 +136,130 @@ class SingleTripItem extends StatelessWidget {
     );
   }
 
-  SizedBox buildTitle(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // status == TripStatus.ONGOING
-                //     ? Checkbox(
-                //         value: singleListItem.isSelected,
-                //         onChanged: (bool value) {
-                //           onCheckBoxTapped(value, singleListItem);
-                //         },
-                //       )
-                //     : Container(),
-                Image.asset(
-                  consignmentIcon,
-                  height: 20,
-                  width: 20,
+  Widget buildTitle(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 40,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          consignmentIcon,
+                          height: 20,
+                          width: 20,
+                        ),
+                        wSizedBox(8),
+                        Text(
+                          'C#${singleListItem.consignmentId}',
+                          style: AppTextStyles.latoBold12Black
+                              .copyWith(color: AppColors.primaryColorShade5),
+                        )
+                      ],
+                    ),
+                    status == TripStatus.ONGOING ||
+                            status == TripStatus.UPCOMING
+                        ? Container()
+                        : SizedBox(
+                            height: 15,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  'Status : ',
+                                  style: AppTextStyles.latoBold12Black.copyWith(
+                                    color: AppColors.primaryColorShade5,
+                                    fontSize: 8,
+                                  ),
+                                ),
+                                Text(
+                                  getStatusTitle(
+                                      statusCode: singleListItem.statusCode,
+                                      context: context),
+                                  style: getStatusTitleStyle(
+                                      statusCode: singleListItem.statusCode),
+                                ),
+                              ],
+                            ),
+                          )
+                  ],
                 ),
-                wSizedBox(8),
-                Text(
-                  'C#${singleListItem.consignmentId}',
-                  style: AppTextStyles.latoBold12Black
-                      .copyWith(color: AppColors.primaryColorShade5),
-                )
-              ],
-            ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: AppButton(
+                      buttonTextFontWeight: FontWeight.normal,
+                      borderWidth: 0,
+                      borderColor: AppColors.primaryColorShade5,
+                      onTap: () {
+                        if (onTap != null) onTap.call();
+                      },
+                      background: AppColors.primaryColorShade5,
+                      buttonText: 'View'),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: AppButton(
-                  buttonTextFontWeight: FontWeight.normal,
-                  borderWidth: 0,
-                  borderColor: AppColors.primaryColorShade5,
-                  onTap: () {
-                    if (onTap != null) onTap.call();
-                  },
-                  background: AppColors.primaryColorShade5,
-                  buttonText: 'View'),
-            ),
-          )
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  String getStatusTitle({int statusCode, BuildContext context}) {
+    switch (statusCode) {
+      case 3:
+        return 'Completed';
+        break;
+      case 4:
+        return 'Completed & Verified';
+        break;
+      default:
+        return 'Rejected';
+    }
+  }
+
+  getStatusTitleStyle({int statusCode}) {
+    switch (statusCode) {
+      case 3:
+        return AppTextStyles.latoBold12Black.copyWith(
+          color: AppColors.primaryColorShade5,
+          fontWeight: FontWeight.bold,
+          fontSize: 10,
+        );
+        break;
+      case 4:
+        return AppTextStyles.latoBold12Black.copyWith(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+          fontSize: 10,
+        );
+        break;
+      default:
+        return AppTextStyles.latoBold12Black.copyWith(
+          color: Colors.red,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        );
+    }
   }
 }
 

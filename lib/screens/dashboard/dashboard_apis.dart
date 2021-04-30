@@ -31,43 +31,40 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   Future<List<GetClientsResponse>> getClientList() async {
     List<GetClientsResponse> clientsList = [];
     ParentApiResponse apiResponse = await apiService.getClientsList();
-    if (apiResponse.error == null) {
-      //positive
+
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       list.forEach((element) {
         GetClientsResponse getClientsResponse =
             GetClientsResponse.fromMap(element);
         clientsList.add(getClientsResponse);
       });
-    } else {
-      //negative
-      snackBarService.showSnackbar(message: apiResponse.getErrorReason());
     }
+
     return clientsList;
   }
 
   @override
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
       {@required String clientId}) async {
+    DashboardTilesStatsResponse initialDashBoardStats =
+        DashboardTilesStatsResponse(
+            hubCount: 0,
+            totalKm: 0,
+            routeCount: 0,
+            dueKm: 0,
+            dueExpense: 0,
+            totalExpense: 0);
+
     ParentApiResponse dashboardTilesData =
         await apiService.getDashboardTilesStats(clientId: clientId);
-    if (dashboardTilesData.error == null) {
-      //positive
-      return DashboardTilesStatsResponse.fromJson(
+
+    if (filterResponse(dashboardTilesData, showSnackBar: false) != null) {
+      initialDashBoardStats = DashboardTilesStatsResponse.fromJson(
           dashboardTilesData.response.data);
-    } else {
-      //negative
-      snackBarService.showSnackbar(
-          message: dashboardTilesData.getErrorReason());
     }
 
-    return DashboardTilesStatsResponse(
-        hubCount: 0,
-        totalKm: 0,
-        routeCount: 0,
-        dueKm: 0,
-        dueExpense: 0,
-        totalExpense: 0);
+    return initialDashBoardStats;
   }
 
   @override
@@ -75,8 +72,8 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
     List<FetchRoutesResponse> _routesList = [];
     ParentApiResponse routesListResponse =
         await apiService.getRoutesForClientId(clientId: clientId);
-    if (routesListResponse.error == null) {
-      //positive
+
+    if (filterResponse(routesListResponse, showSnackBar: false) != null) {
       if (routesListResponse.isNoDataFound()) {
         snackBarService.showSnackbar(message: routesListResponse.emptyResult);
       } else {
@@ -85,10 +82,6 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
           _routesList.add(FetchRoutesResponse.fromMap(element));
         });
       }
-    } else {
-      //negative
-      snackBarService.showSnackbar(
-          message: routesListResponse.getErrorReason());
     }
 
     return _routesList;
@@ -99,8 +92,8 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
     List<FetchHubsResponse> _hubsList = [];
     ParentApiResponse routesListResponse =
         await apiService.getHubsList(routeId: routeId);
-    if (routesListResponse.error == null) {
-      //positive
+
+    if (filterResponse(routesListResponse, showSnackBar: false) != null) {
       if (routesListResponse.isNoDataFound()) {
         snackBarService.showSnackbar(message: routesListResponse.emptyResult);
       } else {
@@ -109,10 +102,6 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
           _hubsList.add(FetchHubsResponse.fromMap(element));
         });
       }
-    } else {
-      //negative
-      snackBarService.showSnackbar(
-          message: routesListResponse.getErrorReason());
     }
 
     return _hubsList;
@@ -124,7 +113,8 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
     List<GetDistributorsResponse> _responseList = [];
     ParentApiResponse response =
         await apiService.getDistributors(clientId: clientId);
-    if (filterResponse(response) != null) {
+
+    if (filterResponse(response, showSnackBar: false) != null) {
       var list = response.response.data as List;
       if (list.length > 0) {
         for (Map singleHub in list) {
@@ -143,7 +133,7 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
     List<ConsignmentTrackingStatusResponse> _responseList = [];
     ParentApiResponse response =
         await apiService.getConsignmentTrackingStatus(clientId: clientId);
-    if (filterResponse(response) != null) {
+    if (filterResponse(response, showSnackBar: false) != null) {
       var list = response.response.data as List;
       if (list.length > 0) {
         for (Map singleHub in list) {
