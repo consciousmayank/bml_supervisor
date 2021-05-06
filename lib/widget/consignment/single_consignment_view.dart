@@ -3,6 +3,7 @@ import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/consignment/single_consignment_viewmodel.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -81,11 +82,7 @@ class _SingleConsignmentViewState extends State<SingleConsignmentView> {
                   )
                 ],
               )
-            : Center(
-                child: Container(
-                  child: Text("No Data"),
-                ),
-              ),
+            : Center(child: NoDataWidget()),
         viewModelBuilder: () => SingleConsignmentViewModel());
   }
 }

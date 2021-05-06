@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/consignments/list/consignment_list_viewmo
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -67,9 +68,16 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
 
   Widget getBody({BuildContext context, ConsignmentListViewModel viewModel}) {
     return viewModel.recentConsignmentList.length == 0
-        ? Container(
-            padding: EdgeInsets.all(16),
-            child: Center(child: Text('No data')),
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: buildChartTitle(title: "Recent Driven Kilometers"),
+              ),
+              NoDataWidget(),
+            ],
           )
         : SizedBox(
             child: makeConsignmentList(context: context, viewModel: viewModel),

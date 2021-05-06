@@ -48,6 +48,7 @@ const String GET_ROUTES_FOR_CLIENT_ID = "/route/list/client/";
 const String GET_ROUTES_FOR_CLIENT_ID_new = "/route/list/client/";
 const String GET_HUB_DATA = "/hub/find/";
 const String ADD_CONSIGNMENT_DATA_TO_HUB = "/consignment/add";
+const String ADD_VEHICLE = "/vehicle/add";
 const String GET_CONSIGNMENTS_LIST = "/consignment/find/";
 
 final GET_HUBS = (routeId) => "/route/$routeId/hub/list";
@@ -93,4 +94,15 @@ final GET_CONSIGNMENT_TRACKING_STATUS =
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
     (consignmentId) => '/consignment/$consignmentId/discard';
+
+final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId) =>
+    "/manager/consignment/tracking/status/created/client/$clientId";
+final GET_ONGOING_TRIPS_STATUS_LIST = (clientId) =>
+    "/manager/consignment/tracking/status/ongoing/client/$clientId";
+final GET_COMPLETED_TRIPS_STATUS_LIST = (clientId) =>
+    "/manager/consignment/tracking/status/completed/client/$clientId";
+final GET_APPROVED_TRIPS_STATUS_LIST = (clientId) =>
+    "/manager/consignment/tracking/status/approved/client/$clientId";
+final GET_DISCARDED_TRIPS_STATUS_LIST = (clientId) =>
+    "/manager/consignment/tracking/status/discarded/client/$clientId";
 ///////////////////////////////////////////////////////////////

@@ -13,7 +13,9 @@ import 'package:stacked_services/stacked_services.dart';
 import 'detailed_trips_bottom_sheet.dart';
 
 class DetailedTripsViewModel extends GeneralisedBaseViewModel {
-  List<ConsignmentTrackingStatusResponse> _trips;
+  List<ConsignmentTrackingStatusResponse> _trips = [];
+  List<ConsignmentTrackingStatusResponse> completedTrips = [];
+  List<ConsignmentTrackingStatusResponse> verifiedTrips = [];
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
   ConsignmentTrackingStatusResponse _selectedTripForEndingTrip;
 
@@ -28,6 +30,32 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
 
   set trips(List<ConsignmentTrackingStatusResponse> value) {
     _trips = value;
+  }
+
+  void getCompletedAndVerifiedTrips() async {
+    setBusy(true);
+    List<ConsignmentTrackingStatusResponse> response;
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        tripStatus: TripStatus.COMPLETED,
+        clientId: MyPreferences().getSelectedClient().clientId);
+    completedTrips = copyList(response);
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        tripStatus: TripStatus.APPROVED,
+        clientId: MyPreferences().getSelectedClient().clientId);
+    verifiedTrips = copyList(response);
+    setBusy(false);
+    notifyListeners();
+  }
+
+  void getConsignmentTrackingStatus({TripStatus tripStatus}) async {
+    setBusy(true);
+    List<ConsignmentTrackingStatusResponse> response =
+        await _dashboardApi.getConsignmentTrackingStatus(
+            tripStatus: tripStatus,
+            clientId: MyPreferences().getSelectedClient().clientId);
+    trips = copyList(response);
+    setBusy(false);
+    notifyListeners();
   }
 
   void openBottomSheet({ConsignmentTrackingStatusResponse trip}) async {
@@ -52,32 +80,15 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     navigationService
         .navigateTo(reviewCompletedTripsPageRoute, arguments: trip)
         .then((value) {
-      if (value != null) {
-        ReturnDetailedTripsViewArgs returningArgs = value;
-        if (returningArgs.success &&
-            returningArgs.tripStatus == TripStatus.COMPLETED) {
-          trips.clear();
-          getConsignmentTrackingStatus();
-        }
-      }
+      getCompletedAndVerifiedTrips();
+      // if (value != null) {
+      //   ReturnDetailedTripsViewArgs returningArgs = value;
+      //   if (returningArgs.success &&
+      //       returningArgs.tripStatus == TripStatus.COMPLETED) {
+      //     trips.clear();
+      //     getConsignmentTrackingStatus();
+      //   }
+      // }
     });
-  }
-
-  void getConsignmentTrackingStatus() async {
-    List<ConsignmentTrackingStatusResponse> response =
-        await _dashboardApi.getConsignmentTrackingStatus(
-            clientId: MyPreferences().getSelectedClient().clientId);
-
-    var variableList = response
-        .where((element) =>
-            element.statusCode == 3 ||
-            element.statusCode == 4 ||
-            element.statusCode == 5)
-        .toList();
-    trips = copyList(variableList);
-    if (trips.isEmpty) {
-      navigationService.back();
-    }
-    notifyListeners();
   }
 }

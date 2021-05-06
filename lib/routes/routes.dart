@@ -11,6 +11,7 @@ import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_argume
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
+import 'package:bml_supervisor/screens/addvehicle/add_vehicle_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_view.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
@@ -138,12 +139,17 @@ class AppRouter {
 
       case addRoutesPageRoute:
         AddRoutesArguments args = settings.arguments;
-        List<GetDistributorsResponse> newHubsList = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddRoutesView(
                     args: args,
                   ),
+                ));
+
+      case addVehiclePageRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: AddVehicleView(),
                 ));
 
       case viewAllConsignmentsViewPageRoute:

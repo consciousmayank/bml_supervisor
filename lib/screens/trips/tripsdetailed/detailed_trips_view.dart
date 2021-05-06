@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_m
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -25,7 +26,10 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DetailedTripsViewModel>.reactive(
       onModelReady: (viewModel) {
-        viewModel.trips = widget.args.tripsList;
+        widget.args.tripStatus == TripStatus.COMPLETED
+            ? viewModel.getCompletedAndVerifiedTrips()
+            : viewModel.getConsignmentTrackingStatus(
+                tripStatus: widget.args.tripStatus);
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -35,52 +39,19 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
           ),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) =>
-                    SingleTripItem(
-                  status: widget.args.tripStatus,
-                  onCheckBoxTapped: (
-                    bool value,
-                    ConsignmentTrackingStatusResponse tappedTrip,
-                  ) {},
-                  singleListItem: viewModel.trips[index],
-                  onTap: () {
-                    if (widget.args.tripsList[index].statusCode == 1 ||
-                        widget.args.tripsList[index].statusCode == 2 ||
-                        widget.args.tripsList[index].statusCode == 4) {
-                      viewModel.openBottomSheet(trip: viewModel.trips[index]);
-                    } else if (widget.args.tripsList[index].statusCode == 3) {
-                      viewModel.reviewTrip(trip: viewModel.trips[index]);
-                    }
-                  },
-                ),
-                itemCount: viewModel.trips.length,
-              ),
-            ),
-            viewModel.selectedTripForEndingTrip != null
-                ? Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 8,
-                      right: 4,
-                      left: 4,
-                    ),
-                    child: SizedBox(
-                      height: buttonHeight,
-                      child: AppButton(
-                        borderColor: AppColors.primaryColorShade11,
-                        onTap: () {},
-                        background: AppColors.primaryColorShade5,
-                        buttonText: 'End Trip',
-                      ),
-                    ),
+        body: viewModel.isBusy
+            ? ShimmerContainer(
+                itemCount: 20,
+              )
+            : widget.args.tripStatus == TripStatus.COMPLETED
+                ? TabbedBody(
+                    viewModel: viewModel,
+                    tripStatus: widget.args.tripStatus,
                   )
-                : Container()
-          ],
-        ),
+                : NormalBody(
+                    viewModel: viewModel,
+                    tripStatus: widget.args.tripStatus,
+                  ),
       ),
       viewModelBuilder: () => DetailedTripsViewModel(),
     );
@@ -95,10 +66,151 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
         return 'Ongoing Trips';
         break;
       case TripStatus.COMPLETED:
-        return 'Completed Trips';
+        return 'Trips';
         break;
       default:
         return 'Trips';
     }
+  }
+}
+
+class NormalBody extends StatefulWidget {
+  final DetailedTripsViewModel viewModel;
+  final TripStatus tripStatus;
+
+  const NormalBody({
+    Key key,
+    @required this.viewModel,
+    @required this.tripStatus,
+  }) : super(key: key);
+  @override
+  _NormalBodyState createState() => _NormalBodyState();
+}
+
+class _NormalBodyState extends State<NormalBody> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.viewModel.trips.length == 0
+        ? Container(
+            child: Center(
+              child: Text('No Trips as of yet.'),
+            ),
+          )
+        : Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) =>
+                      SingleTripItem(
+                    status: widget.tripStatus,
+                    onCheckBoxTapped: (
+                      bool value,
+                      ConsignmentTrackingStatusResponse tappedTrip,
+                    ) {},
+                    singleListItem: widget.viewModel.trips[index],
+                    onTap: () {
+                      if (widget.viewModel.trips[index].statusCode == 1 ||
+                          widget.viewModel.trips[index].statusCode == 2 ||
+                          widget.viewModel.trips[index].statusCode == 4) {
+                        widget.viewModel.openBottomSheet(
+                            trip: widget.viewModel.trips[index]);
+                      } else if (widget.viewModel.trips[index].statusCode ==
+                          3) {
+                        widget.viewModel
+                            .reviewTrip(trip: widget.viewModel.trips[index]);
+                      }
+                    },
+                  ),
+                  itemCount: widget.viewModel.trips.length,
+                ),
+              ),
+            ],
+          );
+  }
+}
+
+class TabbedBody extends StatefulWidget {
+  final DetailedTripsViewModel viewModel;
+  final TripStatus tripStatus;
+
+  const TabbedBody(
+      {Key key, @required this.viewModel, @required this.tripStatus})
+      : super(key: key);
+  @override
+  _TabbedBodyState createState() => _TabbedBodyState();
+}
+
+class _TabbedBodyState extends State<TabbedBody> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Column(
+        children: [
+          TabBar(
+            labelStyle: AppTextStyles.latoBold14Black,
+            unselectedLabelStyle: AppTextStyles.latoMedium14Black,
+            labelColor: AppColors.primaryColorShade5,
+            unselectedLabelColor: AppColors.black,
+            indicatorColor: AppColors.primaryColorShade5,
+            indicatorSize: TabBarIndicatorSize.label,
+            tabs: [
+              Tab(
+                text: 'Completed (${widget.viewModel.completedTrips.length})',
+              ),
+              Tab(
+                text: 'Verified (${widget.viewModel.verifiedTrips.length})',
+              ),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                widget.viewModel.completedTrips.length == 0
+                    ? Container(
+                        child: Center(
+                          child: Text('No Trips as of yet.'),
+                        ),
+                      )
+                    : makeList(widget.viewModel.completedTrips),
+                widget.viewModel.verifiedTrips.length == 0
+                    ? Container(
+                        child: Center(
+                          child: Text('No Trips as of yet.'),
+                        ),
+                      )
+                    : makeList(widget.viewModel.verifiedTrips)
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  makeList(List<ConsignmentTrackingStatusResponse> trips) {
+    return Expanded(
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) => SingleTripItem(
+          status: widget.tripStatus,
+          onCheckBoxTapped: (
+            bool value,
+            ConsignmentTrackingStatusResponse tappedTrip,
+          ) {},
+          singleListItem: trips[index],
+          onTap: () {
+            if (trips[index].statusCode == 1 ||
+                trips[index].statusCode == 2 ||
+                trips[index].statusCode == 4) {
+              widget.viewModel.openBottomSheet(trip: trips[index]);
+            } else if (trips[index].statusCode == 3) {
+              widget.viewModel.reviewTrip(trip: trips[index]);
+            }
+          },
+        ),
+        itemCount: trips.length,
+      ),
+    );
   }
 }

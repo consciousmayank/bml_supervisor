@@ -9,13 +9,13 @@ class CreateConsignmentRequest {
     this.itemUnit,
     this.dropOff,
     this.collect,
-    this.payment,
+    this.payment = 0.00,
     this.clientId,
     this.routeId,
     this.vehicleId,
     this.entryDate,
     this.dispatchDateTime,
-    this.title = 'NA',
+    this.title,
     this.routeTitle,
     this.items,
     this.weight,
@@ -30,7 +30,7 @@ class CreateConsignmentRequest {
   final String routeTitle;
   final int dropOff;
   final int collect;
-  final double payment;
+  double payment;
   final List<Item> items;
   final String itemUnit;
   final double weight;
@@ -116,39 +116,43 @@ class Item {
     // this.id,
     this.hubId,
     this.sequence,
-    this.title = 'NA',
-    this.dropOff = 0,
-    this.collect = 0,
-    this.payment = 0.0,
-    this.dropOffG = 0,
-    this.collectG = 0,
-    this.paymentG = 0.0,
+    this.title,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.dropOffG,
+    this.collectG,
+    this.paymentG,
     this.paymentMode,
-    this.paymentId = 'NA',
-    this.remarks = 'NA',
+    this.paymentId,
+    this.remarks,
     this.flag,
+    this.collectError = false,
+    this.dropOffError = false,
+    this.paymentError = false,
+    this.titleError = false,
   });
 
   // final int id;
   final int hubId;
   final int sequence;
-  final dynamic title;
-  final int dropOff;
-  final int collect;
-  final double payment;
+  String title;
+  int dropOff;
+  int collect;
+  double payment;
   final int dropOffG;
   final int collectG;
   final double paymentG;
   final int paymentMode;
   final String paymentId;
-  final String remarks;
+  String remarks;
   final String flag;
   final String hubTitle;
   final String hubCity;
   final String hubContactPerson;
   final double hubGeoLatitude;
   final double hubGeoLongitude;
-
+  bool titleError, dropOffError, collectError, paymentError;
   Item copyWith({
     int id,
     int hubId,

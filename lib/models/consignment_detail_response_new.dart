@@ -35,7 +35,7 @@ class ConsignmentDetailResponseNew {
   String clientId;
   String createBy;
   String assessBy;
-  String driverId;
+  dynamic driverId;
   String itemUnit;
   double weight;
   int routeId;
@@ -55,7 +55,7 @@ class ConsignmentDetailResponseNew {
           String clientId,
           String createBy,
           String assessBy,
-          String driverId,
+          int driverId,
           String itemUnit,
           double weight,
           int routeId,
@@ -85,9 +85,9 @@ class ConsignmentDetailResponseNew {
         collect: collect ?? this.collect,
         payment: payment ?? this.payment,
         dropOff: dropOff ?? this.dropOff,
-        driverId: driverId??this.driverId,
-        itemUnit: itemUnit??this.itemUnit,
-        weight: weight??this.weight,
+        driverId: driverId ?? this.driverId,
+        itemUnit: itemUnit ?? this.itemUnit,
+        weight: weight ?? this.weight,
       );
 
   factory ConsignmentDetailResponseNew.fromJson(Map<String, dynamic> json) =>

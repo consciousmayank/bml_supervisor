@@ -18,8 +18,7 @@ class TripsViewModel extends GeneralisedBaseViewModel {
     navigationService
         .navigateTo(
           tripsDetailsPageRoute,
-          arguments: DetailedTripsViewArgs(
-              tripsList: tripsList, tripStatus: tripStatus),
+          arguments: DetailedTripsViewArgs(tripStatus: tripStatus),
         )
         .then((value) => onLoadComplete());
   }

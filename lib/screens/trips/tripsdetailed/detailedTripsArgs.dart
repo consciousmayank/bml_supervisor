@@ -3,11 +3,9 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:flutter/cupertino.dart';
 
 class DetailedTripsViewArgs {
-  List<ConsignmentTrackingStatusResponse> tripsList;
   final TripStatus tripStatus;
 
   DetailedTripsViewArgs({
-    @required this.tripsList,
     @required this.tripStatus,
   });
 }

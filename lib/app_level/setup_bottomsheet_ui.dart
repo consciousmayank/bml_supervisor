@@ -254,16 +254,20 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin ?? 0,
-      padding: margin ?? 0,
+      margin: margin ?? EdgeInsets.all(0),
+      padding: margin ?? EdgeInsets.all(0),
       height: height,
       decoration: BoxDecoration(
         color: AppColors.appScaffoldColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(defaultBorder),
           topRight: Radius.circular(defaultBorder),
-          bottomLeft: margin != null ? Radius.circular(defaultBorder) : 0,
-          bottomRight: margin != null ? Radius.circular(defaultBorder) : 0,
+          bottomLeft: margin != null
+              ? Radius.circular(defaultBorder)
+              : Radius.circular(0),
+          bottomRight: margin != null
+              ? Radius.circular(defaultBorder)
+              : Radius.circular(0),
         ),
       ),
       child: Column(

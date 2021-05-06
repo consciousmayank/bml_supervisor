@@ -106,40 +106,65 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                 children: [
                                   hSizedBox(5),
 
-                                  NotificationTile(
-                                    iconName: consignmentIcon,
-                                    notificationTitle: 'Upcoming trips',
-                                    taskNumber:
-                                        viewModel?.upcomingTrips?.length,
-                                    onTap: () {
-                                      viewModel.takeToUpcomingTripsDetailsView(
-                                        tripStatus: TripStatus.UPCOMING,
-                                      );
-                                    },
-                                  ),
+                                  viewModel.isGettingTripsStatus
+                                      ? Container(
+                                          height: 50,
+                                          child: ShimmerContainer(
+                                            itemCount: 1,
+                                          ),
+                                        )
+                                      : NotificationTile(
+                                          iconName: consignmentIcon,
+                                          notificationTitle: 'Upcoming trips',
+                                          taskNumber:
+                                              viewModel?.upcomingTrips?.length,
+                                          onTap: () {
+                                            viewModel
+                                                .takeToUpcomingTripsDetailsView(
+                                              tripStatus: TripStatus.UPCOMING,
+                                            );
+                                          },
+                                        ),
 
-                                  NotificationTile(
-                                    iconName: blueRouteIcon,
-                                    notificationTitle: 'Ongoing Trips',
-                                    taskNumber: viewModel?.ongoingTrips?.length,
-                                    onTap: () {
-                                      viewModel.takeToUpcomingTripsDetailsView(
-                                        tripStatus: TripStatus.ONGOING,
-                                      );
-                                    },
-                                  ),
+                                  viewModel.isGettingTripsStatus
+                                      ? Container(
+                                          height: 50,
+                                          child: ShimmerContainer(
+                                            itemCount: 1,
+                                          ),
+                                        )
+                                      : NotificationTile(
+                                          iconName: blueRouteIcon,
+                                          notificationTitle: 'Ongoing Trips',
+                                          taskNumber:
+                                              viewModel?.ongoingTrips?.length,
+                                          onTap: () {
+                                            viewModel
+                                                .takeToUpcomingTripsDetailsView(
+                                              tripStatus: TripStatus.ONGOING,
+                                            );
+                                          },
+                                        ),
 
-                                  NotificationTile(
-                                    iconName: completedTripsIcon,
-                                    notificationTitle: 'Completed Trips',
-                                    taskNumber:
-                                        viewModel?.completedTrips?.length,
-                                    onTap: () {
-                                      viewModel.takeToUpcomingTripsDetailsView(
-                                        tripStatus: TripStatus.COMPLETED,
-                                      );
-                                    },
-                                  ),
+                                  viewModel.isGettingTripsStatus
+                                      ? Container(
+                                          height: 50,
+                                          child: ShimmerContainer(
+                                            itemCount: 1,
+                                          ),
+                                        )
+                                      : NotificationTile(
+                                          iconName: completedTripsIcon,
+                                          notificationTitle: 'Completed Trips',
+                                          taskNumber:
+                                              viewModel?.completedTrips?.length,
+                                          onTap: () {
+                                            viewModel
+                                                .takeToUpcomingTripsDetailsView(
+                                              tripStatus: TripStatus.COMPLETED,
+                                            );
+                                          },
+                                        ),
 
                                   hSizedBox(3),
                                   viewModel.singleClientTileData != null
@@ -260,17 +285,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         )
                                       : Container(),
 
-                                  // selectDuration(viewModel: viewModel),
-                                  ///Bar chart
+                                  ///Bar chart (Driven Kilometers)
                                   BarChartView(),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      'Recent Driven Kilometers',
-                                      style: AppTextStyles
-                                          .latoBold14primaryColorShade6,
-                                    ),
-                                  ),
 
                                   ///Recent Driven Km Table
                                   ClipRRect(
@@ -283,7 +299,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                     ),
                                   ),
 
-                                  ///line chart
+                                  ///line chart (Routes Driven Kilometers)
                                   LineChartView(
                                     clientId: MyPreferences()
                                         .getSelectedClient()
@@ -292,7 +308,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         MyPreferences().getSelectedDuration(),
                                   ),
 
-                                  /// Driven Km pie chart
+                                  /// Driven Km % pie chart
                                   PieChartView(
                                     // key: UniqueKey(),
                                     selectedDuration:
@@ -305,14 +321,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                   /// Expense Pie Chart
                                   ExpensesPieChartView(),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      'Route List',
-                                      style: AppTextStyles
-                                          .latoBold14primaryColorShade6,
-                                    ),
-                                  ),
+                                  //Route List
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: Card(

@@ -1,7 +1,9 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,9 +58,7 @@ class _RoutesViewState extends State<RoutesView> {
                   child: CircularProgressIndicator(),
                 ),
               )
-            : viewModel.routesList.length > 0
-                ? buildRoutesListView(viewModel)
-                : Container();
+            : buildRoutesListView(viewModel);
       },
       viewModelBuilder: () => RoutesViewModel(),
     );
@@ -73,50 +73,59 @@ class _RoutesViewState extends State<RoutesView> {
           bottom: widget.isInDashBoard ? 4.0 : 0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: viewModel.routesList.length > 0
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
-          // hSizedBox(5),
-          Container(
-            color: AppColors.primaryColorShade5,
-            padding: EdgeInsets.all(15),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    ('#'),
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    ('Title'),
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Kilometer',
-                    textAlign: TextAlign.end,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-              ],
-            ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: buildChartTitle(title: 'Route List'),
           ),
-          Column(
-            children: getRoutesList(
-              viewModel: viewModel,
-              listLength: getListLength(
-                viewModel: viewModel,
+          if (viewModel.routesList.length > 0) hSizedBox(5),
+          if (viewModel.routesList.length > 0)
+            Container(
+              color: AppColors.primaryColorShade5,
+              padding: EdgeInsets.all(15),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      ('#'),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.whiteRegular,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      ('Title'),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.whiteRegular,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Kilometer',
+                      textAlign: TextAlign.end,
+                      style: AppTextStyles.whiteRegular,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
+          viewModel.routesList.length > 0
+              ? Column(
+                  children: getRoutesList(
+                    viewModel: viewModel,
+                    listLength: getListLength(
+                      viewModel: viewModel,
+                    ),
+                  ),
+                )
+              : NoDataWidget(),
         ],
       ),
     );

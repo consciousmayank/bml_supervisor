@@ -2,6 +2,7 @@ import 'package:bml_supervisor/screens/charts/piechart/pie_chart_viewmodel.dart'
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
@@ -30,45 +31,49 @@ class _PieChartViewState extends State<PieChartView> {
         builder: (context, viewModel, child) {
           return viewModel.isBusy
               ? DashBoardLoadingWidget()
-              : viewModel.routesDrivenKmPercentageList.length > 0
-                  ? Card(
-                      elevation: defaultElevation,
-                      shape: getCardShape(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            buildChartTitle(
-                                title: 'Route Driven Kilometers (%)'),
-                            viewModel.buildChartSubTitleNew(),
-                            // buildChartSubTitle(time: viewModel?.selectedDate),
-                            hSizedBox(5),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.width,
-                              child: charts.PieChart(
-                                viewModel.seriesPieData,
-                                animate: true,
-                                animationDuration: Duration(milliseconds: 200),
-                                defaultRenderer: new charts.ArcRendererConfig(
-                                  arcWidth: 80,
-                                  arcRendererDecorators: [
-                                    charts.ArcLabelDecorator(
-                                      labelPosition:
-                                          charts.ArcLabelPosition.auto,
-                                    )
-                                  ],
+              : Card(
+                  elevation: defaultElevation,
+                  shape: getCardShape(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        buildChartTitle(title: 'Route Driven Kilometers (%)'),
+                        if (viewModel.routesDrivenKmPercentageList.length > 0)
+                          viewModel.buildChartSubTitleNew(),
+                        // buildChartSubTitle(time: viewModel?.selectedDate),
+                        if (viewModel.routesDrivenKmPercentageList.length > 0)
+                          hSizedBox(5),
+                        viewModel.routesDrivenKmPercentageList.length > 0
+                            ? SizedBox(
+                                height: MediaQuery.of(context).size.width,
+                                child: charts.PieChart(
+                                  viewModel.seriesPieData,
+                                  animate: true,
+                                  animationDuration:
+                                      Duration(milliseconds: 200),
+                                  defaultRenderer: new charts.ArcRendererConfig(
+                                    arcWidth: 80,
+                                    arcRendererDecorators: [
+                                      charts.ArcLabelDecorator(
+                                        labelPosition:
+                                            charts.ArcLabelPosition.auto,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                            hSizedBox(10),
-                            // route label bottom positioned
-                            buildColorLegendListView(viewModel),
-                          ],
-                        ),
-                      ),
-                    )
-                  : Container();
+                              )
+                            : NoDataWidget(),
+                        if (viewModel.routesDrivenKmPercentageList.length > 0)
+                          hSizedBox(10),
+                        // route label bottom positioned
+                        if (viewModel.routesDrivenKmPercentageList.length > 0)
+                          buildColorLegendListView(viewModel),
+                      ],
+                    ),
+                  ),
+                );
         },
         viewModelBuilder: () => PieChartViewModel());
   }

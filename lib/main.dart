@@ -74,43 +74,52 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   AppRouter _router = AppRouter();
   String token;
+
+  Future selectNotification(String payload) async {
+    //Handle notification tapped logic here
+    print('PushNotifications :: payload = $payload');
+  }
+
   @override
   void initState() {
     super.initState();
     FirebaseMessaging.instance.requestPermission();
-    var initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    var initialzationSettingsIos = IOSInitializationSettings();
+    InitializationSettings initializationSettings =
+        initializeLocalNotificationsPlugIn();
 
-    var initializationSettings = InitializationSettings(
-        android: initialzationSettingsAndroid, iOS: initialzationSettingsIos);
-
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: selectNotification);
     //will be called when app is in foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(
-          'PushNotifications :: Handling a foreground message ${message.messageId}');
-      print('PushNotifications :: ${message.data}');
-      print('PushNotifications :: ${message.notification.title}');
-      print('PushNotifications :: ${message.notification.body}');
+      flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+            ),
+          ));
 
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                icon: android?.smallIcon,
-              ),
-            ));
-      }
+      // RemoteNotification notification = message.notification;
+      // AndroidNotification android = message.notification?.android;
+      // if (notification != null && android != null) {
+      //   flutterLocalNotificationsPlugin.show(
+      //       notification.hashCode,
+      //       message.data['title'],
+      //       message.data['body'],
+      //       NotificationDetails(
+      //         android: AndroidNotificationDetails(
+      //           channel.id,
+      //           channel.name,
+      //           channel.description,
+      //           icon: android?.smallIcon,
+      //         ),
+      //       ));
+      // }
     });
     getToken();
   }
@@ -144,5 +153,20 @@ class _MyAppState extends State<MyApp> {
         initialRoute: mainViewRoute,
       ),
     );
+  }
+
+  InitializationSettings initializeLocalNotificationsPlugIn() {
+    var initialzationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+
+    return InitializationSettings(
+        android: initialzationSettingsAndroid, iOS: initializationSettingsIOS);
   }
 }

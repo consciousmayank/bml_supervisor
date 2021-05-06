@@ -35,7 +35,6 @@ class _NotificationTileState extends State<NotificationTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                // mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Image.asset(

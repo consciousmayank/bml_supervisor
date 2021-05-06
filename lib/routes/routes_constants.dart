@@ -32,6 +32,7 @@ const String changePasswordRoute = '/changePasswordRoute';
 const String userProfileRoute = '/userProfileRoute';
 const String addHubRoute = '/addHubRoute';
 const String addRoutesPageRoute = '/addRoutesPageRoute';
+const String addVehiclePageRoute = '/addVehiclePageRoute';
 const String pickHubsPageRoute = '/pickHubsPageRoute';
 const String consignmentDetailsPageRoute = '/consignmentDetailsPageRoute';
 const String arrangeHubsPageRoute = '/arrangeHubsPageRoute';

@@ -24,6 +24,7 @@ import 'package:stacked_services/stacked_services.dart';
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   List<ConsignmentTrackingStatusResponse> _upcomingTrips = [];
   List<ConsignmentTrackingStatusResponse> _ongoingTrips = [];
+  bool _isGettingTripsStatus = false;
 
   List<ConsignmentTrackingStatusResponse> _completedTrips = [];
   bool openConsignmentGroup = false;
@@ -36,6 +37,13 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   set image(Uint8List value) {
     _image = value;
+  }
+
+  bool get isGettingTripsStatus => _isGettingTripsStatus;
+
+  set isGettingTripsStatus(bool value) {
+    _isGettingTripsStatus = value;
+    notifyListeners();
   }
 
   UserProfileResponse get userProfile => _userProfile;
@@ -230,6 +238,13 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         );
   }
 
+  void onAddVehicleTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(addVehiclePageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void reloadPage() {
     // getClients();
     getClientDashboardStats();
@@ -324,23 +339,25 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   }
 
   void getConsignmentTrackingStatus() async {
-    List<ConsignmentTrackingStatusResponse> response = await _dashboardApi
-        .getConsignmentTrackingStatus(clientId: selectedClient.clientId);
+    isGettingTripsStatus = true;
+    List<ConsignmentTrackingStatusResponse> response;
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        clientId: selectedClient.clientId, tripStatus: TripStatus.UPCOMING);
+    upcomingTrips = copyList(response);
 
-    var variableList =
-        response.where((element) => element.statusCode == 1).toList();
-    upcomingTrips = copyList(variableList);
-    variableList =
-        response.where((element) => element.statusCode == 2).toList();
-    ongoingTrips = copyList(variableList);
-    variableList = response
-        .where((element) =>
-            element.statusCode == 3 ||
-            element.statusCode == 4 ||
-            element.statusCode == 5)
-        .toList();
-    completedTrips = copyList(variableList);
-    notifyListeners();
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        clientId: selectedClient.clientId, tripStatus: TripStatus.ONGOING);
+    ongoingTrips = copyList(response);
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        clientId: selectedClient.clientId, tripStatus: TripStatus.COMPLETED);
+    completedTrips = copyList(response);
+    response = await _dashboardApi.getConsignmentTrackingStatus(
+        clientId: selectedClient.clientId, tripStatus: TripStatus.APPROVED);
+    _completedTrips.addAll(
+      copyList(response),
+    );
+    isGettingTripsStatus = false;
+    // notifyListeners();
   }
 
   get completedTrips => _completedTrips;
@@ -361,39 +378,12 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     _upcomingTrips = value;
   }
 
-  void takeToCompletedTrips() {
+  void takeToUpcomingTripsDetailsView({@required TripStatus tripStatus}) {
     navigationService.back();
     navigationService
         .navigateTo(
           tripsDetailsPageRoute,
-          arguments: DetailedTripsViewArgs(
-            tripStatus: TripStatus.COMPLETED,
-            tripsList: completedTrips,
-          ),
-        )
-        .then((value) => reloadPage());
-  }
-
-  void takeToUpcomingTripsDetailsView({TripStatus tripStatus}) {
-    List<ConsignmentTrackingStatusResponse> tripList;
-
-    switch (tripStatus) {
-      case TripStatus.UPCOMING:
-        tripList = copyList(upcomingTrips);
-        break;
-      case TripStatus.ONGOING:
-        tripList = copyList(ongoingTrips);
-        break;
-      case TripStatus.COMPLETED:
-        tripList = copyList(completedTrips);
-        break;
-    }
-
-    navigationService
-        .navigateTo(
-          tripsDetailsPageRoute,
-          arguments: DetailedTripsViewArgs(
-              tripsList: tripList, tripStatus: tripStatus),
+          arguments: DetailedTripsViewArgs(tripStatus: tripStatus),
         )
         .then((value) => reloadPage());
   }

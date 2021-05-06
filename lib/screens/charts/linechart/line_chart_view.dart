@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dar
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
 // ignore: implementation_imports
@@ -17,8 +18,8 @@ class LineChartView extends StatefulWidget {
   final String selectedDuration;
 
   LineChartView({
-     this.clientId,
-     this.selectedDuration,
+    this.clientId,
+    this.selectedDuration,
   });
 
   @override
@@ -43,25 +44,29 @@ class _LineChartViewState extends State<LineChartView> {
         if (viewModel.isBusy) {
           return DashBoardLoadingWidget();
         } else {
-          return viewModel.routesDrivenKmListForLineChart.length > 0
-              ? SizedBox(
-                  height: 350,
-                  child: Card(
-                    color: AppColors.white,
-                    elevation: defaultElevation,
-                    shape: getCardShape(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buildChartTitle(title: "Routes Driven Kilometers"),
-                          // buildChartSubTitle(
-                          //     time: viewModel?.selectedDateForLineChart),
-                          buildChartSubTitleNew(
-                              date: viewModel.chartDate),
-                          Expanded(
+          return SizedBox(
+            height:
+                viewModel.routesDrivenKmListForLineChart.length > 0 ? 350 : 100,
+            child: Card(
+              color: AppColors.white,
+              elevation: defaultElevation,
+              shape: getCardShape(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment:
+                      viewModel.routesDrivenKmListForLineChart.length > 0
+                          ? MainAxisAlignment.center
+                          : MainAxisAlignment.start,
+                  children: [
+                    buildChartTitle(title: "Routes Driven Kilometers"),
+                    // buildChartSubTitle(
+                    //     time: viewModel?.selectedDateForLineChart),
+                    if (viewModel.routesDrivenKmListForLineChart.length > 0)
+                      buildChartSubTitleNew(date: viewModel.chartDate),
+                    viewModel.routesDrivenKmListForLineChart.length > 0
+                        ? Expanded(
                             child: BezierChart(
                               fromDate: viewModel.uniqueDatesForLineChart.first,
                               bezierChartScale: BezierChartScale.WEEKLY,
@@ -110,16 +115,19 @@ class _LineChartViewState extends State<LineChartView> {
                                   backgroundColor: Colors.transparent,
                                   footerHeight: 15),
                             ),
-                          ),
-                          buildChartDateLabel(),
-                          hSizedBox(10),
-                          Center(child: buildColorLegendListView(viewModel))
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : Container();
+                          )
+                        : NoDataWidget(),
+                    if (viewModel.routesDrivenKmListForLineChart.length > 0)
+                      buildChartDateLabel(),
+                    if (viewModel.routesDrivenKmListForLineChart.length > 0)
+                      hSizedBox(10),
+                    if (viewModel.routesDrivenKmListForLineChart.length > 0)
+                      Center(child: buildColorLegendListView(viewModel))
+                  ],
+                ),
+              ),
+            ),
+          );
         }
       },
       viewModelBuilder: () => LineChartViewModel(),

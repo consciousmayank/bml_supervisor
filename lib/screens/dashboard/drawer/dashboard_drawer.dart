@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/drawerlistitem/drawer_list_item.dart';
@@ -164,14 +165,22 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                             imageName: consignmentIcon,
                             text:
                                 "Upcoming Trips (${widget?.dashBoardScreenViewModel?.upcomingTrips?.length ?? 0})",
-                            onTap: () {},
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.UPCOMING);
+                            },
                           ),
                           DrawerListItem(
                             isSubMenu: true,
                             imageName: consignmentListIcon,
                             text:
                                 "OnGoing Trips (${widget?.dashBoardScreenViewModel?.ongoingTrips?.length ?? 0})",
-                            onTap: () {},
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.ONGOING);
+                            },
                           ),
                           DrawerListItem(
                             isSubMenu: true,
@@ -180,7 +189,8 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                 "Completed Trips (${widget?.dashBoardScreenViewModel?.completedTrips?.length ?? 0})",
                             onTap: () {
                               widget.dashBoardScreenViewModel
-                                  .takeToCompletedTrips();
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.COMPLETED);
                             },
                           ),
                         ],
@@ -215,6 +225,15 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .onAddRoutesTileClick();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: addRouteIcon,
+                            text: "Vehicle",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddVehicleTileClick();
                             },
                           ),
                         ],

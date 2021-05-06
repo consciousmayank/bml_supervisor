@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,11 @@ Widget appTextFormField({
   List<TextInputFormatter> formatter,
   String labelText,
   FormFieldValidator<String> validator,
+  bool showButtonOnRight = false,
+  String buttonLabelText,
+  Icon buttonIcon,
+  Function onButtonPressed,
+  String errorText,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,34 +62,65 @@ Widget appTextFormField({
         elevation: 2,
         child: Padding(
           padding: const EdgeInsets.only(top: 2, bottom: 2),
-          child: TextFormField(
-              initialValue: initialValue,
-              autovalidateMode: autoValidateMode,
-              textAlign: textAlignment,
-              onEditingComplete: onEditingComplete,
-              maxLines: maxLines,
-              onChanged: onTextChange,
-              textCapitalization: textCapitalization,
-              inputFormatters: formatter,
-              enabled: enabled,
-              controller: controller,
-              focusNode: focusNode,
-              autofocus: autoFocus,
-              decoration:
-                  inputDecoration ?? textFieldDecoration(showRupeesSymbol),
-              keyboardType: keyboardType,
-              onFieldSubmitted: onFieldSubmitted,
-              validator: validator),
+          child: Stack(
+            children: [
+              TextFormField(
+                  initialValue: initialValue,
+                  autovalidateMode: autoValidateMode,
+                  textAlign: textAlignment,
+                  onEditingComplete: onEditingComplete,
+                  maxLines: maxLines,
+                  onChanged: onTextChange,
+                  textCapitalization: textCapitalization,
+                  inputFormatters: formatter,
+                  enabled: enabled,
+                  controller: controller,
+                  focusNode: focusNode,
+                  autofocus: autoFocus,
+                  decoration: inputDecoration ??
+                      textFieldDecoration(showRupeesSymbol, errorText),
+                  keyboardType: keyboardType,
+                  onFieldSubmitted: onFieldSubmitted,
+                  validator: validator),
+              showButtonOnRight
+                  ? Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        label: Text(buttonLabelText),
+                        icon: buttonIcon,
+                        onPressed: onButtonPressed.call,
+                      ),
+                    )
+                  : Container(),
+              errorText != null
+                  ? Positioned(
+                      left: 4,
+                      bottom: 0,
+                      child: Text(
+                        errorText,
+                        style: AppTextStyles.latoMedium10PrimaryShade5
+                            .copyWith(color: Colors.red, fontSize: 12),
+                      ),
+                    )
+                  : Container()
+            ],
+          ),
         ),
       ),
     ],
   );
 }
 
-InputDecoration textFieldDecoration(bool showRupeesSymbol) {
+InputDecoration textFieldDecoration(bool showRupeesSymbol, String errorText) {
   return new InputDecoration(
     prefix: showRupeesSymbol ? Text(rupeeSymbol) : null,
     hintStyle: TextStyle(fontSize: 14, color: Colors.white),
+    focusedBorder: normalTextFormFieldBorder(),
+    enabledBorder: normalTextFormFieldBorder(),
+    disabledBorder: normalTextFormFieldBorder(),
+    errorBorder: errorText != null
+        ? errorTextFormFieldBorder()
+        : normalTextFormFieldBorder(),
   );
 }
 
@@ -91,4 +128,22 @@ void fieldFocusChange(
     BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
   currentFocus.unfocus();
   FocusScope.of(context).requestFocus(nextFocus);
+}
+
+normalTextFormFieldBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(defaultBorder),
+    borderSide: BorderSide(
+      color: Colors.transparent,
+    ),
+  );
+}
+
+errorTextFormFieldBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(defaultBorder),
+    borderSide: BorderSide(
+      color: Colors.red,
+    ),
+  );
 }

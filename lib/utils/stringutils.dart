@@ -13,6 +13,9 @@ const String supervisor_page_superviser_dr_title = "Daily Report";
 const String textPasswordPattern =
     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
 const String chasisNumberHint = "Enter Chasis Number";
+const String vehicleHeightHint = "Height (m)";
+const String vehicleWidthHint = "Width (m)";
+const String vehicleLengthHint = "Length (m)";
 const String invalidChasisNumber = "Invalid Chasis number";
 
 const String registrationNumberHint = "Enter Registration Number";
@@ -73,7 +76,7 @@ const String logoutTimeError =
 
 const List<String> ownerLevelList = ["1", "2", "3", "4", "5"];
 const List<String> vehicleClassList = ["Goods Carrier"];
-const List<String> vehicleSeatingList = ["2"];
+const List<String> vehicleSeatingList = ["1", "2", "3", "4", "5"];
 const List<String> vehicleEmmisionTypeList = [
   "BS I",
   "BS II",

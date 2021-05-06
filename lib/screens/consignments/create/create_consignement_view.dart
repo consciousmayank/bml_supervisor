@@ -2,10 +2,9 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignment_textfield.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -53,19 +52,14 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       print("The value of listener");
     });
 
-  TextEditingController hubTitleController = TextEditingController();
   FocusNode hubTitleFocusNode = FocusNode();
 
-  TextEditingController remarksController = TextEditingController();
   FocusNode remarksFocusNode = FocusNode();
 
-  TextEditingController dropController = TextEditingController();
   FocusNode dropFocusNode = FocusNode();
 
-  TextEditingController collectController = TextEditingController();
   FocusNode collectFocusNode = FocusNode();
 
-  TextEditingController paymentController = TextEditingController();
   FocusNode paymentFocusNode = FocusNode();
 
   @override
@@ -150,11 +144,11 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
                           viewModel.getHubs();
                           consignmentTitleController.clear();
-                          hubTitleController.clear();
-                          dropController.clear();
-                          collectController.clear();
-                          paymentController.clear();
-                          remarksController.clear();
+                          // hubTitleController.clear();
+                          // dropController.clear();
+                          // collectController.clear();
+                          // paymentController.clear();
+                          // remarksController.clear();
                           viewModel.resetControllerBoolValue();
                         },
                         selectedValue: viewModel.selectedRoute == null
@@ -198,52 +192,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   PageView _hubsPageView(CreateConsignmentModel viewModel) {
     return PageView.builder(
-      onPageChanged: (index) {
-        setValueAt(
-          textEditingController: hubTitleController,
-          value: viewModel.consignmentRequest.items[index].title ?? "NA",
-        );
-        setValueAt(
-          textEditingController: dropController,
-          value: viewModel.consignmentRequest.items[index].dropOff != null
-              ? dropController.text =
-                  viewModel.consignmentRequest.items[index].dropOff.toString()
-              : "0",
-        );
-
-        setValueAt(
-          textEditingController: collectController,
-          value: viewModel.consignmentRequest.items[index].collect != null
-              ? viewModel.consignmentRequest.items[index].collect.toString()
-              : "0",
-        );
-
-        setValueAt(
-          textEditingController: remarksController,
-          value: viewModel.consignmentRequest.items[index].remarks ?? "",
-        );
-
-        if (index == viewModel.hubsList.length - 1) {
-          double grandTotal = 0;
-          for (int i = 1;
-              i < viewModel.consignmentRequest.items.length - 1;
-              i++) {
-            if (viewModel.consignmentRequest.items[i].payment != null) {
-              grandTotal =
-                  grandTotal + viewModel.consignmentRequest.items[i].payment ??
-                      0;
-            }
-          }
-
-          viewModel.consignmentRequest.items.forEach((element) {});
-          paymentController.text = grandTotal.toString();
-        } else {
-          paymentController.text =
-              viewModel.consignmentRequest.items[index].payment != null
-                  ? viewModel.consignmentRequest.items[index].payment.toString()
-                  : "0.0";
-        }
-      },
       physics: NeverScrollableScrollPhysics(),
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
@@ -452,22 +400,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                       ],
                     ),
                   ),
-                  index == viewModel.hubsList.length - 1 || index == 0
-                      ? Container()
-                      : Positioned(
-                          right: 10,
-                          top: 10,
-                          child: InkWell(
-                            child: Text("Skip"),
-                            onTap: () {
-                              updateData(
-                                  viewModel: viewModel,
-                                  index: index,
-                                  goForward: true,
-                                  skip: true);
-                            },
-                          ),
-                        )
                 ],
               ),
             ),
@@ -759,39 +691,29 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget hubTitle(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isHubTitleEdited) {
-      hubTitleController.text =
-          viewModel?.consignmentRequest?.items[index]?.title?.toString();
-    }
+    // if (!viewModel.isHubTitleEdited) {
+    //   hubTitleController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.title?.toString();
+    // }
 
-    return TextFormField(
-      // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Item Title"),
-      // decoration: InputDecoration(
-      //   labelText: "Enter Email",
-      //   fillColor: AppColors.appScaffoldColor,
-      //   focusedBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(defaultBorder),
-      //     borderSide: BorderSide(
-      //       // color: Colors.blue,
-      //     ),
-      //   ),
-      //   enabledBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(defaultBorder),
-      //     borderSide: BorderSide(
-      //       color: AppColors.primaryColorShade5,
-      //       // width: 2.0,
-      //     ),
-      //   ),
-      // ),
+    return createConsignmentTextFormField(
+      decoration: getInputBorder(
+          hintText: "Item Title",
+          showSuffix: viewModel.consignmentRequest.items[index].titleError),
       enabled: true,
-      controller: hubTitleController,
+      // controller: hubTitleController,
+      initialValue: viewModel.consignmentRequest.items[index].title ?? '',
       keyboardType: TextInputType.text,
-      onChanged: (_) {
+      onTextChange: (String value) {
+        if (value.trim().length > 0) {
+          viewModel.consignmentRequest.items[index].titleError = false;
+          viewModel.consignmentRequest.items[index].title = value;
+          viewModel.notifyListeners();
+        }
         viewModel.isHubTitleEdited = true;
       },
       onFieldSubmitted: (_) {
-        fieldFocusChange(
+        onfieldFocusChange(
           context,
           hubTitleFocusNode,
           dropFocusNode,
@@ -799,29 +721,31 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       },
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].titleError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
 
   Widget remarksInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isRemarksEdited) {
-      remarksController.text =
-          viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
-    }
+    // if (!viewModel.isRemarksEdited) {
+    //   remarksController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
+    // }
     return TextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Remarks"),
       // maxLines: 5,
       enabled: true,
-      controller: remarksController,
+      // controller: remarksController,
+      initialValue: viewModel.consignmentRequest.items[index].remarks ?? '',
       focusNode: remarksFocusNode,
-      onChanged: (_) {
+      onChanged: (String value) {
         viewModel.isRemarksEdited = true;
+        viewModel.consignmentRequest.items[index].remarks = value;
       },
       onFieldSubmitted: (_) {
         remarksFocusNode.unfocus();
@@ -833,19 +757,29 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget dropInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isDropCratesEdited) {
-      dropController.text =
-          viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
-    }
-    return TextFormField(
+    // if (!viewModel.isDropCratesEdited) {
+    //   dropController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
+    // }
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      onChanged: (_) {
+      onTextChange: (String value) {
+        if (value.trim().length > 0) {
+          viewModel.consignmentRequest.items[index].dropOffError = false;
+          viewModel.consignmentRequest.items[index].dropOff = int.parse(value);
+          viewModel.notifyListeners();
+        }
         viewModel.isDropCratesEdited = true;
       },
-      decoration: getInputBorder(hintText: "Item Drop"),
+      decoration: getInputBorder(
+          hintText: "Item Drop",
+          showSuffix: viewModel.consignmentRequest.items[index].dropOffError),
       enabled: true,
-      controller: dropController,
+      // controller: dropController,
       focusNode: dropFocusNode,
+      initialValue: viewModel.consignmentRequest.items[index].dropOff == null
+          ? ''
+          : viewModel.consignmentRequest.items[index].dropOff.toString(),
       onFieldSubmitted: (_) {
         fieldFocusChange(
           context,
@@ -856,27 +790,39 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].dropOffError = true;
+          viewModel.notifyListeners();
         }
+
+        return null;
       },
     );
   }
 
   Widget collectInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isCollectCratesEdited) {
-      collectController.text =
-          viewModel?.consignmentRequest?.items[index]?.collect?.toString();
-    }
-    return TextFormField(
+    // if (!viewModel.isCollectCratesEdited) {
+    //   collectController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.collect?.toString();
+    // }
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Item Collect"),
+      decoration: getInputBorder(
+        hintText: "Item Collect",
+        showSuffix: viewModel.consignmentRequest.items[index].collectError,
+      ),
       enabled: true,
-      controller: collectController,
+      // controller: collectController,
       focusNode: collectFocusNode,
-      onChanged: (_) {
+      initialValue: viewModel.consignmentRequest.items[index].collect == null
+          ? ''
+          : viewModel.consignmentRequest.items[index].collect.toString(),
+      onTextChange: (String value) {
+        if (value.trim().length > 0) {
+          viewModel.consignmentRequest.items[index].collectError = false;
+          viewModel.consignmentRequest.items[index].collect = int.parse(value);
+          viewModel.notifyListeners();
+        }
         viewModel.isCollectCratesEdited = true;
       },
       onFieldSubmitted: (_) {
@@ -889,10 +835,10 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].collectError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
@@ -903,17 +849,33 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     bool enabled,
     int index,
   }) {
-    if (!viewModel.isPaymentEdited) {
-      paymentController.text =
-          viewModel?.consignmentRequest?.items[index]?.payment?.toString();
-    }
+    // if (!viewModel.isPaymentEdited) {
+    //   paymentController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.payment?.toString();
+    // }
 
-    return TextFormField(
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Payment"),
+      decoration: getInputBorder(
+        hintText: "Payment",
+        showSuffix: viewModel.consignmentRequest.items[index].paymentError,
+      ),
       enabled: !enabled,
-      controller: paymentController,
-      onChanged: (_) {
+      initialValue: enabled
+          ? viewModel.consignmentRequest.payment.toString()
+          : viewModel.consignmentRequest.items[index].payment == null
+              ? ''
+              : viewModel.consignmentRequest.items[index].payment.toString(),
+      // controller: paymentController,
+      onTextChange: (String value) {
+        if (value.trim().length > 0) {
+          viewModel.consignmentRequest.items[index].paymentError = false;
+          viewModel.consignmentRequest.items[index].payment =
+              double.parse(value);
+          viewModel.consignmentRequest.payment =
+              viewModel.consignmentRequest.payment + double.parse(value);
+          viewModel.notifyListeners();
+        }
         viewModel.isPaymentEdited = true;
       },
       focusNode: paymentFocusNode,
@@ -930,19 +892,23 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
           return null;
         }
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].paymentError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
 
-  getInputBorder({@required String hintText}) {
+  getInputBorder({
+    @required String hintText,
+    bool showSuffix = false,
+  }) {
     return InputDecoration(
       alignLabelWithHint: true,
+      focusedErrorBorder: normalTextFormFieldBorder(),
       errorStyle: TextStyle(
-        fontSize: 14,
+        fontSize: 10,
       ),
       helperStyle: TextStyle(
         fontSize: 14,
@@ -951,30 +917,38 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       labelText: hintText,
       labelStyle: TextStyle(color: AppColors.primaryColorShade5, fontSize: 14),
       fillColor: AppColors.appScaffoldColor,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-            // color: Colors.blue,
-            ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-          // width: 2.0,
-        ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-        ),
+      suffixIcon: showSuffix
+          ? InkWell(
+              onTap: () {
+                // onPasswordTogglePressed(obscureText);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  width: 70,
+                  child: Center(
+                    child: Text(
+                      'required',
+                      style: AppTextStyles.appBarTitleStyle
+                          .copyWith(color: Colors.red),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : null,
+      focusedBorder: normalTextFormFieldBorder(),
+      enabledBorder: normalTextFormFieldBorder(),
+      disabledBorder: normalTextFormFieldBorder(),
+      errorBorder: normalTextFormFieldBorder(),
+    );
+  }
+
+  normalTextFormFieldBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(defaultBorder),
+      borderSide: BorderSide(
+        color: AppColors.primaryColorShade5,
       ),
     );
   }
@@ -984,28 +958,30 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       int index,
       bool goForward = true,
       bool skip = false}) {
-    if (skip || viewModel.formKeyList[index].currentState.validate()) {
-      FetchHubsResponse tempVar = viewModel.hubsList[index];
-      viewModel.hubsList.removeAt(index);
-      tempVar.copyWith(isSubmitted: true);
-      viewModel.hubsList.insert(index, tempVar);
+    bool isAllIsWell = true;
 
-      viewModel.hubsList.forEach((element) {
-        if (element.sequence == viewModel.hubsList[index].sequence) {
-          Item item = viewModel.consignmentRequest.items[index];
-          viewModel.consignmentRequest.items.removeAt(index);
-          item = item.copyWith(
-            dropOff: skip ? 0 : int.parse(dropController.text),
-            collect: skip ? 0 : int.parse(collectController.text),
-            payment: skip ? 0 : double.parse(paymentController.text),
-            title: skip ? "NA" : hubTitleController.text.trim(),
-            remarks: skip ? " " : remarksController.text.trim(),
-          );
-          viewModel.consignmentRequest.items.insert(index, item);
-          viewModel.notifyListeners();
-        }
-      });
+    if (viewModel.consignmentRequest.items[index].dropOff == null) {
+      viewModel.consignmentRequest.items[index].dropOffError = true;
+      isAllIsWell = false;
+    }
 
+    if (viewModel.consignmentRequest.items[index].collect == null) {
+      viewModel.consignmentRequest.items[index].collectError = true;
+      isAllIsWell = false;
+    }
+
+    if (viewModel.consignmentRequest.items[index].title == null) {
+      viewModel.consignmentRequest.items[index].titleError = true;
+      isAllIsWell = false;
+    }
+
+    // if (index < viewModel.consignmentRequest.items.length - 1 &&
+    //     viewModel.consignmentRequest.items[index].payment == null) {
+    //   viewModel.consignmentRequest.items[index].paymentError = true;
+    //   isAllIsWell = false;
+    // }
+
+    if (isAllIsWell) {
       if (goForward) {
         if (index < viewModel.hubsList.length) {
           _controller.nextPage(
@@ -1017,7 +993,38 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }
       }
+    } else {
+      viewModel.notifyListeners();
     }
+
+    // if (skip || viewModel.formKeyList[index].currentState.validate()) {
+    // FetchHubsResponse tempVar = viewModel.hubsList[index];
+    // viewModel.hubsList.removeAt(index);
+    // tempVar.copyWith(isSubmitted: true);
+    // viewModel.hubsList.insert(index, tempVar);
+
+    // viewModel.hubsList.forEach((element) {
+    //   if (element.sequence == viewModel.hubsList[index].sequence) {
+    //     Item item = viewModel.consignmentRequest.items[index];
+    //     viewModel.consignmentRequest.items.removeAt(index);
+    //     item = item.copyWith(
+    //       dropOff:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].dropOff,
+    //       collect:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].collect,
+    //       payment:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].payment,
+    //       title:
+    //           skip ? "NA" : viewModel.consignmentRequest.items[index].title,
+    //       remarks:
+    //           skip ? " " : viewModel.consignmentRequest.items[index].remarks,
+    //     );
+    //     viewModel.consignmentRequest.items.insert(index, item);
+    //     viewModel.notifyListeners();
+    //   }
+    // });
+
+    // }
   }
 
   void validateRegistrationNumber({CreateConsignmentModel viewModel}) {

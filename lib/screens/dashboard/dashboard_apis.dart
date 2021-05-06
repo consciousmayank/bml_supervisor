@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
@@ -20,7 +21,7 @@ abstract class DashBoardApis {
   Future<List<GetDistributorsResponse>> getDistributors(
       {@required String clientId});
   Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required String clientId});
+      {@required String clientId, @required TripStatus tripStatus});
 }
 
 class DashBoardApisImpl extends BaseApi implements DashBoardApis {
@@ -129,10 +130,10 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
 
   @override
   Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required String clientId}) async {
+      {@required String clientId, @required TripStatus tripStatus}) async {
     List<ConsignmentTrackingStatusResponse> _responseList = [];
-    ParentApiResponse response =
-        await apiService.getConsignmentTrackingStatus(clientId: clientId);
+    ParentApiResponse response = await apiService.getConsignmentTrackingStatus(
+        clientId: clientId, tripStatus: tripStatus);
     if (filterResponse(response, showSnackBar: false) != null) {
       var list = response.response.data as List;
       if (list.length > 0) {

@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
+import 'package:bml_supervisor/models/add_vehicle_request.dart';
 import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
@@ -591,17 +593,40 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getConsignmentTrackingStatus(
-      {String clientId}) async {
+      {String clientId, @required TripStatus tripStatus}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_CONSIGNMENT_TRACKING_STATUS(clientId));
+      response = await dioClient.getDio().get(
+            getApiCall(tripStatus: tripStatus, clientId: clientId),
+          );
     } on DioError catch (e) {
       error = e;
     }
     return ParentApiResponse(response: response, error: error);
+  }
+
+  String getApiCall(
+      {@required TripStatus tripStatus, @required String clientId}) {
+    switch (tripStatus) {
+      case TripStatus.UPCOMING:
+        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+        break;
+      case TripStatus.ONGOING:
+        return GET_ONGOING_TRIPS_STATUS_LIST(clientId);
+        break;
+      case TripStatus.COMPLETED:
+        return GET_COMPLETED_TRIPS_STATUS_LIST(clientId);
+        break;
+      case TripStatus.APPROVED:
+        return GET_APPROVED_TRIPS_STATUS_LIST(clientId);
+        break;
+      case TripStatus.DISCARDED:
+        return GET_DISCARDED_TRIPS_STATUS_LIST(clientId);
+        break;
+      default:
+        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+    }
   }
 
   Future<ParentApiResponse> rejectCompletedTripWithId(
@@ -616,6 +641,21 @@ class ApiService {
       error = e;
     }
     return ParentApiResponse(response: response, error: error);
+  }
+
+  ///Create a new Consignment
+  Future<ParentApiResponse> addVehicle(
+      {@required AddVehicleRequest request}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .post(ADD_VEHICLE, data: request.toJson());
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
   }
   ////////////////////////////////////////////////////////////////
 

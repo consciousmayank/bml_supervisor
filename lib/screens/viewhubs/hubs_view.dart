@@ -5,6 +5,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -85,11 +86,7 @@ class _HubsViewState extends State<HubsView> {
                             itemCount: viewModel.hubsList.length,
                           ),
                         )
-                      : Center(
-                          child: Container(
-                            child: Text("No Data"),
-                          ),
-                        ),
+                      : Center(child: NoDataWidget()),
             ),
         viewModelBuilder: () => HubsViewModel());
   }

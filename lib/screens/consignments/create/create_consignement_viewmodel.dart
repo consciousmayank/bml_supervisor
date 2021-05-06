@@ -195,9 +195,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
             hubTitle: element.title),
       );
     });
-    // final int dropOff;
-    // final int collect;
-    // final double payment;
 
     consignmentRequest = CreateConsignmentRequest(
         itemUnit: itemUnit,
