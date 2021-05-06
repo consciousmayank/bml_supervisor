@@ -27,7 +27,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
       client: clientId,
     );
 
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map singleDay in list) {
         KilometerReportResponse singleDayReport =
@@ -45,7 +45,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
     List<RoutesDrivenKm> routesDrivenKmList = [];
     ParentApiResponse apiResponse =
         await apiService.getRoutesDrivenKm(clientId: clientId);
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map value in list) {
         RoutesDrivenKm routesDrivenKmResponse = RoutesDrivenKm.fromJson(value);
@@ -73,7 +73,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
     ParentApiResponse apiResponse =
         await apiService.getRoutesDrivenKmPercentage(clientId: clientId);
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map value in list) {
         RoutesDrivenKmPercentage routesDrivenKmResponse =
