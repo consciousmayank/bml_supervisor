@@ -311,7 +311,8 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   Future getUserProfile() async {
     setBusy(true);
-    UserProfileResponse profileResponse = await _profileApi.getUserProfile();
+    UserProfileResponse profileResponse =
+        await _profileApi.getUserProfile(showResponseToast: false);
     if (profileResponse != null) {
       userProfile = profileResponse;
       image = getImageFromBase64String(base64String: userProfile.photo);

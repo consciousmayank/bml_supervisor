@@ -12,7 +12,7 @@ abstract class ProfileApi {
   Future<bool> changePassword(
       {@required String userName, @required String newPassword});
 
-  Future<UserProfileResponse> getUserProfile();
+  Future<UserProfileResponse> getUserProfile({bool showResponseToast = true});
   Future<ApiResponse> updateUserMobile({UpdateUserRequest request});
   Future<ApiResponse> updateUserEmail({UpdateUserRequest request});
 }
@@ -38,9 +38,10 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
   }
 
   @override
-  Future<UserProfileResponse> getUserProfile() async {
+  Future<UserProfileResponse> getUserProfile(
+      {bool showResponseToast = true}) async {
     ParentApiResponse response = await apiService.getUserProfile();
-    if (filterResponse(response) != null) {
+    if (filterResponse(response, showSnackBar: showResponseToast) != null) {
       return UserProfileResponse.fromJson(response.response.data);
     } else {
       return null;
@@ -48,26 +49,25 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
   }
 
   @override
-  Future<ApiResponse> updateUserMobile({UpdateUserRequest request}) async{
+  Future<ApiResponse> updateUserMobile({UpdateUserRequest request}) async {
     ApiResponse response = ApiResponse(
         status: 'failed', message: ParentApiResponse().defaultError);
     ParentApiResponse parentApiResponse =
-    await apiService.updateUserMobile(request: request);
+        await apiService.updateUserMobile(request: request);
 
     if (filterResponse(parentApiResponse) != null) {
       response = ApiResponse.fromMap(parentApiResponse.response.data);
       return response;
     }
     return null;
-
   }
 
   @override
-  Future<ApiResponse> updateUserEmail({UpdateUserRequest request}) async{
+  Future<ApiResponse> updateUserEmail({UpdateUserRequest request}) async {
     ApiResponse response = ApiResponse(
         status: 'failed', message: ParentApiResponse().defaultError);
     ParentApiResponse parentApiResponse =
-    await apiService.updateUserEmail(request: request);
+        await apiService.updateUserEmail(request: request);
 
     if (filterResponse(parentApiResponse) != null) {
       response = ApiResponse.fromMap(parentApiResponse.response.data);
@@ -76,17 +76,3 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
     return null;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

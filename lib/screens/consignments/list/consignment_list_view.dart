@@ -30,7 +30,8 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         //todo: put new api for last seven entries here
         // viewModel.getRecentConsignments();
         viewModel.getRecentDrivenKm(
-            clientId: MyPreferences().getSelectedClient().clientId);
+            clientId: MyPreferences().getSelectedClient().clientId,
+            isFullScreen: widget.isFulPageView);
       },
       builder: (context, viewModel, child) => SafeArea(
         left: true,
