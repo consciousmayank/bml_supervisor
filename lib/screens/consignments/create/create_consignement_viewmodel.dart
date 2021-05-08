@@ -230,7 +230,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     tempItems.forEach((element) {
       element.copyWith(
         paymentId: "NA",
-        remarks: element.remarks.length == 0 ? "NA" : element.remarks,
+        remarks: element?.remarks?.length == 0 ? "NA" : element.remarks,
         title: element.title.length == 0 ? "NA" : element.title,
       );
     });

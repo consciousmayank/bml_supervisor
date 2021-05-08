@@ -8,11 +8,11 @@ import '../utils/api_endpoints.dart';
 import 'configuration.dart';
 
 class DioConfig {
-  final _dio = Dio();
-
   DioConfig() {
     configureDio();
   }
+
+  final _dio = Dio();
 
   Interceptor get element => Interceptor();
 
@@ -20,7 +20,7 @@ class DioConfig {
     _dio.options
       ..baseUrl =
           // kReleaseMode ? baseRestUrlProduction :
-          baseSecureUrl
+          baseRestUrlProduction
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
