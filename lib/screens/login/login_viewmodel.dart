@@ -31,8 +31,8 @@ class LoginViewModel extends GeneralisedBaseViewModel {
             isUserLoggedIn: true,
             userRole: loginResponse.userRole,
             userName: '${loginResponse.firstName} ${loginResponse.lastName}');
-        MyPreferences().setLoggedInUser(preferencesSavedUser);
-        MyPreferences().saveCredentials(
+        preferences.setLoggedInUser(preferencesSavedUser);
+        preferences.saveCredentials(
           getBase64String(value: '$userName:$password'),
         );
         // locator<DioConfig>().configureDio();

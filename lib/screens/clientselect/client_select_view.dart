@@ -98,7 +98,7 @@ class BodyWidget extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Future.delayed(Duration(milliseconds: 500), () {
-                      MyPreferences()
+                      preferences
                           .saveSelectedClient(viewModel.clientsList[index]);
                       if (isCalledFromBottomSheet) {
                         onClientSelected(viewModel.clientsList[index]);

@@ -21,7 +21,7 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DistributorsScreenViewModel>.reactive(
       onModelReady: (viewModel) async {
-        viewModel.selectedClient = MyPreferences().getSelectedClient();
+        viewModel.selectedClient = preferences.getSelectedClient();
         viewModel.getDistributors(selectedClient: viewModel.selectedClient);
       },
       builder: (context, viewModel, child) => Scaffold(
@@ -89,7 +89,7 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
                             ),
                           )
                         : Container(),
-                    hSizedBox(8),
+                    Utils().hSizedBox(8),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

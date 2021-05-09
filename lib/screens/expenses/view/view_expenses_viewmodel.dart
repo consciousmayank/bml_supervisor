@@ -152,7 +152,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
     setBusy(false);
     notifyListeners();
   }
@@ -171,7 +171,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
       registrationNumber: regNum,
       clientId: clientId,
     );
-    viewExpensesResponse = copyList(res);
+    viewExpensesResponse = Utils().copyList(res);
     viewExpensesResponse.forEach((element) {
       // expensePieChartResponseList
       //     .add(element);
@@ -211,7 +211,8 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         ExpensesFilterBottomSheetOutputArgs args = sheetResponse.responseData;
         selectedExpenseType = args.selectedExpense;
         if (args.index == 0) {
-          viewExpensesResponse = copyList(expensePieChartResponseListAll);
+          viewExpensesResponse =
+              Utils().copyList(expensePieChartResponseListAll);
         } else {
           filterList(args.index);
         }
@@ -231,6 +232,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     });
 
     viewExpensesResponse.clear();
-    viewExpensesResponse = copyList(tempList);
+    viewExpensesResponse = Utils().copyList(tempList);
   }
 }

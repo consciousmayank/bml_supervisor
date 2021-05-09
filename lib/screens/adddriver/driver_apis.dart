@@ -1,9 +1,9 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class DriverApis {
@@ -51,7 +51,7 @@ class DriverApisImpl extends BaseApi implements DriverApis {
         ApiResponse(status: 'failed', message: 'Failed to add Driver');
 
     ParentApiResponse _parentApiResponse =
-        await apiService.addDriver(request: request);
+        await apiService.addDriver(addDriverRequest: request);
     if (filterResponse(_parentApiResponse) != null) {
       _apiResponse = ApiResponse.fromMap(_parentApiResponse.response.data);
     }

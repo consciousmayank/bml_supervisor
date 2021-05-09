@@ -74,7 +74,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                 children: [
                   // selectClientForTransactionList(viewModel: viewModel),
                   // selectDuration(viewModel: viewModel),
-                  hSizedBox(5),
+                  Utils().hSizedBox(5),
                   viewModel.paymentHistoryResponseList.length > 0
                       ? Expanded(
                           child: buildTransactionsTableData(context, viewModel),
@@ -99,7 +99,7 @@ class _PaymentsViewState extends State<PaymentsView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(title, style: AppTextStyles.latoMedium12Black),
-            wSizedBox(10),
+            Utils().wSizedBox(10),
             Text(value, style: AppTextStyles.latoBold16Black),
           ],
         ),
@@ -173,7 +173,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                                         .toString(),
                                   ),
                                 ),
-                                wSizedBox(8),
+                                Utils().wSizedBox(8),
                                 Expanded(
                                   flex: 1,
                                   child: AppTextView(
@@ -184,7 +184,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                                         .toString(),
                                   ),
                                 ),
-                                wSizedBox(8),
+                                Utils().wSizedBox(8),
                                 Expanded(
                                   flex: 1,
                                   child: AppTextView(
@@ -205,7 +205,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                 ),
               ),
               index == viewModel.paymentHistoryResponseList.length - 1
-                  ? hSizedBox(80)
+                  ? Utils().hSizedBox(80)
                   : Container()
             ],
           );
@@ -338,7 +338,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                       padding: getPaymentScreenSidePadding(),
                       child: getRemarksView(node: node),
                     ),
-                    hSizedBox(10),
+                    Utils().hSizedBox(10),
                     Padding(
                       padding: getPaymentScreenSidePadding(),
                       child: addNewPaymentButton(viewModel: viewModel),
@@ -494,7 +494,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                 iconName: rupeesIcon,
               ),
             ),
-            // wSizedBox(5),
+            // Utils().wSizedBox(5),
             Expanded(
               flex: 1,
               child: AppTiles(
@@ -516,7 +516,7 @@ class _PaymentsViewState extends State<PaymentsView> {
                 iconName: totalKmIcon,
               ),
             ),
-            // wSizedBox(5),
+            // Utils().wSizedBox(5),
             Expanded(
               flex: 1,
               child: AppTiles(

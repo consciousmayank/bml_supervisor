@@ -78,25 +78,25 @@ class _BodyWidgetState extends State<BodyWidget> {
           )
         : Column(
             children: [
-              hSizedBox(20),
+              Utils().hSizedBox(20),
               Hero(
                 tag: 'test',
                 child: ProfileImageWidget(
                     image: widget.userProfileViewModel.image),
               ),
-              hSizedBox(20),
+              Utils().hSizedBox(20),
               Text(
-                MyPreferences().getUserLoggedIn().userName,
+                preferences.getUserLoggedIn().userName,
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(color: AppColors.primaryColorShade5),
               ),
-              hSizedBox(8),
+              Utils().hSizedBox(8),
               Text(
-                '( ${MyPreferences().getUserLoggedIn().role} )',
+                '( ${preferences.getUserLoggedIn().role} )',
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(fontSize: 10),
               ),
-              hSizedBox(32),
+              Utils().hSizedBox(32),
               Divider(
                 height: 1,
                 thickness: 1,
@@ -270,9 +270,9 @@ class _BodyWidgetState extends State<BodyWidget> {
                   title: 'Log Out',
                   iconName: logout,
                   onTap: () {
-                    MyPreferences().setLoggedInUser(null);
-                    MyPreferences().saveCredentials(null);
-                    MyPreferences().saveSelectedClient(null);
+                    preferences.setLoggedInUser(null);
+                    preferences.saveCredentials(null);
+                    preferences.saveSelectedClient(null);
                     widget.userProfileViewModel.navigationService
                         .clearStackAndShow(logInPageRoute);
                   }),

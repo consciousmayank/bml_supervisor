@@ -1,18 +1,10 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/screens/adddriver/add_driver_viewmodel.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -114,7 +106,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -123,7 +115,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildVehicleTextFormField(),
               buildDlTextFormField(),
               buildAadhaarTextFormField(),
-              hSizedBox(2),
+              Utils().Utils().hSizedBox(2),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -174,7 +166,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildStateTextFormField(),
               buildCountryTextFormField(),
               buildRemarksTextFormField(),
-              hSizedBox(10),
+              Utils().Utils().hSizedBox(10),
               SizedBox(
                 height: 250,
                 width: 200,
@@ -184,7 +176,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                   },
                 ),
               ),
-              hSizedBox(10),
+              Utils().Utils().hSizedBox(10),
               buildSaveButton(),
             ],
           ),
@@ -612,7 +604,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,
@@ -644,7 +636,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       firstName: fNameController.text,
                       lastName: lNameController.text,
                       dob: dobController.text,
-                      dateOfJoin: getDateString(DateTime.now()),
+                      dateOfJoin: Utils().getDateString(DateTime.now()),
                       gender: widget.viewModel.selectedGender,
                       fatherName: fatherNameController.text,
                       mobile: mobileNumberController.text,

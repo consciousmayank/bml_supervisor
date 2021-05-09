@@ -1,9 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_route_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 import 'locator.dart';
 

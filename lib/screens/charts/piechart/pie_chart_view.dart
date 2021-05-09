@@ -44,7 +44,7 @@ class _PieChartViewState extends State<PieChartView> {
                           viewModel.buildChartSubTitleNew(),
                         // buildChartSubTitle(time: viewModel?.selectedDate),
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
-                          hSizedBox(5),
+                          Utils().hSizedBox(5),
                         viewModel.routesDrivenKmPercentageList.length > 0
                             ? SizedBox(
                                 height: MediaQuery.of(context).size.width,
@@ -66,7 +66,7 @@ class _PieChartViewState extends State<PieChartView> {
                               )
                             : NoDataWidget(),
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                         // route label bottom positioned
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
                           buildColorLegendListView(viewModel),
@@ -98,10 +98,10 @@ class _PieChartViewState extends State<PieChartView> {
                   width: 10,
                   color: viewModel.pieChartsColorArray[index],
                 ),
-                wSizedBox(5),
+                Utils().wSizedBox(5),
                 Text(
                     '#${viewModel.uniqueRoutes[index]}-${viewModel.getRouteTitle(index)}'),
-                wSizedBox(10),
+                Utils().wSizedBox(10),
               ],
             ),
           ),

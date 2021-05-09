@@ -48,7 +48,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-              "Add Expenses - ${MyPreferences().getSelectedClient().clientId}",
+              "Add Expenses - ${preferences.getSelectedClient().clientId}",
               style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
@@ -56,7 +56,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                 child: CircularProgressIndicator(),
               )
             : Padding(
-                padding: getSidePadding(context: context),
+                padding: Utils().getSidePadding(context: context),
                 child: body(context, viewModel),
               ),
       ),
@@ -163,21 +163,21 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                   optionList: expenseTypes,
                 )
               : Container(),
-          hSizedBox(10),
+          Utils().hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :
           viewModel.showSubmitForm
               ? getAmount(context: context, viewModel: viewModel)
               : Container(),
-          hSizedBox(10),
+          Utils().hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :
           viewModel.showSubmitForm
               ? getDescription(context: context, viewModel: viewModel)
               : Container(),
-          hSizedBox(10),
+          Utils().hSizedBox(10),
           // viewModel.entryDate == null
           //     ? Container()
           //     :

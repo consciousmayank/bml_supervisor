@@ -1,13 +1,7 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class PickHubsView extends StatefulWidget {
   final PickHubsArguments args;
@@ -24,8 +18,7 @@ class _PickHubsViewState extends State<PickHubsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PickHubsViewModel>.reactive(
-        onModelReady: (viewModel) {
-        },
+        onModelReady: (viewModel) {},
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -39,14 +32,14 @@ class _PickHubsViewState extends State<PickHubsView> {
                 child: Column(
                   children: [
                     buildCityTextFormField(viewModel: viewModel),
-                    hSizedBox(10),
+                    Utils().hSizedBox(10),
                     Container(
                       color: AppColors.primaryColorShade5,
                       padding: EdgeInsets.all(15),
                       child: Row(
                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // hSizedBox(5),
+                          // Utils().hSizedBox(5),
                           Expanded(
                             flex: 1,
                             child: Padding(
@@ -150,13 +143,28 @@ class _PickHubsViewState extends State<PickHubsView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-              flex: 1, child: Padding(
-                padding: const EdgeInsets.all( 8.0),
-                child: Text(widget.args.hubsList[index].id.toString(), textAlign: TextAlign.left,),
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.args.hubsList[index].id.toString(),
+                  textAlign: TextAlign.left,
+                ),
               )),
-          Expanded(flex: 2, child: Text(widget.args.hubsList[index].title, textAlign: TextAlign.center,)),
-          Expanded(flex: 2, child: Text(widget.args.hubsList[index].city, textAlign: TextAlign.center,)),
-          Expanded(flex: 1,
+          Expanded(
+              flex: 2,
+              child: Text(
+                widget.args.hubsList[index].title,
+                textAlign: TextAlign.center,
+              )),
+          Expanded(
+              flex: 2,
+              child: Text(
+                widget.args.hubsList[index].city,
+                textAlign: TextAlign.center,
+              )),
+          Expanded(
+            flex: 1,
             child: Checkbox(
               value: widget.args.hubsList[index].isCheck,
               onChanged: (value) {

@@ -1,18 +1,15 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/routes/routes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import 'app_level/locator.dart';
 import 'app_level/setup_bottomsheet_ui.dart';
 import 'app_level/setup_dialogs_ui.dart';
-import 'app_level/shared_prefs.dart';
-import 'app_level/themes.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -45,7 +42,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await MyPreferences().init();
   declareDependencies();
   setupDialogUi();
   setupBottomSheetUi();
@@ -61,6 +57,7 @@ void main() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+  await Bml.initialise();
   runApp(MyApp());
 }
 

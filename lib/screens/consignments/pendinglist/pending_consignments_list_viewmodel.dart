@@ -25,13 +25,13 @@ class PendingConsignmentsListViewModel extends GeneralisedBaseViewModel {
 
     List<SinglePendingConsignmentListItem> response =
         await _consignmentApis.getPendingConsignmentsList(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: preferences.getSelectedClient().clientId,
             pageIndex: pageIndex);
     response.forEach((element) {
       pendingConsignmentsDateList.add(element.entryDate);
     });
     if (pageIndex == 0) {
-      pendingConsignmentsList = copyList(response);
+      pendingConsignmentsList = Utils().copyList(response);
     } else {
       pendingConsignmentsList.addAll(response);
     }

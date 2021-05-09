@@ -120,7 +120,7 @@ class _LineChartViewState extends State<LineChartView> {
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
                       buildChartDateLabel(),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
-                      hSizedBox(10),
+                      Utils().hSizedBox(10),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
                       Center(child: buildColorLegendListView(viewModel))
                   ],
@@ -155,7 +155,7 @@ Widget buildColorLegendListView(LineChartViewModel viewModel) {
               width: 10,
               color: viewModel.lineChartColorArray[index],
             ),
-            wSizedBox(5),
+            Utils().wSizedBox(5),
             InkWell(
               onTap: () {
                 // viewModel.snackBarService.showSnackbar(
@@ -165,7 +165,7 @@ Widget buildColorLegendListView(LineChartViewModel viewModel) {
               child: Text(
                   '#${viewModel.uniqueRoutes[index]}-${viewModel.getRouteTitle(index)}'),
             ),
-            wSizedBox(10),
+            Utils().wSizedBox(10),
           ],
         ),
       ),

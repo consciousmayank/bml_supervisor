@@ -178,7 +178,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
                 child: CircularProgressIndicator(),
               )
             : Padding(
-                padding: getSidePadding(context: context),
+                padding: Utils().getSidePadding(context: context),
                 child: Column(
                   children: [
                     // Text('Show Form Here'),
@@ -271,19 +271,19 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               ],
             ),
           ),
-          hSizedBox(10),
+          Utils().hSizedBox(10),
           viewModel.vehicleLog != null
               ? startingReadingView(viewModel)
               : Container(),
-          hSizedBox(20),
+          Utils().hSizedBox(20),
 
           viewModel.vehicleLog != null ? endReadingView() : Container(),
-          hSizedBox(20),
+          Utils().hSizedBox(20),
 
           viewModel.vehicleLog != null ? distanceDrivenView() : Container(),
 
           // endReadingView(),
-          hSizedBox(20),
+          Utils().hSizedBox(20),
           // distanceDrivenView(),
         ],
       ),
@@ -296,11 +296,11 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
               ],
             )
           : Container(),
-      hSizedBox(20),
+      Utils().hSizedBox(20),
       viewModel.vehicleLog != null
           ? getRemarks(context: context, viewModel: viewModel)
           : Container(),
-      hSizedBox(20),
+      Utils().hSizedBox(20),
       viewModel.vehicleLog != null
           ? Column(
               children: [
@@ -324,17 +324,23 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: getFuelEntry(context: context, viewModel: viewModel),
                 ),
-                viewModel.isFuelEntryAdded ? hSizedBox(20) : Container(),
+                viewModel.isFuelEntryAdded
+                    ? Utils().hSizedBox(20)
+                    : Container(),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: getFuelRate(context: context, viewModel: viewModel),
                 ),
-                viewModel.isFuelEntryAdded ? hSizedBox(20) : Container(),
+                viewModel.isFuelEntryAdded
+                    ? Utils().hSizedBox(20)
+                    : Container(),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: getFuelAmount(context: context, viewModel: viewModel),
                 ),
-                viewModel.isFuelEntryAdded ? hSizedBox(20) : Container(),
+                viewModel.isFuelEntryAdded
+                    ? Utils().hSizedBox(20)
+                    : Container(),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: getFuelMeterReading(

@@ -57,7 +57,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
       clientId: clientId,
     );
 
-    routesDrivenKmPercentageList = copyList(res);
+    routesDrivenKmPercentageList = Utils().copyList(res);
 
     routesDrivenKmPercentageList.forEach((element) {
       if (!uniqueRoutes.contains(element.routeId)) {

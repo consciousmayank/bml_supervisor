@@ -1,16 +1,15 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 abstract class ConsignmentApis {
   Future<SearchByRegNoResponse> getVehicleDetails(
@@ -187,14 +186,16 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
   Future<List<SinglePendingConsignmentListItem>>
       getRecentConsignmentsForCreateConsignment({String clientId}) async {
     List<SinglePendingConsignmentListItem> response = [];
-    ParentApiResponse apiResponse = await _apiService
-        .getRecentConsignmentsForCreateConsignment(clientId: clientId, );
+    ParentApiResponse apiResponse =
+        await _apiService.getRecentConsignmentsForCreateConsignment(
+      clientId: clientId,
+    );
 
     if (filterResponse(apiResponse) != null) {
       var responseList = apiResponse.response.data as List;
       responseList.forEach((element) {
         SinglePendingConsignmentListItem singlePendingConsignmentListItem =
-        SinglePendingConsignmentListItem.fromMap(element);
+            SinglePendingConsignmentListItem.fromMap(element);
         response.add(singlePendingConsignmentListItem);
       });
     }

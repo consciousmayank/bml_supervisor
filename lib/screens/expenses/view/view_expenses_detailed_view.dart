@@ -107,7 +107,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                                     )
                                   ],
                                 ),
-                                hSizedBox(5),
+                                Utils().hSizedBox(5),
                                 Row(
                                   children: [
                                     Expanded(
@@ -138,7 +138,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: Column(
         children: [
           Row(
@@ -171,7 +171,7 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
               title,
               // style: TextStyle(fontSize: 20),
             ),
-            wSizedBox(20),
+            Utils().wSizedBox(20),
             Text(
               value,
               style: TextStyle(

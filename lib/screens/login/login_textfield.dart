@@ -31,7 +31,7 @@ Widget loginTextFormField({
         hintText,
         style: TextStyle(color: Colors.white, fontSize: 11),
       ),
-      hSizedBox(5),
+      Utils().hSizedBox(5),
       TextFormField(
           autovalidateMode: autoValidateMode,
           obscureText: obscureText,
@@ -45,7 +45,6 @@ Widget loginTextFormField({
           controller: controller,
           focusNode: focusNode,
           autofocus: autoFocus,
-
           decoration: InputDecoration(
             // hintText: 'asdf',
             labelText: showSuffix ? ' ' : null,

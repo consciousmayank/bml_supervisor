@@ -81,7 +81,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    selectedClientForTransactionList = MyPreferences().getSelectedClient();
+    selectedClientForTransactionList = preferences.getSelectedClient();
     // selectedClientForNewTransaction = selectedClientForTransactionList;
     getPaymentHistory(selectedClientForTransactionList.clientId);
     setBusy(false);
@@ -96,7 +96,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
 
     var response = await _paymentsApis.getPaymentHistory(clientId: clientId);
-    paymentHistoryResponseList = copyList(response);
+    paymentHistoryResponseList = Utils().copyList(response);
 
     paymentHistoryResponseList.forEach((element) {
       totalAmt += element.amount;

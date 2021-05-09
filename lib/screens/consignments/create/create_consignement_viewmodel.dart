@@ -143,14 +143,14 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     hubsList = [];
     List<FetchRoutesResponse> response =
         await _dashBoardApis.getRoutes(clientId: clientId);
-    this.routesList = copyList(response);
+    this.routesList = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }
 
   getClients() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
     getRoutes(selectedClient.clientId);
     setBusy(false);
   }
@@ -159,7 +159,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     hubsList = [];
     List<FetchHubsResponse> hubList =
         await _dashBoardApis.getHubs(routeId: selectedRoute.routeId);
-    this.hubsList = copyList(hubList);
+    this.hubsList = Utils().copyList(hubList);
     setBusy(false);
     notifyListeners();
   }
@@ -302,7 +302,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
             date: getDateString(entryDate), clientId: selectedClient.clientId);
 
-    consignmentsList = copyList(response);
+    consignmentsList = Utils().copyList(response);
 
     setBusy(false);
     notifyListeners();
@@ -314,13 +314,13 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   //   recentConsignmentsDateList = Set();
   //   List<SinglePendingConsignmentListItem> response =
   //       await _consignmentApis.getRecentConsignmentsForCreateConsignment(
-  //           clientId: MyPreferences().getSelectedClient().clientId);
+  //           clientId: preferences.getSelectedClient().clientId);
   //
   //   response.forEach((element) {
   //     recentConsignmentsDateList.add(element.entryDate);
   //   });
   //
-  //   recentConsignmentsList = copyList(response);
+  //   recentConsignmentsList = Utils().copyList(response);
   //
   //   setBusy(false);
   //   notifyListeners();

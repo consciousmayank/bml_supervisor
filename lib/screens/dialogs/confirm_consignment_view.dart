@@ -135,7 +135,7 @@ class ConfirmConsignmentView extends StatelessWidget {
             //     ],
             //   ),
             // ),
-            // hSizedBox(20),
+            // Utils().hSizedBox(20),
             // RichText(
             //   textAlign: TextAlign.center,
             //   text: TextSpan(
@@ -158,7 +158,7 @@ class ConfirmConsignmentView extends StatelessWidget {
             //     ],
             //   ),
             // ),
-            hSizedBox(10),
+            Utils().hSizedBox(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -170,7 +170,7 @@ class ConfirmConsignmentView extends StatelessWidget {
                 ),
               ],
             ),
-            hSizedBox(10),
+            Utils().hSizedBox(10),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
@@ -191,35 +191,35 @@ class ConfirmConsignmentView extends StatelessWidget {
                                     label: "Title",
                                     value:
                                         consignmentRequest.items[index].title),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                                 rowMaker(
                                     label: "Hub",
                                     value: consignmentRequest.items[index].hubId
                                         .toString()),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                                 rowMaker(
                                     label: "Item Collect",
                                     value: consignmentRequest
                                         .items[index].collect
                                         .toString()),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                                 rowMaker(
                                     label: "Item Drop",
                                     value: consignmentRequest
                                         .items[index].dropOff
                                         .toString()),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                                 rowMaker(
                                     label: "Payment",
                                     value: consignmentRequest
                                         .items[index].payment
                                         .toString()),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                                 rowMaker(
                                     label: "Remark",
                                     value: consignmentRequest
                                         .items[index].remarks),
-                                hSizedBox(10),
+                                Utils().hSizedBox(10),
                               ],
                             ),
                           )

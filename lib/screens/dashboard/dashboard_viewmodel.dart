@@ -62,7 +62,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   }
 
   void getSavedUser() {
-    savedUser = MyPreferences().getUserLoggedIn();
+    savedUser = preferences.getUserLoggedIn();
   }
 
   List<IconData> optionsIcons = [
@@ -129,7 +129,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   //   //* get bar graph data too when populating the client dropdown
   //
   //   List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
-  //   this.clientsList = copyList(responseList);
+  //   this.clientsList = Utils().copyList(responseList);
   //
   //   this.selectedClient = clientsList.first;
   //   setBusy(false);
@@ -325,7 +325,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
       isScrollControlled: true,
       barrierDismissible: true,
-      customData: MyPreferences().getSelectedClient(),
+      customData: preferences.getSelectedClient(),
       variant: BottomSheetType.clientSelect,
     );
 
@@ -344,18 +344,18 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     List<ConsignmentTrackingStatusResponse> response;
     response = await _dashboardApi.getConsignmentTrackingStatus(
         clientId: selectedClient.clientId, tripStatus: TripStatus.UPCOMING);
-    upcomingTrips = copyList(response);
+    upcomingTrips = Utils().copyList(response);
 
     response = await _dashboardApi.getConsignmentTrackingStatus(
         clientId: selectedClient.clientId, tripStatus: TripStatus.ONGOING);
-    ongoingTrips = copyList(response);
+    ongoingTrips = Utils().copyList(response);
     response = await _dashboardApi.getConsignmentTrackingStatus(
         clientId: selectedClient.clientId, tripStatus: TripStatus.COMPLETED);
-    completedTrips = copyList(response);
+    completedTrips = Utils().copyList(response);
     response = await _dashboardApi.getConsignmentTrackingStatus(
         clientId: selectedClient.clientId, tripStatus: TripStatus.APPROVED);
     _completedTrips.addAll(
-      copyList(response),
+      Utils().copyList(response),
     );
     isGettingTripsStatus = false;
     // notifyListeners();

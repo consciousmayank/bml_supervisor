@@ -86,7 +86,7 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   }
 
   getClients() async {
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
   }
 
   void vehicleEntrySearch({String regNum, String clientId}) async {
@@ -103,7 +103,7 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
       ),
     );
 
-    vehicleEntrySearchResponseList = copyList(res);
+    vehicleEntrySearchResponseList = Utils().copyList(res);
     vehicleEntrySearchResponseList.forEach((element) {
       _datesSet.add(element.entryDate);
       _totalKmGround += element.drivenKmGround;

@@ -1,13 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/consignment/single_consignment_viewmodel.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
-import '../dots_indicator.dart';
 
 class SingleConsignmentView extends StatefulWidget {
   final FetchRoutesResponse selectedRoute;
@@ -42,7 +38,7 @@ class _SingleConsignmentViewState extends State<SingleConsignmentView> {
                       return Card(
                         color: AppColors.primaryColorShade5,
                         elevation: 4,
-                        shape: getCardShape(),
+                        shape: Utils().getCardShape(),
                         child: Stack(
                           alignment: Alignment.topCenter,
                           children: [

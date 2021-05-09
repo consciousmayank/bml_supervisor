@@ -102,7 +102,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                 "BookMyLoading",
                 style: AppTextStyles.latoMediumItalics20,
               ),
-              hSizedBox(20),
+              Utils().hSizedBox(20),
               Text(
                 // S.of(context).appTitle,
                 'Driver App',
@@ -126,10 +126,10 @@ class _BodyWidgetState extends State<BodyWidget> {
                     children: [
                       passwordTextField(
                           viewModel: widget.changePasswordViewModel),
-                      hSizedBox(20),
+                      Utils().hSizedBox(20),
                       reEnterPasswordTextField(
                           viewModel: widget.changePasswordViewModel),
-                      hSizedBox(20),
+                      Utils().hSizedBox(20),
                       SizedBox(
                         height: buttonHeight,
                         child: AppButton(
@@ -139,7 +139,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                             onTap: () {
                               if (_formKey.currentState.validate()) {
                                 widget.changePasswordViewModel.changePassword(
-                                    userId: MyPreferences().getCredentials(),
+                                    userId: preferences.getCredentials(),
                                     password: passwordController.text);
                               }
                             },
@@ -170,7 +170,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                       //               if (_formKey.currentState.validate()) {
                       //                 widget.changePasswordViewModel
                       //                     .changePassword(
-                      //                         userId: MyPreferences()
+                      //                         userId: preferences
                       //                             .getCredentials(),
                       //                         password: passwordController.text);
                       //               }

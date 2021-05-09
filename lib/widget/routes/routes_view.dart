@@ -1,15 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
-import '../app_button.dart';
 
 class RoutesView extends StatefulWidget {
   final GetClientsResponse selectedClient;
@@ -79,9 +72,9 @@ class _RoutesViewState extends State<RoutesView> {
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: buildChartTitle(title: 'Route List'),
+            child: Utils().buildChartTitle(title: 'Route List'),
           ),
-          if (viewModel.routesList.length > 0) hSizedBox(5),
+          if (viewModel.routesList.length > 0) Utils().Utils().hSizedBox(5),
           if (viewModel.routesList.length > 0)
             Container(
               color: AppColors.primaryColorShade5,

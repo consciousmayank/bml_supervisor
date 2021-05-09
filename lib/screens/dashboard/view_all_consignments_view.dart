@@ -50,18 +50,18 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
                     ),
                   ],
                 ),
-                hSizedBox(5),
+                Utils().hSizedBox(5),
                 Container(
                   height: 1,
                   color: Colors.black,
                 ),
-                hSizedBox(5),
+                Utils().hSizedBox(5),
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -111,7 +111,7 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
                                     )
                             ],
                           ),
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                           index + 1 != widget.recentConsignmentList.length
                               ? Container(
                                   height: 1,

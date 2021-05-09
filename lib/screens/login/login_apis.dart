@@ -10,7 +10,7 @@ abstract class LoginApis {
 class LoginApisImpl extends BaseApi implements LoginApis {
   @override
   Future<LoginResponse> login(String credentials) async {
-    MyPreferences().saveCredentials(credentials);
+    preferences.saveCredentials(credentials);
     ParentApiResponse loginResponse =
         await apiService.login(base64string: credentials);
 

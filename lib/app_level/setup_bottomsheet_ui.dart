@@ -1,3 +1,4 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignment_params.dart';
 import 'package:bml_supervisor/screens/consignments/create/existing_consignment_bottom_sheet.dart';
@@ -8,12 +9,8 @@ import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_shee
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 
-import 'colors.dart';
 import 'locator.dart';
 
 void setupBottomSheetUi() {

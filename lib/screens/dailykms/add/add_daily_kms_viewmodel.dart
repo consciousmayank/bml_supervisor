@@ -172,12 +172,12 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   getClients() async {
     setBusy(true);
 
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
 
     // clientsList = [];
     // List<GetClientsResponse> responseList =
     //     await _dashBoardApis.getClientList();
-    // this.clientsList = copyList(responseList);
+    // this.clientsList = Utils().copyList(responseList);
     setBusy(false);
     notifyListeners();
   }
@@ -312,7 +312,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
       clientId: clientId,
       date: getDateString(entryDate),
     );
-    this.routesList = copyList(response);
+    this.routesList = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }

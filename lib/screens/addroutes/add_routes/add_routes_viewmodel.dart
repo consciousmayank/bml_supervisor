@@ -1,17 +1,11 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-
-// import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/adddriver/driver_apis.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class AddRoutesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
@@ -67,20 +61,20 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
 
     List<GetClientsResponse> responseList =
         await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+    this.clientsList = Utils().copyList(responseList);
 
     setBusy(false);
     notifyListeners();
   }
 
-  Future getHubsForSelectedClient(
-      {@required GetClientsResponse selectedClient}) async {
+  Future getHubsForSelectedClient() async {
     hubsList.clear();
     setBusy(true);
     notifyListeners();
-    var response =
-        await _dashBoardApis.getDistributors(clientId: selectedClient.clientId);
-    hubsList = copyList(response);
+    var response = await _dashBoardApis.getDistributors(
+      clientId: preferences.getSelectedClient().clientId,
+    );
+    hubsList = Utils().copyList(response);
     notifyListeners();
     setBusy(false);
   }
@@ -94,10 +88,8 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
         ));
   }
 
-
-
 // getCities() async {
 //   var citiesList = await _driverApis.getCities();
-//   cityList = copyList(citiesList);
+//   cityList = Utils().copyList(citiesList);
 // }
 }

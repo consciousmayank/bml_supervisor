@@ -31,7 +31,7 @@ class _PendingConsignmentsListViewState
               child: Scaffold(
                 appBar: AppBar(
                   title: Text(
-                    'Pending Consignments - ${MyPreferences().getSelectedClient().clientId}',
+                    'Pending Consignments - ${preferences.getSelectedClient().clientId}',
                     style: AppTextStyles.appBarTitleStyle,
                   ),
                   centerTitle: true,

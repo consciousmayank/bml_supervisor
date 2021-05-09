@@ -46,7 +46,7 @@ class DistributorsScreenViewModel extends GeneralisedBaseViewModel {
 
     List<GetClientsResponse> responseList =
         await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+    this.clientsList = Utils().copyList(responseList);
 
     setBusy(false);
     notifyListeners();
@@ -58,7 +58,7 @@ class DistributorsScreenViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
     var response =
         await _dashBoardApis.getDistributors(clientId: selectedClient.clientId);
-    distributorsResponseList = copyList(response);
+    distributorsResponseList = Utils().copyList(response);
     notifyListeners();
     setBusy(false);
   }

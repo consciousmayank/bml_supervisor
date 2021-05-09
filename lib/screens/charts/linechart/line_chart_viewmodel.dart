@@ -56,57 +56,54 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
   void getRoutesDrivenKm({
     String clientId,
   }) async {
+    chartDate = '';
+    routesDrivenKmListForLineChart.clear();
+    dataForLineChart = [];
 
-      chartDate = '';
-      routesDrivenKmListForLineChart.clear();
-      dataForLineChart = [];
+    // int selectedDurationValue =
+    //     selectedDuration.contains('THIS MONTH') ? 1 : 2;
+    // if (selectedDurationValue == 1) {
+    //   selectedDateForLineChart = DateTime.now();
+    // } else {
+    //   selectedDateForLineChart = DateTime.now().subtract(Duration(days: 30));
+    // }
 
-      // int selectedDurationValue =
-      //     selectedDuration.contains('THIS MONTH') ? 1 : 2;
-      // if (selectedDurationValue == 1) {
-      //   selectedDateForLineChart = DateTime.now();
-      // } else {
-      //   selectedDateForLineChart = DateTime.now().subtract(Duration(days: 30));
-      // }
+    setBusy(true);
+    notifyListeners();
+    List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
+      clientId: clientId,
+    );
 
-      setBusy(true);
-      notifyListeners();
-      List<RoutesDrivenKm> res = await _chartsApi.getRoutesDrivenKm(
-        clientId: clientId,
-      );
+    routesDrivenKmListForLineChart = Utils().copyList(res);
 
-      routesDrivenKmListForLineChart = copyList(res);
+    // add distinct routes and dates to uniqueRoutes and uniqueDates
+    routesDrivenKmListForLineChart.forEach(
+      (routesDrivenKmObject) {
+        if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
+          uniqueRoutes.add(routesDrivenKmObject.routeId);
+        }
+        if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
+          uniqueDates.add(routesDrivenKmObject.entryDate);
+        }
+        if (!uniqueDatesForLineChart.contains(routesDrivenKmObject.entryDate)) {
+          uniqueDatesForLineChart.add(routesDrivenKmObject.entryDateTime);
+        }
+      },
+    );
+    if (uniqueDates.length > 0) {
+      chartDate = uniqueDates?.first;
+    }
 
-      // add distinct routes and dates to uniqueRoutes and uniqueDates
-      routesDrivenKmListForLineChart.forEach(
-        (routesDrivenKmObject) {
-          if (!uniqueRoutes.contains(routesDrivenKmObject.routeId)) {
-            uniqueRoutes.add(routesDrivenKmObject.routeId);
-          }
-          if (!uniqueDates.contains(routesDrivenKmObject.entryDate)) {
-            uniqueDates.add(routesDrivenKmObject.entryDate);
-          }
-          if (!uniqueDatesForLineChart
-              .contains(routesDrivenKmObject.entryDate)) {
-            uniqueDatesForLineChart.add(routesDrivenKmObject.entryDateTime);
-          }
-        },
-      );
-      if (uniqueDates.length > 0) {
-        chartDate = uniqueDates?.first;
-      }
-
-      uniqueRoutes.forEach(
-        (singleRouteElement) {
-          dataForLineChart.add(
-            routesDrivenKmListForLineChart
-                .where((routeDrivenKmObject) =>
-                    routeDrivenKmObject.routeId == singleRouteElement)
-                .toList(),
-          );
-        },
-      );
-
+    uniqueRoutes.forEach(
+      (singleRouteElement) {
+        dataForLineChart.add(
+          routesDrivenKmListForLineChart
+              .where((routeDrivenKmObject) =>
+                  routeDrivenKmObject.routeId == singleRouteElement)
+              .toList(),
+        );
+      },
+    );
 
     notifyListeners();
     setBusy(false);

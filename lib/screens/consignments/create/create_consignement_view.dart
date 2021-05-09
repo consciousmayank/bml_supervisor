@@ -83,7 +83,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                     child: CircularProgressIndicator(),
                   )
                 : Padding(
-                    padding: getSidePadding(context: context),
+                    padding: Utils().getSidePadding(context: context),
                     child: body(context, viewModel),
                   ),
           )),
@@ -229,7 +229,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                           ),
                           backgroundColor: AppColors.primaryColorShade5,
                         ),
-                        hSizedBox(10),
+                        Utils().hSizedBox(10),
                         Text(
                           viewModel.hubsList[index].title.toUpperCase(),
                           style: AppTextStyles.latoBold16White.copyWith(
@@ -238,50 +238,50 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                             // fontWeight: FontWeight.bold
                           ),
                         ),
-                        hSizedBox(10),
+                        Utils().hSizedBox(10),
                         Text(
                           "( ${viewModel.hubsList[index].contactPerson} )",
                           style: AppTextStyles.latoMedium14Black.copyWith(
                               color: AppColors.primaryColorShade5,
                               fontSize: 15),
                         ),
-                        hSizedBox(10),
+                        Utils().hSizedBox(10),
                         Text(
                           viewModel.hubsList[index].city,
                           style: AppTextStyles.latoMedium14Black
                               .copyWith(color: AppColors.primaryColorShade5),
                         ),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         hubTitle(
                             context: context,
                             viewModel: viewModel,
                             index: index),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         dropInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         collectInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         paymentInput(
                           context: context,
                           viewModel: viewModel,
                           enabled: index == viewModel.hubsList.length - 1,
                           index: index,
                         ),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         remarksInput(
                           context: context,
                           viewModel: viewModel,
                           index: index,
                         ),
-                        hSizedBox(25),
+                        Utils().hSizedBox(25),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -307,7 +307,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                         ),
                                       ),
                               ),
-                              wSizedBox(20),
+                              Utils().wSizedBox(20),
                               Expanded(
                                   flex: 1,
                                   child: SizedBox(

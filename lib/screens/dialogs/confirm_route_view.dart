@@ -38,21 +38,21 @@ class ConfirmRouteView extends StatelessWidget {
                 //
                 // TextSpan(
                 //     text: '${routeRequest.title}', style: AppTextStyles.bold),
-                // hSizedBox(10),
+                // Utils().hSizedBox(10),
               ],
             ),
           ),
-          hSizedBox(5),
+          Utils().hSizedBox(5),
           RichText(
             text: TextSpan(
               children: [
                 TextSpan(text: 'Creation Date '),
                 TextSpan(text: '${getDateString(DateTime.now())}'),
-                // hSizedBox(10),
+                // Utils().hSizedBox(10),
               ],
             ),
           ),
-          hSizedBox(5),
+          Utils().hSizedBox(5),
           Text(
             'Route Hub Details',
             style:
@@ -75,23 +75,23 @@ class ConfirmRouteView extends StatelessWidget {
                               label: "Sequence",
                               value: routeRequest.hubs[index].sequence,
                             ),
-                            hSizedBox(5),
+                            Utils().hSizedBox(5),
                             buildHubDetails(
                               label: "Hub ID",
                               value: routeRequest.hubs[index].hub,
                             ),
-                            hSizedBox(5),
+                            Utils().hSizedBox(5),
 
                             buildHubDetails(
                               label: "Kms",
                               value: routeRequest.hubs[index].kms,
                             ),
-                            hSizedBox(5),
+                            Utils().hSizedBox(5),
                             buildHubDetails(
                               label: "Flag",
                               value: routeRequest.hubs[index].flag,
                             ),
-                            // hSizedBox(10),
+                            // Utils().hSizedBox(10),
                           ],
                         ),
                       )),
@@ -107,7 +107,7 @@ class ConfirmRouteView extends StatelessWidget {
           //
           //       TextSpan(text: '${routeRequest.srcLocation}'),
           //       TextSpan(text: '${routeRequest.dstLocation}'),
-          //       // hSizedBox(10),
+          //       // Utils().hSizedBox(10),
           //     ],
           //   ),
           // ),
@@ -128,7 +128,7 @@ class ConfirmRouteView extends StatelessWidget {
             child: SizedBox(
               height: buttonHeight,
               child: AppButton(
-                fontSize: 14,
+                  fontSize: 14,
                   borderRadius: defaultBorder,
                   borderColor: AppColors.primaryColorShade1,
                   onTap: () {

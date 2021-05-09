@@ -1,18 +1,14 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes_apis.dart';
-import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/route_dialog_params.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   AddRoutesApis _routesApis = locator<AddRouteApisImpl>();
@@ -58,7 +54,7 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void createReturningList({List<GetDistributorsResponse> list}) {
-    selectedReturningHubsList = copyList(list);
+    selectedReturningHubsList = Utils().copyList(list);
 
     selectedReturningHubsList = List.from(selectedReturningHubsList.reversed);
     selectedReturningHubsList.removeAt(0);
@@ -76,7 +72,7 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
       remarks: remarks,
       srcLocation: srcLocation,
       dstLocation: dstLocation,
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: preferences.getSelectedClient().clientId,
       hubs: getHubsList(),
     );
     routeRequest.hubs.first.kms = 0.0;
@@ -109,13 +105,12 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
       if (value.confirmed) {
         if (_apiResponse.isSuccessful()) {
           navigationService.clearStackAndShow(dashBoardPageRoute);
-
         }
       }
     });
   }
 
-  bool isKmEmpty(List<GetDistributorsResponse> list){
+  bool isKmEmpty(List<GetDistributorsResponse> list) {
     bool temp = false;
 
     list.forEach((element) {

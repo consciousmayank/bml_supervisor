@@ -37,12 +37,12 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     List<ConsignmentTrackingStatusResponse> response;
     response = await _dashboardApi.getConsignmentTrackingStatus(
         tripStatus: TripStatus.COMPLETED,
-        clientId: MyPreferences().getSelectedClient().clientId);
-    completedTrips = copyList(response);
+        clientId: preferences.getSelectedClient().clientId);
+    completedTrips = Utils().copyList(response);
     response = await _dashboardApi.getConsignmentTrackingStatus(
         tripStatus: TripStatus.APPROVED,
-        clientId: MyPreferences().getSelectedClient().clientId);
-    verifiedTrips = copyList(response);
+        clientId: preferences.getSelectedClient().clientId);
+    verifiedTrips = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -52,8 +52,8 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     List<ConsignmentTrackingStatusResponse> response =
         await _dashboardApi.getConsignmentTrackingStatus(
             tripStatus: tripStatus,
-            clientId: MyPreferences().getSelectedClient().clientId);
-    trips = copyList(response);
+            clientId: preferences.getSelectedClient().clientId);
+    trips = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }

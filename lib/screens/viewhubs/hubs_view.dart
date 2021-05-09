@@ -118,14 +118,14 @@ class _HubsViewState extends State<HubsView> {
                   height: distributorIconHeight,
                   width: distributorIconWidth,
                 ),
-                wSizedBox(5),
+                Utils().wSizedBox(5),
                 Text(
                   viewModel.hubsList[index].title,
                   style: AppTextStyles.latoBold18PrimaryShade5,
                 ),
               ],
             ),
-            hSizedBox(6),
+            Utils().hSizedBox(6),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -135,7 +135,7 @@ class _HubsViewState extends State<HubsView> {
                   width: distributorIconWidth,
                   color: AppColors.primaryColorShade5,
                 ),
-                wSizedBox(5),
+                Utils().wSizedBox(5),
                 Text("${viewModel.hubsList[index].contactPerson.toUpperCase()}",
                     style: AppTextStyles.latoMedium16Primary5),
               ],
@@ -183,7 +183,7 @@ class _HubsViewState extends State<HubsView> {
                 ],
               ),
             ),
-            hSizedBox(10),
+            Utils().hSizedBox(10),
             SizedBox(
               width: 180,
               child: Padding(

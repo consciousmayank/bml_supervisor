@@ -58,7 +58,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                         ),
                       )
                     : Padding(
-                        padding: getSidePadding(context: context),
+                        padding: Utils().getSidePadding(context: context),
                         child: body(context, viewModel),
                       ),
               ),
@@ -72,7 +72,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         dateSelector(context: context, viewModel: viewModel),
-        hSizedBox(4),
+        Utils().hSizedBox(4),
         viewModel.consignmentsList.length == 0
             ? Expanded(
                 child: createPreviousConsignmentsList(viewModel),
@@ -269,7 +269,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                   ),
                 ],
               ),
-              hSizedBox(14),
+              Utils().hSizedBox(14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -280,7 +280,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                           viewModel.consignmentsList[index].collect.toString(),
                     ),
                   ),
-                  wSizedBox(6),
+                  Utils().wSizedBox(6),
                   Expanded(
                     child: AppTextView(
                       hintText: 'Drop',
@@ -290,7 +290,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                   ),
                 ],
               ),
-              hSizedBox(14),
+              Utils().hSizedBox(14),
               AppTextView(
                 hintText: 'Payment',
                 value: viewModel.consignmentsList[index].payment.toString(),

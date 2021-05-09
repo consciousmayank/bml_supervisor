@@ -80,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
                 "BookMyLoading",
                 style: AppTextStyles.latoMediumItalics20,
               ),
-              hSizedBox(20),
+              Utils().hSizedBox(20),
               Text(
                 // S.of(context).appTitle,
                 'Manager App',
@@ -101,11 +101,11 @@ class _LoginViewState extends State<LoginView> {
                   loginIconIcon,
                   height: 143,
                 ),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 userNameTextField(),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 passwordTextField(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 SizedBox(
                   height: buttonHeight,
                   child: viewModel.isBusy

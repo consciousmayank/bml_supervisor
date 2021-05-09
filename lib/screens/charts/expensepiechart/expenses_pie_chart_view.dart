@@ -26,7 +26,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
         // createNewModelOnInsert: true,
         onModelReady: (viewModel) {
           viewModel.getExpensesListForPieChart(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: preferences.getSelectedClient().clientId,
           );
         },
         builder: (context, viewModel, child) {
@@ -45,7 +45,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                         if (viewModel.expensePieChartResponseList.length > 0)
                           viewModel.buildChartSubTitleNew(),
                         if (viewModel.expensePieChartResponseList.length > 0)
-                          hSizedBox(5),
+                          Utils().hSizedBox(5),
                         // Text(viewModel.expensePieChartResponseList[0].vehicleId),
                         viewModel.expensePieChartResponseList.length > 0
                             ? SizedBox(
@@ -82,7 +82,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                               )
                             : NoDataWidget(),
                         if (viewModel.expensePieChartResponseList.length > 0)
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                         // route label bottom positioned
                         if (viewModel.expensePieChartResponseList.length > 0)
                           buildColorLegendListView(viewModel)
@@ -114,9 +114,9 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                   width: 10,
                   color: viewModel.pieChartsColorArray[index],
                 ),
-                wSizedBox(5),
+                Utils().wSizedBox(5),
                 Text('${viewModel.uniqueExpenseTypes[index]}'),
-                wSizedBox(10),
+                Utils().wSizedBox(10),
               ],
             ),
           ),

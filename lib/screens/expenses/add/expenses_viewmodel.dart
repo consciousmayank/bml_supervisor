@@ -171,7 +171,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     clientsList = [];
     var response = await _dashBoardApis.getClientList();
-    _clientsList = copyList(response);
+    _clientsList = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -224,7 +224,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     var response = await _dailyEntryApis.getDailyKmInfo(
       date: getDateString(entryDate),
     );
-    dailyKmInfoList = copyList(response);
+    dailyKmInfoList = Utils().copyList(response);
     setBusy(false);
   }
 }

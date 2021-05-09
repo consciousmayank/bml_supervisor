@@ -20,7 +20,7 @@ class ViewRoutesViewModel extends GeneralisedBaseViewModel {
 
   getClientIds() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
     setBusy(false);
   }
 

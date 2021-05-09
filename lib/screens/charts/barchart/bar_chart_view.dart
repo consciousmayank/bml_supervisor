@@ -29,7 +29,7 @@ class _BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
-        clientId: MyPreferences().getSelectedClient().clientId,
+        clientId: preferences.getSelectedClient().clientId,
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy
@@ -49,7 +49,7 @@ class _BarChartViewState extends State<BarChartView> {
                         if (viewModel.kmReportListData.length > 0)
                           buildChartSubTitleNew(date: viewModel.chartDate),
                         if (viewModel.kmReportListData.length > 0)
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                         if (viewModel.kmReportListData.length > 0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +60,7 @@ class _BarChartViewState extends State<BarChartView> {
                                   width: 15,
                                   color: AppColors.primaryColorShade5,
                                 ),
-                              wSizedBox(10),
+                              Utils().wSizedBox(10),
                               if (viewModel.kmReportListData.length > 0)
                                 Text(
                                   "Driven km (Total: ${viewModel?.totalKmG ?? 0}, Avg: ${(viewModel.totalKmG / viewModel.kmReportListData.length).toStringAsFixed(0)})",

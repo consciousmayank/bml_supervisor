@@ -121,7 +121,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
 
   getClientIds() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = preferences.getSelectedClient();
     setBusy(false);
   }
 
@@ -134,7 +134,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       clientId: clientId,
       date: getDateString(entryDate),
     );
-    this.routesList = copyList(response);
+    this.routesList = Utils().copyList(response);
     setBusy(false);
     notifyListeners();
   }
@@ -149,7 +149,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
             date: getDateString(entryDate), clientId: selectedClient.clientId);
 
-    consignmentsList = copyList(response);
+    consignmentsList = Utils().copyList(response);
 
     setBusy(false);
     notifyListeners();
@@ -186,7 +186,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   void updateConsignment() async {
     // hit the update Consignment api
     reviewConsignmentRequest = reviewConsignmentRequest.copyWith(
-      assessBy: MyPreferences().getUserLoggedIn().userName,
+      assessBy: preferences.getUserLoggedIn().userName,
     );
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(

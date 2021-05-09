@@ -1,3 +1,4 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
@@ -6,7 +7,6 @@ import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/screens/adddriver/driver_apis.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class AddDriverViewModel extends GeneralisedBaseViewModel {
@@ -103,7 +103,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
 
   getCities() async {
     var citiesList = await _driverApis.getCities();
-    cityList = copyList(citiesList);
+    cityList = Utils().copyList(citiesList);
   }
 
   void getPinCodeState() async {

@@ -19,7 +19,7 @@ class TripsApisImpl extends BaseApi implements TripsApis {
     CompletedTripsDetailsResponse _response;
     ParentApiResponse apiResponse = await apiService.getCompletedTripsWithId(
       consignmentId: consignmentId.toString(),
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: preferences.getSelectedClient().clientId,
     );
     if (filterResponse(apiResponse) != null) {
       _response =

@@ -58,7 +58,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
+                'Daily Kilometers - ${preferences.getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
             actions: [
@@ -182,7 +182,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
 
   Widget _buildChip({@required ViewDailyKmsViewModel viewModel}) {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: Column(
         children: [
           Row(
@@ -335,7 +335,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -347,7 +347,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -360,7 +360,7 @@ class _SingleEntryWidget extends StatelessWidget {
                         )
                       ],
                     ),
-                    hSizedBox(10),
+                    Utils().hSizedBox(10),
                     Row(
                       children: [
                         Expanded(
@@ -373,7 +373,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -385,7 +385,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -398,7 +398,7 @@ class _SingleEntryWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    hSizedBox(10),
+                    Utils().hSizedBox(10),
                     Row(
                       children: [
                         Expanded(
@@ -411,7 +411,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -423,7 +423,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 .toString(),
                           ),
                         ),
-                        wSizedBox(10),
+                        Utils().wSizedBox(10),
                         Expanded(
                           flex: 1,
                           child: AppTextView(
@@ -437,7 +437,7 @@ class _SingleEntryWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    hSizedBox(5),
+                    Utils().hSizedBox(5),
                     InkWell(
                       onTap: () {
                         showViewEntryDetailPreview(context,
@@ -517,7 +517,7 @@ class _SingleEntryWidget extends StatelessWidget {
                                 ),
                                 flex: 1,
                               ),
-                              wSizedBox(10),
+                              Utils().wSizedBox(10),
                               Expanded(
                                 flex: 1,
                                 child: AppTextView(
@@ -531,7 +531,7 @@ class _SingleEntryWidget extends StatelessWidget {
                               )
                             ],
                           ),
-                          hSizedBox(10),
+                          Utils().hSizedBox(10),
                           Row(
                             children: [
                               Expanded(

@@ -30,7 +30,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         //todo: put new api for last seven entries here
         // viewModel.getRecentConsignments();
         viewModel.getRecentDrivenKm(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: preferences.getSelectedClient().clientId,
             isFullScreen: widget.isFulPageView);
       },
       builder: (context, viewModel, child) => SafeArea(
@@ -140,7 +140,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
             ],
           ),
         ),
-        hSizedBox(8),
+        Utils().hSizedBox(8),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -185,7 +185,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
                   ),
                 ),
               ),
-        hSizedBox(5),
+        Utils().hSizedBox(5),
       ],
     );
   }

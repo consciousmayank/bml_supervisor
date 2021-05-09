@@ -59,11 +59,11 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
 
     var response =
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: preferences.getSelectedClient().clientId,
       date: getDateString(entryDate),
     );
 
-    consignmentsList = copyList(response);
+    consignmentsList = Utils().copyList(response);
 
     setBusy(false);
     notifyListeners();
@@ -81,13 +81,13 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
 
     List<SinglePendingConsignmentListItem> response =
         await _consignmentApis.getConsignmentListPageWise(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: preferences.getSelectedClient().clientId,
             pageIndex: pageIndex);
     response.forEach((element) {
       pendingConsignmentsDateList.add(element.entryDate);
     });
     if (pageIndex == 0) {
-      pendingConsignmentsList = copyList(response);
+      pendingConsignmentsList = Utils().copyList(response);
     } else {
       pendingConsignmentsList.addAll(response);
     }

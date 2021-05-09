@@ -75,7 +75,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           // ),
           appBar: AppBar(
             title: Text(
-              'View Expenses - ${MyPreferences().getSelectedClient().clientId}',
+              'View Expenses - ${preferences.getSelectedClient().clientId}',
               style: AppTextStyles.appBarTitleStyle,
             ),
             actions: [
@@ -95,7 +95,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   itemCount: 7,
                 )
               : Padding(
-                  padding: getSidePadding(context: context),
+                  padding: Utils().getSidePadding(context: context),
                   child: Column(
                     children: [
                       // buildSelectDurationTabWidget(viewModel),
@@ -318,7 +318,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                         .toString(),
                   ),
                 ),
-                wSizedBox(8),
+                Utils().wSizedBox(8),
                 Expanded(
                   flex: 1,
                   child: AppTextView(
@@ -331,7 +331,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                         .toString(),
                   ),
                 ),
-                wSizedBox(8),
+                Utils().wSizedBox(8),
                 Expanded(
                   flex: 1,
                   child: AppTextView(
@@ -354,7 +354,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
 
   Widget _buildHeader({@required ViewExpensesViewModel viewModel}) {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: Column(
         children: [
           Row(

@@ -155,7 +155,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
               value: helper.value1,
             ),
           ),
-          wSizedBox(10),
+          Utils().wSizedBox(10),
           Expanded(
             flex: 1,
             child: AppTextView(
@@ -189,7 +189,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
                 height: 20,
                 width: 20,
               ),
-              wSizedBox(8),
+              Utils().wSizedBox(8),
               Text(
                 'C#${trip.consignmentId}',
                 style: AppTextStyles.latoBold12Black

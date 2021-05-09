@@ -31,7 +31,7 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
 
     snackBarService.showSnackbar(message: _apiResponse.message);
     if (_apiResponse.isSuccessful())
-      MyPreferences().saveCredentials(
+      preferences.saveCredentials(
         getBase64String(value: '$userName:$newPassword'),
       );
     return _apiResponse.isSuccessful();

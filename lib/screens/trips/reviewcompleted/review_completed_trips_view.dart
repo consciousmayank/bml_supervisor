@@ -80,7 +80,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
     return viewModel.completedTripsDetails != null
         ? SingleChildScrollView(
             child: Padding(
-              padding: getSidePadding(
+              padding: Utils().getSidePadding(
                 context: context,
               ),
               child: Column(
@@ -127,7 +127,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                     staticReading:
                         viewModel.completedTripsDetails.endReading.toString(),
                   ),
-                  hSizedBox(10),
+                  Utils().hSizedBox(10),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -149,7 +149,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                           ),
                         ),
                       ),
-                      wSizedBox(10),
+                      Utils().wSizedBox(10),
                       Expanded(
                           flex: 1,
                           child: SizedBox(
@@ -163,7 +163,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                                     consignmentId:
                                         widget.selectedTrip.consignmentId,
                                     routeId: widget.selectedTrip.routeId,
-                                    clientId: MyPreferences()
+                                    clientId: preferences
                                         .getSelectedClient()
                                         .clientId,
                                     vehicleId: widget.selectedTrip.vehicleId,
@@ -249,7 +249,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                 ),
               ],
             ),
-            hSizedBox(20),
+            Utils().hSizedBox(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -263,7 +263,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                     image: image,
                   ),
                 ),
-                wSizedBox(4),
+                Utils().wSizedBox(4),
                 Expanded(
                   flex: 4,
                   child: Column(

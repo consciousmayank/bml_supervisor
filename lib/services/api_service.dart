@@ -1,29 +1,13 @@
 import 'dart:convert';
+import 'package:bml/bml.dart';
 
-import 'package:bml_supervisor/app_level/dio_client.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
-import 'package:bml_supervisor/models/add_driver.dart';
-import 'package:bml_supervisor/models/add_hub_request.dart';
-import 'package:bml_supervisor/models/add_vehicle_request.dart';
-import 'package:bml_supervisor/models/app_versioning_request.dart';
-import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/create_route_request.dart';
-import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
-import 'package:bml_supervisor/models/review_consignment_request.dart';
-import 'package:bml_supervisor/models/save_expense_request.dart';
-import 'package:bml_supervisor/models/save_payment_request.dart';
-import 'package:bml_supervisor/models/update_user_request.dart';
-import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class ApiService {
+class ApiService implements ManagerApis {
   final dioClient = locator<DioConfig>();
-  final preferences = MyPreferences();
 
   /////////////////////////Post Security/////////////////////////
 
@@ -98,7 +82,8 @@ class ApiService {
   ///1. Create Consignment
   ///
   /// By sending registrationNumber
-  Future<ParentApiResponse> getVehicleDetails(String registrationNumber) async {
+  Future<ParentApiResponse> getVehicleDetails(
+      {@required String registrationNumber}) async {
     Response response;
     DioError error;
     try {
@@ -111,8 +96,7 @@ class ApiService {
   }
 
   ///Create a new Consignment
-  Future<ParentApiResponse> createConsignment(
-      {@required CreateConsignmentRequest request}) async {
+  Future createConsignment({@required dynamic request}) async {
     Response response;
     DioError error;
     try {
@@ -167,7 +151,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> submitVehicleEntry({
-    @required EntryLog entryLogRequest,
+    @required dynamic entryLogRequest,
   }) async {
     Response response;
     DioError error;
@@ -246,7 +230,7 @@ class ApiService {
   ///Get Daily Kilometers depending on ViewEntryRequest
   ///vehicleId, clientId, period, are the options that can be sent
   Future<ParentApiResponse> getDailyEntries(
-      {ViewEntryRequest viewEntryRequest}) async {
+      {@required dynamic viewEntryRequest}) async {
     String body = viewEntryRequest.toJson();
     Response response;
     DioError error;
@@ -353,14 +337,15 @@ class ApiService {
   }
 
   ///Update a consignment, after re-view.
-  Future<ParentApiResponse> updateConsignment(
-      {int consignmentId, ReviewConsignmentRequest putRequest}) async {
+  Future updateConsignment(
+      {@required int consignmentId,
+      @required dynamic reviewConsignmentRequest}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient.getDio().put(
             GET_CONSIGNMENT_LIST_BY_ID(consignmentId),
-            data: putRequest.toMap(),
+            data: reviewConsignmentRequest.toMap(),
           );
     } on DioError catch (e) {
       error = e;
@@ -383,8 +368,8 @@ class ApiService {
   }
 
   Future<ParentApiResponse> addNewPayment(
-      {@required SavePaymentRequest request}) async {
-    String body = request.toJson();
+      {@required dynamic savePaymentRequest}) async {
+    String body = savePaymentRequest.toJson();
     Response response;
     DioError error;
     try {
@@ -422,8 +407,8 @@ class ApiService {
   }
 
   ///Add expense for a client.
-  Future<ParentApiResponse> addExpense({SaveExpenseRequest request}) async {
-    String body = request.toJson();
+  Future<ParentApiResponse> addExpense({dynamic saveExpenseRequest}) async {
+    String body = saveExpenseRequest.toJson();
     Response response;
     DioError error;
     try {
@@ -467,8 +452,8 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future updateUserMobile({UpdateUserRequest request}) async {
-    String body = request.toJson();
+  Future updateUserMobile({dynamic updateUserRequest}) async {
+    String body = updateUserRequest.toJson();
     Response response;
     DioError error;
     try {
@@ -479,8 +464,8 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future updateUserEmail({UpdateUserRequest request}) async {
-    String body = request.toJson();
+  Future updateUserEmail({dynamic updateUserRequest}) async {
+    String body = updateUserRequest.toJson();
     Response response;
     DioError error;
     try {
@@ -506,13 +491,13 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getAppVersions(
-      {AppVersioningRequest request}) async {
+      {dynamic appVersioningRequest}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient
           .getDio()
-          .post(GET_APP_VERSION, data: request.toJson());
+          .post(GET_APP_VERSION, data: appVersioningRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -544,12 +529,13 @@ class ApiService {
   }
 
   Future<ParentApiResponse> addDriver(
-      {@required AddDriverRequest request}) async {
+      {@required dynamic addDriverRequest}) async {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().post(ADD_DRIVER, data: request.toJson());
+      response = await dioClient
+          .getDio()
+          .post(ADD_DRIVER, data: addDriverRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -557,23 +543,25 @@ class ApiService {
   }
 
   Future<ParentApiResponse> addRoute(
-      {@required CreateRouteRequest request}) async {
+      {@required dynamic createRouteRequest}) async {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().post(ADD_ROUTE, data: request.toJson());
+      response = await dioClient
+          .getDio()
+          .post(ADD_ROUTE, data: createRouteRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future<ParentApiResponse> addHub({@required AddHubRequest request}) async {
+  Future<ParentApiResponse> addHub({@required dynamic addHubRequest}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().post(ADD_HUB, data: request.toJson());
+      response =
+          await dioClient.getDio().post(ADD_HUB, data: addHubRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -645,13 +633,13 @@ class ApiService {
 
   ///Create a new Consignment
   Future<ParentApiResponse> addVehicle(
-      {@required AddVehicleRequest request}) async {
+      {@required dynamic addVehicleRequest}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient
           .getDio()
-          .post(ADD_VEHICLE, data: request.toJson());
+          .post(ADD_VEHICLE, data: addVehicleRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -816,4 +804,11 @@ class ApiService {
     print(response);
     return response;
   }
+
+  @override
+  SharedPreferencesService preferencesService;
+
+  @override
+  // TODO: implement config
+  DioConfig get config => throw UnimplementedError();
 }

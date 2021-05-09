@@ -15,9 +15,7 @@ import 'package:bml_supervisor/screens/trips/trips_apis.dart';
 import 'package:bml_supervisor/services/api_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:stacked_services/stacked_services.dart';
-
-import 'api_provider.dart';
-import 'dio_client.dart';
+import 'package:bml/bml.dart';
 
 final locator = GetIt.instance;
 
@@ -29,7 +27,6 @@ void declareDependencies() {
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => DriverApisImpl());
-  locator.registerLazySingleton(() => ApiProvider());
   locator.registerLazySingleton(() => DioConfig());
   locator.registerLazySingleton(() => DashBoardApisImpl());
   locator.registerLazySingleton(() => ConsignmentApisImpl());
@@ -55,5 +52,5 @@ void declareDependencies() {
 //  locator.registerFactory(() => GraphQlConfig());
 
   //A singleton will always return the same instance of that service.
-//  locator.registerSingleton<MyPreferences>(MyPreferences(), signalsReady: true);
+//  locator.registerSingleton<MyPreferences>(preferences, signalsReady: true);
 }

@@ -19,7 +19,7 @@ class HubsViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     var apiResponse =
         await _dashBoardApis.getHubs(routeId: selectedRoute.routeId);
-    _hubsList = copyList(apiResponse);
+    _hubsList = Utils().copyList(apiResponse);
     notifyListeners();
     setBusy(false);
   }

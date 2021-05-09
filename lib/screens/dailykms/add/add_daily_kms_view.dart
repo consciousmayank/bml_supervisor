@@ -35,7 +35,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-              "Add Daily Kms - ${MyPreferences().getSelectedClient().clientId}",
+              "Add Daily Kms - ${preferences.getSelectedClient().clientId}",
               style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
@@ -43,7 +43,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                 child: CircularProgressIndicator(),
               )
             : Padding(
-                padding: getSidePadding(context: context),
+                padding: Utils().getSidePadding(context: context),
                 child: ListView(
                   children: [
                     dateSelector(context: context, viewModel: viewModel),
@@ -315,7 +315,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                       )
                     ],
                   ),
-                  hSizedBox(5),
+                  Utils().hSizedBox(5),
                   Row(
                     children: [
                       Expanded(
@@ -328,7 +328,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                       )
                     ],
                   ),
-                  hSizedBox(5),
+                  Utils().hSizedBox(5),
                   Row(
                     children: [
                       Expanded(
@@ -347,7 +347,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                       )
                     ],
                   ),
-                  hSizedBox(5),
+                  Utils().hSizedBox(5),
                   Row(
                     children: [
                       Expanded(
@@ -366,7 +366,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                       )
                     ],
                   ),
-                  hSizedBox(5),
+                  Utils().hSizedBox(5),
                 ],
               ),
             )

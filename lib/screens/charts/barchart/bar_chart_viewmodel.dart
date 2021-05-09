@@ -67,7 +67,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
     List<KilometerReportResponse> res =
         await _chartsApi.getDailyDrivenKm(clientId: clientId);
 
-    kmReportListData = copyList(res);
+    kmReportListData = Utils().copyList(res);
 
     if (kmReportListData.length > 0) {
       kmReportListData.forEach((element) {

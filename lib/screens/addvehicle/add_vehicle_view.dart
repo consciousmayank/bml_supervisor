@@ -1,22 +1,9 @@
-import 'dart:ffi';
-
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/add_vehicle_request.dart';
 import 'package:bml_supervisor/screens/addvehicle/add_vehicle_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
-import 'package:string_validator/string_validator.dart';
+import 'package:bml/bml.dart';
 
 class AddVehicleView extends StatefulWidget {
   @override
@@ -107,27 +94,27 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               controller: _controller,
               children: [
                 chasisNumber(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 registrationNumber(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 engineNumber(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 ownnerName(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 lastOwnnerName(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleMake(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleModel(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 rto(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleColor(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleInitialReading(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleLoadCapacity(viewModel: viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 Text('Enter Vehicle\'s'),
                 Row(
                   children: [
@@ -145,19 +132,19 @@ class _AddVehicleViewState extends State<AddVehicleView> {
                     ),
                   ],
                 ),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 registrationDate(context, viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 registrationUpto(context, viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 ownerLevel(viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleClass(viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleFuelType(viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleEmmisionType(viewModel),
-                hSizedBox(20),
+                Utils().hSizedBox(20),
                 vehicleSeating(viewModel),
               ],
             ),

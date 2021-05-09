@@ -1,4 +1,4 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
@@ -7,18 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../app_level/colors.dart';
-import '../../app_level/themes.dart';
 import '../../models/cities_response.dart';
-import '../../models/secured_get_clients_response.dart';
-import '../../utils/app_text_styles.dart';
-import '../../utils/dimens.dart';
 import '../../utils/stringutils.dart';
-import '../../utils/widget_utils.dart';
-import '../../widget/app_button.dart';
-import '../../widget/app_suffix_icon_button.dart';
-import '../../widget/app_textfield.dart';
-import '../../widget/client_dropdown.dart';
 
 class AddHubsView extends StatefulWidget {
   @override
@@ -102,7 +92,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: SingleChildScrollView(
         child: Form(
             key: _formKey,
@@ -161,7 +151,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                   widget.viewModel.addHub(
                       newHubObject: AddHubRequest(
                     // clientId: widget.viewModel.selectedClient.clientId,
-                    clientId: MyPreferences().getSelectedClient().clientId,
+                    // clientId: preferences.getSelectedClient().clientId,
                     title: hubTitleController.text.trim(),
                     contactPerson: contactPersonController.text.trim(),
                     email: emailController.text.trim(),
@@ -267,7 +257,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,

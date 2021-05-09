@@ -32,7 +32,7 @@ class ClientSelectViewModel extends GeneralisedBaseViewModel {
 
     List<GetClientsResponse> responseList =
         await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+    this.clientsList = Utils().copyList(responseList);
     setBusy(false);
   }
 

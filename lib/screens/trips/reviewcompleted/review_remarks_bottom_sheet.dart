@@ -47,7 +47,7 @@ class ReviewRemarksBottomSheet extends StatelessWidget {
                       confirmed: true,
                       responseData: ReviewRemarksBottomSheetOutputArgs(
                         remarks:
-                            '${controller.text.trim()} Verified By: ${MyPreferences().getUserLoggedIn().userName}',
+                            '${controller.text.trim()} Verified By: ${preferences.getUserLoggedIn().userName}',
                       ),
                     ),
                   );

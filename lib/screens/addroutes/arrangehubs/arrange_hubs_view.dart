@@ -1,10 +1,6 @@
-import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -35,7 +31,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
               centerTitle: true,
             ),
             body: Padding(
-              padding: getSidePadding(context: context),
+              padding: Utils().getSidePadding(context: context),
               child: Column(children: [
                 buildSelectedHubList(viewModel: viewModel),
                 buildReturnListCheckButton(viewModel),
@@ -60,7 +56,6 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-
             if (viewModel.isKmEmpty(viewModel.selectedHubList)) {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please fill all the Kms');
@@ -90,7 +85,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
   //                     // Text('${index + 1}'),
   //                     Text(viewModel.selectedReturningHubsList[index].id
   //                         .toString()),
-  //                     wSizedBox(10),
+  //                     Utils().wSizedBox(10),
   //                     Expanded(
   //                         flex: 2,
   //                         child: Text(
@@ -134,7 +129,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
 
   Widget buildReturnListCheckButton(ArrangeHubsViewModel viewModel) {
     return Padding(
-      padding: getSidePadding(context: context),
+      padding: Utils().getSidePadding(context: context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -206,7 +201,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
             return Row(
               children: [
                 Text(viewModel.selectedHubList[index].id.toString()),
-                wSizedBox(10),
+                Utils().wSizedBox(10),
                 Expanded(
                     flex: 2,
                     child: Text('${viewModel.selectedHubList[index].title}')),

@@ -1,3 +1,4 @@
+import 'package:bml/bml.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_apis.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,7 @@ import '../../app_level/locator.dart';
 import '../../models/ApiResponse.dart';
 import '../../models/cities_response.dart';
 import '../../models/city_location_response.dart';
-import '../../models/secured_get_clients_response.dart';
 import '../../utils/stringutils.dart';
-import '../../utils/widget_utils.dart';
 import '../adddriver/driver_apis.dart';
 import '../dashboard/dashboard_apis.dart';
 
@@ -26,6 +25,7 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   DriverApis _driverApis = locator<DriverApisImpl>();
   AddHubsApis _addHubsApis = locator<AddHubApisImpl>();
+
   TextEditingController pinCodeController = TextEditingController();
   FocusNode pinCodeFocusNode = FocusNode();
 
@@ -91,7 +91,7 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
 
   getCities() async {
     var citiesList = await _driverApis.getCities();
-    cityList = copyList(citiesList);
+    cityList = Utils().copyList(citiesList);
   }
 
   void getPinCodeState() async {
@@ -113,6 +113,8 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void addHub({AddHubRequest newHubObject}) async {
+    newHubObject = AddHubRequest()
+        .copyWith(clientId: preferences.getSelectedClient().clientId);
     ApiResponse _apiResponse = await _addHubsApis.addHub(request: newHubObject);
     dialogService
         .showConfirmationDialog(
@@ -137,7 +139,7 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
 
     List<GetClientsResponse> responseList =
         await _dashBoardApis.getClientList();
-    this.clientsList = copyList(responseList);
+    this.clientsList = Utils().copyList(responseList);
 
     setBusy(false);
     notifyListeners();

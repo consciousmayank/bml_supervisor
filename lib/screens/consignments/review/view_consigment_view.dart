@@ -93,7 +93,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                   appBar: AppBar(
                     automaticallyImplyLeading: true,
                     title: Text(
-                        "Review Consignments - ${MyPreferences().getSelectedClient().clientId}",
+                        "Review Consignments - ${preferences.getSelectedClient().clientId}",
                         style: AppTextStyles.appBarTitleStyle),
                     // actions: [
                     //   isEditAllowed
@@ -110,7 +110,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                           child: CircularProgressIndicator(),
                         )
                       : Padding(
-                          padding: getSidePadding(context: context),
+                          padding: Utils().getSidePadding(context: context),
                           child: body(context, viewModel),
                         ),
                 ),
@@ -279,7 +279,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                     ],
                   ),
-
                   Expanded(
                     child: PageView.builder(
                       onPageChanged: (index) {
@@ -313,7 +312,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                     backgroundColor:
                                         AppColors.primaryColorShade5,
                                   ),
-                                  hSizedBox(10),
+                                  Utils().hSizedBox(10),
                                   Text(
                                     viewModel.consignmentDetailResponseNew
                                         .items[index].hubTitle
@@ -324,7 +323,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18),
                                   ),
-                                  hSizedBox(10),
+                                  Utils().hSizedBox(10),
                                   Text(
                                     "( ${viewModel.consignmentDetailResponseNew.items[index].hubContactPerson} )",
                                     style:
@@ -333,7 +332,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                  hSizedBox(10),
+                                  Utils().hSizedBox(10),
                                   Text(
                                       viewModel.consignmentDetailResponseNew
                                           .items[index].hubCity,
@@ -341,12 +340,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                           .copyWith(
                                         color: AppColors.primaryColorShade5,
                                       )),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   hubTitle(
                                       context: context,
                                       viewModel: viewModel,
                                       index: index),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   Row(
                                     children: [
                                       Expanded(
@@ -355,7 +354,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                             context: context,
                                             viewModel: viewModel),
                                       ),
-                                      wSizedBox(10),
+                                      Utils().wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gDropInput(
@@ -365,7 +364,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       ),
                                     ],
                                   ),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   Row(
                                     children: [
                                       Expanded(
@@ -374,7 +373,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                             context: context,
                                             viewModel: viewModel),
                                       ),
-                                      wSizedBox(10),
+                                      Utils().wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gCollectInput(
@@ -383,7 +382,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       ),
                                     ],
                                   ),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   Row(
                                     children: [
                                       Expanded(
@@ -398,7 +397,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                         .length -
                                                     1),
                                       ),
-                                      wSizedBox(10),
+                                      Utils().wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gPaymentInput(
@@ -413,10 +412,10 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                       ),
                                     ],
                                   ),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   remarksInput(
                                       context: context, viewModel: viewModel),
-                                  hSizedBox(25),
+                                  Utils().hSizedBox(25),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
@@ -443,7 +442,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                   ),
                                                 ),
                                         ),
-                                        wSizedBox(20),
+                                        Utils().wSizedBox(20),
                                         Expanded(
                                             flex: 1,
                                             child: SizedBox(

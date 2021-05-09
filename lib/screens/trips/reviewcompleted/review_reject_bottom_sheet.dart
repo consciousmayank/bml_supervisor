@@ -31,18 +31,18 @@ class ReviewRejectConfirmationBottomSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            hSizedBox(10),
+            Utils().hSizedBox(10),
             Text(
               'Are you sure to reject this Consignment ?',
               style: AppTextStyles.latoBold18PrimaryShade5,
             ),
-            hSizedBox(30),
+            Utils().hSizedBox(30),
             Text(
               'You cannot undo this decision.',
               style:
                   AppTextStyles.latoBold18PrimaryShade5.copyWith(fontSize: 14),
             ),
-            hSizedBox(30),
+            Utils().hSizedBox(30),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -65,7 +65,7 @@ class ReviewRejectConfirmationBottomSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-                wSizedBox(10),
+                Utils().wSizedBox(10),
                 Expanded(
                   child: SizedBox(
                     height: buttonHeight,

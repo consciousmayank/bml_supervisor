@@ -33,7 +33,7 @@ class _SearchViewState extends State<SearchView> {
           child: Stack(
             children: [
               Padding(
-                padding: getSidePadding(context: context),
+                padding: Utils().getSidePadding(context: context),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,9 +257,9 @@ class _SearchViewState extends State<SearchView> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         searchParams(viewModel: viewModel),
-        hSizedBox(20),
+        Utils().hSizedBox(20),
         searchInput(viewModel: viewModel),
-        hSizedBox(20),
+        Utils().hSizedBox(20),
         Container(
             child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -282,9 +282,9 @@ class _SearchViewState extends State<SearchView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(flex: 1, child: searchParams(viewModel: viewModel)),
-          wSizedBox(20),
+          Utils().wSizedBox(20),
           Expanded(flex: 1, child: searchInput(viewModel: viewModel)),
-          wSizedBox(20),
+          Utils().wSizedBox(20),
           Expanded(flex: 1, child: searchButton(viewModel: viewModel)),
         ],
       ),

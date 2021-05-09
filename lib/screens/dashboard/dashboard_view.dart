@@ -39,9 +39,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
           viewModel.getUserProfile();
-          viewModel.selectedClient = MyPreferences().getSelectedClient();
+          viewModel.selectedClient = preferences.getSelectedClient();
           viewModel.getClientDashboardStats();
-          viewModel.selectedDuration = MyPreferences().getSelectedDuration();
+          viewModel.selectedDuration = preferences.getSelectedDuration();
           viewModel.getConsignmentTrackingStatus();
           // viewModel.getBarGraphKmReport(
           //   selectedDuration: viewModel.selectedDuration,
@@ -54,7 +54,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               child: Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      'Dashboard - ${capitalizeFirstLetter(MyPreferences().getSelectedClient().clientId)}',
+                      'Dashboard - ${capitalizeFirstLetter(preferences.getSelectedClient().clientId)}',
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
@@ -63,7 +63,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                         onTap: () {
                           viewModel.showClientSelectBottomSheet();
 
-                          // MyPreferences().saveSelectedClient(null);
+                          // preferences.saveSelectedClient(null);
                           // viewModel.navigationService
                           //     .clearStackAndShow(clientSelectPageRoute);
                         },
@@ -104,7 +104,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  hSizedBox(5),
+                                  Utils().hSizedBox(5),
 
                                   viewModel.isGettingTripsStatus
                                       ? Container(
@@ -166,7 +166,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                           },
                                         ),
 
-                                  hSizedBox(3),
+                                  Utils().hSizedBox(3),
                                   viewModel.singleClientTileData != null
                                       ? Row(
                                           children: [
@@ -301,11 +301,11 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
                                   ///line chart (Routes Driven Kilometers)
                                   LineChartView(
-                                    clientId: MyPreferences()
+                                    clientId: preferences
                                         .getSelectedClient()
                                         .clientId,
                                     selectedDuration:
-                                        MyPreferences().getSelectedDuration(),
+                                        preferences.getSelectedDuration(),
                                   ),
 
                                   /// Driven Km % pie chart
@@ -313,7 +313,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                     // key: UniqueKey(),
                                     selectedDuration:
                                         viewModel.selectedDuration,
-                                    clientId: MyPreferences()
+                                    clientId: preferences
                                         .getSelectedClient()
                                         .clientId,
                                   ),
@@ -335,7 +335,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                         },
                                         isInDashBoard: true,
                                         selectedClient:
-                                            MyPreferences().getSelectedClient(),
+                                            preferences.getSelectedClient(),
                                       ),
                                     ),
                                   ),
@@ -368,7 +368,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               String selectedValue = selectDurationListDashBoard[index];
               viewModel.selectedDuration = selectedValue;
               // viewModel.getBarGraphKmReport(selectedDuration: selectedValue);
-              MyPreferences().saveSelectedDuration(selectedValue);
+              preferences.saveSelectedDuration(selectedValue);
               viewModel.selectedDuration = selectedValue;
               viewModel.reloadPage();
             },
