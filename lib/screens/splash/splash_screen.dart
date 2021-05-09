@@ -1,16 +1,14 @@
 import 'dart:io';
 
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rive/rive.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bml/bml.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -33,6 +31,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  SharedPreferencesService preferences = locator<SharedPreferencesService>();
+
   final riveFileName = 'assets/animations/new_file_3.riv';
   Artboard _artboard;
   RiveAnimationController _controller;

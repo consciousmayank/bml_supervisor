@@ -48,8 +48,8 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
   Future<SearchByRegNoResponse> getVehicleDetails(
       {String registrationNumber}) async {
     SearchByRegNoResponse vehicleDetails;
-    ParentApiResponse apiResponse =
-        await _apiService.getVehicleDetails(registrationNumber);
+    ParentApiResponse apiResponse = await _apiService.getVehicleDetails(
+        registrationNumber: registrationNumber);
     if (apiResponse.error == null) {
       //positive
 
@@ -132,7 +132,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
 
     ParentApiResponse apiResponse = await apiService.updateConsignment(
       consignmentId: consignmentId,
-      putRequest: putRequest,
+      reviewConsignmentRequest: putRequest,
     );
 
     if (filterResponse(apiResponse) != null) {

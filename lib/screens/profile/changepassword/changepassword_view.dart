@@ -1,16 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/login/login_textfield.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'changepassword_viewmodel.dart';
 
 class ChangePasswordView extends StatefulWidget {
@@ -78,12 +70,13 @@ class _BodyWidgetState extends State<BodyWidget> {
             verticalSemiCircles,
           ),
         ),
-        getMainBody(context)
+        getMainBody(context: context, viewModel: widget.changePasswordViewModel)
       ],
     );
   }
 
-  Widget getMainBody(BuildContext context) {
+  Widget getMainBody(
+      {BuildContext context, ChangePasswordViewModel viewModel}) {
     return ListView(
       children: [
         Container(
@@ -139,7 +132,8 @@ class _BodyWidgetState extends State<BodyWidget> {
                             onTap: () {
                               if (_formKey.currentState.validate()) {
                                 widget.changePasswordViewModel.changePassword(
-                                    userId: preferences.getCredentials(),
+                                    userId:
+                                        viewModel.preferences.getCredentials(),
                                     password: passwordController.text);
                               }
                             },

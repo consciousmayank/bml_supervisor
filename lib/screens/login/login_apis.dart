@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/login_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 abstract class LoginApis {
   Future<LoginResponse> login(String credentials);

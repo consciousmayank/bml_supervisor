@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:bml/bml.dart';
 
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/utils/api_endpoints.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,7 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().post(LOGIN);
+      response = await dioClient.getDio().post(BmlManager().LOGIN);
     } on DioError catch (e) {
       error = e;
     }
@@ -30,7 +29,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_DASHBOARD_TILES(clientId));
+      response = await dioClient
+          .getDio()
+          .get(BmlManager().GET_DASHBOARD_TILES(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -42,7 +43,7 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_CLIENTS);
+      response = await dioClient.getDio().get(BmlManager().GET_CLIENTS);
     } on DioError catch (e) {
       error = e;
     }
@@ -56,7 +57,7 @@ class ApiService implements ManagerApis {
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID_new$clientId/page/1",
+            "${BmlManager().GET_ROUTES_FOR_CLIENT_ID_new}$clientId/page/1",
           );
     } on DioError catch (e) {
       error = e;
@@ -71,7 +72,7 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_HUBS(routeId));
+      response = await dioClient.getDio().get(BmlManager().GET_HUBS(routeId));
     } on DioError catch (e) {
       error = e;
     }
@@ -100,9 +101,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
+      response = await dioClient.getDio().post(
+          BmlManager().ADD_CONSIGNMENT_DATA_TO_HUB,
+          data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -117,7 +118,7 @@ class ApiService implements ManagerApis {
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
+            BmlManager().GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
           );
     } on DioError catch (e) {
       error = e;
@@ -132,7 +133,7 @@ class ApiService implements ManagerApis {
     try {
       _response = await dioClient
           .getDio()
-          .get(FIND_LAST_ENTRY_BY_DATE(registrationNumber));
+          .get(BmlManager().FIND_LAST_ENTRY_BY_DATE(registrationNumber));
     } on DioError catch (e) {
       _error = e;
     }
@@ -143,7 +144,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_LAST_SEVEN_ENTRIES(clientId));
+      response = await dioClient
+          .getDio()
+          .get(BmlManager().GET_LAST_SEVEN_ENTRIES(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -177,7 +180,8 @@ class ApiService implements ManagerApis {
     };
     String body = json.encode(request);
     try {
-      response = await dioClient.getDio().post(SUMBIT_ENTRY, data: body);
+      response =
+          await dioClient.getDio().post(BmlManager().SUMBIT_ENTRY, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -192,7 +196,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .get(GET_DAILY_DRIVEN_KMS_BAR_CHART(client, period));
+          .get(BmlManager().GET_DAILY_DRIVEN_KMS_BAR_CHART(client, period));
     } on DioError catch (e) {
       error = e;
     }
@@ -205,8 +209,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().get(GET_ROUTES_DRIVEN_KM(clientId, period));
+      response = await dioClient
+          .getDio()
+          .get(BmlManager().GET_ROUTES_DRIVEN_KM(clientId, period));
     } on DioError catch (e) {
       error = e;
     }
@@ -220,7 +225,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .get(GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId));
+          .get(BmlManager().GET_ROUTES_DRIVEN_KM_PERCENTAGE(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -235,7 +240,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().post(GET_DAILY_ENTRIES, data: body);
+      response = await dioClient
+          .getDio()
+          .post(BmlManager().GET_DAILY_ENTRIES, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -248,9 +255,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE(clientId, entryDate));
+      response = await dioClient.getDio().get(BmlManager()
+          .GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE(clientId, entryDate));
     } on DioError catch (e) {
       error = e;
     }
@@ -264,9 +270,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT(clientId, pageIndex));
+      response = await dioClient.getDio().get(BmlManager()
+          .GET_PENDING_CONSIGNMENTS_LIST_FOR_A_CLIENT(clientId, pageIndex));
     } on DioError catch (e) {
       error = e;
     }
@@ -280,9 +285,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_CONSIGNMENT_LIST_PAGE_WISE(clientId, pageIndex));
+      response = await dioClient.getDio().get(
+          BmlManager().GET_CONSIGNMENT_LIST_PAGE_WISE(clientId, pageIndex));
     } on DioError catch (e) {
       error = e;
     }
@@ -295,9 +299,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT(clientId));
+      response = await dioClient.getDio().get(BmlManager()
+          .GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -311,7 +314,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .get(GET_CONSIGNMENT_LIST_BY_ID(consignmentId));
+          .get(BmlManager().GET_CONSIGNMENT_LIST_BY_ID(consignmentId));
     } on DioError catch (e) {
       error = e;
     }
@@ -325,7 +328,7 @@ class ApiService implements ManagerApis {
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            GET_COMPLETED_TRIPS_BY_ID(
+            BmlManager().GET_COMPLETED_TRIPS_BY_ID(
               consignmentId,
               clientId,
             ),
@@ -344,7 +347,7 @@ class ApiService implements ManagerApis {
     DioError error;
     try {
       response = await dioClient.getDio().put(
-            GET_CONSIGNMENT_LIST_BY_ID(consignmentId),
+            BmlManager().GET_CONSIGNMENT_LIST_BY_ID(consignmentId),
             data: reviewConsignmentRequest.toMap(),
           );
     } on DioError catch (e) {
@@ -360,7 +363,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .get(GET_PAYMENT_HISTORY(clientId, pageNumber));
+          .get(BmlManager().GET_PAYMENT_HISTORY(clientId, pageNumber));
     } on DioError catch (e) {
       error = e;
     }
@@ -397,7 +400,7 @@ class ApiService implements ManagerApis {
 
       String body = json.encode(request);
       response = await dioClient.getDio().post(
-            GET_EXPENSES_LIST,
+            BmlManager().GET_EXPENSES_LIST,
             data: body,
           );
     } on DioError catch (e) {
@@ -412,7 +415,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().post(ADD_EXPENSE, data: body);
+      response =
+          await dioClient.getDio().post(BmlManager().ADD_EXPENSE, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -423,7 +427,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_DAILY_KM_INFO(date));
+      response =
+          await dioClient.getDio().get(BmlManager().GET_DAILY_KM_INFO(date));
     } on DioError catch (e) {
       error = e;
     }
@@ -434,7 +439,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_DISTRIBUTORS(clientId));
+      response =
+          await dioClient.getDio().get(BmlManager().GET_DISTRIBUTORS(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -445,7 +451,7 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_USER);
+      response = await dioClient.getDio().get(BmlManager().GET_USER);
     } on DioError catch (e) {
       error = e;
     }
@@ -457,7 +463,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().put(UPDATE_USER_MOBILE, data: body);
+      response = await dioClient
+          .getDio()
+          .put(BmlManager().UPDATE_USER_MOBILE, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -469,7 +477,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().put(UPDATE_USER_EMAIL, data: body);
+      response = await dioClient
+          .getDio()
+          .put(BmlManager().UPDATE_USER_EMAIL, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -483,7 +493,9 @@ class ApiService implements ManagerApis {
     try {
       var request = {"username": userName, "password": newPassword};
       String body = json.encode(request);
-      response = await dioClient.getDio().post(CHANGE_PASSWORD, data: body);
+      response = await dioClient
+          .getDio()
+          .post(BmlManager().CHANGE_PASSWORD, data: body);
     } on DioError catch (e) {
       error = e;
     }
@@ -495,9 +507,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .post(GET_APP_VERSION, data: appVersioningRequest.toJson());
+      response = await dioClient.getDio().post(BmlManager().GET_APP_VERSION,
+          data: appVersioningRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -509,7 +520,7 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_CITIES);
+      response = await dioClient.getDio().get(BmlManager().GET_CITIES);
     } on DioError catch (e) {
       error = e;
     }
@@ -521,7 +532,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_CITY_LOCATION(cityId));
+      response =
+          await dioClient.getDio().get(BmlManager().GET_CITY_LOCATION(cityId));
     } on DioError catch (e) {
       error = e;
     }
@@ -535,7 +547,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .post(ADD_DRIVER, data: addDriverRequest.toJson());
+          .post(BmlManager().ADD_DRIVER, data: addDriverRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -549,7 +561,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .post(ADD_ROUTE, data: createRouteRequest.toJson());
+          .post(BmlManager().ADD_ROUTE, data: createRouteRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -560,8 +572,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().post(ADD_HUB, data: addHubRequest.toJson());
+      response = await dioClient
+          .getDio()
+          .post(BmlManager().ADD_HUB, data: addHubRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -573,7 +586,9 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_EXPENSE_PIE_CHART(clientId));
+      response = await dioClient
+          .getDio()
+          .get(BmlManager().GET_EXPENSE_PIE_CHART(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -598,22 +613,22 @@ class ApiService implements ManagerApis {
       {@required TripStatus tripStatus, @required String clientId}) {
     switch (tripStatus) {
       case TripStatus.UPCOMING:
-        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
         break;
       case TripStatus.ONGOING:
-        return GET_ONGOING_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_ONGOING_TRIPS_STATUS_LIST(clientId);
         break;
       case TripStatus.COMPLETED:
-        return GET_COMPLETED_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_COMPLETED_TRIPS_STATUS_LIST(clientId);
         break;
       case TripStatus.APPROVED:
-        return GET_APPROVED_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_APPROVED_TRIPS_STATUS_LIST(clientId);
         break;
       case TripStatus.DISCARDED:
-        return GET_DISCARDED_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_DISCARDED_TRIPS_STATUS_LIST(clientId);
         break;
       default:
-        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+        return BmlManager().GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
     }
   }
 
@@ -622,9 +637,8 @@ class ApiService implements ManagerApis {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID(consignmentId));
+      response = await dioClient.getDio().get(BmlManager()
+          .REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID(consignmentId));
     } on DioError catch (e) {
       error = e;
     }
@@ -639,7 +653,7 @@ class ApiService implements ManagerApis {
     try {
       response = await dioClient
           .getDio()
-          .post(ADD_VEHICLE, data: addVehicleRequest.toJson());
+          .post(BmlManager().ADD_VEHICLE, data: addVehicleRequest.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -650,8 +664,9 @@ class ApiService implements ManagerApis {
   Future<Response> search({String registrationNumber}) async {
     Response response;
     try {
-      response =
-          await dioClient.getDio().get('$SEARCH_BY_REG_NO$registrationNumber');
+      response = await dioClient
+          .getDio()
+          .get('${BmlManager().SEARCH_BY_REG_NO}$registrationNumber');
     } on DioError catch (e) {
       throw e;
     }
@@ -724,9 +739,8 @@ class ApiService implements ManagerApis {
     Response response;
 
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_ENTRIES_BTW_DATES(regNo, fromDate, toDate, page));
+      response = await dioClient.getDio().get(
+          BmlManager().GET_ENTRIES_BTW_DATES(regNo, fromDate, toDate, page));
     } on DioError catch (e) {
       return e.message;
     }
@@ -749,7 +763,7 @@ class ApiService implements ManagerApis {
     Response response;
     try {
       response = await dioClient.getDio().get(
-            "$GET_HUB_DATA$hubId",
+            "${BmlManager().GET_HUB_DATA}$hubId",
           );
     } on DioError catch (e) {
       return e.message;
@@ -774,7 +788,8 @@ class ApiService implements ManagerApis {
   Future getHubs({int routeId}) async {
     Response response;
     try {
-      response = await dioClient.getDio().get("$GET_HUBS$routeId");
+      response =
+          await dioClient.getDio().get("${BmlManager().GET_HUBS}$routeId");
     } on DioError catch (e) {
       return e.message;
     }
@@ -786,29 +801,11 @@ class ApiService implements ManagerApis {
   }) async {
     Response response;
     try {
-      response = await dioClient.getDio().get("$GET_HUBS$routeId");
+      response =
+          await dioClient.getDio().get("${BmlManager().GET_HUBS}$routeId");
     } on DioError catch (e) {
       return e.message;
     }
     return response;
   }
-
-  Future getClientDashboardStats(PreferencesSavedUser user) async {
-    // dashboard client specific tiles data api
-    Response response;
-    try {
-      response = await dioClient.getDio().get(GET_DASHBOARD_STATS(user));
-    } on DioError catch (e) {
-      return e.message;
-    }
-    print(response);
-    return response;
-  }
-
-  @override
-  SharedPreferencesService preferencesService;
-
-  @override
-  // TODO: implement config
-  DioConfig get config => throw UnimplementedError();
 }

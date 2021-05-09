@@ -758,7 +758,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,

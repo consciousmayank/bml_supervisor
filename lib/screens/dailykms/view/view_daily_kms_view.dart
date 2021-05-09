@@ -1,18 +1,10 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/bml.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
@@ -58,7 +50,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-                'Daily Kilometers - ${preferences.getSelectedClient().clientId}',
+                'Daily Kilometers - ${viewModel.preferences.getSelectedClient().clientId}',
                 style: AppTextStyles.appBarTitleStyle),
             centerTitle: true,
             actions: [
@@ -283,16 +275,16 @@ class _SingleEntryWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: ClipRRect(
-        borderRadius: getBorderRadius(),
+        borderRadius: Utils().getBorderRadius(),
         child: Card(
           color: AppColors.appScaffoldColor,
           elevation: 4,
-          shape: getCardShape(),
+          shape: Utils().getCardShape(),
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: ThemeConfiguration.primaryBackground,
+                  color: ThemeConfiguration().primaryBackground,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(5),
                       topRight: Radius.circular(5)),
@@ -468,15 +460,15 @@ class _SingleEntryWidget extends StatelessWidget {
           return Container(
             height: MediaQuery.of(context).size.height * 0.25,
             child: ClipRRect(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               child: Card(
                 elevation: 4,
-                shape: getCardShape(),
+                shape: Utils().getCardShape(),
                 child: Column(
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5)),

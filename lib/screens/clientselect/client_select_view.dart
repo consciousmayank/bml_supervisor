@@ -1,13 +1,7 @@
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 import 'client_select_viewmodel.dart';
 
@@ -93,12 +87,12 @@ class BodyWidget extends StatelessWidget {
             // Generate 100 widgets that display their index in the List.
             children: List.generate(viewModel.clientsList.length, (index) {
               return Card(
-                shape: getCardShape(),
+                shape: Utils().getCardShape(),
                 elevation: defaultElevation,
                 child: InkWell(
                   onTap: () {
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      preferences
+                    Future.delayed(Duration(milliseconds: 200), () {
+                      viewModel.preferences
                           .saveSelectedClient(viewModel.clientsList[index]);
                       if (isCalledFromBottomSheet) {
                         onClientSelected(viewModel.clientsList[index]);

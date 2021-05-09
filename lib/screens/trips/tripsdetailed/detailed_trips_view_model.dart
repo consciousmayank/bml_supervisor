@@ -1,14 +1,11 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 import 'detailed_trips_bottom_sheet.dart';
 

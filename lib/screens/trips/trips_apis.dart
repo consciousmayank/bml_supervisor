@@ -1,9 +1,8 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/completed_trips_details.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 abstract class TripsApis {
   Future<CompletedTripsDetailsResponse> getCompletedTripsWithId(

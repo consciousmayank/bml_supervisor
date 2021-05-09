@@ -1,15 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bml/bml.dart';
 
 import 'hubs_viewmodel.dart';
 
@@ -95,7 +89,7 @@ class _HubsViewState extends State<HubsView> {
     return Card(
       color: AppColors.routesCardColor,
       elevation: 4,
-      shape: getCardShape(),
+      shape: Utils().getCardShape(),
       child: Container(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -163,7 +157,7 @@ class _HubsViewState extends State<HubsView> {
             ),
             InkWell(
               onTap: () {
-                launchMaps(
+                Utils().launchMaps(
                     latitude: viewModel.hubsList[index].geoLatitude,
                     longitude: viewModel.hubsList[index].geoLongitude);
               },

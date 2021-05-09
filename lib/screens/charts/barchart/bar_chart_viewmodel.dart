@@ -2,9 +2,9 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/km_report_response.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
+import 'package:bml/bml.dart';
 
 class BarChartViewModel extends GeneralisedBaseViewModel {
   ChartsApi _chartsApi = locator<ChartsApiImpl>();

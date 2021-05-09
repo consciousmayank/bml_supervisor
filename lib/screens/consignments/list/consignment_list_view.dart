@@ -1,14 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ConsignmentListView extends StatefulWidget {
   final bool isFulPageView;
@@ -29,9 +24,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
       onModelReady: (viewModel) {
         //todo: put new api for last seven entries here
         // viewModel.getRecentConsignments();
-        viewModel.getRecentDrivenKm(
-            clientId: preferences.getSelectedClient().clientId,
-            isFullScreen: widget.isFulPageView);
+        viewModel.getRecentDrivenKm(isFullScreen: widget.isFulPageView);
       },
       builder: (context, viewModel, child) => SafeArea(
         left: true,
@@ -75,7 +68,8 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: buildChartTitle(title: "Recent Driven Kilometers"),
+                child:
+                    Utils().buildChartTitle(title: "Recent Driven Kilometers"),
               ),
               NoDataWidget(),
             ],
@@ -242,7 +236,7 @@ class RecentDrivenSingleItem extends StatelessWidget {
           padding: EdgeInsets.only(top: 5, bottom: 5, left: 8, right: 8),
           decoration: BoxDecoration(
             color: AppColors.primaryColorShade5,
-            borderRadius: getBorderRadius(),
+            borderRadius: Utils().getBorderRadius(),
           ),
           child: Text(
             viewModel.recentConsignmentList[index].drivenKmG.toString(),

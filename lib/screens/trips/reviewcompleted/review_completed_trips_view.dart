@@ -1,21 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_completed_trips_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ReviewCompletedTripsView extends StatefulWidget {
   final ConsignmentTrackingStatusResponse selectedTrip;
@@ -86,7 +77,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
               child: Column(
                 children: [
                   buildMeterReadingWidget(
-                      image: getImageFromBase64String(
+                      image: Utils().getImageFromBase64String(
                         base64String:
                             viewModel.completedTripsDetails.startReadingImage,
                       ),
@@ -112,7 +103,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                     backgroundColor: AppColors.primaryColorShade5,
                   ),
                   buildMeterReadingWidget(
-                    image: getImageFromBase64String(
+                    image: Utils().getImageFromBase64String(
                       base64String:
                           viewModel.completedTripsDetails.endReadingImage,
                     ),
@@ -163,7 +154,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                                     consignmentId:
                                         widget.selectedTrip.consignmentId,
                                     routeId: widget.selectedTrip.routeId,
-                                    clientId: preferences
+                                    clientId: viewModel.preferences
                                         .getSelectedClient()
                                         .clientId,
                                     vehicleId: widget.selectedTrip.vehicleId,
@@ -215,7 +206,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
   }) {
     return Card(
       elevation: defaultElevation,
-      shape: getCardShape(),
+      shape: Utils().getCardShape(),
       color: AppColors.appScaffoldColor,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -233,7 +224,7 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                 ),
                 InkWell(
                   onTap: () {
-                    launchMaps(
+                    Utils().launchMaps(
                       latitude: latitude,
                       longitude: longitude,
                     );

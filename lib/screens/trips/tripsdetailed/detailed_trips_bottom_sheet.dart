@@ -1,14 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class DetailedTripsBottomSheet extends StatelessWidget {
   final SheetRequest request;
@@ -31,7 +26,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
         children: [
           Card(
             elevation: defaultElevation,
-            shape: getCardShape(),
+            shape: Utils().getCardShape(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

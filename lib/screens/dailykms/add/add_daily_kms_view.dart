@@ -1,20 +1,10 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'add_daily_kms_viewmodel.dart';
 
 class AddVehicleEntryView extends StatefulWidget {
@@ -35,7 +25,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-              "Add Daily Kms - ${preferences.getSelectedClient().clientId}",
+              "Add Daily Kms - ${viewModel.preferences.getSelectedClient().clientId}",
               style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
@@ -168,7 +158,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,
@@ -268,15 +258,15 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
 
   Widget showLastEntry({EntryLog entryLog}) {
     return ClipRRect(
-      borderRadius: getBorderRadius(),
+      borderRadius: Utils().getBorderRadius(),
       child: Card(
         elevation: 4,
-        shape: getCardShape(),
+        shape: Utils().getCardShape(),
         child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
-                color: ThemeConfiguration.primaryBackground,
+                color: ThemeConfiguration().primaryBackground,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5), topRight: Radius.circular(5)),
               ),
@@ -340,7 +330,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                         child: Text(
                           entryLog.loginTime == null
                               ? ""
-                              : convertFrom24HoursTime(
+                              : Utils().convertFrom24HoursTime(
                                   entryLog.loginTime.toString(),
                                 ),
                         ),
@@ -358,7 +348,7 @@ class _AddVehicleEntryViewState extends State<AddVehicleEntryView> {
                         flex: 1,
                         child: Text(
                           entryLog.logoutTime != null
-                              ? convertFrom24HoursTime(
+                              ? Utils().convertFrom24HoursTime(
                                   entryLog.logoutTime.toString(),
                                 )
                               : "",
@@ -509,7 +499,7 @@ class _RoutesDropDownState extends State<RoutesDropDown> {
                       padding: const EdgeInsets.only(right: 4),
                       child: Icon(
                         Icons.keyboard_arrow_down,
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                       ),
                     ),
                     underline: Container(),

@@ -5,6 +5,7 @@ import 'package:bml_supervisor/services/api_service.dart';
 class BaseApi {
   SnackbarService snackBarService = locator<SnackbarService>();
   ApiService apiService = locator<ApiService>();
+  SharedPreferencesService preferences = locator<SharedPreferencesService>();
 
   ParentApiResponse filterResponse(ParentApiResponse apiResponse,
       {bool showSnackBar = true}) {

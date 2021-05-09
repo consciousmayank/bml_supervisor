@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -9,11 +8,10 @@ import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/bml.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
@@ -132,7 +130,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     List<RoutesForSelectedClientAndDateResponse> response =
         await _dailyEntryApis.getRoutesForSelectedClientAndDate(
       clientId: clientId,
-      date: getDateString(entryDate),
+      date: Utils().getDateString(entryDate),
     );
     this.routesList = Utils().copyList(response);
     setBusy(false);
@@ -144,10 +142,10 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
   getConsignmentListWithDate() async {
     setBusy(true);
     consignmentsList = [];
-    print(getDateString(entryDate));
     List<ConsignmentsForSelectedDateAndClientResponse> response =
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
-            date: getDateString(entryDate), clientId: selectedClient.clientId);
+            date: Utils().getDateString(entryDate),
+            clientId: selectedClient.clientId);
 
     consignmentsList = Utils().copyList(response);
 

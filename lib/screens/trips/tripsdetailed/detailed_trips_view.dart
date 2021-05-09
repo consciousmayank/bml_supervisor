@@ -1,14 +1,9 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml/model/single_trip_model.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bml_supervisor/widget/single_trip_item.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 import 'detailedTripsArgs.dart';
 
@@ -107,7 +102,27 @@ class _NormalBodyState extends State<NormalBody> {
                       bool value,
                       ConsignmentTrackingStatusResponse tappedTrip,
                     ) {},
-                    singleListItem: widget.viewModel.trips[index],
+                    singleListItem: SingleTripModel(
+                      dstLocation: widget.viewModel.trips[index].dstLocation,
+                      consignmentDate:
+                          widget.viewModel.trips[index].consignmentDate,
+                      itemUnit: widget.viewModel.trips[index].itemUnit,
+                      consignmentId:
+                          widget.viewModel.trips[index].consignmentId,
+                      routeTitle: widget.viewModel.trips[index].routeTitle,
+                      srcLocation: widget.viewModel.trips[index].srcLocation,
+                      itemDrop: widget.viewModel.trips[index].itemDrop,
+                      dispatchDateTime:
+                          widget.viewModel.trips[index].dispatchDateTime,
+                      routeId: widget.viewModel.trips[index].routeId,
+                      itemCollect: widget.viewModel.trips[index].itemCollect,
+                      consignmentTitle:
+                          widget.viewModel.trips[index].consignmentTitle,
+                      payment: widget.viewModel.trips[index].payment,
+                      vehicleId: widget.viewModel.trips[index].vehicleId,
+                      itemWeight: widget.viewModel.trips[index].itemWeight,
+                      statusCode: widget.viewModel.trips[index].statusCode,
+                    ),
                     onTap: () {
                       if (widget.viewModel.trips[index].statusCode == 1 ||
                           widget.viewModel.trips[index].statusCode == 2 ||
@@ -198,7 +213,23 @@ class _TabbedBodyState extends State<TabbedBody> {
             bool value,
             ConsignmentTrackingStatusResponse tappedTrip,
           ) {},
-          singleListItem: trips[index],
+          singleListItem: SingleTripModel(
+            dstLocation: trips[index].dstLocation,
+            consignmentDate: trips[index].consignmentDate,
+            itemUnit: trips[index].itemUnit,
+            consignmentId: trips[index].consignmentId,
+            routeTitle: trips[index].routeTitle,
+            srcLocation: trips[index].srcLocation,
+            itemDrop: trips[index].itemDrop,
+            dispatchDateTime: trips[index].dispatchDateTime,
+            routeId: trips[index].routeId,
+            itemCollect: trips[index].itemCollect,
+            consignmentTitle: trips[index].consignmentTitle,
+            payment: trips[index].payment,
+            vehicleId: trips[index].vehicleId,
+            itemWeight: trips[index].itemWeight,
+            statusCode: trips[index].statusCode,
+          ),
           onTap: () {
             if (trips[index].statusCode == 1 ||
                 trips[index].statusCode == 2 ||

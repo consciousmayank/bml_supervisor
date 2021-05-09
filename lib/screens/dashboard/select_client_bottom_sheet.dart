@@ -1,10 +1,6 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class SelectClientBottomSheet extends StatelessWidget {
   final SheetRequest request;

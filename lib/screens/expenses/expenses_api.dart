@@ -1,10 +1,9 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
-import 'package:bml_supervisor/models/view_expenses_response.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 abstract class ExpensesApi {
   Future<List<ExpensePieChartResponse>> getExpensesList({
@@ -43,7 +42,7 @@ class ExpensesApisImpl extends BaseApi implements ExpensesApi {
         status: 'failed', message: ParentApiResponse().defaultError);
 
     ParentApiResponse apiResponse =
-        await apiService.addExpense(request: saveExpenseRequest);
+        await apiService.addExpense(saveExpenseRequest: saveExpenseRequest);
 
     if (filterResponse(apiResponse) != null) {
       response = ApiResponse.fromMap(apiResponse.response.data);

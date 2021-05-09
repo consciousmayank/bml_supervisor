@@ -1,6 +1,5 @@
-import 'package:bml_supervisor/enums/trip_statuses.dart';
-import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/enums/trip_statuses.dart';
 
 class DetailedTripsViewArgs {
   final TripStatus tripStatus;

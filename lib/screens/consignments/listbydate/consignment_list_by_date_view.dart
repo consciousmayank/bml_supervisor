@@ -1,23 +1,11 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
 import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_by_date_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ConsignmentListByDateView extends StatefulWidget {
   @override
@@ -95,7 +83,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: ClipRRect(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               child: Container(
                 decoration: BoxDecoration(
                   border:
@@ -108,7 +96,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(5),
                           topRight: Radius.circular(5),
@@ -219,9 +207,9 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       ConsignmentListByDateViewModel viewModel, int index) {
     return Card(
       elevation: defaultElevation,
-      shape: getCardShape(),
+      shape: Utils().getCardShape(),
       child: ClickableWidget(
-        borderRadius: getBorderRadius(),
+        borderRadius: Utils().getBorderRadius(),
         elevation: defaultElevation,
         onTap: () {
           viewModel.takeToConsignmentDetailPage(
@@ -356,7 +344,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,

@@ -1,8 +1,6 @@
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_expenses_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class ViewExpensesDetailedView extends StatefulWidget {
   // final List<ViewExpensesResponse> viewExpensesDetailedList;
@@ -58,15 +56,15 @@ class _ViewExpensesDetailedViewState extends State<ViewExpensesDetailedView> {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: ClipRRect(
-                    borderRadius: getBorderRadius(),
+                    borderRadius: Utils().getBorderRadius(),
                     child: Card(
                       elevation: 4,
-                      shape: getCardShape(),
+                      shape: Utils().getCardShape(),
                       child: Column(
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ThemeConfiguration.primaryBackground,
+                              color: ThemeConfiguration().primaryBackground,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(5),
                                   topRight: Radius.circular(5)),

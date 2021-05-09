@@ -5,12 +5,11 @@ import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml/bml.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
@@ -222,7 +221,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   void getInfo() async {
     setBusy(true);
     var response = await _dailyEntryApis.getDailyKmInfo(
-      date: getDateString(entryDate),
+      date: Utils().getDateString(entryDate),
     );
     dailyKmInfoList = Utils().copyList(response);
     setBusy(false);

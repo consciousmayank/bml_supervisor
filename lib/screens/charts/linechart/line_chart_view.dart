@@ -1,25 +1,17 @@
 import 'package:bezier_chart/bezier_chart.dart';
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dashboard_loading.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
 // ignore: implementation_imports
 import 'package:flutter/src/painting/text_style.dart' as axisTextStyle;
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class LineChartView extends StatefulWidget {
   final String clientId;
-  final String selectedDuration;
 
   LineChartView({
     this.clientId,
-    this.selectedDuration,
   });
 
   @override
@@ -50,7 +42,7 @@ class _LineChartViewState extends State<LineChartView> {
             child: Card(
               color: AppColors.white,
               elevation: defaultElevation,
-              shape: getCardShape(),
+              shape: Utils().getCardShape(),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -60,11 +52,11 @@ class _LineChartViewState extends State<LineChartView> {
                           ? MainAxisAlignment.center
                           : MainAxisAlignment.start,
                   children: [
-                    buildChartTitle(title: "Routes Driven Kilometers"),
+                    Utils().buildChartTitle(title: "Routes Driven Kilometers"),
                     // buildChartSubTitle(
                     //     time: viewModel?.selectedDateForLineChart),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
-                      buildChartSubTitleNew(date: viewModel.chartDate),
+                      Utils().buildChartSubTitleNew(date: viewModel.chartDate),
                     viewModel.routesDrivenKmListForLineChart.length > 0
                         ? Expanded(
                             child: BezierChart(
@@ -118,7 +110,7 @@ class _LineChartViewState extends State<LineChartView> {
                           )
                         : NoDataWidget(),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
-                      buildChartDateLabel(),
+                      Utils().buildChartDateLabel(),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
                       Utils().hSizedBox(10),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)

@@ -1,19 +1,11 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_grid_view.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_list_view.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'consignment_detials_viewmodel.dart';
 
 class ConsignmentDetailsView extends StatefulWidget {
@@ -210,7 +202,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                     child: AppTiles(
                       value: viewModel.consignmentDetailResponse.dropOff == 0
                           ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
+                                      .length >
+                                  0
                               ? viewModel.consignmentDetailResponse
                                       .reviewedItems.last.dropOff
                                       .toString() +
@@ -222,7 +215,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                                   .consignmentDetailResponse.items.last.dropOff
                                   .toString()
                           : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
+                                      .length >
+                                  0
                               ? viewModel.consignmentDetailResponse
                                       .reviewedItems.last.dropOff
                                       .toString() +
@@ -275,7 +269,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
         return Card(
           color: AppColors.appScaffoldColor,
           elevation: defaultElevation,
-          shape: getCardShape(),
+          shape: Utils().getCardShape(),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: SingleHubGridView(
@@ -298,7 +292,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
           child: Card(
             color: AppColors.appScaffoldColor,
             elevation: defaultElevation,
-            shape: getCardShape(),
+            shape: Utils().getCardShape(),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: SingleHubListView(

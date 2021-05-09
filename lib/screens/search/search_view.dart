@@ -1,13 +1,8 @@
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/search/search_viewmodel.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class SearchView extends StatefulWidget {
   final bool showVehicleDetails;
@@ -45,10 +40,10 @@ class _SearchViewState extends State<SearchView> {
                             top: 50,
                             left: 8,
                           ),
-                          child: headerText("Search Vehicle"),
+                          child: Utils().headerText("Search Vehicle"),
                         ),
-                        tablet: headerText("Search Vehicle"),
-                        desktop: headerText("Search Vehicle")),
+                        tablet: Utils().headerText("Search Vehicle"),
+                        desktop: Utils().headerText("Search Vehicle")),
                     ScreenTypeLayout.builder(
                       mobile: (BuildContext context) =>
                           mobileViewHeader(viewModel: viewModel),
@@ -111,15 +106,15 @@ class _SearchViewState extends State<SearchView> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: ClipRRect(
-                borderRadius: getBorderRadius(),
+                borderRadius: Utils().getBorderRadius(),
                 child: Card(
                   elevation: 4,
-                  shape: getCardShape(),
+                  shape: Utils().getCardShape(),
                   child: Column(
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: ThemeConfiguration.primaryBackground,
+                          color: ThemeConfiguration().primaryBackground,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
@@ -245,7 +240,7 @@ class _SearchViewState extends State<SearchView> {
             padding: const EdgeInsets.all(8.0),
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: singleColumnColored(
+              child: Utils().singleColumnColored(
                   label: label, value: value, showColor: false),
             ),
           );

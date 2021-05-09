@@ -1,12 +1,5 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import "package:bml_supervisor/app_level/string_extensions.dart";
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class ExpensesFilterBottomSheet extends StatelessWidget {
   final SheetRequest request;
@@ -67,9 +60,7 @@ class ExpensesFilterBottomSheet extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
-                            '${args.expenseTypes[index]}'
-                                .toLowerCase()
-                                .capitalizeFirstLetter(),
+                            '${StringUtils().capitalizeFirstLetter(word: args.expenseTypes[index].toLowerCase())}',
                             style: args.selectedExpense ==
                                     args.expenseTypes[index]
                                 ? AppTextStyles.latoBold18PrimaryShade5
@@ -92,7 +83,7 @@ class ExpensesFilterBottomSheet extends StatelessWidget {
                           ),
                         );
                       },
-                      borderRadius: getBorderRadius(borderRadius: 0),
+                      borderRadius: Utils().getBorderRadius(borderRadius: 0),
                     ),
                   ],
                 );

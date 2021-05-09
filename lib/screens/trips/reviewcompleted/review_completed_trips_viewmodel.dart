@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/completed_trips_details.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
@@ -11,6 +10,7 @@ import 'package:bml_supervisor/screens/trips/trips_apis.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
   CompletedTripsDetailsResponse _completedTripsDetails;

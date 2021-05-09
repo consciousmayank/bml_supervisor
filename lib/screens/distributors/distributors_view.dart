@@ -1,14 +1,7 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/distributors/distributors_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DistributorsScreenView extends StatefulWidget {
@@ -21,7 +14,7 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DistributorsScreenViewModel>.reactive(
       onModelReady: (viewModel) async {
-        viewModel.selectedClient = preferences.getSelectedClient();
+        viewModel.selectedClient = viewModel.preferences.getSelectedClient();
         viewModel.getDistributors(selectedClient: viewModel.selectedClient);
       },
       builder: (context, viewModel, child) => Scaffold(

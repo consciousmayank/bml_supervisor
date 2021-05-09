@@ -1,14 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'login_textfield.dart';
 import 'login_viewmodel.dart';
 
@@ -155,7 +149,7 @@ class _LoginViewState extends State<LoginView> {
         hintText: "UserName",
         keyboardType: TextInputType.text,
         onFieldSubmitted: (_) {
-          fieldFocusChange(
+          loginTextFormFieldFocusChange(
             context,
             userNameFocusNode,
             passwordFocusNode,

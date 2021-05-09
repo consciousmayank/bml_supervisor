@@ -115,7 +115,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildVehicleTextFormField(),
               buildDlTextFormField(),
               buildAadhaarTextFormField(),
-              Utils().Utils().hSizedBox(2),
+              Utils().hSizedBox(2),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -166,7 +166,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildStateTextFormField(),
               buildCountryTextFormField(),
               buildRemarksTextFormField(),
-              Utils().Utils().hSizedBox(10),
+              Utils().hSizedBox(10),
               SizedBox(
                 height: 250,
                 width: 200,
@@ -176,7 +176,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                   },
                 ),
               ),
-              Utils().Utils().hSizedBox(10),
+              Utils().hSizedBox(10),
               buildSaveButton(),
             ],
           ),

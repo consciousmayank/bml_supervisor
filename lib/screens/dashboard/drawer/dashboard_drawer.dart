@@ -1,15 +1,8 @@
-import 'package:bml_supervisor/enums/trip_statuses.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
-import 'package:bml_supervisor/widget/drawerlistitem/drawer_list_item.dart';
-import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../app_level/colors.dart';
 import '../../../app_level/image_config.dart';
-import '../../../utils/app_text_styles.dart';
-import '../../../utils/dimens.dart';
 import '../dashboard_viewmodel.dart';
+import 'package:bml/bml.dart';
 
 class DashBoardDrawer extends StatefulWidget {
   final DashBoardScreenViewModel dashBoardScreenViewModel;
@@ -40,7 +33,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
             children: [
               ClickableWidget(
                 childColor: AppColors.white,
-                borderRadius: getBorderRadius(),
+                borderRadius: Utils().getBorderRadius(),
                 onTap: () {
                   widget.dashBoardScreenViewModel.onUserProfileTileClicked();
                 },

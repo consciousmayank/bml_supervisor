@@ -1,7 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/src/widget_utils.dart';
 
 import '../profile_apis.dart';
 
@@ -22,7 +22,7 @@ class ChangePasswordViewModel extends GeneralisedBaseViewModel {
       {@required String userId, @required String password}) async {
     setBusy(true);
     bool response = await _profileApi.changePassword(
-        userName: getUserName(value: userId).split(':')[0],
+        userName: Utils().getUserName(value: userId).split(':')[0],
         newPassword: password);
     setBusy(false);
     if (response) {

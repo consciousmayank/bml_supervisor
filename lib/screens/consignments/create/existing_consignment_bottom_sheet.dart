@@ -1,9 +1,7 @@
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class ExistingConsignmentBottomSheet extends StatelessWidget {
   final SheetRequest request;

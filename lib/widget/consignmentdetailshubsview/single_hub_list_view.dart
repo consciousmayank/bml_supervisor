@@ -37,7 +37,7 @@ class SingleHubListView extends StatelessWidget {
                                   fontSize: 14, color: AppColors.white),
                             ),
                           ),
-                          Utils().Utils().wSizedBox(10),
+                          Utils().wSizedBox(10),
                           Text(
                             singleHub.hubTitle ?? '',
                             style: AppTextStyles.latoBold14Black.copyWith(
@@ -53,7 +53,7 @@ class SingleHubListView extends StatelessWidget {
                       )
                     ],
                   ),
-                  Utils().Utils().hSizedBox(14),
+                  Utils().hSizedBox(14),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -63,7 +63,7 @@ class SingleHubListView extends StatelessWidget {
                           value: singleHub.collect.toString(),
                         ),
                       ),
-                      Utils().Utils().wSizedBox(6),
+                      Utils().wSizedBox(6),
                       Expanded(
                         child: AppTextView(
                           hintText: 'Drop',
@@ -72,7 +72,7 @@ class SingleHubListView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Utils().Utils().hSizedBox(14),
+                  Utils().hSizedBox(14),
                   AppTextView(
                     hintText: 'Payment',
                     value: singleHub.payment.toString(),

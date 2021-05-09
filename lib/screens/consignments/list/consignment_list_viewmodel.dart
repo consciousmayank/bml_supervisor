@@ -1,10 +1,10 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 import 'consignment_list_arguments.dart';
 
@@ -66,15 +66,16 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
         ));
   }
 
-  getRecentDrivenKm({String clientId, bool isFullScreen}) async {
+  getRecentDrivenKm({bool isFullScreen}) async {
     recentConsignmentList.clear();
     // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
 
     setBusy(true);
     notifyListeners();
     try {
-      ParentApiResponse apiResponse =
-          await apiService.getRecentDrivenKm(clientId: clientId);
+      ParentApiResponse apiResponse = await apiService.getRecentDrivenKm(
+        clientId: preferences.getSelectedClient().clientId,
+      );
       if (apiResponse.error == null) {
         if (apiResponse.isNoDataFound()) {
           if (isFullScreen) {

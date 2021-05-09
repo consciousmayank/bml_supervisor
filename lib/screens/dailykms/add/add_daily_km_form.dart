@@ -1,21 +1,14 @@
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_arguments.dart';
 import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class AddVehicleEntryFormView extends StatefulWidget {
   final AddDailyKmsArguments arguments;
@@ -248,7 +241,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
           ),
           Container(
             decoration: BoxDecoration(
-              color: ThemeConfiguration.primaryBackground,
+              color: ThemeConfiguration().primaryBackground,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(5), topRight: Radius.circular(5)),
             ),
@@ -826,7 +819,7 @@ class _AddVehicleEntryFormViewState extends State<AddVehicleEntryFormView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,

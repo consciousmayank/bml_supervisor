@@ -1,7 +1,6 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:bml/bml.dart';
 
 Widget loginTextFormField({
   Function onPasswordTogglePressed,
@@ -65,25 +64,25 @@ Widget loginTextFormField({
             ),
             fillColor: AppColors.white,
             focusedBorder: OutlineInputBorder(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               borderSide: BorderSide(
                 color: AppColors.primaryColorShade1,
               ),
             ),
             disabledBorder: OutlineInputBorder(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               borderSide: BorderSide(
                 color: AppColors.primaryColorShade1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               borderSide: BorderSide(
                 color: AppColors.primaryColorShade1,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               borderSide: BorderSide(
                 color: AppColors.primaryColorShade1,
               ),
@@ -96,7 +95,7 @@ Widget loginTextFormField({
   );
 }
 
-void fieldFocusChange(
+void loginTextFormFieldFocusChange(
     BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
   currentFocus.unfocus();
   FocusScope.of(context).requestFocus(nextFocus);

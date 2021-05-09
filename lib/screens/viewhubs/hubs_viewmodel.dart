@@ -3,7 +3,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml/bml.dart';
 
 class HubsViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();

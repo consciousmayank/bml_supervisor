@@ -1,20 +1,15 @@
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_viewmodel.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dashboard_loading.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
 import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class PieChartView extends StatefulWidget {
   final String clientId;
-  final String selectedDuration;
 
   PieChartView({
     @required this.clientId,
-    @required this.selectedDuration,
   });
 
   @override
@@ -33,13 +28,14 @@ class _PieChartViewState extends State<PieChartView> {
               ? DashBoardLoadingWidget()
               : Card(
                   elevation: defaultElevation,
-                  shape: getCardShape(),
+                  shape: Utils().getCardShape(),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        buildChartTitle(title: 'Route Driven Kilometers (%)'),
+                        Utils().buildChartTitle(
+                            title: 'Route Driven Kilometers (%)'),
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
                           viewModel.buildChartSubTitleNew(),
                         // buildChartSubTitle(time: viewModel?.selectedDate),

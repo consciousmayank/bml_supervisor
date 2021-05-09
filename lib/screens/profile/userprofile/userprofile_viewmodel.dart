@@ -6,7 +6,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml/src/widget_utils.dart';
 
 class UserProfileViewModel extends GeneralisedBaseViewModel {
   ProfileApi _profileApi = locator<ProfileApisImpl>();
@@ -51,7 +51,7 @@ class UserProfileViewModel extends GeneralisedBaseViewModel {
     UserProfileResponse profileResponse = await _profileApi.getUserProfile();
     if (profileResponse != null) {
       userProfile = profileResponse;
-      image = getImageFromBase64String(base64String: userProfile.photo);
+      image = Utils().getImageFromBase64String(base64String: userProfile.photo);
     }
     notifyListeners();
     setBusy(false);

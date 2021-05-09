@@ -1,20 +1,11 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/IconBlueBackground.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class UserProfileView extends StatefulWidget {
   @override
@@ -86,13 +77,15 @@ class _BodyWidgetState extends State<BodyWidget> {
               ),
               Utils().hSizedBox(20),
               Text(
-                preferences.getUserLoggedIn().userName,
+                widget.userProfileViewModel.preferences
+                    .getUserLoggedIn()
+                    .userName,
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(color: AppColors.primaryColorShade5),
               ),
               Utils().hSizedBox(8),
               Text(
-                '( ${preferences.getUserLoggedIn().role} )',
+                '( ${widget.userProfileViewModel.preferences.getUserLoggedIn().role} )',
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(fontSize: 10),
               ),
@@ -270,9 +263,12 @@ class _BodyWidgetState extends State<BodyWidget> {
                   title: 'Log Out',
                   iconName: logout,
                   onTap: () {
-                    preferences.setLoggedInUser(null);
-                    preferences.saveCredentials(null);
-                    preferences.saveSelectedClient(null);
+                    widget.userProfileViewModel.preferences
+                        .setLoggedInUser(null);
+                    widget.userProfileViewModel.preferences
+                        .saveCredentials(null);
+                    widget.userProfileViewModel.preferences
+                        .saveSelectedClient(null);
                     widget.userProfileViewModel.navigationService
                         .clearStackAndShow(logInPageRoute);
                   }),

@@ -1,9 +1,7 @@
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'view_routes_viewmodel.dart';
 
 class ViewRoutesView extends StatefulWidget {
@@ -21,7 +19,8 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Route List", style: AppTextStyles.appBarTitleStyle),
+                  title:
+                      Text("Route List", style: AppTextStyles.appBarTitleStyle),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),

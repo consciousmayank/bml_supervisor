@@ -1,9 +1,9 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/km_report_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/routes_driven_km.dart';
 import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 abstract class ChartsApi {
   Future<List<KilometerReportResponse>> getDailyDrivenKm({String clientId});

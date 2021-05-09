@@ -1,10 +1,9 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/login/login_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml/bml.dart';
 
 class LoginViewModel extends GeneralisedBaseViewModel {
   LoginApis _loginApi = locator<LoginApisImpl>();
@@ -21,8 +20,8 @@ class LoginViewModel extends GeneralisedBaseViewModel {
   void login({String userName, String password}) async {
     setBusy(true);
 
-    LoginResponse loginResponse =
-        await _loginApi.login(getBase64String(value: '$userName:$password'));
+    LoginResponse loginResponse = await _loginApi
+        .login(Utils().getBase64String(value: '$userName:$password'));
 
     if (loginResponse != null) {
       if (loginResponse.userRole == 'ROLE_MANAGER') {
@@ -33,7 +32,7 @@ class LoginViewModel extends GeneralisedBaseViewModel {
             userName: '${loginResponse.firstName} ${loginResponse.lastName}');
         preferences.setLoggedInUser(preferencesSavedUser);
         preferences.saveCredentials(
-          getBase64String(value: '$userName:$password'),
+          Utils().getBase64String(value: '$userName:$password'),
         );
         // locator<DioConfig>().configureDio();
         takeToClientSelect();

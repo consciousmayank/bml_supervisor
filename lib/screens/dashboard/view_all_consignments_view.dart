@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class ViewAllConsignmentsView extends StatefulWidget {
   final List<RecentConginmentResponse> recentConsignmentList;
@@ -81,7 +80,8 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
-                                        color: getDashboardDueKmTileBgColor(),
+                                        color: Utils()
+                                            .getDashboardDueKmTileBgColor(),
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(16),
                                         ),
@@ -98,8 +98,8 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 5),
                                         decoration: BoxDecoration(
-                                          color:
-                                              getDashboardDistributerTileBgColor(),
+                                          color: Utils()
+                                              .getDashboardDistributerTileBgColor(),
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(16),
                                           ),

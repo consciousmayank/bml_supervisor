@@ -1,11 +1,5 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class DailyKmsBottomSheet extends StatelessWidget {
   final SheetRequest request;
@@ -71,7 +65,7 @@ class DailyKmsBottomSheet extends StatelessWidget {
                               confirmed: true, responseData: customData[index]),
                         );
                       },
-                      borderRadius: getBorderRadius(borderRadius: 0),
+                      borderRadius: Utils().getBorderRadius(borderRadius: 0),
                     )
                   ],
                 );

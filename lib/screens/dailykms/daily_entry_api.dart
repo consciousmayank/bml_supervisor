@@ -2,11 +2,11 @@ import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/model/parent_api_response.dart';
 
 abstract class DailyEntryApis {
   Future<List<RoutesForSelectedClientAndDateResponse>>

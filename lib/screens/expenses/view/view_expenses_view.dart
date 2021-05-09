@@ -1,22 +1,12 @@
 // Added by Vikas
 // Subject to change
 
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ViewExpensesView extends StatefulWidget {
   @override
@@ -75,7 +65,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           // ),
           appBar: AppBar(
             title: Text(
-              'View Expenses - ${preferences.getSelectedClient().clientId}',
+              'View Expenses - ${viewModel.preferences.getSelectedClient().clientId}',
               style: AppTextStyles.appBarTitleStyle,
             ),
             actions: [
@@ -242,18 +232,18 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: ClipRRect(
-                        borderRadius: getBorderRadius(),
+                        borderRadius: Utils().getBorderRadius(),
                         child: Card(
                           color: AppColors.appScaffoldColor,
                           elevation: defaultElevation,
-                          shape: getCardShape(),
+                          shape: Utils().getCardShape(),
                           child: Column(
                             children: [
                               // if date is same don't build new date header
                               // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
                               Container(
                                 decoration: BoxDecoration(
-                                  color: ThemeConfiguration.primaryBackground,
+                                  color: ThemeConfiguration().primaryBackground,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5),
                                       topRight: Radius.circular(5)),

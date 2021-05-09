@@ -1,7 +1,7 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
+import 'package:bml/model/parent_api_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,7 +20,7 @@ class PaymentsApisImpl extends BaseApi implements PaymentsApis {
         status: 'failed', message: ParentApiResponse().defaultError);
 
     ParentApiResponse apiResponse =
-        await apiService.addNewPayment(request: savePaymentRequest);
+        await apiService.addNewPayment(savePaymentRequest: savePaymentRequest);
 
     if (filterResponse(apiResponse) != null) {
       response = ApiResponse.fromMap(apiResponse.response.data);

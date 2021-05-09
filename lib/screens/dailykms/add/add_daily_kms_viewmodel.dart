@@ -1,17 +1,15 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_arguments.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
   DashBoardApisImpl _dashBoardApis = locator<DashBoardApisImpl>();
@@ -310,7 +308,7 @@ class AddVehicleEntryViewModel extends GeneralisedBaseViewModel {
     List<RoutesForSelectedClientAndDateResponse> response =
         await _dailyEntryApis.getRoutesForSelectedClientAndDate(
       clientId: clientId,
-      date: getDateString(entryDate),
+      date: Utils().getDateString(entryDate),
     );
     this.routesList = Utils().copyList(response);
     setBusy(false);

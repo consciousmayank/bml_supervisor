@@ -1,8 +1,7 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:image_pickers/image_pickers.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class PickImageView extends StatefulWidget {
   final Function onImageSelected;

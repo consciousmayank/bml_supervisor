@@ -74,7 +74,7 @@ class _RoutesViewState extends State<RoutesView> {
             padding: const EdgeInsets.all(4.0),
             child: Utils().buildChartTitle(title: 'Route List'),
           ),
-          if (viewModel.routesList.length > 0) Utils().Utils().hSizedBox(5),
+          if (viewModel.routesList.length > 0) Utils().hSizedBox(5),
           if (viewModel.routesList.length > 0)
             Container(
               color: AppColors.primaryColorShade5,

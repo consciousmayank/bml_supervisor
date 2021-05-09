@@ -25,7 +25,7 @@ class _TripsViewState extends State<TripsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<TripsViewModel>.reactive(
       onModelReady: (viewModel) {
-        viewModel.tripsList = Utils().Utils().copyList(widget.tripsList);
+        viewModel.tripsList = Utils().copyList(widget.tripsList);
       },
       builder: (context, viewModel, child) => NotificationTile(
         iconName: getIcon(),

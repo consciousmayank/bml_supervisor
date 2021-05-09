@@ -3,9 +3,8 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/routes_driven_km.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class LineChartViewModel extends GeneralisedBaseViewModel {
   ChartsApi _chartsApi = locator<ChartsApiImpl>();

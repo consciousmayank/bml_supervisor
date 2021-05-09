@@ -1,13 +1,8 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_viewmodel.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dashboard_loading.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ExpensesPieChartView extends StatefulWidget {
   final String selectedDuration;
@@ -26,7 +21,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
         // createNewModelOnInsert: true,
         onModelReady: (viewModel) {
           viewModel.getExpensesListForPieChart(
-            clientId: preferences.getSelectedClient().clientId,
+            clientId: viewModel.preferences.getSelectedClient().clientId,
           );
         },
         builder: (context, viewModel, child) {
@@ -34,13 +29,13 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
               ? DashBoardLoadingWidget()
               : Card(
                   elevation: defaultElevation,
-                  shape: getCardShape(),
+                  shape: Utils().getCardShape(),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        buildChartTitle(title: 'Expenses'),
+                        Utils().buildChartTitle(title: 'Expenses'),
                         // buildChartSubTitle(time: viewModel?.selectedDate),
                         if (viewModel.expensePieChartResponseList.length > 0)
                           viewModel.buildChartSubTitleNew(),

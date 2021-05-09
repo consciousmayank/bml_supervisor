@@ -1,15 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dashboard_loading.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class BarChartView extends StatefulWidget {
   final String clientId;
@@ -29,7 +22,7 @@ class _BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
-        clientId: preferences.getSelectedClient().clientId,
+        clientId: viewModel.preferences.getSelectedClient().clientId,
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy
@@ -38,16 +31,17 @@ class _BarChartViewState extends State<BarChartView> {
                 maxHeight: (viewModel.kmReportListData.length > 0) ? 350 : 100,
                 child: Card(
                   elevation: defaultElevation,
-                  shape: getCardShape(),
+                  shape: Utils().getCardShape(),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        buildChartTitle(title: "Driven Kilometers"),
+                        Utils().buildChartTitle(title: "Driven Kilometers"),
                         // buildChartSubTitle(time: viewModel?.selectedDate),
                         if (viewModel.kmReportListData.length > 0)
-                          buildChartSubTitleNew(date: viewModel.chartDate),
+                          Utils()
+                              .buildChartSubTitleNew(date: viewModel.chartDate),
                         if (viewModel.kmReportListData.length > 0)
                           Utils().hSizedBox(10),
                         if (viewModel.kmReportListData.length > 0)

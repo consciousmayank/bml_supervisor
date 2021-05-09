@@ -1,10 +1,6 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class ConfirmRouteView extends StatelessWidget {
   final CreateRouteRequest routeRequest;
@@ -33,7 +29,8 @@ class ConfirmRouteView extends StatelessWidget {
                     text: '${routeRequest.title}, ', style: AppTextStyles.bold),
                 TextSpan(text: 'for '),
                 TextSpan(
-                    text: '${capitalizeFirstLetter(routeRequest.clientId)}'),
+                    text:
+                        '${StringUtils().capitalizeFirstLetter(word: routeRequest.clientId)}'),
 
                 //
                 // TextSpan(
@@ -47,7 +44,7 @@ class ConfirmRouteView extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(text: 'Creation Date '),
-                TextSpan(text: '${getDateString(DateTime.now())}'),
+                TextSpan(text: '${Utils().getDateString(DateTime.now())}'),
                 // Utils().hSizedBox(10),
               ],
             ),
@@ -66,7 +63,7 @@ class ConfirmRouteView extends StatelessWidget {
                   child: Card(
                       color: AppColors.white,
                       elevation: 4,
-                      shape: getCardShape(),
+                      shape: Utils().getCardShape(),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(

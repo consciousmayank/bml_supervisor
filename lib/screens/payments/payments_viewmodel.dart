@@ -1,12 +1,10 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/payments/payments_apis.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml/bml.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
   PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();

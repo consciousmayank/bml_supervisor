@@ -2,14 +2,11 @@ import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
@@ -17,9 +14,8 @@ import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   List<ConsignmentTrackingStatusResponse> _upcomingTrips = [];
@@ -75,15 +71,6 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     Icons.access_alarm,
     Icons.payment,
   ];
-
-  String _selectedDuration = "";
-
-  String get selectedDuration => _selectedDuration;
-
-  set selectedDuration(String selectedDuration) {
-    _selectedDuration = selectedDuration;
-    notifyListeners();
-  }
 
   DashboardTilesStatsResponse _singleClientTileData;
 
@@ -315,7 +302,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         await _profileApi.getUserProfile(showResponseToast: false);
     if (profileResponse != null) {
       userProfile = profileResponse;
-      image = getImageFromBase64String(base64String: userProfile.photo);
+      image = Utils().getImageFromBase64String(base64String: userProfile.photo);
     }
     notifyListeners();
     setBusy(false);

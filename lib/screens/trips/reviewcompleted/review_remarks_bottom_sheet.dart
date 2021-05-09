@@ -1,12 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:bml/bml.dart';
 
 class ReviewRemarksBottomSheet extends StatelessWidget {
   final SheetRequest request;
@@ -22,6 +18,7 @@ class ReviewRemarksBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesService preferences = locator<SharedPreferencesService>();
     return BaseBottomSheet(
       request: request,
       completer: completer,

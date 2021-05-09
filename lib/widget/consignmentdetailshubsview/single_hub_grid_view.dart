@@ -36,7 +36,7 @@ class SingleHubGridView extends StatelessWidget {
                           .copyWith(fontSize: 14, color: AppColors.white),
                     ),
                   ),
-                  Utils().Utils().hSizedBox(5),
+                  Utils().hSizedBox(5),
                   Text(
                     singleHub?.hubTitle,
                     style: AppTextStyles.latoMedium14Black.copyWith(
@@ -48,23 +48,23 @@ class SingleHubGridView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Utils().Utils().hSizedBox(10),
+                  Utils().hSizedBox(10),
                   Text(
                     singleHub.hubCity ?? '',
                     style: AppTextStyles.latoMedium14Black.copyWith(
                         fontSize: 14, color: AppColors.primaryColorShade5),
                   ),
-                  Utils().Utils().hSizedBox(10),
+                  Utils().hSizedBox(10),
                   AppTextView(
                     hintText: 'Collect',
                     value: singleHub.collect.toString(),
                   ),
-                  Utils().Utils().hSizedBox(10),
+                  Utils().hSizedBox(10),
                   AppTextView(
                     hintText: 'Drop',
                     value: singleHub?.dropOff?.toString(),
                   ),
-                  Utils().Utils().hSizedBox(10),
+                  Utils().hSizedBox(10),
                   AppTextView(
                     hintText: 'Payment',
                     value: singleHub?.payment?.toString(),

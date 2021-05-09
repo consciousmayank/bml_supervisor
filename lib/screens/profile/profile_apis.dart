@@ -1,12 +1,9 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
-import 'package:bml_supervisor/models/get_distributors_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:bml/bml.dart';
 
 abstract class ProfileApi {
   Future<bool> changePassword(
@@ -32,7 +29,7 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
     snackBarService.showSnackbar(message: _apiResponse.message);
     if (_apiResponse.isSuccessful())
       preferences.saveCredentials(
-        getBase64String(value: '$userName:$newPassword'),
+        Utils().getBase64String(value: '$userName:$newPassword'),
       );
     return _apiResponse.isSuccessful();
   }
@@ -53,7 +50,7 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
     ApiResponse response = ApiResponse(
         status: 'failed', message: ParentApiResponse().defaultError);
     ParentApiResponse parentApiResponse =
-        await apiService.updateUserMobile(request: request);
+        await apiService.updateUserMobile(updateUserRequest: request);
 
     if (filterResponse(parentApiResponse) != null) {
       response = ApiResponse.fromMap(parentApiResponse.response.data);
@@ -67,7 +64,7 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
     ApiResponse response = ApiResponse(
         status: 'failed', message: ParentApiResponse().defaultError);
     ParentApiResponse parentApiResponse =
-        await apiService.updateUserEmail(request: request);
+        await apiService.updateUserEmail(updateUserRequest: request);
 
     if (filterResponse(parentApiResponse) != null) {
       response = ApiResponse.fromMap(parentApiResponse.response.data);

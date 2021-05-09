@@ -1,8 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
-import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
-import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
+import 'package:bml/bml.dart';
 
 class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
   ConsignmentDetailResponseNew _consignmentDetailResponse;
@@ -41,7 +39,7 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     uniqueHubIds.clear();
     ParentApiResponse apiResponse =
-    await apiService.getConsignmentWithId(consignmentId: consignmentId);
+        await apiService.getConsignmentWithId(consignmentId: consignmentId);
     if (apiResponse.error == null) {
       if (apiResponse.isNoDataFound()) {
         snackBarService.showSnackbar(message: apiResponse.emptyResult);
@@ -49,7 +47,7 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
         consignmentDetailResponse =
             ConsignmentDetailResponseNew.fromJson(apiResponse.response.data);
         consignmentDetailResponse.items.forEach(
-              (element) {
+          (element) {
             if (!uniqueHubIds.contains(element.hubId)) {
               uniqueHubIds.add(element.hubId);
             }
@@ -82,9 +80,9 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
             newItems[i] = newItems[i].copyWith(
               dropOff: consignmentDetailResponse.reviewedItems.length > 0
                   ? consignmentDetailResponse.reviewedItems[j].dropOff
-                  .toString() +
-                  '/' +
-                  consignmentDetailResponse.items[j].dropOff.toString()
+                          .toString() +
+                      '/' +
+                      consignmentDetailResponse.items[j].dropOff.toString()
                   : consignmentDetailResponse.items[j].dropOff.toString(),
             );
           }
@@ -97,9 +95,9 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
             newItems[i] = newItems[i].copyWith(
               collect: consignmentDetailResponse.reviewedItems.length > 0
                   ? consignmentDetailResponse.reviewedItems[j].collect
-                  .toString() +
-                  '/' +
-                  consignmentDetailResponse.items[j].collect.toString()
+                          .toString() +
+                      '/' +
+                      consignmentDetailResponse.items[j].collect.toString()
                   : consignmentDetailResponse.items[j].collect.toString(),
             );
           }
@@ -112,9 +110,9 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
             newItems[i] = newItems[i].copyWith(
               payment: consignmentDetailResponse.reviewedItems.length > 0
                   ? consignmentDetailResponse.reviewedItems[j].payment
-                  .toString() +
-                  '/' +
-                  consignmentDetailResponse.items[j].payment.toString()
+                          .toString() +
+                      '/' +
+                      consignmentDetailResponse.items[j].payment.toString()
                   : consignmentDetailResponse.items[j].payment.toString(),
             );
           }
@@ -127,21 +125,21 @@ class ConsignmentDetailsViewModel extends GeneralisedBaseViewModel {
             hubCity: consignmentDetailResponse.items[j].hubCity,
             collect: consignmentDetailResponse.reviewedItems.length > 0
                 ? consignmentDetailResponse.reviewedItems[j].collect
-                .toString() +
-                '/' +
-                consignmentDetailResponse.items[j].collect.toString()
+                        .toString() +
+                    '/' +
+                    consignmentDetailResponse.items[j].collect.toString()
                 : consignmentDetailResponse.items[j].collect.toString(),
             dropOff: consignmentDetailResponse.reviewedItems.length > 0
                 ? consignmentDetailResponse.reviewedItems[j].dropOff
-                .toString() +
-                '/' +
-                consignmentDetailResponse.items[j].dropOff.toString()
+                        .toString() +
+                    '/' +
+                    consignmentDetailResponse.items[j].dropOff.toString()
                 : consignmentDetailResponse.items[j].dropOff.toString(),
             payment: consignmentDetailResponse.reviewedItems.length > 0
                 ? consignmentDetailResponse.reviewedItems[j].payment
-                .toString() +
-                '/' +
-                consignmentDetailResponse.items[j].payment.toString()
+                        .toString() +
+                    '/' +
+                    consignmentDetailResponse.items[j].payment.toString()
                 : consignmentDetailResponse.items[j].payment.toString(),
           );
         }

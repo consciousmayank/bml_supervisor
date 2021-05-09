@@ -2,10 +2,9 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class PieChartViewModel extends GeneralisedBaseViewModel {
   int eMonth;
@@ -90,7 +89,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
 
   Text buildChartSubTitleNew() {
     return Text(
-      '(' + getMonth(eMonth) + ', ' + eYear.toString() + ')',
+      '(' + Utils().getMonth(eMonth) + ', ' + eYear.toString() + ')',
       style: AppTextStyles.latoBold12Black,
     );
   }

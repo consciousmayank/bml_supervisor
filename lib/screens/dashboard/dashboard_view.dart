@@ -1,9 +1,6 @@
 import 'dart:async';
 
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/charts/barchart/bar_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_view.dart';
@@ -11,18 +8,10 @@ import 'package:bml_supervisor/screens/charts/linechart/line_chart_view.dart';
 import 'package:bml_supervisor/screens/charts/piechart/pie_chart_view.dart';
 import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.dart';
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_notification_row.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-
+import 'package:bml/bml.dart';
 import 'dashboard_viewmodel.dart';
 
 class DashBoardScreenView extends StatefulWidget {
@@ -39,9 +28,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
           viewModel.getUserProfile();
-          viewModel.selectedClient = preferences.getSelectedClient();
+          viewModel.selectedClient = viewModel.preferences.getSelectedClient();
           viewModel.getClientDashboardStats();
-          viewModel.selectedDuration = preferences.getSelectedDuration();
           viewModel.getConsignmentTrackingStatus();
           // viewModel.getBarGraphKmReport(
           //   selectedDuration: viewModel.selectedDuration,
@@ -54,7 +42,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
               child: Scaffold(
                   appBar: AppBar(
                     title: Text(
-                      'Dashboard - ${capitalizeFirstLetter(preferences.getSelectedClient().clientId)}',
+                      'Dashboard - ${StringUtils().capitalizeFirstLetter(word: viewModel.preferences.getSelectedClient().clientId)}',
                       style: AppTextStyles.whiteRegular,
                     ),
                     centerTitle: true,
@@ -63,7 +51,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                         onTap: () {
                           viewModel.showClientSelectBottomSheet();
 
-                          // preferences.saveSelectedClient(null);
+                          // viewModel.preferences.saveSelectedClient(null);
                           // viewModel.navigationService
                           //     .clearStackAndShow(clientSelectPageRoute);
                         },
@@ -301,19 +289,15 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
 
                                   ///line chart (Routes Driven Kilometers)
                                   LineChartView(
-                                    clientId: preferences
+                                    clientId: viewModel.preferences
                                         .getSelectedClient()
                                         .clientId,
-                                    selectedDuration:
-                                        preferences.getSelectedDuration(),
                                   ),
 
                                   /// Driven Km % pie chart
                                   PieChartView(
                                     // key: UniqueKey(),
-                                    selectedDuration:
-                                        viewModel.selectedDuration,
-                                    clientId: preferences
+                                    clientId: viewModel.preferences
                                         .getSelectedClient()
                                         .clientId,
                                   ),
@@ -334,8 +318,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                               clickedRoute: clickedRoute);
                                         },
                                         isInDashBoard: true,
-                                        selectedClient:
-                                            preferences.getSelectedClient(),
+                                        selectedClient: viewModel.preferences
+                                            .getSelectedClient(),
                                       ),
                                     ),
                                   ),
@@ -349,44 +333,5 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                   )),
             ),
         viewModelBuilder: () => DashBoardScreenViewModel());
-  }
-
-  Widget selectDuration({DashBoardScreenViewModel viewModel}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 30,
-        width: MediaQuery.of(context).size.width,
-        child: DefaultTabController(
-          length: 2, // length of tabs
-          initialIndex:
-              viewModel.selectedDuration == selectDurationListDashBoard.first
-                  ? 0
-                  : 1,
-          child: TabBar(
-            onTap: (index) {
-              String selectedValue = selectDurationListDashBoard[index];
-              viewModel.selectedDuration = selectedValue;
-              // viewModel.getBarGraphKmReport(selectedDuration: selectedValue);
-              preferences.saveSelectedDuration(selectedValue);
-              viewModel.selectedDuration = selectedValue;
-              viewModel.reloadPage();
-            },
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicator: new BubbleTabIndicator(
-              indicatorHeight: 25.0,
-              indicatorColor: AppColors.primaryColorShade5,
-              tabBarIndicatorSize: TabBarIndicatorSize.tab,
-            ),
-            labelColor: Colors.white,
-            unselectedLabelColor: AppColors.primaryColorShade5,
-            tabs: [
-              Tab(text: selectDurationListDashBoard.first),
-              Tab(text: selectDurationListDashBoard.last),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

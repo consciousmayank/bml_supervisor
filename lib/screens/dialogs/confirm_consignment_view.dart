@@ -1,13 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
+import 'package:bml/bml.dart';
 
 class ConfirmConsignmentView extends StatelessWidget {
   final CreateConsignmentRequest consignmentRequest;
@@ -179,7 +174,7 @@ class ConfirmConsignmentView extends StatelessWidget {
                     child: Card(
                       color: AppColors.routesCardColor,
                       elevation: 4,
-                      shape: getCardShape(),
+                      shape: Utils().getCardShape(),
                       child: Stack(
                         children: [
                           // Image.asset(semiCircles),

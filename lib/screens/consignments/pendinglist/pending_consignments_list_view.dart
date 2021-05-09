@@ -1,16 +1,8 @@
-import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
-import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class PendingConsignmentsListView extends StatefulWidget {
   @override
@@ -31,7 +23,7 @@ class _PendingConsignmentsListViewState
               child: Scaffold(
                 appBar: AppBar(
                   title: Text(
-                    'Pending Consignments - ${preferences.getSelectedClient().clientId}',
+                    'Pending Consignments - ${viewModel.preferences.getSelectedClient().clientId}',
                     style: AppTextStyles.appBarTitleStyle,
                   ),
                   centerTitle: true,
@@ -77,16 +69,16 @@ class __MainBodyState extends State<_MainBody> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: ClipRRect(
-              borderRadius: getBorderRadius(),
+              borderRadius: Utils().getBorderRadius(),
               child: Card(
                 color: AppColors.appScaffoldColor,
                 elevation: defaultElevation,
-                shape: getCardShape(),
+                shape: Utils().getCardShape(),
                 child: Column(
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(defaultBorder),
                           topRight: Radius.circular(defaultBorder),

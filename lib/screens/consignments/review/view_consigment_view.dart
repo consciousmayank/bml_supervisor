@@ -1,25 +1,13 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consignment_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class ViewConsignmentView extends StatefulWidget {
   final ReviewConsignmentArgs reviewConsignmentArgs;
@@ -93,7 +81,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                   appBar: AppBar(
                     automaticallyImplyLeading: true,
                     title: Text(
-                        "Review Consignments - ${preferences.getSelectedClient().clientId}",
+                        "Review Consignments - ${viewModel.preferences.getSelectedClient().clientId}",
                         style: AppTextStyles.appBarTitleStyle),
                     // actions: [
                     //   isEditAllowed
@@ -291,7 +279,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                         return Card(
                           color: AppColors.appScaffoldColor,
                           elevation: defaultElevation,
-                          shape: getCardShape(),
+                          shape: Utils().getCardShape(),
                           child: Form(
                             key: viewModel.formKeyList[index],
                             child: Padding(
@@ -779,7 +767,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,
@@ -997,7 +985,7 @@ class _ConsignmentsDropDownState extends State<ConsignmentsDropDown> {
                       padding: const EdgeInsets.only(right: 4),
                       child: Icon(
                         Icons.keyboard_arrow_down,
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                       ),
                     ),
                     underline: Container(),

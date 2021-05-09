@@ -1,22 +1,12 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/payments/payments_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 class PaymentsView extends StatefulWidget {
   final PaymentArgs args;
@@ -89,7 +79,7 @@ class _PaymentsViewState extends State<PaymentsView> {
 
   Widget buildChip({String title, String value}) {
     return Card(
-      shape: getCardShape(),
+      shape: Utils().getCardShape(),
       elevation: defaultElevation,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -120,16 +110,16 @@ class _PaymentsViewState extends State<PaymentsView> {
           return Column(
             children: [
               ClipRRect(
-                borderRadius: getBorderRadius(),
+                borderRadius: Utils().getBorderRadius(),
                 child: Card(
                   color: AppColors.appScaffoldColor,
                   elevation: defaultElevation,
-                  shape: getCardShape(),
+                  shape: Utils().getCardShape(),
                   child: Column(
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: ThemeConfiguration.primaryBackground,
+                          color: ThemeConfiguration().primaryBackground,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
@@ -279,7 +269,7 @@ class _PaymentsViewState extends State<PaymentsView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,
@@ -323,24 +313,24 @@ class _PaymentsViewState extends State<PaymentsView> {
                   controller: _scrollController,
                   children: [
                     Padding(
-                      padding: getPaymentScreenSidePadding(),
+                      padding: Utils().getPaymentScreenSidePadding(),
                       child: dateSelector(viewModel: viewModel),
                     ),
                     Padding(
-                      padding: getPaymentScreenSidePadding(),
+                      padding: Utils().getPaymentScreenSidePadding(),
                       child: totalKmView(context: context, node: node),
                     ),
                     Padding(
-                      padding: getPaymentScreenSidePadding(),
+                      padding: Utils().getPaymentScreenSidePadding(),
                       child: totalPaymentView(context: context, node: node),
                     ),
                     Padding(
-                      padding: getPaymentScreenSidePadding(),
+                      padding: Utils().getPaymentScreenSidePadding(),
                       child: getRemarksView(node: node),
                     ),
                     Utils().hSizedBox(10),
                     Padding(
-                      padding: getPaymentScreenSidePadding(),
+                      padding: Utils().getPaymentScreenSidePadding(),
                       child: addNewPaymentButton(viewModel: viewModel),
                     ),
                   ],
@@ -426,7 +416,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       onEditingComplete: () => node.nextFocus(),
       enabled: true,
       formatter: [
-        twoDigitDecimalPointFormatter(),
+        Utils().twoDigitDecimalPointFormatter(),
       ],
       controller: totalKmController,
       // autoFocus: true,

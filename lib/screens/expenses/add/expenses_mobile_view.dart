@@ -1,19 +1,11 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
+import 'package:bml/bml.dart';
 
 import 'expenses_viewmodel.dart';
 
@@ -48,7 +40,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-              "Add Expenses - ${preferences.getSelectedClient().clientId}",
+              "Add Expenses - ${viewModel.preferences.getSelectedClient().clientId}",
               style: AppTextStyles.appBarTitleStyle),
         ),
         body: viewModel.isBusy
@@ -79,7 +71,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light().copyWith(
-              primary: ThemeConfiguration.primaryBackground,
+              primary: ThemeConfiguration().primaryBackground,
             ),
           ),
           child: child,
@@ -122,7 +114,8 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                   onPressed: (() async {
                     DateTime selectedDate = await selectDate();
                     if (selectedDate != null) {
-                      selectedDateController.text = getDateString(selectedDate);
+                      selectedDateController.text =
+                          Utils().getDateString(selectedDate);
                       viewModel.entryDate = selectedDate;
                       viewModel.getInfo();
                     }
@@ -304,8 +297,9 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        singleColumn("Expense Type: ", singleEntry.expenseType),
-        singleColumn("Amount: ", "$rupeeSymbol${singleEntry.expenseAmount}")
+        Utils().singleColumn("Expense Type: ", singleEntry.expenseType),
+        Utils().singleColumn(
+            "Amount: ", "$rupeeSymbol${singleEntry.expenseAmount}")
       ]),
     );
   }
@@ -314,7 +308,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        singleColumn("Description: ", singleEntry.expenseDesc),
+        Utils().singleColumn("Description: ", singleEntry.expenseDesc),
       ]),
     );
   }
@@ -391,7 +385,7 @@ class _ClientsDropDownState extends State<DailyKmInfoDropDown> {
                       padding: const EdgeInsets.only(right: 4),
                       child: Icon(
                         Icons.keyboard_arrow_down,
-                        color: ThemeConfiguration.primaryBackground,
+                        color: ThemeConfiguration().primaryBackground,
                       ),
                     ),
                     underline: Container(),
