@@ -42,7 +42,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  declareDependencies();
+  await declareDependencies();
   setupDialogUi();
   setupBottomSheetUi();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(

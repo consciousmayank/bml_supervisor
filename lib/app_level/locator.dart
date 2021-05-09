@@ -19,10 +19,10 @@ import 'package:bml/bml.dart';
 
 final locator = GetIt.instance;
 
-void declareDependencies() {
-//A lazy Singleton will create the object on the first instance when it is
-  // called. This is useful when you have a service that takes time to start
-  // and should only start when it is needed.
+Future declareDependencies() async {
+  SharedPreferencesService sharedPreferences =
+      await SharedPreferencesService.getInstance();
+  locator.registerSingleton(sharedPreferences);
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => DialogService());
