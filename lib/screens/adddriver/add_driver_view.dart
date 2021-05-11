@@ -171,6 +171,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 height: 250,
                 width: 200,
                 child: PickImageView(
+                  enableGalleryUpload: true,
                   onImageSelected: (String base64String) {
                     widget.viewModel.imageBase64String = base64String;
                   },

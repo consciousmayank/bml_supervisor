@@ -5,9 +5,13 @@ import 'package:bml/bml.dart';
 
 class PickImageView extends StatefulWidget {
   final Function onImageSelected;
+  final bool enableGalleryUpload;
 
-  const PickImageView({Key key, @required this.onImageSelected})
-      : super(key: key);
+  const PickImageView({
+    Key key,
+    @required this.onImageSelected,
+    this.enableGalleryUpload = false,
+  }) : super(key: key);
 
   @override
   _PickImageViewState createState() => _PickImageViewState();
@@ -70,25 +74,34 @@ class _PickImageViewState extends State<PickImageView> {
                           Icons.camera_enhance_outlined,
                           size: 20,
                         ),
-                        onPressed: () {
-                          ImagePickers.openCamera(
-                            cropConfig: CropConfig(
-                                enableCrop: true, width: 1, height: 1),
-                            compressSize: 900,
-                          ).then((Media media) {
-                            viewModel.imagePath = media.path;
-                          });
-                          // List<Media> _listImagePaths = await ImagePickers.pickerPaths(
-                          //   galleryMode: GalleryMode.image,
-                          //   selectCount: 1,
-                          //   showGif: false,
-                          //   showCamera: true,
-                          //   compressSize: 500,
-                          //   uiConfig:
-                          //       UIConfig(uiThemeColor: AppColors.primaryColorShade5),
-                          //   cropConfig:
-                          //       CropConfig(enableCrop: true, width: 1, height: 1),
-                          // );
+                        onPressed: () async {
+                          if (widget.enableGalleryUpload) {
+                            List<Media> _listImagePaths =
+                                await ImagePickers.pickerPaths(
+                                    galleryMode: GalleryMode.image,
+                                    selectCount: 1,
+                                    showGif: false,
+                                    showCamera: true,
+                                    compressSize: 900,
+                                    uiConfig: UIConfig(
+                                      uiThemeColor:
+                                          AppColors.primaryColorShade5,
+                                    ),
+                                    cropConfig: CropConfig(
+                                        enableCrop: false,
+                                        width: 1,
+                                        height: 1));
+
+                            viewModel.imagePath = _listImagePaths.first.path;
+                          } else {
+                            ImagePickers.openCamera(
+                              cropConfig: CropConfig(
+                                  enableCrop: true, width: 1, height: 1),
+                              compressSize: 900,
+                            ).then((Media media) {
+                              viewModel.imagePath = media.path;
+                            });
+                          }
                         },
                         label: Text('Add Image'),
                       ),
