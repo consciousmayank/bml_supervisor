@@ -78,6 +78,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
 
   set selectedBloodGroup(String value) {
     _selectedBloodGroup = value;
+    notifyListeners();
   }
 
   CitiesResponse _selectedCity;
@@ -93,6 +94,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
 
   set selectedGender(String value) {
     _selectedGender = value;
+    notifyListeners();
   }
 
   set dateOfBirth(DateTime value) {
