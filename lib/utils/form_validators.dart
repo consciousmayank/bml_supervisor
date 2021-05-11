@@ -55,7 +55,7 @@ class RegularExpressions {
 
   ///helpful for vehicle Numbers
   RegExp alphaNumericWithSpaceRegEx = RegExp(r'[a-zA-Z0-9 -]');
-  RegExp alphabeticSpaceRegEx = RegExp(r'[a-zA-Z] ');
+  RegExp alphabeticSpaceRegEx = RegExp(r'[a-zA-Z ]');
   RegExp numericRegEx = RegExp(r'[0-9]');
 }
 
