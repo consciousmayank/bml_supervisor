@@ -20,7 +20,7 @@ class DioConfig {
     _dio.options
       ..baseUrl =
           // kReleaseMode ? baseRestUrlProduction :
-          baseRestUrlProduction
+          baseSecureUrl
       ..contentType = "application/json";
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),

@@ -1,10 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
 import 'package:flutter/material.dart';
@@ -173,14 +175,18 @@ class _TabbedBodyState extends State<TabbedBody> {
                           child: Text('No Trips as of yet.'),
                         ),
                       )
-                    : makeList(widget.viewModel.completedTrips),
+                    : makeList(
+                        trips: widget.viewModel.completedTrips,
+                        typeOfTrip: TripStatus.COMPLETED),
                 widget.viewModel.verifiedTrips.length == 0
                     ? Container(
                         child: Center(
                           child: Text('No Trips as of yet.'),
                         ),
                       )
-                    : makeList(widget.viewModel.verifiedTrips)
+                    : makeList(
+                        trips: widget.viewModel.verifiedTrips,
+                        typeOfTrip: TripStatus.APPROVED),
               ],
             ),
           )
@@ -189,28 +195,117 @@ class _TabbedBodyState extends State<TabbedBody> {
     );
   }
 
-  makeList(List<ConsignmentTrackingStatusResponse> trips) {
+  makeList(
+      {List<ConsignmentTrackingStatusResponse> trips, TripStatus typeOfTrip}) {
+    Set<String> dateList = typeOfTrip == TripStatus.COMPLETED
+        ? widget.viewModel.completeTripsDate
+        : widget.viewModel.verifiedTripsDate;
+
     return Expanded(
       child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => SingleTripItem(
-          status: widget.tripStatus,
-          onCheckBoxTapped: (
-            bool value,
-            ConsignmentTrackingStatusResponse tappedTrip,
-          ) {},
-          singleListItem: trips[index],
-          onTap: () {
-            if (trips[index].statusCode == 1 ||
-                trips[index].statusCode == 2 ||
-                trips[index].statusCode == 4) {
-              widget.viewModel.openBottomSheet(trip: trips[index]);
-            } else if (trips[index].statusCode == 3) {
-              widget.viewModel.reviewTrip(trip: trips[index]);
-            }
-          },
+        itemBuilder: (BuildContext context, int index) => Container(
+          child:
+
+              // Container(
+              // child: Container(
+              //   height: 100,
+              //   color: Colors.red,
+              // ),
+
+              Card(
+            elevation: defaultElevation,
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: ThemeConfiguration.primaryBackground,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5),
+                    ),
+                  ),
+                  height: 50.0,
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Date',
+                        style: AppTextStyles.latoBold16White,
+                      ),
+                      Text(
+                        dateList.elementAt(index),
+                        style: AppTextStyles.latoBold16White,
+                      ),
+                    ],
+                  ),
+                ),
+                makeSingleTripView(
+                    date: dateList.elementAt(index),
+                    trips: trips,
+                    outerIndex: index),
+              ],
+            ),
+          ),
+          padding: const EdgeInsets.all(16),
         ),
-        itemCount: trips.length,
+        itemCount: dateList.length,
       ),
+    );
+  }
+
+  Widget makeSingleTripView(
+      {@required String date,
+      @required List<ConsignmentTrackingStatusResponse> trips,
+      @required int outerIndex}) {
+    List<ConsignmentTrackingStatusResponse> tripWithSelectedDate = [];
+
+    trips.forEach((element) {
+      if (element.consignmentDate == date) {
+        tripWithSelectedDate.add(element);
+      }
+    });
+
+    // List<ConsignmentTrackingStatusResponse> tripWithSelectedDate =
+    //     trips.where((element) => element.consignmentDate == date);
+
+    return Column(
+      children: List.generate(
+        tripWithSelectedDate.length,
+        (index) => Column(
+          children: [
+            index == 0
+                ? Container()
+                : Container(
+                    color: AppColors.appScaffoldColor,
+                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    child: DottedDivider(
+                      strokeWidth: 3,
+                      dottedLength: 3,
+                      space: 3,
+                    ),
+                  ),
+            SingleTripItem(
+              status: widget.tripStatus,
+              onCheckBoxTapped: (
+                bool value,
+                ConsignmentTrackingStatusResponse tappedTrip,
+              ) {},
+              singleListItem: trips[index],
+              onTap: () {
+                if (trips[index].statusCode == 1 ||
+                    trips[index].statusCode == 2 ||
+                    trips[index].statusCode == 4) {
+                  widget.viewModel.openBottomSheet(trip: trips[index]);
+                } else if (trips[index].statusCode == 3) {
+                  widget.viewModel.reviewTrip(trip: trips[index]);
+                }
+              },
+            ),
+          ],
+        ),
+      ).toList(),
     );
   }
 }
