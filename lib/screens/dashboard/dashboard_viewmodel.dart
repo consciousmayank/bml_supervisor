@@ -232,6 +232,20 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         );
   }
 
+  void onViewVehicleTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewVehiclesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewDriverTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewDriversPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void reloadPage() {
     // getClients();
     getClientDashboardStats();

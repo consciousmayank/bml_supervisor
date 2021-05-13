@@ -1,7 +1,7 @@
 import 'package:bml/bml.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
-import 'package:bml_supervisor/screens/adddriver/add_driver_viewmodel.dart';
+import 'package:bml_supervisor/screens/driver/add/add_driver_viewmodel.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
