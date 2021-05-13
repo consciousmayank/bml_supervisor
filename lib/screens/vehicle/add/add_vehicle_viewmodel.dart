@@ -2,7 +2,7 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_vehicle_request.dart';
-import 'package:bml_supervisor/screens/addvehicle/vehicle_apis.dart';
+import 'package:bml_supervisor/screens/vehicle/vehicle_apis.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 
 class AddVehicleViewModel extends GeneralisedBaseViewModel {

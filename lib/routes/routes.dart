@@ -3,7 +3,7 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/adddriver/add_driver_view.dart';
+import 'package:bml_supervisor/screens/driver/add/add_driver_view.dart';
 import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_view.dart';
@@ -11,7 +11,6 @@ import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_argume
 import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
-import 'package:bml_supervisor/screens/addvehicle/add_vehicle_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_view.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
@@ -29,6 +28,7 @@ import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:bml_supervisor/screens/distributors/distributors_view.dart';
+import 'package:bml_supervisor/screens/driver/view/drivers_list_view.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
@@ -42,6 +42,8 @@ import 'package:bml_supervisor/screens/splash/splash_screen.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_completed_trips_view.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view.dart';
+import 'package:bml_supervisor/screens/vehicle/add/add_vehicle_view.dart';
+import 'package:bml_supervisor/screens/vehicle/view/vehicles_list_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/hubs_view.dart';
 import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
@@ -150,6 +152,17 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddVehicleView(),
+                ));
+
+        case viewVehiclesPageRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: VehiclesListView(),
+                ));
+      case viewDriversPageRoute:
+        return MaterialPageRoute(
+            builder: (_) => NetworkSensitive(
+                  child: DriversListView(),
                 ));
 
       case viewAllConsignmentsViewPageRoute:

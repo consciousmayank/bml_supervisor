@@ -7,7 +7,7 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 
 // import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/screens/adddriver/driver_apis.dart';
+import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -93,8 +93,6 @@ class AddRoutesViewModel extends GeneralisedBaseViewModel {
           remarks: remarks,
         ));
   }
-
-
 
 // getCities() async {
 //   var citiesList = await _driverApis.getCities();

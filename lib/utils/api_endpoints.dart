@@ -105,4 +105,10 @@ final GET_APPROVED_TRIPS_STATUS_LIST = (clientId) =>
     "/manager/consignment/tracking/status/approved/client/$clientId";
 final GET_DISCARDED_TRIPS_STATUS_LIST = (clientId) =>
     "/manager/consignment/tracking/status/discarded/client/$clientId";
+
+final GET_DRIVERS_LIST_PAGE_WISE =
+    (pageIndex) => "/manager/driver/list/page/$pageIndex";
+
+final GET_VEHICLES_LIST_PAGE_WISE =
+    (pageIndex) => "/vehicle/list/page/$pageIndex";
 ///////////////////////////////////////////////////////////////

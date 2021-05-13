@@ -10,7 +10,7 @@ import '../../models/city_location_response.dart';
 import '../../models/secured_get_clients_response.dart';
 import '../../utils/stringutils.dart';
 import '../../utils/widget_utils.dart';
-import '../adddriver/driver_apis.dart';
+import '../driver/driver_apis.dart';
 import '../dashboard/dashboard_apis.dart';
 
 class AddHubsViewModel extends GeneralisedBaseViewModel {

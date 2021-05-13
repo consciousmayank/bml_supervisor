@@ -4,10 +4,12 @@ import 'package:bml_supervisor/screens/consignments/create/existing_consignment_
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
+import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,10 @@ void setupBottomSheetUi() {
     BottomSheetType.COMPLETED_TRIP_REVIEW_REMARKS: (context, sheetRequest,
             completer) =>
         ReviewRemarksBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.DRIVER_DETAILS: (context, sheetRequest, completer) =>
+        DriverDetailsBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.VEHICLE_DETAILS: (context, sheetRequest, completer) =>
+        VehicleDetailsBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

@@ -55,3 +55,4 @@ final String consignmentListIcon = _imagePath + 'consignment_list_icon.png';
 final String forwardArrowIcon = _imagePath + 'forward_arrow_icon.png';
 final String blueRouteIcon = _imagePath + 'blue_route_icon.png';
 final String completedTripsIcon = _imagePath + 'completed_trips.png';
+final String addVehicleIcon = _imagePath + 'add_vehicle_icon.png';

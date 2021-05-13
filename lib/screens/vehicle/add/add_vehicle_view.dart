@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/add_vehicle_request.dart';
-import 'package:bml_supervisor/screens/addvehicle/add_vehicle_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
@@ -17,6 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:string_validator/string_validator.dart';
+
+import 'add_vehicle_viewmodel.dart';
 
 class AddVehicleView extends StatefulWidget {
   @override
