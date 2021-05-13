@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
    <application
        android:name=".Application"
-        android:label="Bml Mngr"
+        android:label="Bml Manager"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity

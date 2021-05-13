@@ -2,7 +2,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
-import 'package:bml_supervisor/screens/adddriver/add_driver_viewmodel.dart';
+import 'package:bml_supervisor/screens/driver/add/add_driver_viewmodel.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -179,6 +179,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 height: 250,
                 width: 200,
                 child: PickImageView(
+                  enableGalleryUpload: true,
                   onImageSelected: (String base64String) {
                     widget.viewModel.imageBase64String = base64String;
                   },

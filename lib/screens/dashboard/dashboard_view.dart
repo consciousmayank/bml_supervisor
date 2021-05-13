@@ -350,43 +350,4 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
             ),
         viewModelBuilder: () => DashBoardScreenViewModel());
   }
-
-  Widget selectDuration({DashBoardScreenViewModel viewModel}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        height: 30,
-        width: MediaQuery.of(context).size.width,
-        child: DefaultTabController(
-          length: 2, // length of tabs
-          initialIndex:
-              viewModel.selectedDuration == selectDurationListDashBoard.first
-                  ? 0
-                  : 1,
-          child: TabBar(
-            onTap: (index) {
-              String selectedValue = selectDurationListDashBoard[index];
-              viewModel.selectedDuration = selectedValue;
-              // viewModel.getBarGraphKmReport(selectedDuration: selectedValue);
-              MyPreferences().saveSelectedDuration(selectedValue);
-              viewModel.selectedDuration = selectedValue;
-              viewModel.reloadPage();
-            },
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicator: new BubbleTabIndicator(
-              indicatorHeight: 25.0,
-              indicatorColor: AppColors.primaryColorShade5,
-              tabBarIndicatorSize: TabBarIndicatorSize.tab,
-            ),
-            labelColor: Colors.white,
-            unselectedLabelColor: AppColors.primaryColorShade5,
-            tabs: [
-              Tab(text: selectDurationListDashBoard.first),
-              Tab(text: selectDurationListDashBoard.last),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

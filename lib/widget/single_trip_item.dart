@@ -26,57 +26,63 @@ class SingleTripItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: defaultElevation,
-      shape: getCardShape(),
-      child: InkWell(
-        onTap: status == TripStatus.ONGOING
-            ? () {
-                onCheckBoxTapped(!singleListItem.isSelected, singleListItem);
-              }
-            : null,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: 8,
-                bottom: 8,
-                right: 16,
-                left: 16,
-              ),
-              child: buildTitle(context),
+    return status == TripStatus.APPROVED || status == TripStatus.COMPLETED
+        ? buildInkBody(context)
+        : Card(
+            elevation: defaultElevation,
+            shape: getCardShape(),
+            child: buildInkBody(context),
+          );
+  }
+
+  InkWell buildInkBody(BuildContext context) {
+    return InkWell(
+      onTap: status == TripStatus.ONGOING
+          ? () {
+              onCheckBoxTapped(!singleListItem.isSelected, singleListItem);
+            }
+          : null,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              top: 8,
+              bottom: 8,
+              right: 16,
+              left: 16,
             ),
-            Container(
-              padding: EdgeInsets.all(8),
-              color: AppColors.routesCardColor,
-              child: Column(
-                children: [
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'Dispatch Time',
-                      value1: singleListItem.dispatchDateTime.toString(),
-                      label2: 'Route Id',
-                      value2: singleListItem.routeId.toString(),
-                      label3: 'Route Title',
-                      value3: singleListItem.routeTitle.toString(),
-                    ),
+            child: buildTitle(context),
+          ),
+          Container(
+            padding: EdgeInsets.all(8),
+            color: AppColors.routesCardColor,
+            child: Column(
+              children: [
+                buildContentRow(
+                  helper: RowHelper(
+                    label1: 'Dispatch Time',
+                    value1: singleListItem.dispatchDateTime.toString(),
+                    label2: 'Route Id',
+                    value2: singleListItem.routeId.toString(),
+                    label3: 'Route Title',
+                    value3: singleListItem.routeTitle.toString(),
                   ),
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'Item Unit',
-                      value1: singleListItem.itemUnit.toString(),
-                      label2: 'Item Weight',
-                      value2: singleListItem.itemWeight.toString(),
-                      label3: null,
-                      value3: null,
-                    ),
+                ),
+                buildContentRow(
+                  helper: RowHelper(
+                    label1: 'Item Unit',
+                    value1: singleListItem.itemUnit.toString(),
+                    label2: 'Item Weight',
+                    value2: singleListItem.itemWeight.toString(),
+                    label3: null,
+                    value3: null,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

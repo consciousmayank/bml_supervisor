@@ -46,7 +46,7 @@ class _DrawerListItemState extends State<DrawerListItem> {
                       widget.onTap.call();
                     }
                   : () {
-                      Future.delayed(Duration(milliseconds: 500), () {
+                      Future.delayed(Duration(milliseconds: 200), () {
                         viewModel.showItems = !viewModel.showItems;
                       });
                     },

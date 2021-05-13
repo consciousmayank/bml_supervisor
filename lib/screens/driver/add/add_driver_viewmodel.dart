@@ -4,7 +4,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
-import 'package:bml_supervisor/screens/adddriver/driver_apis.dart';
+import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +78,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
 
   set selectedBloodGroup(String value) {
     _selectedBloodGroup = value;
+    notifyListeners();
   }
 
   CitiesResponse _selectedCity;
@@ -93,6 +94,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
 
   set selectedGender(String value) {
     _selectedGender = value;
+    notifyListeners();
   }
 
   set dateOfBirth(DateTime value) {

@@ -246,7 +246,7 @@ class RecentDrivenSingleItem extends StatelessWidget {
           ),
           child: Text(
             viewModel.recentConsignmentList[index].drivenKmG.toString(),
-            style: AppTextStyles.whiteRegular,
+            style: AppTextStyles.whiteRegular.copyWith(fontSize: 10),
           ),
         ),
         Text(
@@ -282,7 +282,7 @@ class RecentDrivenSingleItem extends StatelessWidget {
                     );
                   },
             background: AppColors.primaryColorShade5,
-            fontSize: 12,
+            fontSize: 9,
             buttonText: '#' +
                 viewModel.recentConsignmentList[index].routeId.toString() +
                 '-' +

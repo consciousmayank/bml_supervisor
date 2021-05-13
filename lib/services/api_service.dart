@@ -649,9 +649,8 @@ class ApiService {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .post(ADD_VEHICLE, data: request.toJson());
+      response =
+          await dioClient.getDio().post(ADD_VEHICLE, data: request.toJson());
     } on DioError catch (e) {
       error = e;
     }
@@ -815,5 +814,35 @@ class ApiService {
     }
     print(response);
     return response;
+  }
+
+  // new APIs
+
+  Future<ParentApiResponse> getDriversListPageWise({
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().get(GET_DRIVERS_LIST_PAGE_WISE(pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getVehiclesListPageWise({
+    @required int pageIndex,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response =
+          await dioClient.getDio().get(GET_VEHICLES_LIST_PAGE_WISE(pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
   }
 }

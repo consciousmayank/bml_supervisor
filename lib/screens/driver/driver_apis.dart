@@ -3,6 +3,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
+import 'package:bml_supervisor/models/driver-info.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -10,6 +11,7 @@ abstract class DriverApis {
   Future<List<CitiesResponse>> getCities();
   Future<CityLocationResponse> getCityLocation({@required String cityId});
   Future<ApiResponse> addDriver({@required AddDriverRequest request});
+  Future<List<DriverInfo>> getDriversList({@required int pageNumber});
 }
 
 class DriverApisImpl extends BaseApi implements DriverApis {
@@ -57,5 +59,22 @@ class DriverApisImpl extends BaseApi implements DriverApis {
     }
 
     return _apiResponse;
+  }
+
+  @override
+  Future<List<DriverInfo>> getDriversList({@required int pageNumber}) async {
+    List<DriverInfo> response = [];
+    ParentApiResponse apiResponse =
+        await apiService.getDriversListPageWise(pageIndex: pageNumber);
+
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
+      var responseList = apiResponse.response.data as List;
+      responseList.forEach((element) {
+        DriverInfo singleDriverInfo = DriverInfo.fromMap(element);
+        response.add(singleDriverInfo);
+      });
+    }
+
+    return response;
   }
 }
