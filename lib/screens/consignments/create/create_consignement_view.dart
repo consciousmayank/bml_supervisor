@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app_level/locator.dart';
 import 'create_consignment_params.dart';
 
 class CreateConsignmentView extends StatefulWidget {
@@ -323,66 +324,18 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                               updateData(
                                                   viewModel: viewModel,
                                                   index: index);
+                                              if (checkRequiredItems(
+                                                  viewModel: viewModel)) {
+                                                showSummaryBottomSheet(
+                                                        viewModel: viewModel)
+                                                    .then((value) {
+                                                  viewModel.createConsignment(
+                                                      consignmentTitle:
+                                                          consignmentTitleController
+                                                              .text);
+                                                });
 
-                                              if (consignmentTitleController
-                                                      .text
-                                                      .trim()
-                                                      .length ==
-                                                  0) {
-                                                locator<SnackbarService>()
-                                                    .showSnackbar(
-                                                        message:
-                                                            "Please Enter Consignment Title");
-                                                consignmentTitleFocusNode
-                                                    .requestFocus();
-                                                _scrollController.animateTo(0,
-                                                    duration: Duration(
-                                                        milliseconds: 200),
-                                                    curve: Curves.easeInOut);
-                                              } else {
-                                                if (viewModel.itemUnit ==
-                                                    null) {
-                                                  locator<SnackbarService>()
-                                                      .showSnackbar(
-                                                          message:
-                                                              "Please Select Item Unit");
-                                                } else {
-                                                  locator<BottomSheetService>()
-                                                      .showCustomSheet(
-                                                    isScrollControlled: true,
-                                                    barrierDismissible: true,
-                                                    variant: BottomSheetType
-                                                        .createConsignmentSummary,
-                                                    // Which builder you'd like to call that was assigned in the builders function above.
-                                                    customData:
-                                                        CreateConsignmentDialogParams(
-                                                      selectedClient: viewModel
-                                                          .selectedClient,
-                                                      validatedRegistrationNumber:
-                                                          viewModel
-                                                              .validatedRegistrationNumber,
-                                                      consignmentRequest:
-                                                          viewModel
-                                                              .consignmentRequest,
-                                                      selectedRoute: viewModel
-                                                          .selectedRoute,
-                                                      itemUnit:
-                                                          viewModel.itemUnit,
-                                                    ),
-                                                  )
-                                                      .then((value) {
-                                                    if (value != null) {
-                                                      if (value.confirmed) {
-                                                        viewModel.createConsignment(
-                                                            consignmentTitle:
-                                                                consignmentTitleController
-                                                                    .text);
-                                                      }
-                                                    }
-                                                  });
-                                                }
-
-                                                ///end of else
+                                                // viewModel.createConsignment();
                                               }
                                             }
                                           : () {
@@ -520,7 +473,9 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         enabled: true,
         controller: totalWeightController,
         focusNode: totalWeightFocusNode,
-        hintText: totalWeightHint,
+        hintText: viewModel.itemUnit == selectItemUnit[1]
+            ? totalWeightHint1
+            : totalWeightHint2,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         onTextChange: (String value) {
           viewModel.totalWeight = double.parse(value);
@@ -705,11 +660,9 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       initialValue: viewModel.consignmentRequest.items[index].title ?? '',
       keyboardType: TextInputType.text,
       onTextChange: (String value) {
-        if (value.trim().length > 0) {
-          viewModel.consignmentRequest.items[index].titleError = false;
-          viewModel.consignmentRequest.items[index].title = value;
-          viewModel.notifyListeners();
-        }
+        viewModel.consignmentRequest.items[index].titleError = false;
+        viewModel.consignmentRequest.items[index].title = value.trim();
+        viewModel.notifyListeners();
         viewModel.isHubTitleEdited = true;
       },
       onFieldSubmitted: (_) {
@@ -764,11 +717,12 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       onTextChange: (String value) {
-        if (value.trim().length > 0) {
-          viewModel.consignmentRequest.items[index].dropOffError = false;
-          viewModel.consignmentRequest.items[index].dropOff = int.parse(value);
-          viewModel.notifyListeners();
-        }
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].dropOffError = false;
+        viewModel.consignmentRequest.items[index].dropOff =
+            value.trim().length == 0 ? 0 : int.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isDropCratesEdited = true;
       },
       decoration: getInputBorder(
@@ -818,11 +772,12 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
           ? ''
           : viewModel.consignmentRequest.items[index].collect.toString(),
       onTextChange: (String value) {
-        if (value.trim().length > 0) {
-          viewModel.consignmentRequest.items[index].collectError = false;
-          viewModel.consignmentRequest.items[index].collect = int.parse(value);
-          viewModel.notifyListeners();
-        }
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].collectError = false;
+        viewModel.consignmentRequest.items[index].collect =
+            value.trim().length == 0 ? 0 : int.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isCollectCratesEdited = true;
       },
       onFieldSubmitted: (_) {
@@ -861,21 +816,16 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         showSuffix: viewModel.consignmentRequest.items[index].paymentError,
       ),
       enabled: !enabled,
-      initialValue: enabled
-          ? viewModel.consignmentRequest.payment.toString()
-          : viewModel.consignmentRequest.items[index].payment == null
-              ? ''
-              : viewModel.consignmentRequest.items[index].payment.toString(),
+      initialValue: getPaymentLabelInnitialValue(
+          enabled: !enabled, viewModel: viewModel, index: index),
       // controller: paymentController,
       onTextChange: (String value) {
-        if (value.trim().length > 0) {
-          viewModel.consignmentRequest.items[index].paymentError = false;
-          viewModel.consignmentRequest.items[index].payment =
-              double.parse(value);
-          viewModel.consignmentRequest.payment =
-              viewModel.consignmentRequest.payment + double.parse(value);
-          viewModel.notifyListeners();
-        }
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].paymentError = false;
+        viewModel.consignmentRequest.items[index].payment =
+            value.trim().length == 0 ? 0 : double.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isPaymentEdited = true;
       },
       focusNode: paymentFocusNode,
@@ -1056,6 +1006,85 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     } else {
       return 'Consignments';
     }
+  }
+
+  ///Check if consignment title, item unit, dispatch time has been selected or not.
+  bool checkRequiredItems({@required CreateConsignmentModel viewModel}) {
+    bool allRequiredFieldsFilled = true;
+
+    if (consignmentTitleController.text.trim().length == 0) {
+      locator<SnackbarService>()
+          .showSnackbar(message: "Please Enter Consignment Title");
+      consignmentTitleFocusNode.requestFocus();
+      _scrollController.animateTo(0,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      allRequiredFieldsFilled = false;
+    } else {
+      if (viewModel.itemUnit == null) {
+        locator<SnackbarService>()
+            .showSnackbar(message: "Please Select Item Unit");
+        allRequiredFieldsFilled = false;
+      } else if (selectedDispatchTimeController.text.trim().length == 0) {
+        locator<SnackbarService>()
+            .showSnackbar(message: 'Please Select Dispatch Time.');
+        allRequiredFieldsFilled = false;
+      }
+    }
+    return allRequiredFieldsFilled;
+  }
+
+  Future<bool> showSummaryBottomSheet(
+      {@required CreateConsignmentModel viewModel}) async {
+    SheetResponse createConsignment = SheetResponse();
+
+    createConsignment = await locator<BottomSheetService>().showCustomSheet(
+      isScrollControlled: true,
+      barrierDismissible: true,
+      variant: BottomSheetType.createConsignmentSummary,
+      // Which builder you'd like to call that was assigned in the builders function above.
+      customData: CreateConsignmentDialogParams(
+        selectedClient: viewModel.selectedClient,
+        validatedRegistrationNumber: viewModel.validatedRegistrationNumber,
+        consignmentRequest: viewModel.consignmentRequest,
+        selectedRoute: viewModel.selectedRoute,
+        itemUnit: viewModel.itemUnit,
+      ),
+    );
+
+    return createConsignment.confirmed;
+  }
+
+  getPaymentLabelInnitialValue({
+    @required bool enabled,
+    @required CreateConsignmentModel viewModel,
+    int index,
+  }) {
+    double payment = 0.00;
+
+    if (enabled) {
+      //payment can be entered in the widget. If individual item's payment
+      //viewModel.consignmentRequest.items[index].payment is not null, and has a value, show it,
+      //other wise show empty string.
+      if (viewModel.consignmentRequest.items[index].payment == null ||
+          viewModel.consignmentRequest.items[index].payment == 0) {
+        return '';
+      } else {
+        payment = viewModel.consignmentRequest.items[index].payment;
+      }
+    } else {
+      //payment can be not be entered in the widget. Its the last hub,
+      //hence it will show sum of all payments
+      //if viewModel.consignmentRequest.payment is not null, and has a value, show it,
+      // other wise show empty string.
+      if (viewModel.consignmentRequest.getTotalPayment() == null ||
+          viewModel.consignmentRequest.getTotalPayment() == 0) {
+        payment = 0;
+      } else {
+        payment = viewModel.consignmentRequest.getTotalPayment();
+      }
+    }
+
+    return payment.toString();
   }
 }
 

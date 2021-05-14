@@ -8,6 +8,7 @@ import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dar
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/trips/reviewcompleted/review_warning_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -48,6 +49,8 @@ void setupBottomSheetUi() {
         DriverDetailsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.VEHICLE_DETAILS: (context, sheetRequest, completer) =>
         VehicleDetailsBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.REVIEW_TRIPS_WARNING: (context, sheetRequest, completer) =>
+        RevieWarningBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

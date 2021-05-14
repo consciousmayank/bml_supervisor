@@ -99,7 +99,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
     ParentApiResponse apiResponse = await _apiService
         .getConsignmentListWithDate(clientId: clientId, entryDate: date);
 
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var responseList = apiResponse.response.data as List;
       responseList.forEach((element) {
         ConsignmentsForSelectedDateAndClientResponse consignment =
@@ -187,14 +187,16 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
   Future<List<SinglePendingConsignmentListItem>>
       getRecentConsignmentsForCreateConsignment({String clientId}) async {
     List<SinglePendingConsignmentListItem> response = [];
-    ParentApiResponse apiResponse = await _apiService
-        .getRecentConsignmentsForCreateConsignment(clientId: clientId, );
+    ParentApiResponse apiResponse =
+        await _apiService.getRecentConsignmentsForCreateConsignment(
+      clientId: clientId,
+    );
 
     if (filterResponse(apiResponse) != null) {
       var responseList = apiResponse.response.data as List;
       responseList.forEach((element) {
         SinglePendingConsignmentListItem singlePendingConsignmentListItem =
-        SinglePendingConsignmentListItem.fromMap(element);
+            SinglePendingConsignmentListItem.fromMap(element);
         response.add(singlePendingConsignmentListItem);
       });
     }

@@ -292,14 +292,22 @@ class _TabbedBodyState extends State<TabbedBody> {
                 bool value,
                 ConsignmentTrackingStatusResponse tappedTrip,
               ) {},
-              singleListItem: trips[index],
+              singleListItem: tripWithSelectedDate[index],
               onTap: () {
                 if (trips[index].statusCode == 1 ||
                     trips[index].statusCode == 2 ||
                     trips[index].statusCode == 4) {
                   widget.viewModel.openBottomSheet(trip: trips[index]);
                 } else if (trips[index].statusCode == 3) {
-                  widget.viewModel.reviewTrip(trip: trips[index]);
+                  if (widget.viewModel.completedTrips.first.consignmentId ==
+                      tripWithSelectedDate[index].consignmentId) {
+                    widget.viewModel
+                        .reviewTrip(trip: tripWithSelectedDate[index]);
+                  } else {
+                    widget.viewModel.openWarningBottomSheet(
+                      selectedTrip: tripWithSelectedDate[index],
+                    );
+                  }
                 }
               },
             ),

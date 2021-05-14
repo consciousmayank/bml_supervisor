@@ -219,7 +219,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     consignmentRequest = consignmentRequest.copyWith(
       dropOff: consignmentRequest.items.last.dropOff,
       collect: consignmentRequest.items.first.collect,
-      payment: consignmentRequest.items.last.payment,
+      payment: consignmentRequest.getTotalPayment(),
       title: consignmentTitle,
       itemUnit: itemUnit,
       weight: this.totalWeight,
