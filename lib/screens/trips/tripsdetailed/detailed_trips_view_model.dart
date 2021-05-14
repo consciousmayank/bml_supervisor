@@ -101,4 +101,19 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
   }
 
   getUniqueDates() {}
+
+  void openWarningBottomSheet(
+      {ConsignmentTrackingStatusResponse selectedTrip}) async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.REVIEW_TRIPS_WARNING,
+    );
+
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        reviewTrip(trip: selectedTrip);
+      }
+    }
+  }
 }

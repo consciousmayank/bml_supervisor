@@ -104,6 +104,22 @@ class CreateConsignmentRequest {
         "weight": weight,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
+
+  getTotalPayment() {
+    double totalPayment = 0;
+    if (this.items == null || this.items.length == 0) {
+      return totalPayment;
+    } else {
+      this.items.forEach((element) {
+        if (element.payment == null) {
+          totalPayment = totalPayment + 0;
+        } else {
+          totalPayment = totalPayment + element.payment ?? 0;
+        }
+      });
+    }
+    return totalPayment;
+  }
 }
 
 class Item {

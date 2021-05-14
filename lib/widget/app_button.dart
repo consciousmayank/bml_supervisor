@@ -78,7 +78,8 @@ class AppButton extends StatelessWidget {
                   buttonText,
                   style: AppTextStyles.latoMedium18White.copyWith(
                       fontSize: fontSize, fontWeight: buttonTextFontWeight),
-                  // style: TextStyle(),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
