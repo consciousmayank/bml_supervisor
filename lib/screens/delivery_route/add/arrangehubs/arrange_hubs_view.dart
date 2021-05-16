@@ -1,12 +1,13 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
-import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
+import 'arrange_hubs_arguments.dart';
+import 'arrange_hubs_viewmodel.dart';
 
 class ArrangeHubsView extends StatefulWidget {
   final ArrangeHubsArguments args;
@@ -60,7 +61,6 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-
             if (viewModel.isKmEmpty(viewModel.selectedHubList)) {
               viewModel.snackBarService
                   .showSnackbar(message: 'Please fill all the Kms');

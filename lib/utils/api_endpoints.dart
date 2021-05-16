@@ -111,4 +111,7 @@ final GET_DRIVERS_LIST_PAGE_WISE =
 
 final GET_VEHICLES_LIST_PAGE_WISE =
     (pageIndex) => "/vehicle/list/page/$pageIndex";
+
+final GET_ALL_HUBS_FOR_CLIENT =
+    (clientId, pageNumber) => '/hub/list/client/$clientId';
 ///////////////////////////////////////////////////////////////

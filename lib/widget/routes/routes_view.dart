@@ -77,10 +77,14 @@ class _RoutesViewState extends State<RoutesView> {
             ? CrossAxisAlignment.center
             : CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: buildChartTitle(title: 'Route List'),
-          ),
+          if (widget.isInDashBoard)
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Align(
+                child: buildChartTitle(title: 'Route List'),
+                alignment: Alignment.centerLeft,
+              ),
+            ),
           if (viewModel.routesList.length > 0) hSizedBox(5),
           if (viewModel.routesList.length > 0)
             Container(

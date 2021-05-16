@@ -1,11 +1,11 @@
+import 'package:bml_supervisor/screens/delivery_route/add/add_routes_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
-import 'package:bml_supervisor/screens/addhubs/add_hubs_apis.dart';
-import 'package:bml_supervisor/screens/addroutes/add_routes_apis.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
+import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
 import 'package:bml_supervisor/screens/login/login_apis.dart';
 import 'package:bml_supervisor/screens/payments/payments_apis.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';

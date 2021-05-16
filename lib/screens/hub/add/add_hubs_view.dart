@@ -1,24 +1,23 @@
+import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
-import 'package:bml_supervisor/screens/addhubs/add_hubs_viewmodel.dart';
+import 'package:bml_supervisor/models/cities_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
+import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../app_level/colors.dart';
-import '../../app_level/themes.dart';
-import '../../models/cities_response.dart';
-import '../../models/secured_get_clients_response.dart';
-import '../../utils/app_text_styles.dart';
-import '../../utils/dimens.dart';
-import '../../utils/stringutils.dart';
-import '../../utils/widget_utils.dart';
-import '../../widget/app_button.dart';
-import '../../widget/app_suffix_icon_button.dart';
-import '../../widget/app_textfield.dart';
-import '../../widget/client_dropdown.dart';
 
 class AddHubsView extends StatefulWidget {
   @override
@@ -36,7 +35,7 @@ class _AddHubsViewState extends State<AddHubsView> {
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
                 title: Text(
-                  'Add Hubs',
+                  'Add Hub',
                   style: AppTextStyles.appBarTitleStyle,
                 ),
                 centerTitle: true,

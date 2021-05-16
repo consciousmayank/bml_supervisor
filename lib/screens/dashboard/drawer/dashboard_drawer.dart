@@ -196,12 +196,12 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                         ],
                       ),
                       DrawerListItem(
-                        imageName: expensesIcon,
+                        imageName: vehicleIcon,
                         text: "Vehicle",
                         onTap: () {},
                         children: [
                           DrawerListItem(
-                            imageName: addVehicleIcon,
+                            imageName: addIcon,
                             isSubMenu: true,
                             text: "Add",
                             onTap: () {
@@ -211,8 +211,8 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: addVehicleIcon,
-                            text: "View",
+                            imageName: viewIcon,
+                            text: "List",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .onViewVehicleTileClick();
@@ -221,12 +221,12 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                         ],
                       ),
                       DrawerListItem(
-                        imageName: expensesIcon,
+                        imageName: driverIcon,
                         text: "Driver",
                         onTap: () {},
                         children: [
                           DrawerListItem(
-                            imageName: addDriverIcon,
+                            imageName: addIcon,
                             isSubMenu: true,
                             text: "Add",
                             onTap: () {
@@ -236,8 +236,8 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: addDriverIcon,
-                            text: "View",
+                            imageName: viewIcon,
+                            text: "List",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .onViewDriverTileClick();
@@ -246,14 +246,39 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                         ],
                       ),
                       DrawerListItem(
-                        imageName: expensesIcon,
-                        text: "Add",
+                        imageName: routesIcon,
+                        text: "Route",
                         onTap: () {},
                         children: [
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: addHubIcon,
-                            text: "Hubs",
+                            imageName: addIcon,
+                            text: "Add",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddRoutesTileClick();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: viewIcon,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onViewRoutesDrawerTileClicked();
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: addHubIcon,
+                        text: "Hub",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: addIcon,
+                            text: "Add",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .onAddHubTileClick();
@@ -261,22 +286,14 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: addRouteIcon,
-                            text: "Route",
+                            imageName: viewIcon,
+                            text: "List",
                             onTap: () {
                               widget.dashBoardScreenViewModel
-                                  .onAddRoutesTileClick();
+                                  .onViewHubsListDrawerTileClicked();
                             },
                           ),
                         ],
-                      ),
-                      DrawerListItem(
-                        imageName: routesIcon,
-                        text: "Routes List",
-                        onTap: () {
-                          widget.dashBoardScreenViewModel
-                              .onViewRoutesDrawerTileClicked();
-                        },
                       ),
                       DrawerListItem(
                         imageName: drawerRupeeIcon,

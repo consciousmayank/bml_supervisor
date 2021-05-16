@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
 import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_warning_bottom_sheet.dart';
@@ -51,6 +52,8 @@ void setupBottomSheetUi() {
         VehicleDetailsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.REVIEW_TRIPS_WARNING: (context, sheetRequest, completer) =>
         RevieWarningBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.HUBS_DETAILS: (context, sheetRequest, completer) =>
+        HubsListDetailsBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

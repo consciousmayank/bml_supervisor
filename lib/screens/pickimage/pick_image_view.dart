@@ -89,9 +89,7 @@ class _PickImageViewState extends State<PickImageView> {
                                           AppColors.primaryColorShade5,
                                     ),
                                     cropConfig: CropConfig(
-                                        enableCrop: false,
-                                        width: 1,
-                                        height: 1));
+                                        enableCrop: true, width: 1, height: 1));
 
                             viewModel.imagePath = _listImagePaths.first.path;
                           } else {

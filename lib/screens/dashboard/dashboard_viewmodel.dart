@@ -13,10 +13,10 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
-import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -201,6 +201,13 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   void onViewRoutesDrawerTileClicked() {
     navigationService.back();
     navigationService.navigateTo(viewRoutesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewHubsListDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(hubsListViewPageRoute).then(
           (value) => reloadPage(),
         );
   }

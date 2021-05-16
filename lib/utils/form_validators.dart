@@ -18,6 +18,7 @@ class FormValidators {
 
   final mobileNumberNotRequiredValidator = MultiValidator([
     MinLengthValidator(10, errorText: 'Phone Number must be 10 digits long'),
+    MaxLengthValidator(10, errorText: '')
     // PatternValidator(RegularExpressions().mobileNumberRegEx,
     //     errorText: 'Invalid Phone Number')
   ]);
@@ -25,19 +26,19 @@ class FormValidators {
   final panNumberValidator = MultiValidator([
     RequiredValidator(errorText: 'PAN is required'),
     MinLengthValidator(10, errorText: 'PAN must be 10 digits long'),
-    PatternValidator(RegularExpressions().panCardRegEx,
-        errorText: 'Invalid PAN')
+    // PatternValidator(RegularExpressions().panCardRegEx,
+    // errorText: 'Invalid PAN')
   ]);
 
   final aadhaarCardNumberValidator = MultiValidator([
     RequiredValidator(errorText: 'Aadhar Card is required'),
     MinLengthValidator(12, errorText: 'Aadhar Card must be 12 digits long'),
-    PatternValidator(RegularExpressions().aadhaarCardRegEx,
-        errorText: 'Invalid Aadhar Card Number')
+    // PatternValidator(RegularExpressions().aadhaarCardRegEx,
+    // errorText: 'Invalid Aadhar Card Number')
   ]);
 
   final normalValidator = MultiValidator([
-    RequiredValidator(errorText: 'PAN is required'),
+    RequiredValidator(errorText: 'required'),
   ]);
 }
 
@@ -49,9 +50,9 @@ class RegularExpressions {
   ///[0-9]{4} represents the next 4 digits should be any from 0-9.\\s represents white space.
   ///[0-9]{4} represents the next 4 digits should be any from 0-9.$ represents the ending of the string.
   ///
-  RegExp aadhaarCardRegEx = RegExp(r"^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$");
+  // RegExp aadhaarCardRegEx = RegExp(r"^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$");
   // RegExp mobileNumberRegEx = RegExp(r'(0/91)?[7-9][0-9]{9}');
-  RegExp panCardRegEx = RegExp(r'[A-Z]{5}[0-9]{4}[A-Z]{1}');
+  // RegExp panCardRegEx = RegExp(r'[A-Z]{5}[0-9]{4}[A-Z]{1}');
 
   ///helpful for vehicle Numbers
   RegExp alphaNumericWithSpaceRegEx = RegExp(r'[a-zA-Z0-9 -]');

@@ -94,21 +94,21 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
                         : Container()
                   ],
                 ),
-          floatingActionButton: AnimatedOpacity(
-            duration: Duration(milliseconds: 200),
-            opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
-            child: FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  viewModel.navigationService
-                      .navigateTo(addEntryLogPageRoute)
-                      .then(
-                        (value) => getDailyEntry(
-                            viewModel: viewModel,
-                            registrationNumber: selectedRegNoController.text),
-                      );
-                }),
-          ),
+          // floatingActionButton: AnimatedOpacity(
+          //   duration: Duration(milliseconds: 200),
+          //   opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
+          //   child: FloatingActionButton(
+          //       child: Icon(Icons.add),
+          //       onPressed: () {
+          //         viewModel.navigationService
+          //             .navigateTo(addEntryLogPageRoute)
+          //             .then(
+          //               (value) => getDailyEntry(
+          //                   viewModel: viewModel,
+          //                   registrationNumber: selectedRegNoController.text),
+          //             );
+          //       }),
+          // ),
         );
       },
       viewModelBuilder: () => ViewDailyKmsViewModel(),

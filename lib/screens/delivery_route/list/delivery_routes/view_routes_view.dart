@@ -1,5 +1,7 @@
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -21,7 +23,9 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Route List", style: AppTextStyles.appBarTitleStyle),
+                  title: Text(
+                      "Route List - ${capitalizeFirstLetter(MyPreferences().getSelectedClient().clientId)}",
+                      style: AppTextStyles.appBarTitleStyle),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),

@@ -845,4 +845,18 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
+
+  Future<ParentApiResponse> getAllHubsForClient(
+      {int pageIndex, String clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_ALL_HUBS_FOR_CLIENT(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
 }

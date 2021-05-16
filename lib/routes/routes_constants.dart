@@ -41,3 +41,4 @@ const String arrangeHubsPageRoute = '/arrangeHubsPageRoute';
 const String consignmentListByDatePageRoute = '/consignmentListByDatePageRoute';
 const String reviewCompletedTripsPageRoute = '/reviewCompletedTripsPageRoute';
 const String tripsDetailsPageRoute = '/tripsDetailsPageRoute';
+const String hubsListViewPageRoute = '/hubsListViewPageRoute';

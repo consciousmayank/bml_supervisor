@@ -1,16 +1,17 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
-import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_arguments.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_view.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hubs_view.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_arguments.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_view.dart';
+import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/hubs_view.dart';
+import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
+import 'package:bml_supervisor/screens/delivery_route/list/delivery_routes/view_routes_view.dart';
 import 'package:bml_supervisor/screens/driver/add/add_driver_view.dart';
-import 'package:bml_supervisor/screens/addhubs/add_hubs_view.dart';
-import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_arguments.dart';
-import 'package:bml_supervisor/screens/addroutes/add_routes/add_routes_view.dart';
-import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_arguments.dart';
-import 'package:bml_supervisor/screens/addroutes/arrangehubs/arrange_hubs_view.dart';
-import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_arguments.dart';
-import 'package:bml_supervisor/screens/addroutes/pick_hubs/pick_hubs_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_view.dart';
 import 'package:bml_supervisor/screens/consignments/details/consignment_details_arguments.dart';
@@ -32,6 +33,8 @@ import 'package:bml_supervisor/screens/driver/view/drivers_list_view.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_view.dart';
+import 'package:bml_supervisor/screens/hub/view/hubs_list_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
 import 'package:bml_supervisor/screens/payments/payments_view.dart';
@@ -44,9 +47,6 @@ import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dar
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view.dart';
 import 'package:bml_supervisor/screens/vehicle/add/add_vehicle_view.dart';
 import 'package:bml_supervisor/screens/vehicle/view/vehicles_list_view.dart';
-import 'package:bml_supervisor/screens/viewhubs/hubs_view.dart';
-import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
-import 'package:bml_supervisor/screens/viewroutes/view_routes_view.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -154,7 +154,7 @@ class AppRouter {
                   child: AddVehicleView(),
                 ));
 
-        case viewVehiclesPageRoute:
+      case viewVehiclesPageRoute:
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: VehiclesListView(),
@@ -299,6 +299,12 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ReviewCompletedTripsView(selectedTrip: selectedTrip),
         );
+
+      case hubsListViewPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => HubsListView(),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

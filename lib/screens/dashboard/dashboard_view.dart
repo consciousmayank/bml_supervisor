@@ -13,7 +13,6 @@ import 'package:bml_supervisor/screens/consignments/list/consignment_list_view.d
 import 'package:bml_supervisor/screens/dashboard/drawer/dashboard_drawer.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_notification_row.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
@@ -30,14 +29,37 @@ class DashBoardScreenView extends StatefulWidget {
   _DashBoardScreenViewState createState() => _DashBoardScreenViewState();
 }
 
-class _DashBoardScreenViewState extends State<DashBoardScreenView> {
+class _DashBoardScreenViewState extends State<DashBoardScreenView>
+    with WidgetsBindingObserver {
+  DashBoardScreenViewModel model;
   final UniqueKey scrollKey = UniqueKey();
   final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && model != null) {
+      model.reloadPage();
+      print('state = $state');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DashBoardScreenViewModel>.reactive(
         onModelReady: (viewModel) async {
+          model = viewModel;
           viewModel.getUserProfile();
           viewModel.selectedClient = MyPreferences().getSelectedClient();
           viewModel.getClientDashboardStats();
@@ -174,9 +196,10 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView> {
                                               flex: 1,
                                               child: AppTiles(
                                                 title: 'Distributors',
-                                                value: viewModel
-                                                    .singleClientTileData
-                                                    .hubCount
+                                                value: (viewModel
+                                                            .singleClientTileData
+                                                            .hubCount -
+                                                        1)
                                                     .toString(),
                                                 iconName: distributorIcon,
                                                 onTap: () {

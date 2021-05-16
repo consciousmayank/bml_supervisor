@@ -1,17 +1,16 @@
+import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
+import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
-import 'package:bml_supervisor/screens/addhubs/add_hubs_apis.dart';
+import 'package:bml_supervisor/models/cities_response.dart';
+import 'package:bml_supervisor/models/city_location_response.dart';
+import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/driver/driver_apis.dart';
+import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
-
-import '../../app_level/generalised_base_view_model.dart';
-import '../../app_level/locator.dart';
-import '../../models/ApiResponse.dart';
-import '../../models/cities_response.dart';
-import '../../models/city_location_response.dart';
-import '../../models/secured_get_clients_response.dart';
-import '../../utils/stringutils.dart';
-import '../../utils/widget_utils.dart';
-import '../driver/driver_apis.dart';
-import '../dashboard/dashboard_apis.dart';
 
 class AddHubsViewModel extends GeneralisedBaseViewModel {
   String _alternateMobileNumber = '';

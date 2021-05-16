@@ -236,6 +236,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       enabled: true,
       formatter: <TextInputFormatter>[
         TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().maxLengthFormatter(maxLength: 12),
       ],
       controller: aadhaarController,
       focusNode: aadhaarFocusNode,
@@ -272,21 +273,22 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
 
   Widget buildLastNameTextFormField() {
     return appTextFormField(
-        enabled: true,
-        textCapitalization: TextCapitalization.words,
-        formatter: <TextInputFormatter>[
-          TextFieldInputFormatter().alphabeticFormatter,
-        ],
-        controller: lNameController,
-        focusNode: lNameFocusNode,
-        hintText: addDriverLastNameHint,
-        keyboardType: TextInputType.name,
-        onTextChange: (String value) {},
-        onFieldSubmitted: (_) async {
-          await selectDateOfBirth();
-          // fieldFocusChange(context, lNameFocusNode, fatherNameFocusNode);
-        },
-        validator: FormValidators().normalValidator);
+      enabled: true,
+      textCapitalization: TextCapitalization.words,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().alphabeticFormatter,
+      ],
+      controller: lNameController,
+      focusNode: lNameFocusNode,
+      hintText: addDriverLastNameHint,
+      keyboardType: TextInputType.name,
+      onTextChange: (String value) {},
+      onFieldSubmitted: (_) async {
+        await selectDateOfBirth();
+        // fieldFocusChange(context, lNameFocusNode, fatherNameFocusNode);
+      },
+      // validator: FormValidators().normalValidator
+    );
   }
 
   Widget buildFatherNameTextFormField() {
