@@ -13,7 +13,6 @@ class SaveExpenseRequest {
     @required this.expenseType,
     @required this.expenseAmount,
     @required this.expenseDesc,
-    @required this.status,
     @required this.clientId,
   });
 
@@ -22,7 +21,6 @@ class SaveExpenseRequest {
   final String expenseType;
   final double expenseAmount;
   final String expenseDesc;
-  final bool status;
   final String clientId;
 
   SaveExpenseRequest copyWith({
@@ -40,7 +38,6 @@ class SaveExpenseRequest {
         expenseType: expenseType ?? this.expenseType,
         expenseAmount: expenseAmount ?? this.expenseAmount,
         expenseDesc: expenseDesc ?? this.expenseDesc,
-        status: status ?? this.status,
         clientId: clientId ?? this.clientId,
       );
 
@@ -56,7 +53,6 @@ class SaveExpenseRequest {
         expenseType: json["expenseType"],
         expenseAmount: json["expenseAmount"],
         expenseDesc: json["expenseDesc"],
-        status: json["status"],
         clientId: json["clientId"],
       );
 
@@ -66,7 +62,6 @@ class SaveExpenseRequest {
         "expenseType": expenseType,
         "expenseAmount": expenseAmount,
         "expenseDesc": expenseDesc,
-        "status": status,
         "clientId": clientId,
       };
 }

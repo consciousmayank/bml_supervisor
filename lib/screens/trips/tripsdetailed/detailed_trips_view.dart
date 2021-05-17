@@ -5,7 +5,6 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
@@ -201,57 +200,56 @@ class _TabbedBodyState extends State<TabbedBody> {
         ? widget.viewModel.completeTripsDate
         : widget.viewModel.verifiedTripsDate;
 
-    return Expanded(
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => Container(
-          child:
+    return ListView(
+      children: List.generate(
+          dateList.length,
+          (index) => Container(
+                child:
 
-              // Container(
-              // child: Container(
-              //   height: 100,
-              //   color: Colors.red,
-              // ),
+                    // Container(
+                    // child: Container(
+                    //   height: 100,
+                    //   color: Colors.red,
+                    // ),
 
-              Card(
-            elevation: defaultElevation,
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: ThemeConfiguration.primaryBackground,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5),
-                    ),
-                  ),
-                  height: 50.0,
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Card(
+                  elevation: defaultElevation,
+                  child: Column(
                     children: [
-                      Text(
-                        'Date',
-                        style: AppTextStyles.latoBold16White,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: ThemeConfiguration.primaryBackground,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                          ),
+                        ),
+                        height: 50.0,
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Date',
+                              style: AppTextStyles.latoBold16White,
+                            ),
+                            Text(
+                              dateList.elementAt(index),
+                              style: AppTextStyles.latoBold16White,
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        dateList.elementAt(index),
-                        style: AppTextStyles.latoBold16White,
-                      ),
+                      makeSingleTripView(
+                          date: dateList.elementAt(index),
+                          trips: trips,
+                          outerIndex: index),
                     ],
                   ),
                 ),
-                makeSingleTripView(
-                    date: dateList.elementAt(index),
-                    trips: trips,
-                    outerIndex: index),
-              ],
-            ),
-          ),
-          padding: const EdgeInsets.all(16),
-        ),
-        itemCount: dateList.length,
-      ),
+                padding: const EdgeInsets.all(16),
+              )),
     );
   }
 

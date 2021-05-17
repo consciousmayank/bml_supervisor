@@ -4,6 +4,8 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -28,7 +30,7 @@ class _HubsListViewState extends State<HubsListView> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              "All Vehicles",
+              "All Hubs",
               style: AppTextStyles.appBarTitleStyle,
             ),
           ),
@@ -61,140 +63,90 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: getSidePadding(context: context),
-      child: LazyLoadScrollView(
-          scrollOffset: 300,
-          onEndOfPage: () {},
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return Card(
-                shape: getCardShape(),
-                margin: getSidePadding(context: context),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      HubsListTextView(
-                        label: 'Hub Title',
-                        value: widget.viewModel.hubList[index].title,
-                      ),
-                      HubsListTextView(
-                        label: 'Contact Person',
-                        value: widget.viewModel.hubList[index].contactPerson,
-                      ),
-                      HubsListTextView(
-                        label: 'Email Id',
-                        value: widget.viewModel.hubList[index].email,
-                      ),
-                      SizedBox(
-                        height: 40,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: HubsListTextView(
-                                label: 'Mobile',
-                                value: widget.viewModel.hubList[index].mobile,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: HubsListTextView(
-                                // labelFontSize: helper.labelFontSize,
-                                // valueFontSize: helper.valueFontSize,
-                                label: 'Mobile (Alternate)',
-                                value: widget.viewModel.hubList[index].phone,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          launchMaps(
-                              latitude:
-                                  widget.viewModel.hubList[index].geoLatitude,
-                              longitude:
-                                  widget.viewModel.hubList[index].geoLongitude);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.appScaffoldColor,
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(defaultBorder)),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Address",
-                                style: AppTextStyles.underLinedText,
-                              ),
-                              hSizedBox(20),
-                              widget.viewModel.hubList[index].street != null &&
-                                      widget.viewModel.hubList[index].street !=
-                                          'NA'
-                                  ? Text(
-                                      widget.viewModel.hubList[index].street,
-                                      style: AppTextStyles.lato20PrimaryShade5
-                                          .copyWith(
-                                        fontSize: 14,
-                                      ),
-                                    )
-                                  : Container(),
-                              widget.viewModel.hubList[index].locality !=
-                                          null &&
-                                      widget.viewModel.hubList[index]
-                                              .locality !=
-                                          'NA'
-                                  ? Text(
-                                      widget.viewModel.hubList[index].locality,
-                                      style: AppTextStyles.lato20PrimaryShade5
-                                          .copyWith(
-                                        fontSize: 14,
-                                      ),
-                                    )
-                                  : Container(),
-                              widget.viewModel.hubList[index].landmark !=
-                                          null &&
-                                      widget.viewModel.hubList[index]
-                                              .landmark !=
-                                          'NA'
-                                  ? Text(
-                                      'Landmark : ' +
-                                          widget.viewModel.hubList[index]
-                                              .landmark,
-                                      style: AppTextStyles.lato20PrimaryShade5
-                                          .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    )
-                                  : Container(),
-                              Text(
-                                '${widget.viewModel.hubList[index].city}, ${widget.viewModel.hubList[index].pincode}, ${widget.viewModel.hubList[index].state}',
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                '${widget.viewModel.hubList[index].country}',
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.primaryColorShade5,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(defaultBorder),
+                topRight: Radius.circular(defaultBorder),
+              ),
+            ),
+            padding: EdgeInsets.all(15),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    ('S No.'),
+                    textAlign: TextAlign.left,
+                    style: AppTextStyles.whiteRegular,
                   ),
                 ),
-              );
-            },
-            itemCount: widget.viewModel.hubList.length,
-          )),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    ('Hub Name'),
+                    textAlign: TextAlign.left,
+                    style: AppTextStyles.whiteRegular,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: LazyLoadScrollView(
+                scrollOffset: 300,
+                onEndOfPage: () {},
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ClickableWidget(
+                          borderRadius: getBorderRadius(),
+                          onTap: () {
+                            widget.viewModel.openDriverDetailsBottomSheet(
+                                selectedDriverIndex: index);
+                          },
+                          child: SizedBox(
+                            height: 50,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${index + 1}',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  flex: 1,
+                                ),
+                                wSizedBox(10),
+                                Expanded(
+                                  child: Text(
+                                    widget.viewModel.hubList[index].title,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  flex: 5,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        DottedDivider()
+                      ],
+                    );
+                  },
+                  itemCount: widget.viewModel.hubList.length,
+                )),
+          ),
+        ],
+      ),
     );
   }
 

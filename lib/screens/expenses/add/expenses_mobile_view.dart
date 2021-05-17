@@ -267,17 +267,17 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
             //TODO: Refactor the if(s) and else(s)
             if (viewModel.expenseType != null) {
               if (viewModel.selectedDailyKmInfo != null) {
-                viewModel.searchByRegistrationNumber(
+                viewModel.saveExpense(
                   SaveExpenseRequest(
-                      clientId: viewModel.selectedDailyKmInfo.clientId,
-                      vehicleId: viewModel.selectedDailyKmInfo.vehicleId,
-                      // viewModel.selectedSearchVehicle.registrationNumber,
-                      entryDate:
-                          DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
-                      expenseType: viewModel.expenseType,
-                      expenseAmount: double.parse(amountController.text),
-                      expenseDesc: descriptionController.text,
-                      status: false),
+                    clientId: viewModel.selectedDailyKmInfo.clientId,
+                    vehicleId: viewModel.selectedDailyKmInfo.vehicleId,
+                    // viewModel.selectedSearchVehicle.registrationNumber,
+                    entryDate:
+                        DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
+                    expenseType: viewModel.expenseType,
+                    expenseAmount: double.parse(amountController.text),
+                    expenseDesc: descriptionController.text,
+                  ),
                 );
                 descriptionFocusNode.unfocus();
                 amountFocusNode.unfocus();

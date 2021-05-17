@@ -167,14 +167,14 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     selectedSearchVehicle = await navigationService.navigateTo(searchPageRoute);
   }
 
-  getClients() async {
-    setBusy(true);
-    clientsList = [];
-    var response = await _dashBoardApis.getClientList();
-    _clientsList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
+  // getClients() async {
+  //   setBusy(true);
+  //   clientsList = [];
+  //   var response = await _dashBoardApis.getClientList();
+  //   _clientsList = copyList(response);
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
   void saveExpense(SaveExpenseRequest saveExpenseRequest) async {
     isExpenseListLoading = true;
@@ -189,35 +189,34 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       showSubmitForm = false;
       dailyKmInfoList.clear();
     }
-    snackBarService.showSnackbar(message: response.message);
     isExpenseListLoading = false;
   }
 
-  void searchByRegistrationNumber(
-      SaveExpenseRequest saveExpenseResponse) async {
-    setBusy(true);
+  // void searchByRegistrationNumber(
+  //     SaveExpenseRequest saveExpenseResponse) async {
+  //   setBusy(true);
 
-    var entryLog = await apiService
-        .searchByRegistrationNumber(saveExpenseResponse.vehicleId);
-    if (entryLog is String) {
-      snackBarService.showSnackbar(message: entryLog);
-    } else if (entryLog.data['status'].toString() == 'failed') {
-      setBusy(false);
-      snackBarService.showSnackbar(
-          message: "Enter Correct Registration Number");
-    } else {
-      SearchByRegNoResponse singleSearchResult =
-          SearchByRegNoResponse.fromMap(entryLog.data);
-      // print('init reading - ${singleSearchResult.initReading}');
-      isRegNumCorrect = true;
-      // vehicleLog = EntryLog.fromMap(entryLog.data);
+  //   var entryLog = await apiService
+  //       .searchByRegistrationNumber(saveExpenseResponse.vehicleId);
+  //   if (entryLog is String) {
+  //     snackBarService.showSnackbar(message: entryLog);
+  //   } else if (entryLog.data['status'].toString() == 'failed') {
+  //     setBusy(false);
+  //     snackBarService.showSnackbar(
+  //         message: "Enter Correct Registration Number");
+  //   } else {
+  //     SearchByRegNoResponse singleSearchResult =
+  //         SearchByRegNoResponse.fromMap(entryLog.data);
+  //     // print('init reading - ${singleSearchResult.initReading}');
+  //     isRegNumCorrect = true;
+  //     // vehicleLog = EntryLog.fromMap(entryLog.data);
 
-      // *call saveExpense api here
-      saveExpense(saveExpenseResponse);
-      setBusy(false);
-    }
-    // return isRegNumCorrect;
-  }
+  //     // *call saveExpense api here
+  //     saveExpense(saveExpenseResponse);
+  //     setBusy(false);
+  //   }
+  //   // return isRegNumCorrect;
+  // }
 
   void getInfo() async {
     setBusy(true);

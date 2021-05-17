@@ -5,6 +5,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -57,22 +58,22 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
           }
         });
         return Scaffold(
-          // floatingActionButton: AnimatedOpacity(
-          //   duration: Duration(milliseconds: 200),
-          //   opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
-          //   child: FloatingActionButton(
-          //     onPressed: () {
-          //       viewModel.navigationService
-          //           .navigateTo(addExpensesPageRoute)
-          //           .then(
-          //             (value) => getExpenses(
-          //                 viewModel: viewModel,
-          //                 registrationNumber: selectedRegNoController.text),
-          //           );
-          //     },
-          //     child: Icon(Icons.add),
-          //   ),
-          // ),
+          floatingActionButton: AnimatedOpacity(
+            duration: Duration(milliseconds: 200),
+            opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
+            child: FloatingActionButton(
+              onPressed: () {
+                viewModel.navigationService
+                    .navigateTo(addExpensesPageRoute)
+                    .then(
+                      (value) => getExpenses(
+                          viewModel: viewModel,
+                          registrationNumber: selectedRegNoController.text),
+                    );
+              },
+              child: Icon(Icons.add),
+            ),
+          ),
           appBar: AppBar(
             title: Text(
               'View Expenses - ${MyPreferences().getSelectedClient().clientId}',

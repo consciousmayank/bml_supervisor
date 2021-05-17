@@ -625,7 +625,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       fieldHintText: 'Month/Date/Year',
       context: context,
       initialDate: DateTime.now(),
-      firstDate: new DateTime(1990),
+      firstDate: new DateTime(1950),
       lastDate: DateTime.now(),
     );
 

@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/consignments/list/consignment_list_viewmo
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -80,13 +81,17 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
               NoDataWidget(),
             ],
           )
-        : SizedBox(
-            child: makeConsignmentList(context: context, viewModel: viewModel),
-            height: widget.isFulPageView
-                ? double.infinity
-                : viewModel.recentConsignmentList.length <= 7
-                    ? 400
-                    : 400,
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!widget.isFulPageView)
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: buildChartTitle(title: "Recent Driven Kilometers"),
+                ),
+              makeConsignmentList(context: context, viewModel: viewModel),
+            ],
           );
   }
 
@@ -141,29 +146,54 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
           ),
         ),
         hSizedBox(8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return RecentDrivenSingleItem(
-                  viewModel: viewModel,
-                  index: index,
-                );
-              },
-              itemCount: viewModel.recentConsignmentList.length >= 7
-                  ? 7
-                  : viewModel.recentConsignmentList.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  thickness: 1,
-                  color: AppColors.primaryColorShade3,
-                );
-              },
+        Column(
+          children: List.generate(
+            widget.isFulPageView
+                ? viewModel.recentConsignmentList.length
+                : viewModel.recentConsignmentList.length < 5
+                    ? viewModel.recentConsignmentList.length
+                    : 5,
+            (index) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  RecentDrivenSingleItem(
+                    viewModel: viewModel,
+                    index: index,
+                  ),
+                  if (index < (viewModel.recentConsignmentList.length - 1))
+                    hSizedBox(10),
+                  if (index < (viewModel.recentConsignmentList.length - 1))
+                    DottedDivider()
+                ],
+              ),
             ),
           ),
         ),
+        // Expanded(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: ListView.separated(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       itemBuilder: (context, index) {
+        //         return RecentDrivenSingleItem(
+        //           viewModel: viewModel,
+        //           index: index,
+        //         );
+        //       },
+        //       itemCount: viewModel.recentConsignmentList.length >= 7
+        //           ? 7
+        //           : viewModel.recentConsignmentList.length,
+        //       separatorBuilder: (BuildContext context, int index) {
+        //         return Padding(
+        //           padding: const EdgeInsets.all(8.0),
+        //           child: DottedDivider(),
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // ),
+        hSizedBox(10),
         widget.isFulPageView
             ? Container()
             : InkWell(

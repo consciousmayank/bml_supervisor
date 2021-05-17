@@ -28,14 +28,14 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
-  //   SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
-  //     barrierDismissible: true,
-  //     isScrollControlled: true,
-  //     variant: BottomSheetType.HUBS_DETAILS,
-  //     customData: HubsListDetailsBottomSheetInputArgs(
-  //       singleHubInfo: _hubsList[selectedDriverIndex],
-  //     ),
-  //   );
-  // }
+  Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      barrierDismissible: true,
+      isScrollControlled: true,
+      variant: BottomSheetType.HUBS_DETAILS,
+      customData: HubsListDetailsBottomSheetInputArgs(
+        singleHubInfo: _hubsList[selectedDriverIndex],
+      ),
+    );
+  }
 }
