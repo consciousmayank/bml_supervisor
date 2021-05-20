@@ -56,6 +56,8 @@ class RegularExpressions {
 
   ///helpful for vehicle Numbers
   RegExp alphaNumericWithSpaceRegEx = RegExp(r'[a-zA-Z0-9 -]');
+  RegExp alphaNumericWithSpaceSlashHyphenUnderScoreRegEx =
+      RegExp(r'[a-zA-Z0-9 -/_]');
   RegExp alphabeticSpaceRegEx = RegExp(r'[a-zA-Z ]');
   RegExp numericRegEx = RegExp(r'[0-9]');
 }
@@ -64,6 +66,9 @@ class TextFieldInputFormatter {
   final TextInputFormatter alphaNumericFormatter =
       FilteringTextInputFormatter.allow(
           RegularExpressions().alphaNumericWithSpaceRegEx);
+  final TextInputFormatter alphaNumericWithSpaceSlashHyphenUnderScoreFormatter =
+      FilteringTextInputFormatter.allow(
+          RegularExpressions().alphaNumericWithSpaceSlashHyphenUnderScoreRegEx);
   final TextInputFormatter alphabeticFormatter =
       FilteringTextInputFormatter.allow(
           RegularExpressions().alphabeticSpaceRegEx);

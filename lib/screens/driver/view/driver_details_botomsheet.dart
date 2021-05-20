@@ -205,7 +205,7 @@ SizedBox buildContentRow({
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-          flex: 1,
+          flex: 2,
           child: InkWell(
             onTap: helper.onValue1Clicked == null
                 ? null
@@ -225,7 +225,7 @@ SizedBox buildContentRow({
         ),
         wSizedBox(10),
         Expanded(
-          flex: 1,
+          flex: 5,
           child: InkWell(
             onTap: helper.onValue2Clicked == null
                 ? null

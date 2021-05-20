@@ -21,7 +21,7 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
 
     List<HubResponse> response = await _addHubsApis.getAllHubsForClient(
         pageNumber: pageNumber,
-        clientId: MyPreferences().getSelectedClient().clientId);
+        clientId: MyPreferences()?.getSelectedClient()?.clientId);
 
     _hubsList = copyList(response);
     setBusy(false);

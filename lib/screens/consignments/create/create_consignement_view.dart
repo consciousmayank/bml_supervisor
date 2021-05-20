@@ -1,5 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
@@ -9,10 +11,13 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -71,23 +76,23 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         // viewModel.getRecentConsignmentsForCreateConsignment();
       },
       builder: (context, viewModel, child) => SafeArea(
-          left: false,
-          right: false,
-          child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: true,
-              title: Text("Create Consignment",
-                  style: AppTextStyles.appBarTitleStyle),
-            ),
-            body: viewModel.isBusy
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Padding(
-                    padding: getSidePadding(context: context),
-                    child: body(context, viewModel),
-                  ),
-          )),
+        left: false,
+        right: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+            title: setAppBarTitle(title: 'Create Consignment'),
+          ),
+          body: viewModel.isBusy
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Padding(
+                  padding: getSidePadding(context: context),
+                  child: body(context, viewModel),
+                ),
+        ),
+      ),
       viewModelBuilder: () => CreateConsignmentModel(),
     );
   }
@@ -95,8 +100,51 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   Widget body(BuildContext context, CreateConsignmentModel viewModel) {
     return viewModel.entryDate == null
         ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              dateSelector(context: context, viewModel: viewModel),
+              // dateSelector(context: context, viewModel: viewModel),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: ClickableWidget(
+                  childColor: AppColors.white,
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        IconBlueBackground(
+                          iconName: addIcon,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16, right: 16),
+                            child: Text('Create Consignment'),
+                          ),
+                        ),
+                        Icon(Icons.arrow_right)
+                      ],
+                    ),
+                  ),
+                  onTap: () => dateSelectListener(viewModel: viewModel),
+                  borderRadius: getBorderRadius(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  bottom: 4,
+                ),
+                child: DottedDivider(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 4,
+                  right: 4,
+                ),
+                child: buildChartTitle(title: "Recently Created Consigments"),
+              ),
               Expanded(
                 child: RecentConsignmentList(),
               ),
@@ -380,12 +428,16 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                   duration: Duration(milliseconds: 200),
                   curve: Curves.easeInOut);
             } else {
-              locator<DialogService>()
-                  .showConfirmationDialog(
+              locator<BottomSheetService>()
+                  .showCustomSheet(
+                customData: ConfirmationBottomSheetInputArgs(
+                  title: 'Create Consignment?',
+                  description:
+                      "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                ),
                 barrierDismissible: false,
-                title: 'Create Consignment?',
-                description:
-                    "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                isScrollControlled: true,
+                variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
               )
                   .then((value) {
                 if (value != null) {
@@ -473,9 +525,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         enabled: true,
         controller: totalWeightController,
         focusNode: totalWeightFocusNode,
-        hintText: viewModel.itemUnit == selectItemUnit[1]
-            ? totalWeightHint1
-            : totalWeightHint2,
+        hintText: 'Total ${viewModel.itemUnit ?? selectItemUnit[1]}',
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         onTextChange: (String value) {
           viewModel.totalWeight = double.parse(value);
@@ -540,7 +590,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
           contentPadding:
               EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
           hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
-          hintText: 'Entry Date'),
+          hintText: 'Select date to create a new consigment'),
       keyboardType: TextInputType.text,
     );
   }
@@ -566,21 +616,25 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         padding: const EdgeInsets.only(bottom: 4.0, right: 4),
         child: appSuffixIconButton(
           icon: Icon(Icons.calendar_today_outlined),
-          onPressed: (() async {
-            DateTime selectedDate = await selectDate();
-            if (selectedDate != null) {
-              selectedDateController.text =
-                  DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-              viewModel.entryDate = selectedDate;
-              viewModel.getConsignmentListWithDate();
-              selectedRegNoController.clear();
-              consignmentTitleController.clear();
-              viewModel.resetControllerBoolValue();
-            }
-          }),
+          onPressed: () => dateSelectListener(viewModel: viewModel),
         ),
       ),
     );
+  }
+
+  dateSelectListener({
+    @required CreateConsignmentModel viewModel,
+  }) async {
+    DateTime selectedDate = await selectDate();
+    if (selectedDate != null) {
+      selectedDateController.text =
+          DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+      viewModel.entryDate = selectedDate;
+      viewModel.getConsignmentListWithDate();
+      selectedRegNoController.clear();
+      consignmentTitleController.clear();
+      viewModel.resetControllerBoolValue();
+    }
   }
 
   selectDispatchTimeButton(
@@ -726,7 +780,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         viewModel.isDropCratesEdited = true;
       },
       decoration: getInputBorder(
-          hintText: "Item Drop",
+          hintText: "Item Drop (${viewModel.itemUnit})",
           showSuffix: viewModel.consignmentRequest.items[index].dropOffError),
       enabled: true,
       // controller: dropController,
@@ -762,7 +816,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(
-        hintText: "Item Collect",
+        hintText: "Item Collect (${viewModel.itemUnit})",
         showSuffix: viewModel.consignmentRequest.items[index].collectError,
       ),
       enabled: true,

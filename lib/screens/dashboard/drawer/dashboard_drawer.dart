@@ -68,7 +68,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   color: AppColors.primaryColorShade5),
                             ),
                             Text(
-                              '${widget.dashBoardScreenViewModel?.savedUser?.role}',
+                              '${widget.dashBoardScreenViewModel?.savedUser?.designation}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.latoMedium16Primary5
@@ -101,7 +101,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                       ),
                       DrawerListItem(
                         imageName: totalKmIcon,
-                        text: "Daily Kilometers",
+                        text: "Daily Kilometer",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onDailyKilometersDrawerTileClicked();
@@ -109,7 +109,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                       ),
                       DrawerListItem(
                         imageName: expensesIcon,
-                        text: "Expenses",
+                        text: "Expense",
                         onTap: () {
                           widget.dashBoardScreenViewModel
                               .onExpensesDrawerTileClicked();

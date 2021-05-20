@@ -47,8 +47,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('Transaction History',
-              style: AppTextStyles.appBarTitleStyle),
+          title: setAppBarTitle(title: 'Transaction History'),
         ),
         floatingActionButton: viewModel.paymentHistoryResponseList.length > 0
             ? FloatingActionButton.extended(

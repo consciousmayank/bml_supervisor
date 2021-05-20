@@ -86,7 +86,7 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   }
 
   getClients() async {
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = MyPreferences()?.getSelectedClient();
   }
 
   void vehicleEntrySearch({String regNum, String clientId}) async {

@@ -17,7 +17,7 @@ class _ViewAllConsignmentsViewState extends State<ViewAllConsignmentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Consignment', style: AppTextStyles.appBarTitleStyle),
+        title: setAppBarTitle(title: 'Consignments'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -61,20 +61,19 @@ class SingleTripItem extends StatelessWidget {
               children: [
                 buildContentRow(
                   helper: RowHelper(
-                    label1: 'Dispatch Time',
-                    value1: singleListItem.dispatchDateTime.toString(),
-                    label2: 'Route Id',
-                    value2: singleListItem.routeId.toString(),
-                    label3: 'Route Title',
-                    value3: singleListItem.routeTitle.toString(),
+                    label1: 'Item Value',
+                    value1:
+                        '${singleListItem.itemWeight.toString()} ${singleListItem.itemUnit.toString()}',
+                    label2: 'Remarks',
+                    value2: singleListItem.routeDesc,
                   ),
                 ),
                 buildContentRow(
                   helper: RowHelper(
-                    label1: 'Item Unit',
-                    value1: singleListItem.itemUnit.toString(),
-                    label2: 'Item Weight',
-                    value2: singleListItem.itemWeight.toString(),
+                    label1: 'Dispatch Time',
+                    value1: singleListItem.dispatchDateTime.toString(),
+                    label2: null,
+                    value2: null,
                     label3: null,
                     value3: null,
                   ),
@@ -97,46 +96,49 @@ class SingleTripItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(
-            flex: 3,
-            child: AppTextView(
-              labelFontSize: helper.labelFontSize,
-              valueFontSize: helper.valueFontSize,
-              showBorder: false,
-              textAlign: TextAlign.left,
-              isUnderLined: false,
-              hintText: helper.label1,
-              value: helper.value1,
+          if (helper.label1 != null)
+            Expanded(
+              flex: 1,
+              child: AppTextView(
+                labelFontSize: helper.labelFontSize,
+                valueFontSize: helper.valueFontSize,
+                showBorder: false,
+                textAlign: TextAlign.left,
+                isUnderLined: false,
+                hintText: helper.label1,
+                value: helper.value1,
+              ),
             ),
-          ),
-          wSizedBox(10),
-          Expanded(
-            flex: 1,
-            child: AppTextView(
-              labelFontSize: helper.labelFontSize,
-              valueFontSize: helper.valueFontSize,
-              showBorder: false,
-              textAlign: TextAlign.left,
-              isUnderLined: false,
-              hintText: helper.label2,
-              value: helper.value2,
+          if (helper.label2 != null) wSizedBox(10),
+          if (helper.label2 != null)
+            Expanded(
+              flex: 1,
+              child: AppTextView(
+                labelFontSize: helper.labelFontSize,
+                valueFontSize: helper.valueFontSize,
+                showBorder: false,
+                textAlign: TextAlign.left,
+                isUnderLined: false,
+                hintText: helper.label2,
+                value: helper.value2,
+              ),
             ),
-          ),
-          wSizedBox(10),
-          Expanded(
-            flex: 2,
-            child: helper.label3 == null
-                ? Container()
-                : AppTextView(
-                    labelFontSize: helper.labelFontSize,
-                    valueFontSize: helper.valueFontSize,
-                    showBorder: false,
-                    textAlign: TextAlign.left,
-                    isUnderLined: false,
-                    hintText: helper.label3,
-                    value: helper.value3,
-                  ),
-          ),
+          if (helper.label3 != null) wSizedBox(10),
+          if (helper.label3 != null)
+            Expanded(
+              flex: 2,
+              child: helper.label3 == null
+                  ? Container()
+                  : AppTextView(
+                      labelFontSize: helper.labelFontSize,
+                      valueFontSize: helper.valueFontSize,
+                      showBorder: false,
+                      textAlign: TextAlign.left,
+                      isUnderLined: false,
+                      hintText: helper.label3,
+                      value: helper.value3,
+                    ),
+            ),
         ],
       ),
     );
@@ -277,10 +279,10 @@ class RowHelper {
   RowHelper({
     @required this.label1,
     @required this.label2,
-    @required this.label3,
-    @required this.value1,
-    @required this.value2,
-    @required this.value3,
+    this.label3,
+    this.value1,
+    this.value2,
+    this.value3,
     this.valueFontSize = appTextViewValueFontSize,
     this.labelFontSize = appTextViewLabelFontSize,
   });

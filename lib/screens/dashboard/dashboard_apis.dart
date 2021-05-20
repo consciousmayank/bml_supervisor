@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 abstract class DashBoardApis {
-  Future<List<GetClientsResponse>> getClientList();
+  Future<List<GetClientsResponse>> getClientList({@required int pageNumber});
   Future<List<FetchRoutesResponse>> getRoutes({@required String clientId});
   Future<List<FetchHubsResponse>> getHubs({@required int routeId});
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
@@ -29,9 +29,11 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   SnackbarService snackBarService = locator<SnackbarService>();
 
   @override
-  Future<List<GetClientsResponse>> getClientList() async {
+  Future<List<GetClientsResponse>> getClientList(
+      {@required int pageNumber}) async {
     List<GetClientsResponse> clientsList = [];
-    ParentApiResponse apiResponse = await apiService.getClientsList();
+    ParentApiResponse apiResponse =
+        await apiService.getClientsList(pageNumber: pageNumber);
 
     if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;

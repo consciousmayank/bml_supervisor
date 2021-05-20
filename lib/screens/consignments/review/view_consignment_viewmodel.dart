@@ -1,6 +1,8 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -205,10 +207,17 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       snackBarService.showSnackbar(message: '${apiResponse.message}');
     } else {
       // print('')
-      dialogService
-          .showConfirmationDialog(
-              title: apiResponse.message, description: 'Consignment Reviewed.')
+      bottomSheetService
+          .showCustomSheet(
+            customData: ConfirmationBottomSheetInputArgs(
+              title: apiResponse.message,
+            ),
+            barrierDismissible: false,
+            isScrollControlled: true,
+            variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+          )
           .then((value) => navigationService.back(result: true));
+
       setBusy(false);
     }
   }

@@ -25,13 +25,12 @@ class LoginViewModel extends GeneralisedBaseViewModel {
         await _loginApi.login(getBase64String(value: '$userName:$password'));
 
     if (loginResponse != null) {
-      if (loginResponse.userRole == 'ROLE_MANAGER') {
-        PreferencesSavedUser preferencesSavedUser;
-        preferencesSavedUser = PreferencesSavedUser(
+      if (loginResponse.designation == 'MANAGER') {
+        MyPreferences().setLoggedInUser(
+          loginResponse.copyWith(
             isUserLoggedIn: true,
-            userRole: loginResponse.userRole,
-            userName: '${loginResponse.firstName} ${loginResponse.lastName}');
-        MyPreferences().setLoggedInUser(preferencesSavedUser);
+          ),
+        );
         MyPreferences().saveCredentials(
           getBase64String(value: '$userName:$password'),
         );

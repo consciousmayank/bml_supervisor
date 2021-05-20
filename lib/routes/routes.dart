@@ -22,9 +22,6 @@ import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/review_consignment_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/view_consigment_view.dart';
-import 'package:bml_supervisor/screens/dailykms/add/add_daily_km_form.dart';
-import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_arguments.dart';
-import 'package:bml_supervisor/screens/dailykms/add/add_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_view.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
@@ -88,12 +85,6 @@ class AppRouter {
             ),
           ),
         );
-
-      case addEntryLogPageRoute:
-        return MaterialPageRoute(
-            builder: (_) => NetworkSensitive(
-                  child: AddVehicleEntryView(),
-                ));
 
       case viewEntryLogPageRoute:
         return MaterialPageRoute(
@@ -244,16 +235,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
             child: PendingConsignmentsListView(),
-          ),
-        );
-
-      case addEntry2PointOFormViewPageRoute:
-        AddDailyKmsArguments args = settings.arguments;
-        return MaterialPageRoute(
-          builder: (_) => NetworkSensitive(
-            child: AddVehicleEntryFormView(
-              arguments: args,
-            ),
           ),
         );
 

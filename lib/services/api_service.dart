@@ -11,6 +11,7 @@ import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
@@ -32,7 +33,7 @@ class ApiService {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().post(LOGIN);
+      response = await dioClient.getDio().get(LOGIN);
     } on DioError catch (e) {
       error = e;
     }
@@ -54,11 +55,11 @@ class ApiService {
   }
 
   ///Get the list of clients which logged in user/manager are allotted/can handle
-  Future<ParentApiResponse> getClientsList() async {
+  Future<ParentApiResponse> getClientsList({int pageNumber}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_CLIENTS);
+      response = await dioClient.getDio().get(GET_CLIENTS(pageNumber));
     } on DioError catch (e) {
       error = e;
     }
@@ -801,18 +802,6 @@ class ApiService {
     } on DioError catch (e) {
       return e.message;
     }
-    return response;
-  }
-
-  Future getClientDashboardStats(PreferencesSavedUser user) async {
-    // dashboard client specific tiles data api
-    Response response;
-    try {
-      response = await dioClient.getDio().get(GET_DASHBOARD_STATS(user));
-    } on DioError catch (e) {
-      return e.message;
-    }
-    print(response);
     return response;
   }
 

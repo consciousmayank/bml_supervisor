@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
@@ -59,16 +60,20 @@ class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
         entryLogRequest: entryLogRequest);
 
     if (apiResponse.isSuccessful()) {
-      var dialogResponse =
-          await locator<DialogService>().showConfirmationDialog(
-        title: 'Congratulations...',
-        description: apiResponse.message,
-      );
-      if (dialogResponse == null || dialogResponse.confirmed) {
+      bottomSheetService
+          .showCustomSheet(
+        customData: ConfirmationBottomSheetInputArgs(
+          title: apiResponse.message,
+        ),
+        barrierDismissible: false,
+        isScrollControlled: true,
+        variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+      )
+          .then((value) {
         navigationService.back(
             result: ReturnDetailedTripsViewArgs(
                 success: true, tripStatus: TripStatus.COMPLETED));
-      }
+      });
     }
     setBusy(false);
   }
@@ -121,16 +126,21 @@ class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
         consignmentId: consignmentId);
     setBusy(false);
     if (apiResponse.isSuccessful()) {
-      var dialogResponse =
-          await locator<DialogService>().showConfirmationDialog(
-        title: 'Congratulations...',
-        description: apiResponse.message,
-      );
-      if (dialogResponse == null || dialogResponse.confirmed) {
-        navigationService.back(
-            result: ReturnDetailedTripsViewArgs(
-                success: true, tripStatus: TripStatus.COMPLETED));
-      }
+      bottomSheetService
+          .showCustomSheet(
+            customData: ConfirmationBottomSheetInputArgs(
+              title: apiResponse.message,
+            ),
+            barrierDismissible: false,
+            isScrollControlled: true,
+            variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+          )
+          .then(
+            (value) => navigationService.back(
+              result: ReturnDetailedTripsViewArgs(
+                  success: true, tripStatus: TripStatus.COMPLETED),
+            ),
+          );
     }
   }
 }

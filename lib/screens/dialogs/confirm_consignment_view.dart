@@ -97,7 +97,6 @@ class ConfirmConsignmentView extends StatelessWidget {
                 ),
               ],
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -107,57 +106,6 @@ class ConfirmConsignmentView extends StatelessWidget {
                 ),
               ],
             ),
-            // RichText(
-            //   textAlign: TextAlign.center,
-            //   text: TextSpan(
-            //     style: AppTextStyles.latoMedium14Black,
-            //     children: <TextSpan>[
-            //       TextSpan(text: "Consignment for "),
-            //       TextSpan(
-            //         text: '${selectedClient.clientId} ',
-            //         style: AppTextStyles.latoBold12Black.copyWith(
-            //           color: AppColors.black,
-            //         ),
-            //       ),
-            //       TextSpan(text: 'for'),
-            //       TextSpan(
-            //           text: ' ${selectedRoute.routeTitle} ',
-            //           style: AppTextStyles.latoBold12Black.copyWith(
-            //             color: AppColors.black,
-            //           )),
-            //       TextSpan(text: ' route dated,  '),
-            //       TextSpan(
-            //         text: '${consignmentRequest.entryDate}.',
-            //         style: AppTextStyles.latoBold12Black.copyWith(
-            //           color: AppColors.black,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // hSizedBox(20),
-            // RichText(
-            //   textAlign: TextAlign.center,
-            //   text: TextSpan(
-            //     style: AppTextStyles.latoMedium14Black,
-            //     children: <TextSpan>[
-            //       TextSpan(text: "The Vehicle selected is "),
-            //       TextSpan(
-            //         text: '${validatedRegistrationNumber.registrationNumber} ',
-            //         style: AppTextStyles.latoBold12Black.copyWith(
-            //           color: AppColors.black,
-            //         ),
-            //       ),
-            //       TextSpan(text: ', driven by '),
-            //       TextSpan(
-            //         text: ' ${validatedRegistrationNumber.ownerName} ',
-            //         style: AppTextStyles.latoBold12Black.copyWith(
-            //           color: AppColors.black,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             hSizedBox(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

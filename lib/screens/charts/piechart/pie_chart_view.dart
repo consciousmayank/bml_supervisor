@@ -12,10 +12,8 @@ class PieChartView extends StatefulWidget {
   final String clientId;
   final String selectedDuration;
 
-  PieChartView({
-    @required this.clientId,
-    @required this.selectedDuration,
-  });
+  const PieChartView({Key key, this.clientId, this.selectedDuration})
+      : super(key: key);
 
   @override
   _PieChartViewState createState() => _PieChartViewState();

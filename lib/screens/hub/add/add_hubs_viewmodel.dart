@@ -1,10 +1,13 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
@@ -112,19 +115,23 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
   }
 
   void addHub({AddHubRequest newHubObject}) async {
+    setBusy(true);
     ApiResponse _apiResponse = await _addHubsApis.addHub(request: newHubObject);
-    dialogService
-        .showConfirmationDialog(
-            title: _apiResponse.isSuccessful()
-                ? addHubSuccessful
-                : addHubUnSuccessful,
-            description: _apiResponse.message,
-            barrierDismissible: false)
+    setBusy(false);
+
+    bottomSheetService
+        .showCustomSheet(
+      customData: ConfirmationBottomSheetInputArgs(
+        title:
+            _apiResponse.isSuccessful() ? addHubSuccessful : addHubUnSuccessful,
+      ),
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+    )
         .then((value) {
-      if (value.confirmed) {
-        if (_apiResponse.isSuccessful()) {
-          navigationService.back();
-        }
+      if (_apiResponse.isSuccessful()) {
+        navigationService.replaceWith(addHubRoute);
       }
     });
   }

@@ -13,6 +13,7 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -36,14 +37,15 @@ class _AddDriverViewState extends State<AddDriverView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              "Add Driver Details",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: setAppBarTitle(title: 'Add Driver Details'),
           ),
-          body: AddDriverBodyWidget(
-            viewModel: viewModel,
-          ),
+          body: viewModel.isBusy
+              ? ShimmerContainer(
+                  itemCount: 20,
+                )
+              : AddDriverBodyWidget(
+                  viewModel: viewModel,
+                ),
         ),
       ),
       viewModelBuilder: () => AddDriverViewModel(),
@@ -91,6 +93,9 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   TextEditingController workExpController = TextEditingController();
   FocusNode workExpFocusNode = FocusNode();
 
+  TextEditingController houseNoBuildingNameController = TextEditingController();
+  FocusNode houseNoBuildingNameFocusNode = FocusNode();
+
   TextEditingController streetController = TextEditingController();
   FocusNode streetFocusNode = FocusNode();
 
@@ -113,6 +118,25 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // if (widget.viewModel.isAddDriverSuccessful) {
+    //   vehicleIdController.clear();
+    //   drivingLicenseController.clear();
+    //   aadhaarController.clear();
+    //   fNameController.clear();
+    //   fatherNameController.clear();
+    //   mobileNumberController.clear();
+    //   alternateMobileNumberController.clear();
+    //   whatsAppMobileNumberController.clear();
+    //   workExpController.clear();
+    //   houseNoBuildingNameController.clear();
+    //   streetController.clear();
+    //   localityController.clear();
+    //   landmarkController.clear();
+    //   lNameController.clear();
+    //   dobController.clear();
+    //   remarksController.clear();
+    // }
+
     return Padding(
       padding: getSidePadding(context: context),
       child: SingleChildScrollView(
@@ -164,12 +188,13 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildAlternateMobileNumberTextFormField(),
               buildWhatsAppMobileNumberTextFormField(),
               buildWorkExperienceTextFormField(),
-              widget.viewModel.cityList.length > 0
-                  ? buildCityTextFormField(viewModel: widget.viewModel)
-                  : Container(),
+              buildHnoBuildingNameTextFormField(),
               buildStreetTextFormField(),
               buildLocalityTextFormField(),
               buildLandmarkTextFormField(),
+              widget.viewModel.cityList.length > 0
+                  ? buildCityTextFormField(viewModel: widget.viewModel)
+                  : Container(),
               buildPinCodeTextFormField(),
               buildStateTextFormField(),
               buildCountryTextFormField(),
@@ -425,7 +450,28 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       keyboardType: TextInputType.number,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
-        fieldFocusChange(context, workExpFocusNode, streetFocusNode);
+        fieldFocusChange(
+            context, workExpFocusNode, houseNoBuildingNameFocusNode);
+      },
+      validator: FormValidators().normalValidator,
+    );
+  }
+
+  Widget buildHnoBuildingNameTextFormField() {
+    return appTextFormField(
+      enabled: true,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
+      ],
+      controller: houseNoBuildingNameController,
+      focusNode: houseNoBuildingNameFocusNode,
+      hintText: addDriverHnoBuildingNameHint,
+      keyboardType: TextInputType.text,
+      onTextChange: (String value) {},
+      onFieldSubmitted: (_) {
+        fieldFocusChange(
+            context, houseNoBuildingNameFocusNode, streetFocusNode);
       },
       validator: FormValidators().normalValidator,
     );
@@ -435,7 +481,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        TextFieldInputFormatter().alphaNumericFormatter,
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: streetController,
       focusNode: streetFocusNode,
@@ -453,7 +500,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        TextFieldInputFormatter().alphaNumericFormatter,
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: localityController,
       focusNode: localityFocusNode,
@@ -471,7 +519,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        TextFieldInputFormatter().alphaNumericFormatter,
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: landmarkController,
       focusNode: landmarkFocusNode,
@@ -639,6 +688,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
+            hideKeyboard(context: context);
             if (_formKey.currentState.validate()) {
               widget.viewModel.addDriver(
                   newDriverObject: AddDriverRequest(
@@ -662,8 +712,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       address: [
                     Address(
                       type: 'RESIDENTIAL',
-                      addressLine1: streetController.text,
-                      addressLine2: 'NA',
+                      addressLine1: houseNoBuildingNameController.text,
+                      addressLine2: streetController.text,
                       locality: localityController.text,
                       nearby: landmarkController.text,
                       city: widget.viewModel.selectedCity.city,

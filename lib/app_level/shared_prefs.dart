@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import "package:bml_supervisor/app_level/string_extensions.dart";
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,7 @@ class MyPreferences {
     if (selectedClient == null) {
       _sharedPrefs.remove(selected_client);
     } else {
-      _sharedPrefs.setString(selected_client, json.encode(selectedClient));
+      _sharedPrefs.setString(selected_client, selectedClient.toJson());
     }
   }
 
@@ -63,73 +64,22 @@ class MyPreferences {
     return _sharedPrefs.getString(loggedInUserCredentials) ?? "";
   }
 
-  void setLoggedInUser(PreferencesSavedUser user) {
+  void setLoggedInUser(LoginResponse user) {
     if (user == null) {
       _sharedPrefs.remove(loggedInUser);
     } else {
-      _sharedPrefs.setString(loggedInUser, json.encode(user));
+      // _sharedPrefs.setString(loggedInUser, json.encode(user));
+      _sharedPrefs.setString(loggedInUser, user.toJson());
     }
   }
 
-  PreferencesSavedUser getUserLoggedIn() {
+  LoginResponse getUserLoggedIn() {
     String savedResponseString = _sharedPrefs.getString(loggedInUser);
     if (savedResponseString == null) {
       return null;
     } else {
-      return PreferencesSavedUser.fromJson(json.decode(savedResponseString));
+      // return LoginResponse.fromJson(json.decode(savedResponseString));
+      return LoginResponse.fromJson(savedResponseString);
     }
   }
-}
-
-class PreferencesSavedUser {
-  PreferencesSavedUser({
-    this.isUserLoggedIn,
-    this.userRole,
-    this.userName,
-  });
-
-  final bool isUserLoggedIn;
-  final String userRole;
-  final String userName;
-
-  PreferencesSavedUser copyWith({
-    bool isUserLoggedIn,
-    String userRole,
-    String userName,
-  }) =>
-      PreferencesSavedUser(
-        isUserLoggedIn: isUserLoggedIn ?? this.isUserLoggedIn,
-        userRole: userRole ?? this.userRole,
-        userName: userName ?? this.userName,
-      );
-
-  String get role {
-    List<String> splitRoles = userRole.split('_');
-
-    return splitRoles[splitRoles.length - 1]
-        .toLowerCase()
-        .capitalizeFirstLetter();
-  }
-
-  String getUnEditedRole() {
-    return userRole;
-  }
-
-  factory PreferencesSavedUser.fromJson(String str) =>
-      PreferencesSavedUser.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory PreferencesSavedUser.fromMap(Map<String, dynamic> json) =>
-      PreferencesSavedUser(
-        isUserLoggedIn: json["isUserLoggedIn"],
-        userRole: json["userRole"],
-        userName: json["userName"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "isUserLoggedIn": isUserLoggedIn,
-        "userRole": userRole,
-        "userName": userName,
-      };
 }

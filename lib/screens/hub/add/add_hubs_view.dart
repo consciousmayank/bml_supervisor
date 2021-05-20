@@ -34,10 +34,7 @@ class _AddHubsViewState extends State<AddHubsView> {
         },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
-                title: Text(
-                  'Add Hub',
-                  style: AppTextStyles.appBarTitleStyle,
-                ),
+                title: setAppBarTitle(title: 'Add Hub'),
                 centerTitle: true,
               ),
               body: AddHubBodyWidget(
@@ -160,7 +157,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                   widget.viewModel.addHub(
                       newHubObject: AddHubRequest(
                     // clientId: widget.viewModel.selectedClient.clientId,
-                    clientId: MyPreferences().getSelectedClient().clientId,
+                    clientId: MyPreferences()?.getSelectedClient()?.clientId,
                     title: hubTitleController.text.trim(),
                     contactPerson: contactPersonController.text.trim(),
                     email: emailController.text.trim(),
@@ -381,7 +378,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       enabled: true,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: streetController,
       focusNode: streetFocusNode,
@@ -400,7 +398,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       enabled: true,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: localityController,
       focusNode: localityFocusNode,
@@ -418,7 +417,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     return appTextFormField(
       enabled: true,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: landmarkController,
       focusNode: landmarkFocusNode,

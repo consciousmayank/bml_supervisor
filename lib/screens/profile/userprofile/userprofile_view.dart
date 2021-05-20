@@ -92,7 +92,7 @@ class _BodyWidgetState extends State<BodyWidget> {
               ),
               hSizedBox(8),
               Text(
-                '( ${MyPreferences().getUserLoggedIn().role} )',
+                '( ${MyPreferences().getUserLoggedIn().designation} )',
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(fontSize: 10),
               ),

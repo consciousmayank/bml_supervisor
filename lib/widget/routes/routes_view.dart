@@ -16,11 +16,12 @@ class RoutesView extends StatefulWidget {
   final Function onRoutesPageInView;
   final bool isInDashBoard;
 
-  RoutesView({
-    @required this.selectedClient,
-    @required this.onRoutesPageInView,
-    this.isInDashBoard = true,
-  });
+  const RoutesView(
+      {Key key,
+      this.selectedClient,
+      this.onRoutesPageInView,
+      this.isInDashBoard})
+      : super(key: key);
 
   @override
   _RoutesViewState createState() => _RoutesViewState();

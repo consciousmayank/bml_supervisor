@@ -5,7 +5,9 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,8 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text(
-            getTitle(widget.args.tripStatus),
-            style: AppTextStyles.appBarTitleStyle,
+          title: setAppBarTitle(
+            title: getTitle(widget.args.tripStatus),
           ),
           centerTitle: true,
         ),
@@ -92,11 +93,7 @@ class _NormalBodyState extends State<NormalBody> {
   @override
   Widget build(BuildContext context) {
     return widget.viewModel.trips.length == 0
-        ? Container(
-            child: Center(
-              child: Text('No Trips as of yet.'),
-            ),
-          )
+        ? NoDataWidget()
         : Column(
             children: [
               Expanded(
@@ -114,7 +111,7 @@ class _NormalBodyState extends State<NormalBody> {
                           widget.viewModel.trips[index].statusCode == 2 ||
                           widget.viewModel.trips[index].statusCode == 4) {
                         widget.viewModel.openBottomSheet(
-                            trip: widget.viewModel.trips[index]);
+                            selectedTrip: widget.viewModel.trips[index]);
                       } else if (widget.viewModel.trips[index].statusCode ==
                           3) {
                         widget.viewModel
@@ -155,7 +152,7 @@ class _TabbedBodyState extends State<TabbedBody> {
             labelColor: AppColors.primaryColorShade5,
             unselectedLabelColor: AppColors.black,
             indicatorColor: AppColors.primaryColorShade5,
-            indicatorSize: TabBarIndicatorSize.label,
+            indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               Tab(
                 text: 'Completed (${widget.viewModel.completedTrips.length})',
@@ -169,20 +166,12 @@ class _TabbedBodyState extends State<TabbedBody> {
             child: TabBarView(
               children: [
                 widget.viewModel.completedTrips.length == 0
-                    ? Container(
-                        child: Center(
-                          child: Text('No Trips as of yet.'),
-                        ),
-                      )
+                    ? NoDataWidget()
                     : makeList(
                         trips: widget.viewModel.completedTrips,
                         typeOfTrip: TripStatus.COMPLETED),
                 widget.viewModel.verifiedTrips.length == 0
-                    ? Container(
-                        child: Center(
-                          child: Text('No Trips as of yet.'),
-                        ),
-                      )
+                    ? NoDataWidget()
                     : makeList(
                         trips: widget.viewModel.verifiedTrips,
                         typeOfTrip: TripStatus.APPROVED),
@@ -273,17 +262,6 @@ class _TabbedBodyState extends State<TabbedBody> {
         tripWithSelectedDate.length,
         (index) => Column(
           children: [
-            index == 0
-                ? Container()
-                : Container(
-                    color: AppColors.appScaffoldColor,
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: DottedDivider(
-                      strokeWidth: 3,
-                      dottedLength: 3,
-                      space: 3,
-                    ),
-                  ),
             SingleTripItem(
               status: widget.tripStatus,
               onCheckBoxTapped: (
@@ -292,11 +270,12 @@ class _TabbedBodyState extends State<TabbedBody> {
               ) {},
               singleListItem: tripWithSelectedDate[index],
               onTap: () {
-                if (trips[index].statusCode == 1 ||
-                    trips[index].statusCode == 2 ||
-                    trips[index].statusCode == 4) {
-                  widget.viewModel.openBottomSheet(trip: trips[index]);
-                } else if (trips[index].statusCode == 3) {
+                if (tripWithSelectedDate[index].statusCode == 1 ||
+                    tripWithSelectedDate[index].statusCode == 2 ||
+                    tripWithSelectedDate[index].statusCode == 4) {
+                  widget.viewModel.openBottomSheet(
+                      selectedTrip: tripWithSelectedDate[index]);
+                } else if (tripWithSelectedDate[index].statusCode == 3) {
                   if (widget.viewModel.completedTrips.first.consignmentId ==
                       tripWithSelectedDate[index].consignmentId) {
                     widget.viewModel

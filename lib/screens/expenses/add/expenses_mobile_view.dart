@@ -47,9 +47,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       // onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text(
-              "Add Expenses - ${MyPreferences().getSelectedClient().clientId}",
-              style: AppTextStyles.appBarTitleStyle),
+          title: setAppBarTitle(title: 'Add Expense'),
         ),
         body: viewModel.isBusy
             ? Center(

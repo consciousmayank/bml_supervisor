@@ -2,7 +2,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:dio/dio.dart';
 
 class ParentApiResponse {
-  final String badCredentials = 'Bad Credentials.';
+  final String badCredentials = 'Bad Credentials. Please Login Again.';
   final String noResourceFound = 'Resource does not exist.';
   final String serverBusy = 'Server is busy. Please try again';
   final String defaultError = 'Something went wrong.';

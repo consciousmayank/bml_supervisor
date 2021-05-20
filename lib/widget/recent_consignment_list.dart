@@ -3,6 +3,7 @@ import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list_viewmodel.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
@@ -91,18 +92,7 @@ class _RecentConsignmentListState extends State<RecentConsignmentList> {
       viewModel.getConsolidatedData(outerIndex).length,
       (index) => Column(
         children: [
-          index == 0
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Divider(
-                    thickness: 0.5,
-                    color: AppColors.primaryColorShade5,
-                  ),
-                ),
+          index == 0 ? Container() : DottedDivider(),
           SingleConsignmentItem(
             args: SingleConsignmentItemArguments(
               onTap: () {},
@@ -134,27 +124,6 @@ class _RecentConsignmentListState extends State<RecentConsignmentList> {
                   .getConsolidatedData(outerIndex)[index]
                   .consigmentId
                   .toString(),
-              // onTap: () {
-              //   viewModel.takeToConsignmentDetailPage(
-              //     args: ConsignmentDetailsArgument(
-              //       vehicleId:
-              //       viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
-              //       callingScreen: CallingScreen.CONSIGNMENT_LIST,
-              //       consignmentId: viewModel
-              //           .getConsolidatedData(outerIndex)[index]
-              //           .consigmentId
-              //           .toString(),
-              //       routeId: viewModel
-              //           .getConsolidatedData(outerIndex)[index]
-              //           .routeId
-              //           .toString(),
-              //       routeName:
-              //       viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
-              //       entryDate:
-              //       viewModel.getConsolidatedData(outerIndex)[index].entryDate,
-              //     ),
-              //   );
-              // },
             ),
           ),
         ],

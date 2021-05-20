@@ -1,17 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
-import 'package:bml_supervisor/models/driver-info.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
-import 'package:bml_supervisor/models/vehicle_info.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HubsListDetailsBottomSheet extends StatelessWidget {
   final SheetRequest request;

@@ -17,10 +17,8 @@ class LineChartView extends StatefulWidget {
   final String clientId;
   final String selectedDuration;
 
-  LineChartView({
-    this.clientId,
-    this.selectedDuration,
-  });
+  const LineChartView({Key key, this.clientId, this.selectedDuration})
+      : super(key: key);
 
   @override
   _LineChartViewState createState() => _LineChartViewState();

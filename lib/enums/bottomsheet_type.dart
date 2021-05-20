@@ -1,5 +1,5 @@
 enum BottomSheetType {
-  floating,
+  CONFIRMATION_BOTTOM_SHEET,
   viewEntry,
   consignmentList,
   createConsignmentSummary,
@@ -11,5 +11,6 @@ enum BottomSheetType {
   DRIVER_DETAILS,
   VEHICLE_DETAILS,
   HUBS_DETAILS,
-  REVIEW_TRIPS_WARNING
+  REVIEW_TRIPS_WARNING,
+  CREATE_ROUTE
 }

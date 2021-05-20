@@ -43,10 +43,7 @@ class _DriversListViewState extends State<DriversListView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              "All Drivers",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: setAppBarTitle(title: 'Drivers List'),
           ),
           body: viewModel.isBusy
               ? ShimmerContainer(

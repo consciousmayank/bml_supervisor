@@ -7,6 +7,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 
 import 'client_select_viewmodel.dart';
@@ -32,7 +33,7 @@ class _ClientSelectViewState extends State<ClientSelectView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ClientSelectViewModel>.reactive(
         onModelReady: (viewModel) {
-          viewModel.getClientList();
+          viewModel.getClientList(showLoading: true);
           viewModel.preSelectedClient = widget.preSelectedClient;
         },
         builder: (context, viewModel, child) => Scaffold(
@@ -86,60 +87,68 @@ class BodyWidget extends StatelessWidget {
           keyboardType: TextInputType.text,
         ),
         Expanded(
-          child: GridView.count(
-            // Create a grid with 2 columns. If you change the scrollDirection to
-            // horizontal, this produces 2 rows.
-            crossAxisCount: 2,
-            // Generate 100 widgets that display their index in the List.
-            children: List.generate(viewModel.clientsList.length, (index) {
-              return Card(
-                shape: getCardShape(),
-                elevation: defaultElevation,
-                child: InkWell(
-                  onTap: () {
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      MyPreferences()
-                          .saveSelectedClient(viewModel.clientsList[index]);
-                      if (isCalledFromBottomSheet) {
-                        onClientSelected(viewModel.clientsList[index]);
-                      } else {
-                        viewModel.takeToDashBoard();
-                      }
-                    });
-                    viewModel.preSelectedClient = viewModel.clientsList[index];
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        viewModel.preSelectedClient != null
-                            ? Radio<GetClientsResponse>(
-                                value: viewModel.preSelectedClient.clientId ==
-                                        viewModel.clientsList[index].clientId
-                                    ? viewModel.preSelectedClient
-                                    : viewModel.clientsList[index],
-                                onChanged: (GetClientsResponse value) {
-                                  viewModel.preSelectedClient = value;
-                                },
-                                groupValue: viewModel.preSelectedClient,
-                              )
-                            : Container(),
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset(loginIconIcon),
-                            Text(viewModel.clientsList[index].clientId),
-                          ],
-                        )
-                      ],
+          child: LazyLoadScrollView(
+            scrollOffset: (MediaQuery.of(context).size.height ~/ 2),
+            onEndOfPage: () => viewModel.getClientList(showLoading: false),
+            child: GridView.count(
+              // Create a grid with 2 columns. If you change the scrollDirection to
+              // horizontal, this produces 2 rows.
+              crossAxisCount: 2,
+              // Generate 100 widgets that display their index in the List.
+              children: List.generate(viewModel.clientsList.length, (index) {
+                return Card(
+                  shape: getCardShape(),
+                  elevation: defaultElevation,
+                  child: InkWell(
+                    onTap: () {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        print(
+                            'saveSelectedClient :: ${viewModel.clientsList[index].clientId}');
+                        print('index :: $index');
+                        MyPreferences()
+                            .saveSelectedClient(viewModel.clientsList[index]);
+                        if (isCalledFromBottomSheet) {
+                          onClientSelected(viewModel.clientsList[index]);
+                        } else {
+                          viewModel.takeToDashBoard();
+                        }
+                      });
+                      viewModel.preSelectedClient =
+                          viewModel.clientsList[index];
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          viewModel.preSelectedClient != null
+                              ? Radio<GetClientsResponse>(
+                                  value: viewModel.preSelectedClient.clientId ==
+                                          viewModel.clientsList[index].clientId
+                                      ? viewModel.preSelectedClient
+                                      : viewModel.clientsList[index],
+                                  onChanged: (GetClientsResponse value) {
+                                    viewModel.preSelectedClient = value;
+                                  },
+                                  groupValue: viewModel.preSelectedClient,
+                                )
+                              : Container(),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Image.asset(loginIconIcon),
+                              Text(viewModel.clientsList[index].businessName),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ),
       ],

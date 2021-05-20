@@ -59,7 +59,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
 
     var response =
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: MyPreferences()?.getSelectedClient()?.clientId,
       date: getDateString(entryDate),
     );
 
@@ -81,7 +81,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
 
     List<SinglePendingConsignmentListItem> response =
         await _consignmentApis.getConsignmentListPageWise(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: MyPreferences()?.getSelectedClient()?.clientId,
             pageIndex: pageIndex);
     response.forEach((element) {
       pendingConsignmentsDateList.add(element.entryDate);

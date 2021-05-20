@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
@@ -45,10 +46,7 @@ class _AddRoutesViewState extends State<AddRoutesView> {
         },
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
-                title: Text(
-                  'Add Routes',
-                  style: AppTextStyles.appBarTitleStyle,
-                ),
+                title: setAppBarTitle(title: 'Add Route'),
                 centerTitle: true,
               ),
               body: Padding(
@@ -74,7 +72,8 @@ class _AddRoutesViewState extends State<AddRoutesView> {
       enabled: true,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
       ],
       controller: remarkController,
       focusNode: remarkFocusNode,

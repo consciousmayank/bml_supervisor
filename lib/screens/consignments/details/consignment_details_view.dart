@@ -45,12 +45,12 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              viewModel.consignmentDetailResponse != null
-                  ? viewModel.consignmentDetailResponse.entryDate
-                  : "Consignment",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: viewModel.consignmentDetailResponse != null
+                ? Text(
+                    viewModel?.consignmentDetailResponse?.entryDate ?? '',
+                    style: AppTextStyles.appBarTitleStyle,
+                  )
+                : setAppBarTitle(title: 'Consignment'),
             actions: [
               IconButton(
                 icon: viewModel.isListViewSelected
@@ -210,7 +210,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                     child: AppTiles(
                       value: viewModel.consignmentDetailResponse.dropOff == 0
                           ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
+                                      .length >
+                                  0
                               ? viewModel.consignmentDetailResponse
                                       .reviewedItems.last.dropOff
                                       .toString() +
@@ -222,7 +223,8 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                                   .consignmentDetailResponse.items.last.dropOff
                                   .toString()
                           : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
+                                      .length >
+                                  0
                               ? viewModel.consignmentDetailResponse
                                       .reviewedItems.last.dropOff
                                       .toString() +

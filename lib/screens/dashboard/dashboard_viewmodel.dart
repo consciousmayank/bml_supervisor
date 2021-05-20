@@ -8,6 +8,7 @@ import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
@@ -30,7 +31,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   bool openConsignmentGroup = false;
   ProfileApi _profileApi = locator<ProfileApisImpl>();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
-  UserProfileResponse _userProfile;
+  LoginResponse _userProfile;
   Uint8List _image;
 
   Uint8List get image => _image;
@@ -46,17 +47,17 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  UserProfileResponse get userProfile => _userProfile;
+  LoginResponse get userProfile => _userProfile;
 
-  set userProfile(UserProfileResponse value) {
+  set userProfile(LoginResponse value) {
     _userProfile = value;
   }
 
-  PreferencesSavedUser _savedUser;
+  LoginResponse _savedUser;
 
-  PreferencesSavedUser get savedUser => _savedUser;
+  LoginResponse get savedUser => _savedUser;
 
-  set savedUser(PreferencesSavedUser value) {
+  set savedUser(LoginResponse value) {
     _savedUser = value;
     notifyListeners();
   }
@@ -273,7 +274,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   }
 
   takeToDistributorsPage() {
-    navigationService.navigateTo(distributorsLogPageRoute).then(
+    navigationService.navigateTo(hubsListViewPageRoute).then(
           (value) => reloadPage(),
         );
   }
@@ -332,10 +333,9 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   Future getUserProfile() async {
     setBusy(true);
-    UserProfileResponse profileResponse =
-        await _profileApi.getUserProfile(showResponseToast: false);
-    if (profileResponse != null) {
-      userProfile = profileResponse;
+    LoginResponse loggedInUserDetails = MyPreferences().getUserLoggedIn();
+    if (loggedInUserDetails != null) {
+      userProfile = loggedInUserDetails;
       image = getImageFromBase64String(base64String: userProfile.photo);
     }
     notifyListeners();

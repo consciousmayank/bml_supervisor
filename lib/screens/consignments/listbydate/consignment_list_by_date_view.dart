@@ -44,9 +44,8 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                 appBar: AppBar(
                   automaticallyImplyLeading: true,
                   centerTitle: true,
-                  title: Text(
-                    getTitle(viewModel),
-                    style: AppTextStyles.whiteRegular,
+                  title: setAppBarTitle(
+                    title: getTitle(viewModel),
                   ),
                 ),
                 body: viewModel.isBusy

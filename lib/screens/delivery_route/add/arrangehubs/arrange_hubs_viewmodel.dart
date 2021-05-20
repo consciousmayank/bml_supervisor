@@ -1,11 +1,14 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/enums/dialog_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/get_distributors_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/add_route_bottomsheet.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/route_dialog_params.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -76,15 +79,18 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
       remarks: remarks,
       srcLocation: srcLocation,
       dstLocation: dstLocation,
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: MyPreferences()?.getSelectedClient()?.clientId,
       hubs: getHubsList(),
     );
     routeRequest.hubs.first.kms = 0.0;
-    locator<DialogService>()
-        .showCustomDialog(
-      variant: DialogType.CREATE_ROUTE,
+    locator<BottomSheetService>()
+        .showCustomSheet(
+      barrierLabel: 'Barrier Label',
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.CREATE_ROUTE,
       // Which builder you'd like to call that was assigned in the builders function above.
-      customData: RouteDialogParams(routeRequest: routeRequest),
+      customData: AddRouteSummaryBottomSheetInputArgs(request: routeRequest),
     )
         .then((value) {
       if (value != null) {
@@ -98,20 +104,20 @@ class ArrangeHubsViewModel extends GeneralisedBaseViewModel {
   void createRouteConfirmed(CreateRouteRequest request) async {
     // print('Request is ${request.toJson()}');
     ApiResponse _apiResponse = await _routesApis.addRoute(request: request);
-    dialogService
-        .showConfirmationDialog(
+
+    bottomSheetService
+        .showCustomSheet(
+          customData: ConfirmationBottomSheetInputArgs(
             title: _apiResponse.isSuccessful()
                 ? addRouteSuccessful
                 : addRouteUnSuccessful,
-            description: _apiResponse.message,
-            barrierDismissible: false)
-        .then((value) {
-      if (value.confirmed) {
-        if (_apiResponse.isSuccessful()) {
-          navigationService.clearStackAndShow(dashBoardPageRoute);
-        }
-      }
-    });
+          ),
+          barrierDismissible: false,
+          isScrollControlled: true,
+          variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+        )
+        .then((value) =>
+            navigationService.clearTillFirstAndShow(addRoutesPageRoute));
   }
 
   bool isKmEmpty(List<GetDistributorsResponse> list) {

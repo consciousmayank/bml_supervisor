@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 
 const String REGISTER_VEHICLE = "/vehicle/add";
 const String SUMBIT_ENTRY = "/dailyKilometer/add";
@@ -62,19 +63,13 @@ final GET_PAYMENT_HISTORY =
 final GET_EXPENSES_FOR_CLIENT_AND_PERIOD =
     (clientId, period) => "/expense/list/client/$clientId/period/$period";
 
-final GET_DASHBOARD_STATS = (PreferencesSavedUser user) => user.role == 'CLIENT'
-    ? '/client/${user.userName}/dashboard/statistics'
-    : user.role == 'ADMIN'
-        ? '/admin/${user.userName}/dashboard/statistics'
-        : '/manager/${user.userName}/dashboard/statistics';
-
 /////////////////////////Post Security/////////////////////////
-final LOGIN = '/user/auth';
+final LOGIN = '/manager/auth';
 
 final GET_DASHBOARD_TILES = //06 Get Client Aggregate Driven Km (Donut Chart)
     (clientId) => "/manager/dashboard/statistics/client/$clientId";
 
-const String GET_CLIENTS = "/manager/client/list";
+final GET_CLIENTS = (pageNumber) => "/manager/client/list/page/$pageNumber";
 const String GET_USER = "/manager/profile";
 const String UPDATE_USER_MOBILE = "/manager/update/mobile";
 const String UPDATE_USER_EMAIL = "/manager/update/email";

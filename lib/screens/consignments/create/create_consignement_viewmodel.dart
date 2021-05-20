@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
@@ -9,6 +10,7 @@ import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -150,7 +152,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
 
   getClients() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = MyPreferences()?.getSelectedClient();
     getRoutes(selectedClient.clientId);
     setBusy(false);
   }
@@ -237,17 +239,24 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
 
     ApiResponse createConsignmentResponse = await _consignmentApis
         .createConsignment(createConsignmentRequest: consignmentRequest);
-    dialogService
-        .showConfirmationDialog(
-            title: createConsignmentResponse.message,
-            description: "You can edit the consignment, in View Consignment.")
-        .then((value) {
-      if (createConsignmentResponse.status != 'failed') {
-        navigationService.back();
-      } else {
-        navigationService.back();
-      }
-    });
+
+    bottomSheetService
+        .showCustomSheet(
+      customData: ConfirmationBottomSheetInputArgs(
+        title: createConsignmentResponse.message,
+      ),
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+    )
+        .then(
+      (value) {
+        if (createConsignmentResponse.isSuccessful()) {
+          navigationService.replaceWith(allotConsignmentsPageRoute);
+        }
+      },
+    );
+
     setBusy(false);
   }
 
@@ -308,31 +317,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // getRecentConsignmentsForCreateConsignment() async {
-  //   setBusy(true);
-  //   recentConsignmentsList = [];
-  //   recentConsignmentsDateList = Set();
-  //   List<SinglePendingConsignmentListItem> response =
-  //       await _consignmentApis.getRecentConsignmentsForCreateConsignment(
-  //           clientId: MyPreferences().getSelectedClient().clientId);
-  //
-  //   response.forEach((element) {
-  //     recentConsignmentsDateList.add(element.entryDate);
-  //   });
-  //
-  //   recentConsignmentsList = copyList(response);
-  //
-  //   setBusy(false);
-  //   notifyListeners();
-  // }
-  //
-  // List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {
-  //   return recentConsignmentsList
-  //       .where((element) =>
-  //           element.entryDate == recentConsignmentsDateList.elementAt(index))
-  //       .toList();
-  // }
-
   Future consignmentsListBottomSheet() async {
     var sheetResponse = await bottomSheetService.showCustomSheet(
       isScrollControlled: true,
@@ -340,9 +324,5 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
       customData: consignmentsList,
       variant: BottomSheetType.consignmentList,
     );
-
-    print('confirmationResponse confirmed: ${sheetResponse?.confirmed}');
-    print(
-        'confirmationResponse return Data: ${sheetResponse?.responseData.toString()}');
   }
 }

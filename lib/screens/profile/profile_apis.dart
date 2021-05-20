@@ -12,7 +12,7 @@ abstract class ProfileApi {
   Future<bool> changePassword(
       {@required String userName, @required String newPassword});
 
-  Future<UserProfileResponse> getUserProfile({bool showResponseToast = true});
+  // Future<UserProfileResponse> getUserProfile({bool showResponseToast = true});
   Future<ApiResponse> updateUserMobile({UpdateUserRequest request});
   Future<ApiResponse> updateUserEmail({UpdateUserRequest request});
 }
@@ -37,16 +37,16 @@ class ProfileApisImpl extends BaseApi implements ProfileApi {
     return _apiResponse.isSuccessful();
   }
 
-  @override
-  Future<UserProfileResponse> getUserProfile(
-      {bool showResponseToast = true}) async {
-    ParentApiResponse response = await apiService.getUserProfile();
-    if (filterResponse(response, showSnackBar: showResponseToast) != null) {
-      return UserProfileResponse.fromJson(response.response.data);
-    } else {
-      return null;
-    }
-  }
+  // @override
+  // Future<UserProfileResponse> getUserProfile(
+  //     {bool showResponseToast = true}) async {
+  //   ParentApiResponse response = await apiService.getUserProfile();
+  //   if (filterResponse(response, showSnackBar: showResponseToast) != null) {
+  //     return UserProfileResponse.fromJson(response.response.data);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   Future<ApiResponse> updateUserMobile({UpdateUserRequest request}) async {

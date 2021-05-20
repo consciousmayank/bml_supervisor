@@ -121,9 +121,9 @@ const List<String> selectDurationList = [
   "LAST MONTH",
 ];
 const List<String> selectItemUnit = [
-  "Crate",
-  "Docket",
-  "Carton",
+  "Crates",
+  "Kilograms",
+  "Cartons",
   "Pieces",
 ];
 
@@ -195,6 +195,7 @@ const String addDriverAlternateMobileHint = "Alternate Mobile Number";
 const String addDriverWhatsAppMobileHint = "WhatsApp Number";
 const String addDriverExperienceHint = "Experience (Yrs)";
 const String addDriverStreetHint = "Street";
+const String addDriverHnoBuildingNameHint = "House No. or Building Name/Number";
 const String addDriverLocalityHint = "Locality";
 const String addDriverLandmarkHint = "Landmark";
 const String addDriverCityHint = "City";

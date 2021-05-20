@@ -3,6 +3,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -29,10 +30,7 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                'Route Hub List',
-                style: AppTextStyles.appBarTitleStyle,
-              ),
+              title: setAppBarTitle(title: 'Route Hub List'),
               centerTitle: true,
             ),
             body: Padding(
@@ -220,7 +218,13 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
                     enabled: true,
                     // index != 0,
                     keyboardType: TextInputType.number,
-                    // initialValue: index == 0 ? '0' : null,
+                    initialValue:
+                        viewModel.selectedHubList[index].kiloMeters == null
+                            ? ''
+                            : viewModel.selectedHubList[index].kiloMeters
+                                .toString(),
+                    // ? '0'
+                    // : null,
                     // widgetdget.args.newHubsList[index].kiloMeters!=null
                     //             widget.args.newHubsList[index].kiloMeters.toString(),
                     onChanged: (value) {
@@ -236,9 +240,9 @@ class _ArrangeHubsViewState extends State<ArrangeHubsView> {
           },
           itemCount: viewModel.selectedHubList.length,
           separatorBuilder: (BuildContext context, int index) {
-            return Divider(
-              thickness: 0.9,
-              color: AppColors.white,
+            return Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: DottedDivider(),
             );
           },
         ),

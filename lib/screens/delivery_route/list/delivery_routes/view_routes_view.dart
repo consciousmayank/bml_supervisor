@@ -23,9 +23,7 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
               right: false,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text(
-                      "Route List - ${capitalizeFirstLetter(MyPreferences().getSelectedClient().clientId)}",
-                      style: AppTextStyles.appBarTitleStyle),
+                  title: setAppBarTitle(title: 'Route List'),
                 ),
                 body: getBody(context: context, viewModel: viewModel),
               ),

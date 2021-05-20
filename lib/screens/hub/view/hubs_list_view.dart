@@ -29,10 +29,7 @@ class _HubsListViewState extends State<HubsListView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              "All Hubs",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: setAppBarTitle(title: 'Hub List'),
           ),
           body: viewModel.isBusy
               ? ShimmerContainer(

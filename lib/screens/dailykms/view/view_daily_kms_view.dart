@@ -57,9 +57,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
         });
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
-                style: AppTextStyles.appBarTitleStyle),
+            title: setAppBarTitle(title: 'Daily Kilometers'),
             centerTitle: true,
             actions: [
               InkWell(
@@ -158,7 +156,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
       {ViewDailyKmsViewModel viewModel, String registrationNumber}) {
     viewModel.vehicleEntrySearch(
       regNum: registrationNumber,
-      clientId: viewModel.selectedClient.clientId,
+      clientId: viewModel.selectedClient?.clientId,
     );
   }
 
@@ -466,7 +464,6 @@ class _SingleEntryWidget extends StatelessWidget {
         context: context,
         builder: (_) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.25,
             child: ClipRRect(
               borderRadius: getBorderRadius(),
               child: Card(

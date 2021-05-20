@@ -38,7 +38,7 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     List<ConsignmentTrackingStatusResponse> response;
     response = await _dashboardApi.getConsignmentTrackingStatus(
         tripStatus: TripStatus.COMPLETED,
-        clientId: MyPreferences().getSelectedClient().clientId);
+        clientId: MyPreferences()?.getSelectedClient()?.clientId);
     completedTrips = copyList(response);
     completedTrips.forEach((element) {
       completeTripsDate.add(element.consignmentDate);
@@ -46,7 +46,7 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
 
     response = await _dashboardApi.getConsignmentTrackingStatus(
         tripStatus: TripStatus.APPROVED,
-        clientId: MyPreferences().getSelectedClient().clientId);
+        clientId: MyPreferences()?.getSelectedClient()?.clientId);
     verifiedTrips = copyList(response);
     verifiedTrips.forEach((element) {
       verifiedTripsDate.add(element.consignmentDate);
@@ -60,17 +60,17 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     List<ConsignmentTrackingStatusResponse> response =
         await _dashboardApi.getConsignmentTrackingStatus(
             tripStatus: tripStatus,
-            clientId: MyPreferences().getSelectedClient().clientId);
+            clientId: MyPreferences()?.getSelectedClient()?.clientId);
     trips = copyList(response);
     setBusy(false);
     notifyListeners();
   }
 
-  void openBottomSheet({ConsignmentTrackingStatusResponse trip}) async {
+  void openBottomSheet({ConsignmentTrackingStatusResponse selectedTrip}) async {
     SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
       barrierDismissible: false,
       isScrollControlled: false,
-      customData: DetailedTripsBottomSheetInputArgs(clickedTrip: trip),
+      customData: DetailedTripsBottomSheetInputArgs(clickedTrip: selectedTrip),
       variant: BottomSheetType.upcomingTrips,
     );
 
@@ -88,6 +88,8 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     navigationService
         .navigateTo(reviewCompletedTripsPageRoute, arguments: trip)
         .then((value) {
+      completeTripsDate.clear();
+      verifiedTripsDate.clear();
       getCompletedAndVerifiedTrips();
       // if (value != null) {
       //   ReturnDetailedTripsViewArgs returningArgs = value;
@@ -99,8 +101,6 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
       // }
     });
   }
-
-  getUniqueDates() {}
 
   void openWarningBottomSheet(
       {ConsignmentTrackingStatusResponse selectedTrip}) async {

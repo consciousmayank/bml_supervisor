@@ -15,10 +15,8 @@ class BarChartView extends StatefulWidget {
   final String clientId;
   final String selectedDuration;
 
-  BarChartView({
-    this.clientId,
-    this.selectedDuration,
-  });
+  const BarChartView({Key key, this.clientId, this.selectedDuration})
+      : super(key: key);
 
   @override
   _BarChartViewState createState() => _BarChartViewState();
@@ -29,7 +27,7 @@ class _BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
-        clientId: MyPreferences().getSelectedClient().clientId,
+        clientId: MyPreferences()?.getSelectedClient()?.clientId,
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy

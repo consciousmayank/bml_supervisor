@@ -25,10 +25,7 @@ class _VehiclesListViewState extends State<VehiclesListView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              "All Vehicles",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: setAppBarTitle(title: 'Vehicle List'),
           ),
           body: viewModel.isBusy
               ? ShimmerContainer(

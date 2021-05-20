@@ -90,16 +90,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
   List<ExpensePieChartResponse> expensePieChartResponseListAll = [];
 
-  // List<ExpensePieChartResponse> _expensePieChartResponseList = [];
-  //
-  // List<ExpensePieChartResponse> get expensePieChartResponseList =>
-  //     _expensePieChartResponseList;
-  //
-  // set expensePieChartResponseList(List<ExpensePieChartResponse> value) {
-  //   _expensePieChartResponseList = value;
-  //   notifyListeners();
-  // }
-
   List<String> uniqueDates = [];
 
   String _expenseAmount;
@@ -186,7 +176,6 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
       ++expenseCount;
     });
     _expenseTypes.insert(0, "All");
-    // takeToViewExpenseDetailedPage();
     notifyListeners();
     setBusy(false);
   }
@@ -212,6 +201,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         selectedExpenseType = args.selectedExpense;
         if (args.index == 0) {
           viewExpensesResponse = copyList(expensePieChartResponseListAll);
+          updateTiles(selectedList: viewExpensesResponse);
         } else {
           filterList(args.index);
         }
@@ -232,5 +222,15 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
 
     viewExpensesResponse.clear();
     viewExpensesResponse = copyList(tempList);
+    updateTiles(selectedList: tempList);
+  }
+
+  void updateTiles({List<ExpensePieChartResponse> selectedList}) {
+    totalExpenses = 0;
+    expenseCount = 0;
+    selectedList.forEach((element) {
+      totalExpenses += element.eAmount;
+      ++expenseCount;
+    });
   }
 }

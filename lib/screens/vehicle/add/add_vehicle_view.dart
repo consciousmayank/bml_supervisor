@@ -25,62 +25,39 @@ class AddVehicleView extends StatefulWidget {
 }
 
 class _AddVehicleViewState extends State<AddVehicleView> {
-  final _formKey = GlobalKey<FormState>();
-  final _controller = ScrollController();
-
   final FocusNode chasisNumberFocusNode = FocusNode();
   final FocusNode vehicleHeightFocusNode = FocusNode();
   final FocusNode vehicleWidthFocusNode = FocusNode();
   final FocusNode vehicleLengthFocusNode = FocusNode();
-  // final TextEditingController chasisNumberController = TextEditingController();
 
   final FocusNode engineNumberFocusNode = FocusNode();
-  // final TextEditingController engineNumberController = TextEditingController();
 
   final FocusNode ownerNameFocusNode = FocusNode();
-  // final TextEditingController ownerNameController = TextEditingController();
 
   final FocusNode lastOwnerNameFocusNode = FocusNode();
-  // final TextEditingController lastOwnerNameController = TextEditingController();
 
   final FocusNode vehicleMakeFocusNode = FocusNode();
-  // final TextEditingController vehicleMakeController = TextEditingController();
 
   final FocusNode vehicleModelFocusNode = FocusNode();
-  // final TextEditingController vehicleModelController = TextEditingController();
 
   final FocusNode rtoFocusNode = FocusNode();
-  // final TextEditingController rtoController = TextEditingController();
 
   final FocusNode vehicleColorFocusNode = FocusNode();
-  // final TextEditingController vehicleColorController = TextEditingController();
 
   final FocusNode vehicleInitialReadingFocusNode = FocusNode();
-  // final TextEditingController vehicleInitialReadingController =
-  // TextEditingController();
 
   final FocusNode vehicleLoadCapacityFocusNode = FocusNode();
-  // final TextEditingController vehicleLoadCapacityController =
-  // TextEditingController();
 
   final FocusNode registrationNumberFocusNode = FocusNode();
-  // final TextEditingController registrationNumberController =
-  // TextEditingController();
 
-  final TextEditingController registrationUptoController =
-      TextEditingController();
-  final TextEditingController registrationDateController =
-      TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddVehicleViewModel>.reactive(
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
-                title: Text(
-                  'Add Vehicle',
-                  style: AppTextStyles.appBarTitleStyle,
-                ),
+                title: setAppBarTitle(title: 'Add Vehicle'),
               ),
               body: Container(
                 padding: const EdgeInsets.all(8),
@@ -90,13 +67,13 @@ class _AddVehicleViewState extends State<AddVehicleView> {
                     ? ShimmerContainer(
                         itemCount: 20,
                       )
-                    : AddVehicleRequestFormView(context, viewModel),
+                    : addVehicleRequestFormView(context, viewModel),
               ),
             ),
         viewModelBuilder: () => AddVehicleViewModel());
   }
 
-  Widget AddVehicleRequestFormView(
+  Widget addVehicleRequestFormView(
       BuildContext context, AddVehicleViewModel viewModel) {
     return Form(
       key: _formKey,
@@ -105,7 +82,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           Expanded(
             flex: 1,
             child: ListView(
-              controller: _controller,
+              controller: viewModel.controller,
               children: [
                 chasisNumber(viewModel: viewModel),
                 hSizedBox(20),
@@ -686,7 +663,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
         errorText: viewModel.addVehicleRequest.registrationDateError,
         hintText: registrationDateHint,
         enabled: false,
-        controller: registrationDateController,
+        controller: viewModel.registrationDateController,
         onTextChange: (String value) {
           if (value.trim().length > 0) {
             viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
@@ -699,10 +676,6 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           if (value.isEmpty) {
             viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
               registrationDateError: textRequired,
-            );
-          } else if (!isAlphanumeric(value)) {
-            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
-              registrationDateError: invalidChasisNumber,
             );
           }
           return null;
@@ -717,7 +690,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               registrationDate:
                   DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase(),
             );
-            registrationDateController.text =
+            viewModel.registrationDateController.text =
                 DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
           }
         });
@@ -729,7 +702,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
         // initialValue: viewModel.addVehicleRequest.registrationUpto,
         hintText: registrationUptoHint,
         enabled: false,
-        controller: registrationUptoController,
+        controller: viewModel.registrationUptoController,
         onTextChange: (String value) {
           if (value.trim().length > 0) {
             viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
@@ -742,10 +715,6 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           if (value.isEmpty) {
             viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
               registrationUptoError: textRequired,
-            );
-          } else if (!isAlphanumeric(value)) {
-            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
-              registrationUptoError: invalidChasisNumber,
             );
           }
           return null;
@@ -760,7 +729,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
                 registrationUpto: DateFormat('dd-MM-yyyy')
                     .format(selectedDate)
                     .toLowerCase());
-            registrationUptoController.text =
+            viewModel.registrationUptoController.text =
                 DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
           }
         });
@@ -803,9 +772,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           hint: ownerLevelHint,
           onOptionSelect: (selectedValue) {
             viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
-              ownerLevel: int.parse(selectedValue),
-            );
-            viewModel.addVehicleRequest.ownerLevelError = textRequired;
+                ownerLevel: int.parse(selectedValue), ownerLevelError: null);
             viewModel.notifyListeners();
           },
           optionList: ownerLevelList,
@@ -836,9 +803,10 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               : null,
           hint: vehicleClassHint,
           onOptionSelect: (selectedValue) {
-            viewModel.addVehicleRequest = viewModel.addVehicleRequest
-                .copyWith(vehicleClass: selectedValue);
-            viewModel.addVehicleRequest.vehicleClassError = textRequired;
+            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
+              vehicleClass: selectedValue,
+              vehicleClassError: null,
+            );
             viewModel.notifyListeners();
           },
           optionList: vehicleClassList,
@@ -869,9 +837,10 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               : null,
           hint: vehicleFuelTypeHint,
           onOptionSelect: (selectedValue) {
-            viewModel.addVehicleRequest =
-                viewModel.addVehicleRequest.copyWith(fuelType: selectedValue);
-            viewModel.addVehicleRequest.fuelTypeError = textRequired;
+            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
+              fuelType: selectedValue,
+              fuelTypeError: null,
+            );
             viewModel.notifyListeners();
           },
           optionList: vehicleFuelTypeList,
@@ -902,9 +871,11 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               : null,
           hint: vehicleEmissionTypeHint,
           onOptionSelect: (selectedValue) {
-            viewModel.addVehicleRequest =
-                viewModel.addVehicleRequest.copyWith(emission: selectedValue);
-            viewModel.addVehicleRequest.emissionError = textRequired;
+            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
+              emission: selectedValue,
+              emissionError: null,
+            );
+
             viewModel.notifyListeners();
           },
           optionList: vehicleEmmisionTypeList,
@@ -935,9 +906,9 @@ class _AddVehicleViewState extends State<AddVehicleView> {
               : null,
           hint: vehicleSeatingCapacityHint,
           onOptionSelect: (selectedValue) {
-            viewModel.addVehicleRequest = viewModel.addVehicleRequest
-                .copyWith(seatingCapacity: int.parse(selectedValue));
-            viewModel.addVehicleRequest.seatingCapacityError = textRequired;
+            viewModel.addVehicleRequest = viewModel.addVehicleRequest.copyWith(
+                seatingCapacity: int.parse(selectedValue),
+                seatingCapacityError: null);
             viewModel.notifyListeners();
           },
           optionList: vehicleSeatingList,
@@ -963,38 +934,207 @@ class _AddVehicleViewState extends State<AddVehicleView> {
     if (viewModel.addVehicleRequest.seatingCapacity == null) {
       viewModel.addVehicleRequest.seatingCapacityError = textRequired;
       returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.seatingCapacityError = null;
+      returningValue = false;
     }
+
     if (viewModel.addVehicleRequest.ownerLevel == null) {
       viewModel.addVehicleRequest.ownerLevelError = textRequired;
       returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.ownerLevelError = null;
+      returningValue = false;
     }
 
     if (viewModel.addVehicleRequest.vehicleClass == null) {
       viewModel.addVehicleRequest.vehicleClassError = textRequired;
       returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.vehicleClassError = null;
+      returningValue = false;
     }
 
     if (viewModel.addVehicleRequest.fuelType == null) {
       viewModel.addVehicleRequest.fuelTypeError = textRequired;
       returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.fuelTypeError = null;
+      returningValue = false;
     }
 
     if (viewModel.addVehicleRequest.emission == null) {
       viewModel.addVehicleRequest.emissionError = textRequired;
       returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.emissionError = null;
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.height == null) {
+      viewModel.addVehicleRequest.widthError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.widthError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.width == null) {
+      viewModel.addVehicleRequest.widthError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.widthError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.length == null) {
+      viewModel.addVehicleRequest.lengthError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.lengthError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.loadCapacity == null) {
+      viewModel.addVehicleRequest.loadCapacityError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.loadCapacityError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.initReading == null) {
+      viewModel.addVehicleRequest.initReadingError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.initReadingError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.color == null) {
+      viewModel.addVehicleRequest.colorError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.colorError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.rto == null) {
+      viewModel.addVehicleRequest.rtoError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.rtoError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.emission == null) {
+      viewModel.addVehicleRequest.emissionError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.emissionError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.model == null) {
+      viewModel.addVehicleRequest.modelError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.modelError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.make == null) {
+      viewModel.addVehicleRequest.makeError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.makeError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.fuelType == null) {
+      viewModel.addVehicleRequest.fuelTypeError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.fuelTypeError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.vehicleClass == null) {
+      viewModel.addVehicleRequest.vehicleClassError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.vehicleClassError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.lastOwner == null) {
+      viewModel.addVehicleRequest.lastOwnerError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.lastOwnerError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.ownerLevel == null) {
+      viewModel.addVehicleRequest.ownerLevelError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.ownerLevelError = null;
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.ownerName == null) {
+      viewModel.addVehicleRequest.ownerNameError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.ownerNameError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.engineNumber == null) {
+      viewModel.addVehicleRequest.engineNumberError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.engineNumberError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.chassisNumber == null) {
+      viewModel.addVehicleRequest.chassisNumberError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.chassisNumberError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.registrationDate == null) {
+      viewModel.addVehicleRequest.registrationDateError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.registrationDateError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.registrationNumber == null) {
+      viewModel.addVehicleRequest.registrationNumberError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.registrationNumberError = '';
+      returningValue = false;
+    }
+
+    if (viewModel.addVehicleRequest.registrationUpto == null) {
+      viewModel.addVehicleRequest.registrationUptoError = textRequired;
+      returningValue = true;
+    } else {
+      viewModel.addVehicleRequest.registrationUptoError = '';
+      returningValue = false;
     }
 
     if (returningValue) {
-      Future.delayed(Duration(milliseconds: 200), () {
-        _controller.animateTo(
-          _controller.position.maxScrollExtent,
-          curve: Curves.easeIn,
-          duration: Duration(milliseconds: 400),
-        );
-      });
-    } else {
-      viewModel.notifyListeners();
+      viewModel.scrollToBottom();
     }
+    viewModel.notifyListeners();
 
     return returningValue;
   }

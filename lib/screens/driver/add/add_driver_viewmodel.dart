@@ -1,9 +1,12 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -12,7 +15,6 @@ import 'package:flutter/material.dart';
 class AddDriverViewModel extends GeneralisedBaseViewModel {
   String _alternatePhNo = '';
   String _whatsAppNo = '';
-
   String get whatsAppNo => _whatsAppNo;
 
   set whatsAppNo(String value) {
@@ -113,22 +115,33 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
   }
 
   void addDriver({AddDriverRequest newDriverObject}) async {
+    setBusy(true);
     ApiResponse _apiResponse =
         await _driverApis.addDriver(request: newDriverObject);
-    dialogService
-        .showConfirmationDialog(
-            title: _apiResponse.isSuccessful()
-                ? addDriverSuccessful
-                : addDriverUnSuccessful,
-            description: _apiResponse.message,
-            barrierDismissible: false)
+
+    // if (_apiResponse.isSuccessful()) {
+    pinCodeController.clear();
+    cityController.clear();
+    countryController.clear();
+    stateController.clear();
+    bottomSheetService
+        .showCustomSheet(
+      customData: ConfirmationBottomSheetInputArgs(
+          title: _apiResponse.isSuccessful()
+              ? addDriverSuccessful
+              : addDriverUnSuccessful,
+          description: _apiResponse?.message ?? null),
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+    )
         .then((value) {
-      if (value.confirmed) {
-        if (_apiResponse.isSuccessful()) {
-          navigationService.back();
-        }
+      if (_apiResponse.isSuccessful()) {
+        navigationService.replaceWith(addDriverPageRoute);
       }
     });
+    // }
+    setBusy(false);
   }
 
   String getSalutation() {

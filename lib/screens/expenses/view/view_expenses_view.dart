@@ -75,10 +75,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
             ),
           ),
           appBar: AppBar(
-            title: Text(
-              'View Expenses - ${MyPreferences().getSelectedClient().clientId}',
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: setAppBarTitle(title: 'View Expenses'),
             actions: [
               IconButton(
                   icon: Image.asset(
@@ -235,53 +232,47 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
             index -= 1;
 
             return viewModel.getConsolidatedData(index).length > 0
-                ? InkWell(
-                    onTap: () {
-                      // showViewEntryDetailPreview(
-                      //     context, vehicleEntrySearchResponse[index]);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: ClipRRect(
-                        borderRadius: getBorderRadius(),
-                        child: Card(
-                          color: AppColors.appScaffoldColor,
-                          elevation: defaultElevation,
-                          shape: getCardShape(),
-                          child: Column(
-                            children: [
-                              // if date is same don't build new date header
-                              // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: ThemeConfiguration.primaryBackground,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(5),
-                                      topRight: Radius.circular(5)),
-                                ),
-                                height: 50.0,
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                alignment: Alignment.centerLeft,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Date',
-                                      style: AppTextStyles.latoBold16White,
-                                    ),
-                                    Text(
-                                      viewModel.uniqueDates[index].toString(),
-                                      style: AppTextStyles.latoBold16White,
-                                    ),
-                                  ],
-                                ),
+                ? Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ClipRRect(
+                      borderRadius: getBorderRadius(),
+                      child: Card(
+                        color: AppColors.appScaffoldColor,
+                        elevation: defaultElevation,
+                        shape: getCardShape(),
+                        child: Column(
+                          children: [
+                            // if date is same don't build new date header
+                            // if(viewModel.vehicleEntrySearchResponseList.length > 0){}
+                            Container(
+                              decoration: BoxDecoration(
+                                color: ThemeConfiguration.primaryBackground,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5),
+                                    topRight: Radius.circular(5)),
                               ),
-                              Column(
-                                children: buildNewEntryRow(viewModel, index),
-                              )
-                            ],
-                          ),
+                              height: 50.0,
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Date',
+                                    style: AppTextStyles.latoBold16White,
+                                  ),
+                                  Text(
+                                    viewModel.uniqueDates[index].toString(),
+                                    style: AppTextStyles.latoBold16White,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              children: buildNewEntryRow(viewModel, index),
+                            )
+                          ],
                         ),
                       ),
                     ),

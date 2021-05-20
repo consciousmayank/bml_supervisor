@@ -7,7 +7,6 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class DetailedTripsBottomSheet extends StatelessWidget {
@@ -200,22 +199,6 @@ class DetailedTripsBottomSheet extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  shouldShowStartTripButton({String dispatchTime}) {
-    var now = new DateTime.now();
-
-    DateTime timeToDispatch = DateTime.parse(
-      DateFormat("dd-MM-yyyy", "en_US")
-          .add_jms()
-          .parse(dispatchTime)
-          .toString(),
-    );
-    //Todo remove before deploying
-    return true;
-    var different = timeToDispatch.difference(now);
-
-    return different.inMinutes < 30;
   }
 }
 

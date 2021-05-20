@@ -92,18 +92,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                 child: Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: true,
-                    title: Text(
-                        "Review Consignments - ${MyPreferences().getSelectedClient().clientId}",
-                        style: AppTextStyles.appBarTitleStyle),
-                    // actions: [
-                    //   isEditAllowed
-                    //       ? TextButton(
-                    //           onPressed: () {
-                    //             // call update consignment api
-                    //           },
-                    //           child: Text("Edit"))
-                    //       : Container()
-                    // ],
+                    title: setAppBarTitle(title: 'Review Consignment'),
                   ),
                   body: viewModel.isBusy
                       ? Center(
@@ -279,7 +268,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                     ],
                   ),
-
                   Expanded(
                     child: PageView.builder(
                       onPageChanged: (index) {

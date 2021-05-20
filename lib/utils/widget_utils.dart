@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_text_styles.dart';
@@ -83,7 +87,7 @@ wSpacer() {
   );
 }
 
-void hideKeyboard(BuildContext context) {
+void hideKeyboard({@required BuildContext context}) {
   FocusScopeNode currentFocus = FocusScope.of(context);
   if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
     currentFocus.focusedChild.unfocus();
@@ -114,7 +118,9 @@ LinearProgressIndicator getLinearProgress() {
 }
 
 String capitalizeFirstLetter(String title) {
-  return "${title[0].toUpperCase()}${title.substring(1)}";
+  return title != null && title.length > 0
+      ? "${title[0].toUpperCase()}${title.substring(1)}"
+      : '';
 }
 
 String getDateString(DateTime date) {
@@ -421,5 +427,14 @@ Widget drawerList(
         ),
       ),
     ),
+  );
+}
+
+Text setAppBarTitle({
+  @required String title,
+}) {
+  return Text(
+    '$title - ${capitalizeFirstLetter(MyPreferences()?.getSelectedClient()?.clientId)}',
+    style: AppTextStyles.whiteRegular,
   );
 }

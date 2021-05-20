@@ -6,6 +6,7 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -27,10 +28,7 @@ class _PickHubsViewState extends State<PickHubsView> {
         onModelReady: (viewModel) {},
         builder: (context, viewModel, child) => Scaffold(
               appBar: AppBar(
-                title: Text(
-                  'Pick Hubs',
-                  style: AppTextStyles.appBarTitleStyle,
-                ),
+                title: setAppBarTitle(title: 'Pick Hubs'),
                 centerTitle: true,
               ),
               body: Padding(
@@ -97,10 +95,7 @@ class _PickHubsViewState extends State<PickHubsView> {
                           },
                           itemCount: widget.args.hubsList.length,
                           separatorBuilder: (BuildContext context, int index) {
-                            return Divider(
-                              thickness: 1,
-                              color: AppColors.primaryColorShade3,
-                            );
+                            return DottedDivider();
                           },
                         ),
                       ),

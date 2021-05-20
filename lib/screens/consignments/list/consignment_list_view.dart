@@ -31,7 +31,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
         //todo: put new api for last seven entries here
         // viewModel.getRecentConsignments();
         viewModel.getRecentDrivenKm(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: MyPreferences()?.getSelectedClient()?.clientId,
             isFullScreen: widget.isFulPageView);
       },
       builder: (context, viewModel, child) => SafeArea(
@@ -56,8 +56,7 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
     if (widget.isFulPageView) {
       return Scaffold(
         appBar: AppBar(
-          title:
-              Text("All Consignments", style: AppTextStyles.appBarTitleStyle),
+          title: setAppBarTitle(title: 'Consignments'),
         ),
         body: child,
       );

@@ -21,13 +21,17 @@ class ConsignmentTrackingStatusResponse {
       this.vehicleId,
       this.itemWeight,
       this.statusCode,
-      this.isSelected = false});
+      this.isSelected = false,
+      this.remark,
+      this.routeDesc});
 
   final int dstLocation;
   final String consignmentDate;
+  final String routeDesc;
   final String itemUnit;
   final int consignmentId;
   final String routeTitle;
+  final String remark;
   final int srcLocation;
   final int itemDrop;
   final String dispatchDateTime;
@@ -56,6 +60,8 @@ class ConsignmentTrackingStatusResponse {
     String vehicleId,
     double itemWeight,
     int statusCode,
+    String remark,
+    String routeDesc,
   }) =>
       ConsignmentTrackingStatusResponse(
         dstLocation: dstLocation ?? this.dstLocation,
@@ -73,6 +79,8 @@ class ConsignmentTrackingStatusResponse {
         vehicleId: vehicleId ?? this.vehicleId,
         itemWeight: itemWeight ?? this.itemWeight,
         statusCode: statusCode ?? this.statusCode,
+        remark: remark ?? this.remark,
+        routeDesc: routeDesc ?? this.routeDesc,
       );
 
   factory ConsignmentTrackingStatusResponse.fromJson(String str) =>
@@ -98,6 +106,8 @@ class ConsignmentTrackingStatusResponse {
         vehicleId: json["vehicleId"],
         itemWeight: json["itemWeight"],
         statusCode: json["statusCode"],
+        remark: json["remark"],
+        routeDesc: json["routeDesc"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -116,5 +126,7 @@ class ConsignmentTrackingStatusResponse {
         "vehicleId": vehicleId,
         "itemWeight": itemWeight,
         "statusCode": statusCode,
+        "remark": remark,
+        "routeDesc": routeDesc,
       };
 }

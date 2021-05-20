@@ -3,6 +3,7 @@ import 'package:bml_supervisor/screens/consignments/create/create_consignment_pa
 import 'package:bml_supervisor/screens/consignments/create/existing_consignment_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/delivery_route/add/add_route_bottomsheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
 import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
@@ -14,6 +15,8 @@ import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -24,8 +27,9 @@ void setupBottomSheetUi() {
   final bottomSheetService = locator<BottomSheetService>();
 
   final builders = {
-    BottomSheetType.floating: (context, sheetRequest, completer) =>
-        _FloatingBoxBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.CONFIRMATION_BOTTOM_SHEET: (context, sheetRequest,
+            completer) =>
+        _ConfirmationBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.viewEntry: (context, sheetRequest, completer) =>
         DailyKmsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.consignmentList: (context, sheetRequest, completer) =>
@@ -54,16 +58,18 @@ void setupBottomSheetUi() {
         RevieWarningBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.HUBS_DETAILS: (context, sheetRequest, completer) =>
         HubsListDetailsBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.CREATE_ROUTE: (context, sheetRequest, completer) =>
+        AddRouteSummaryBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
 }
 
-class _FloatingBoxBottomSheet extends StatelessWidget {
+class _ConfirmationBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
 
-  const _FloatingBoxBottomSheet({
+  const _ConfirmationBottomSheet({
     Key key,
     this.request,
     this.completer,
@@ -72,69 +78,65 @@ class _FloatingBoxBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Calling method should pass custom data, and should be received here
-    var customData = request.customData as Map;
+    ConfirmationBottomSheetInputArgs customData =
+        request.customData as ConfirmationBottomSheetInputArgs;
 
     return Container(
-      // margin: EdgeInsets.all(25),
-      padding: EdgeInsets.all(25),
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(defaultBorder)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            request.title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[900],
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            customData['data1'],
-            style: TextStyle(color: Colors.grey),
-          ),
-          Text(
-            request.description,
-            style: TextStyle(color: Colors.grey),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MaterialButton(
-                onPressed: () => completer(SheetResponse(confirmed: true)),
-                child: Text(
-                  request.secondaryButtonTitle,
-                  style: TextStyle(color: Theme.of(context).primaryColor),
+          if (customData.title != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 32, right: 32, bottom: 16),
+              child: Text(
+                customData.title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[900],
                 ),
+                textAlign: TextAlign.center,
               ),
-              FlatButton(
-                onPressed: () => completer(SheetResponse(confirmed: true)),
-                child: Text(
-                  request.mainButtonTitle,
-                  style: TextStyle(color: Colors.white),
-                ),
-                color: Theme.of(context).primaryColor,
-              )
-            ],
-          )
+            ),
+          if (customData.description != null)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                customData.description,
+                style: TextStyle(color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          SizedBox(
+            height: buttonHeight,
+            child: AppButton(
+                borderColor: AppColors.primaryColorShade5,
+                onTap: () => completer(SheetResponse(confirmed: true)),
+                background: AppColors.primaryColorShade5,
+                buttonText: 'Ok'),
+          ),
         ],
       ),
     );
   }
 }
 
+class ConfirmationBottomSheetInputArgs {
+  final String title, description;
+
+  ConfirmationBottomSheetInputArgs({@required this.title, this.description});
+}
+
 class _CreateConsignmentDialog extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  CreateConsignmentDialogParams args;
+  // CreateConsignmentDialogParams args;
 
   _CreateConsignmentDialog({
     Key key,
@@ -144,7 +146,7 @@ class _CreateConsignmentDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    args = request.customData;
+    CreateConsignmentDialogParams args = request.customData;
 
     return Container(
       decoration: BoxDecoration(
