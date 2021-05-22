@@ -46,7 +46,7 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalDrivenKmG = 0.0;
 
-  void getRoutesDrivenKmPercentage({String clientId}) async {
+  void getRoutesDrivenKmPercentage({int clientId}) async {
     routesDrivenKmPercentageList.clear();
     totalDrivenKmG = 0;
     setBusy(true);

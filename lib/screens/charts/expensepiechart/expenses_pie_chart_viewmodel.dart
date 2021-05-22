@@ -61,7 +61,7 @@ class ExpensesPieChartViewModel extends GeneralisedBaseViewModel {
   ];
   double totalExpenses = 0.0;
 
-  void getExpensesListForPieChart({String clientId}) async {
+  void getExpensesListForPieChart({int clientId}) async {
     // int selectedPeriodValue = selectedDuration.contains('THIS MONTH') ? 1 : 2;
     //
     // if (selectedPeriodValue == 1) {

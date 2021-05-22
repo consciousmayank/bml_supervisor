@@ -343,6 +343,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                         height: buttonHeight,
                                         child: AppButton(
                                           onTap: () {
+                                            hideKeyboard(context: context);
                                             updateData(
                                                 viewModel: viewModel,
                                                 index: index,
@@ -369,6 +370,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                       onTap: index ==
                                               viewModel.hubsList.length - 1
                                           ? () {
+                                              hideKeyboard(context: context);
                                               updateData(
                                                   viewModel: viewModel,
                                                   index: index);
@@ -387,6 +389,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                               }
                                             }
                                           : () {
+                                              hideKeyboard(context: context);
                                               updateData(
                                                   viewModel: viewModel,
                                                   index: index);
@@ -764,10 +767,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget dropInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    // if (!viewModel.isDropCratesEdited) {
-    //   dropController.text =
-    //       viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
-    // }
+    print('dropInput, index = $index');
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       onTextChange: (String value) {
@@ -809,10 +809,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget collectInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    // if (!viewModel.isCollectCratesEdited) {
-    //   collectController.text =
-    //       viewModel?.consignmentRequest?.items[index]?.collect?.toString();
-    // }
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(
@@ -987,11 +983,13 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
     if (isAllIsWell) {
       if (goForward) {
+        print('Go fwd, index = $index');
         if (index < viewModel.hubsList.length) {
           _controller.nextPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }
       } else {
+        print('Go back, index = $index');
         if (index > 0) {
           _controller.previousPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);

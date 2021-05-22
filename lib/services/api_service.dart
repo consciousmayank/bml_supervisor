@@ -42,7 +42,7 @@ class ApiService {
 
   ///Get dashboard Tiles Data.
   Future<ParentApiResponse> getDashboardTilesStats(
-      {@required String clientId}) async {
+      {@required int clientId}) async {
     // dashboard client specific tiles data api
     Response response;
     DioError error;
@@ -68,7 +68,7 @@ class ApiService {
 
   ///Get All the routes for the selected client
   Future<ParentApiResponse> getRoutesForClientId(
-      {@required String clientId}) async {
+      {@required int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -127,7 +127,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRoutesForSelectedClientAndDate({
-    @required String clientId,
+    @required int clientId,
     @required String date,
   }) async {
     Response response;
@@ -156,7 +156,7 @@ class ApiService {
     return ParentApiResponse(error: _error, response: _response);
   }
 
-  Future getRecentDrivenKm({String clientId}) async {
+  Future getRecentDrivenKm({int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -201,8 +201,7 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-  Future<ParentApiResponse> getDailyDrivenKm(
-      {String client, int period}) async {
+  Future<ParentApiResponse> getDailyDrivenKm({int client, int period}) async {
     // dashboard bar graph
     Response response;
     DioError error;
@@ -217,7 +216,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRoutesDrivenKm(
-      {@required String clientId, @required int period}) async {
+      {@required int clientId, @required int period}) async {
     // dashboard line chart api
     Response response;
     DioError error;
@@ -230,8 +229,7 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-  Future<ParentApiResponse> getRoutesDrivenKmPercentage(
-      {String clientId}) async {
+  Future<ParentApiResponse> getRoutesDrivenKmPercentage({int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -261,7 +259,7 @@ class ApiService {
 
   ///Get the list of consignments for a particular client and date.
   Future<ParentApiResponse> getConsignmentListWithDate(
-      {@required String entryDate, @required String clientId}) async {
+      {@required String entryDate, @required int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -275,7 +273,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getPendingConsignmentsList({
-    @required String clientId,
+    @required int clientId,
     @required int pageIndex,
   }) async {
     Response response;
@@ -291,7 +289,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getConsignmentListPageWise({
-    @required String clientId,
+    @required int clientId,
     @required int pageIndex,
   }) async {
     Response response;
@@ -307,7 +305,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getRecentConsignmentsForCreateConsignment({
-    @required String clientId,
+    @required int clientId,
   }) async {
     Response response;
     DioError error;
@@ -337,7 +335,7 @@ class ApiService {
 
   ///Get the Completed Trip details with the help of consignmentId.
   Future<ParentApiResponse> getCompletedTripsWithId(
-      {String consignmentId, String clientId}) async {
+      {String consignmentId, int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -370,7 +368,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getPaymentHistory(
-      {@required String clientId, @required int pageNumber}) async {
+      {@required int clientId, @required int pageNumber}) async {
     Response response;
     DioError error;
     try {
@@ -398,7 +396,7 @@ class ApiService {
 
   Future<ParentApiResponse> getExpensesList({
     String registrationNumber,
-    String clientId,
+    int clientId,
   }) async {
     Response response;
     DioError error;
@@ -446,7 +444,7 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-  Future<ParentApiResponse> getDistributors({@required String clientId}) async {
+  Future<ParentApiResponse> getDistributors({@required int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -582,7 +580,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {String clientId}) async {
+      {int clientId}) async {
     Response response;
     DioError error;
     try {
@@ -594,7 +592,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getConsignmentTrackingStatus(
-      {String clientId, @required TripStatus tripStatus}) async {
+      {int clientId, @required TripStatus tripStatus}) async {
     Response response;
     DioError error;
     try {
@@ -607,8 +605,7 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  String getApiCall(
-      {@required TripStatus tripStatus, @required String clientId}) {
+  String getApiCall({@required TripStatus tripStatus, @required int clientId}) {
     switch (tripStatus) {
       case TripStatus.UPCOMING:
         return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
@@ -700,7 +697,7 @@ class ApiService {
 //! Not in use anymore, replaced by the POST version - vehicleEntrySearch2PointO()
   // Future<Response> vehicleEntrySearch({
   //   String regNum,
-  //   String clientId,
+  //   int clientId,
   //   int duration,
   // }) async {
   //   Response response;
@@ -836,7 +833,7 @@ class ApiService {
   }
 
   Future<ParentApiResponse> getAllHubsForClient(
-      {int pageIndex, String clientId}) async {
+      {int pageIndex, int clientId}) async {
     Response response;
     DioError error;
     try {

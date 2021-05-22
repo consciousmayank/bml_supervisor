@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 abstract class DailyEntryApis {
   Future<List<RoutesForSelectedClientAndDateResponse>>
       getRoutesForSelectedClientAndDate({
-    @required String clientId,
+    @required int clientId,
     @required String date,
   });
 
@@ -25,7 +25,7 @@ abstract class DailyEntryApis {
 class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
   @override
   Future<List<RoutesForSelectedClientAndDateResponse>>
-      getRoutesForSelectedClientAndDate({String clientId, String date}) async {
+      getRoutesForSelectedClientAndDate({int clientId, String date}) async {
     List<RoutesForSelectedClientAndDateResponse> _routesList = [];
 
     ParentApiResponse apiResponse = await apiService

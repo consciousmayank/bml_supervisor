@@ -21,7 +21,7 @@ abstract class ConsignmentApis {
 
   Future<List<ConsignmentsForSelectedDateAndClientResponse>>
       getConsignmentsForSelectedDateAndClient(
-          {@required String clientId, @required String date});
+          {@required int clientId, @required String date});
 
   Future<ConsignmentDetailResponseNew> getConsignmentWithId(
       {@required String consignmentId});
@@ -30,14 +30,14 @@ abstract class ConsignmentApis {
       {int consignmentId, ReviewConsignmentRequest putRequest});
 
   Future<List<SinglePendingConsignmentListItem>> getPendingConsignmentsList(
-      {@required String clientId, @required int pageIndex});
+      {@required int clientId, @required int pageIndex});
 
   Future<List<SinglePendingConsignmentListItem>> getConsignmentListPageWise(
-      {@required String clientId, @required int pageIndex});
+      {@required int clientId, @required int pageIndex});
 
   Future<List<SinglePendingConsignmentListItem>>
       getRecentConsignmentsForCreateConsignment({
-    @required String clientId,
+    @required int clientId,
   });
 }
 
@@ -94,7 +94,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
   @override
   Future<List<ConsignmentsForSelectedDateAndClientResponse>>
       getConsignmentsForSelectedDateAndClient(
-          {String clientId, String date}) async {
+          {int clientId, String date}) async {
     List<ConsignmentsForSelectedDateAndClientResponse> response = [];
     ParentApiResponse apiResponse = await _apiService
         .getConsignmentListWithDate(clientId: clientId, entryDate: date);
@@ -145,7 +145,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
 
   @override
   Future<List<SinglePendingConsignmentListItem>> getPendingConsignmentsList(
-      {String clientId, int pageIndex}) async {
+      {int clientId, int pageIndex}) async {
     List<SinglePendingConsignmentListItem> response = [];
     ParentApiResponse apiResponse = await _apiService
         .getPendingConsignmentsList(clientId: clientId, pageIndex: pageIndex);
@@ -164,7 +164,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
 
   @override
   Future<List<SinglePendingConsignmentListItem>> getConsignmentListPageWise({
-    String clientId,
+    int clientId,
     int pageIndex,
   }) async {
     List<SinglePendingConsignmentListItem> response = [];
@@ -185,7 +185,7 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
 
   @override
   Future<List<SinglePendingConsignmentListItem>>
-      getRecentConsignmentsForCreateConsignment({String clientId}) async {
+      getRecentConsignmentsForCreateConsignment({int clientId}) async {
     List<SinglePendingConsignmentListItem> response = [];
     ParentApiResponse apiResponse =
         await _apiService.getRecentConsignmentsForCreateConsignment(

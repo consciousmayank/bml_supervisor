@@ -45,7 +45,7 @@ class EntryLog {
   final String loginTime;
   final String logoutTime;
   final String remarks;
-  final String clientId;
+  final int clientId;
 
   EntryLog copyWith({
     int routeId,
@@ -64,7 +64,7 @@ class EntryLog {
     String remarks,
     int startReadingHidden,
     int drivenKmHidden,
-    String clientId,
+    int clientId,
     int consignmentId,
   }) =>
       EntryLog(

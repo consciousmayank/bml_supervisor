@@ -66,7 +66,7 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
         ));
   }
 
-  getRecentDrivenKm({String clientId, bool isFullScreen}) async {
+  getRecentDrivenKm({int clientId, bool isFullScreen}) async {
     recentConsignmentList.clear();
     // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
 

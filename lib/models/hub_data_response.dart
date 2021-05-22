@@ -31,7 +31,7 @@ class HubResponse {
 
   final int id;
   final String title;
-  final String clientId;
+  final int clientId;
   final String contactPerson;
   final String mobile;
   final String phone;
@@ -72,7 +72,7 @@ class HubResponse {
     bool status,
     String creationdate,
     String lastupdated,
-    String clientId,
+    int clientId,
   }) =>
       HubResponse(
         id: id ?? this.id,

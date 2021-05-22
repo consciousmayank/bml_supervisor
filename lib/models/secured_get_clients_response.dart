@@ -37,7 +37,7 @@ class GetClientsResponse {
   final String creationdate;
   final String lastupdated;
 
-  get clientId => 'speedx';
+  get clientId => id;
 
   GetClientsResponse copyWith({
     int id,

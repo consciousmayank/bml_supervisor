@@ -70,7 +70,8 @@ class AddRouteSummaryBottomSheet extends StatelessWidget {
                     style: AppTextStyles.latoMedium14Black
                         .copyWith(color: AppColors.primaryColorShade5)),
                 TextSpan(
-                    text: '${capitalizeFirstLetter(args.request.clientId)}',
+                    text:
+                        '${capitalizeFirstLetter(args.request.clientId.toString())}',
                     style: AppTextStyles.latoMedium14Black
                         .copyWith(color: AppColors.primaryColorShade5)),
               ],

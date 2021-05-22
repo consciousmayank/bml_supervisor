@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 abstract class ExpensesApi {
   Future<List<ExpensePieChartResponse>> getExpensesList({
     String registrationNumber,
-    String clientId,
+    int clientId,
   });
 
   Future<ApiResponse> addExpense(
@@ -19,7 +19,7 @@ abstract class ExpensesApi {
 class ExpensesApisImpl extends BaseApi implements ExpensesApi {
   @override
   Future<List<ExpensePieChartResponse>> getExpensesList(
-      {String registrationNumber, String clientId}) async {
+      {String registrationNumber, int clientId}) async {
     List<ExpensePieChartResponse> _response = [];
     final res = await apiService.getExpensesList(
       registrationNumber: registrationNumber,

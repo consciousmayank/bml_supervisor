@@ -135,7 +135,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getRoutes(String clientId) async {
+  getRoutes(int clientId) async {
     entryDate = null;
     validatedRegistrationNumber = null;
     consignmentRequest = null;

@@ -32,7 +32,7 @@ class ConsignmentDetailResponseNew {
   });
 
   int id;
-  String clientId;
+  int clientId;
   String createBy;
   String assessBy;
   dynamic driverId;
@@ -52,7 +52,7 @@ class ConsignmentDetailResponseNew {
 
   ConsignmentDetailResponseNew copyWith(
           {int id,
-          String clientId,
+          int clientId,
           String createBy,
           String assessBy,
           int driverId,

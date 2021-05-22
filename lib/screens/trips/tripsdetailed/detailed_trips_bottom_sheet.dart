@@ -58,7 +58,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
                       ),
                       buildContentRow(
                         helper: RowHelper(
-                          label1: 'Collect',
+                          label1: 'Collect (${args.clickedTrip.itemUnit})',
                           value1: args.clickedTrip.itemCollect.toString(),
                           label2: 'Title',
                           value2: args.clickedTrip.consignmentTitle.toString(),
@@ -82,7 +82,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
                       ),
                       buildContentRow(
                         helper: RowHelper(
-                          label1: 'Drop',
+                          label1: 'Drop (${args.clickedTrip.itemUnit})',
                           value1: args.clickedTrip.itemDrop.toString(),
                           label2: 'Payment',
                           value2: args.clickedTrip.payment.toString(),
@@ -92,8 +92,9 @@ class DetailedTripsBottomSheet extends StatelessWidget {
                         helper: RowHelper(
                           label1: 'Vehicle Number',
                           value1: args.clickedTrip.vehicleId.toString(),
-                          label2: 'Item Weight',
-                          value2: args.clickedTrip.itemWeight.toString(),
+                          label2: 'Item Value',
+                          value2:
+                              '${args.clickedTrip.itemWeight.toString()} ${args.clickedTrip.itemUnit}',
                         ),
                       ),
                     ],

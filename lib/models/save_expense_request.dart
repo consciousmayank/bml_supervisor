@@ -21,7 +21,7 @@ class SaveExpenseRequest {
   final String expenseType;
   final double expenseAmount;
   final String expenseDesc;
-  final String clientId;
+  final int clientId;
 
   SaveExpenseRequest copyWith({
     String vehicleId,
@@ -30,7 +30,7 @@ class SaveExpenseRequest {
     int expenseAmount,
     String expenseDesc,
     bool status,
-    String clientId,
+    int clientId,
   }) =>
       SaveExpenseRequest(
         vehicleId: vehicleId ?? this.vehicleId,

@@ -176,64 +176,18 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                 children: [
                   Expanded(
                     child: AppTiles(
-                      value: viewModel.consignmentDetailResponse.collect == 0
-                          ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.first.collect
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.items
-                                      .first.collect
-                                      .toString()
-                              : viewModel
-                                  .consignmentDetailResponse.items.first.collect
-                                  .toString()
-                          : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.first.collect
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.collect
-                                      .toString()
-                              : viewModel.consignmentDetailResponse.collect
-                                  .toString(),
-                      title: 'Total Collect',
+                      value: getTotalCollectValue(viewModel),
+                      title:
+                          'Total Collect (${viewModel.consignmentDetailResponse.itemUnit})',
                       iconName: collectIcon,
                     ),
                     flex: 1,
                   ),
                   Expanded(
                     child: AppTiles(
-                      value: viewModel.consignmentDetailResponse.dropOff == 0
-                          ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.last.dropOff
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.items.last
-                                      .dropOff
-                                      .toString()
-                              : viewModel
-                                  .consignmentDetailResponse.items.last.dropOff
-                                  .toString()
-                          : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.last.dropOff
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.dropOff
-                                      .toString()
-                              : viewModel.consignmentDetailResponse.dropOff
-                                  .toString(),
-                      title: 'Total Drop',
+                      value: geTotalDropValue(viewModel),
+                      title:
+                          'Total Drop (${viewModel.consignmentDetailResponse.itemUnit})',
                       iconName: dropIcon,
                     ),
                     flex: 1,
@@ -253,6 +207,40 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                   : Container(),
             ],
           );
+  }
+
+  String geTotalDropValue(ConsignmentDetailsViewModel viewModel) {
+    return viewModel.consignmentDetailResponse.dropOff == 0
+        ? viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.last.dropOff
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.items.last.dropOff
+                    .toString()
+            : viewModel.consignmentDetailResponse.items.last.dropOff.toString()
+        : viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.last.dropOff
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.dropOff.toString()
+            : viewModel.consignmentDetailResponse.dropOff.toString();
+  }
+
+  String getTotalCollectValue(ConsignmentDetailsViewModel viewModel) {
+    return viewModel.consignmentDetailResponse.collect == 0
+        ? viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.first.collect
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.items.first.collect
+                    .toString()
+            : viewModel.consignmentDetailResponse.items.first.collect.toString()
+        : viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.first.collect
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.collect.toString()
+            : viewModel.consignmentDetailResponse.collect.toString();
   }
 
   GridView makeGridView(
@@ -281,6 +269,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: SingleHubGridView(
+              itemUnit: viewModel.consignmentDetailResponse.itemUnit,
               singleHub: gridResponseNew[index],
               key: Key(gridResponseNew[index].hubId.toString()),
             ),
@@ -304,6 +293,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: SingleHubListView(
+                itemUnit: viewModel.consignmentDetailResponse.itemUnit,
                 singleHub: viewModel.newItems[index],
                 key: UniqueKey(),
               ),

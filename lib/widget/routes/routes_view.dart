@@ -72,67 +72,13 @@ class _RoutesViewState extends State<RoutesView> {
           right: 4.0,
           top: 4.0,
           bottom: widget.isInDashBoard ? 4.0 : 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: viewModel.routesList.length > 0
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
-        children: [
-          if (widget.isInDashBoard)
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Align(
-                child: buildChartTitle(title: 'Route List'),
-                alignment: Alignment.centerLeft,
-              ),
+      child: widget.isInDashBoard
+          ? getColumnList(
+              viewModel: viewModel,
+            )
+          : getListViewList(
+              viewModel: viewModel,
             ),
-          if (viewModel.routesList.length > 0) hSizedBox(5),
-          if (viewModel.routesList.length > 0)
-            Container(
-              color: AppColors.primaryColorShade5,
-              padding: EdgeInsets.all(15),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      ('#'),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      ('Title'),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      'Kilometer',
-                      textAlign: TextAlign.end,
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          viewModel.routesList.length > 0
-              ? Column(
-                  children: getRoutesList(
-                    viewModel: viewModel,
-                    listLength: getListLength(
-                      viewModel: viewModel,
-                    ),
-                  ),
-                )
-              : NoDataWidget(),
-        ],
-      ),
     );
   }
 
@@ -234,5 +180,99 @@ class _RoutesViewState extends State<RoutesView> {
             ? viewModel.routesList.length
             : 6
         : viewModel.routesList.length;
+  }
+
+  ///Show a 5 routes only
+  getColumnList({@required RoutesViewModel viewModel}) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Align(
+            child: buildChartTitle(title: 'Route List'),
+            alignment: Alignment.centerLeft,
+          ),
+        ),
+        if (viewModel.routesList.length > 0)
+          Container(
+            color: AppColors.primaryColorShade5,
+            padding: EdgeInsets.all(15),
+            child: getTitle(viewModel: viewModel),
+          ),
+        viewModel.routesList.length > 0
+            ? Column(
+                children: getRoutesList(
+                  viewModel: viewModel,
+                  listLength: getListLength(
+                    viewModel: viewModel,
+                  ),
+                ),
+              )
+            : NoDataWidget()
+      ],
+    );
+  }
+
+  getListViewList({@required RoutesViewModel viewModel}) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (viewModel.routesList.length > 0)
+          Container(
+            color: AppColors.primaryColorShade5,
+            padding: EdgeInsets.all(15),
+            child: getTitle(viewModel: viewModel),
+          ),
+        viewModel.routesList.length > 0
+            ? Expanded(
+                child: ListView(
+                  children: getRoutesList(
+                    viewModel: viewModel,
+                    listLength: getListLength(
+                      viewModel: viewModel,
+                    ),
+                  ),
+                ),
+              )
+            : Expanded(
+                child: NoDataWidget(),
+              ),
+      ],
+    );
+  }
+
+  Row getTitle({RoutesViewModel viewModel}) {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            ('#'),
+            textAlign: TextAlign.center,
+            style: AppTextStyles.whiteRegular,
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            ('Title'),
+            textAlign: TextAlign.center,
+            style: AppTextStyles.whiteRegular,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            'Kilometer',
+            textAlign: TextAlign.end,
+            style: AppTextStyles.whiteRegular,
+          ),
+        ),
+      ],
+    );
   }
 }

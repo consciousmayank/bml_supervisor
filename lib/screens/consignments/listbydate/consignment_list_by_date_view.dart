@@ -275,8 +275,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                   Expanded(
                     child: AppTextView(
                       hintText: 'Collect',
-                      value:
-                          viewModel.consignmentsList[index].collect.toString(),
+                      value: viewModel.consignmentsList[index].toString(),
                     ),
                   ),
                   wSizedBox(6),

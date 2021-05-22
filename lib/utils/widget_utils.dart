@@ -434,7 +434,12 @@ Text setAppBarTitle({
   @required String title,
 }) {
   return Text(
-    '$title - ${capitalizeFirstLetter(MyPreferences()?.getSelectedClient()?.clientId)}',
+    '$title - ${capitalizeFirstLetter(
+      MyPreferences()?.getSelectedClient()?.businessName?.substring(
+            0,
+            14,
+          ),
+    )}',
     style: AppTextStyles.whiteRegular,
   );
 }

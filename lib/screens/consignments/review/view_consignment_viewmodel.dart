@@ -127,7 +127,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(false);
   }
 
-  getRoutes(String clientId) async {
+  getRoutes(int clientId) async {
     setBusy(true);
     routesList = [];
     hubList = [];

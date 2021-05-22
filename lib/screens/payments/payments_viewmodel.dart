@@ -88,7 +88,7 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getPaymentHistory(String clientId) async {
+  getPaymentHistory(int clientId) async {
     setBusy(true);
     totalAmt = 0.0;
     noOfPayments = 0;

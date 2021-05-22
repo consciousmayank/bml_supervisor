@@ -57,7 +57,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  Future getBarGraphKmReport({String clientId}) async {
+  Future getBarGraphKmReport({int clientId}) async {
     kmReportListData.clear();
     uniqueDates.clear();
     chartDate = '';

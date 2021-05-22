@@ -17,7 +17,7 @@ class ViewEntryRequest {
   });
 
   String vehicleId;
-  String clientId;
+  int clientId;
 
   factory ViewEntryRequest.fromJson(String str) =>
       ViewEntryRequest.fromMap(json.decode(str));

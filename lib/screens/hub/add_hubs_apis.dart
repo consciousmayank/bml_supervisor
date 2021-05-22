@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 abstract class AddHubsApis {
   Future<ApiResponse> addHub({@required AddHubRequest request});
   Future<List<HubResponse>> getAllHubsForClient(
-      {@required String clientId, @required int pageNumber});
+      {@required int clientId, @required int pageNumber});
 }
 
 class AddHubApisImpl extends BaseApi implements AddHubsApis {
@@ -27,7 +27,7 @@ class AddHubApisImpl extends BaseApi implements AddHubsApis {
 
   @override
   Future<List<HubResponse>> getAllHubsForClient(
-      {@required String clientId, @required int pageNumber}) async {
+      {@required int clientId, @required int pageNumber}) async {
     List<HubResponse> response = [];
     ParentApiResponse apiResponse = await apiService.getAllHubsForClient(
         pageIndex: pageNumber, clientId: clientId);

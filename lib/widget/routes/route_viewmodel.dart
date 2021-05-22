@@ -14,7 +14,7 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     _routesList = value;
   }
 
-  Future getRoutesForClient(String selectedClient) async {
+  Future getRoutesForClient(int selectedClient) async {
     setBusy(true);
     setBusy(true);
     routesList = [];

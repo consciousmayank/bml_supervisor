@@ -9,7 +9,7 @@ abstract class PaymentsApis {
   Future<ApiResponse> addNewPayment(
       {@required SavePaymentRequest savePaymentRequest});
   Future<List<PaymentHistoryResponse>> getPaymentHistory(
-      {@required String clientId});
+      {@required int clientId});
 }
 
 class PaymentsApisImpl extends BaseApi implements PaymentsApis {
@@ -30,8 +30,7 @@ class PaymentsApisImpl extends BaseApi implements PaymentsApis {
   }
 
   @override
-  Future<List<PaymentHistoryResponse>> getPaymentHistory(
-      {String clientId}) async {
+  Future<List<PaymentHistoryResponse>> getPaymentHistory({int clientId}) async {
     List<PaymentHistoryResponse> _responseList = [];
 
     ParentApiResponse apiResponse =

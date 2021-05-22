@@ -21,7 +21,7 @@ class CreateConsignmentRequest {
     this.weight,
   });
 
-  final String clientId;
+  final int clientId;
   final int routeId;
   final dynamic vehicleId;
   final String entryDate;
@@ -37,7 +37,7 @@ class CreateConsignmentRequest {
 
   CreateConsignmentRequest copyWith({
     int id,
-    String clientId,
+    int clientId,
     int routeId,
     dynamic vehicleId,
     String entryDate,

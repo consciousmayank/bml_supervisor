@@ -147,7 +147,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void getExpensesList({String regNum, String clientId}) async {
+  void getExpensesList({String regNum, int clientId}) async {
     expenseCount = 0;
     uniqueDates.clear();
     _expenseTypes.clear();

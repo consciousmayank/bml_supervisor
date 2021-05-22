@@ -56,7 +56,7 @@ class ConfirmConsignmentView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Client'),
-                      Text(selectedClient.clientId),
+                      Text(selectedClient.username),
                     ],
                   ),
                 ),

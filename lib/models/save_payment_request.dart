@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class SavePaymentRequest {
-  String clientId;
+  int clientId;
   String entryDate;
   String remarks;
   double amount;

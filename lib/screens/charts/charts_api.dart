@@ -6,21 +6,19 @@ import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:flutter/material.dart';
 
 abstract class ChartsApi {
-  Future<List<KilometerReportResponse>> getDailyDrivenKm({String clientId});
+  Future<List<KilometerReportResponse>> getDailyDrivenKm({int clientId});
 
-  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({String clientId});
+  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({int clientId});
 
   Future<List<RoutesDrivenKmPercentage>> getRoutesDrivenKmPercentage(
-      {String clientId});
+      {int clientId});
 
-  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {String clientId});
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate({int clientId});
 }
 
 class ChartsApiImpl extends BaseApi implements ChartsApi {
   @override
-  Future<List<KilometerReportResponse>> getDailyDrivenKm(
-      {String clientId}) async {
+  Future<List<KilometerReportResponse>> getDailyDrivenKm({int clientId}) async {
     List<KilometerReportResponse> dataList = [];
 
     ParentApiResponse apiResponse = await apiService.getDailyDrivenKm(
@@ -41,7 +39,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   //Get Client Route Driven Km (Line Chart)
   @override
-  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({String clientId}) async {
+  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({int clientId}) async {
     List<RoutesDrivenKm> routesDrivenKmList = [];
     ParentApiResponse apiResponse =
         await apiService.getRoutesDrivenKm(clientId: clientId);
@@ -57,7 +55,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   @override
   Future<List<RoutesDrivenKmPercentage>> getRoutesDrivenKmPercentage(
-      {String clientId}) async {
+      {int clientId}) async {
     List<Color> pieChartsColorArray = [
       Color(0xff2f6497),
       Color(0xffee6868),
@@ -90,7 +88,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   @override
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {String clientId}) async {
+      {int clientId}) async {
     return await apiService.getExpensesListForPieChartAggregate(
         clientId: clientId);
   }

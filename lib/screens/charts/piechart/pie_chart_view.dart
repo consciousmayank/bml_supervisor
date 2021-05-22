@@ -9,7 +9,7 @@ import 'package:flutter/material.dart' as axisMaterial;
 import 'package:stacked/stacked.dart';
 
 class PieChartView extends StatefulWidget {
-  final String clientId;
+  final int clientId;
   final String selectedDuration;
 
   const PieChartView({Key key, this.clientId, this.selectedDuration})

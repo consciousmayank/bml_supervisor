@@ -14,14 +14,14 @@ import 'package:stacked_services/stacked_services.dart';
 
 abstract class DashBoardApis {
   Future<List<GetClientsResponse>> getClientList({@required int pageNumber});
-  Future<List<FetchRoutesResponse>> getRoutes({@required String clientId});
+  Future<List<FetchRoutesResponse>> getRoutes({@required int clientId});
   Future<List<FetchHubsResponse>> getHubs({@required int routeId});
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
-      {@required String clientId});
+      {@required int clientId});
   Future<List<GetDistributorsResponse>> getDistributors(
-      {@required String clientId});
+      {@required int clientId});
   Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required String clientId, @required TripStatus tripStatus});
+      {@required int clientId, @required TripStatus tripStatus});
 }
 
 class DashBoardApisImpl extends BaseApi implements DashBoardApis {
@@ -49,7 +49,7 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
 
   @override
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
-      {@required String clientId}) async {
+      {@required int clientId}) async {
     DashboardTilesStatsResponse initialDashBoardStats =
         DashboardTilesStatsResponse(
             hubCount: 0,
@@ -71,7 +71,7 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   }
 
   @override
-  Future<List<FetchRoutesResponse>> getRoutes({String clientId}) async {
+  Future<List<FetchRoutesResponse>> getRoutes({int clientId}) async {
     List<FetchRoutesResponse> _routesList = [];
     ParentApiResponse routesListResponse =
         await apiService.getRoutesForClientId(clientId: clientId);
@@ -112,7 +112,7 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
 
   @override
   Future<List<GetDistributorsResponse>> getDistributors(
-      {@required String clientId}) async {
+      {@required int clientId}) async {
     List<GetDistributorsResponse> _responseList = [];
     ParentApiResponse response =
         await apiService.getDistributors(clientId: clientId);
@@ -132,7 +132,7 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
 
   @override
   Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required String clientId, @required TripStatus tripStatus}) async {
+      {@required int clientId, @required TripStatus tripStatus}) async {
     List<ConsignmentTrackingStatusResponse> _responseList = [];
     ParentApiResponse response = await apiService.getConsignmentTrackingStatus(
         clientId: clientId, tripStatus: tripStatus);

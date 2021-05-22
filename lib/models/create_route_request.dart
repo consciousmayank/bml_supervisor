@@ -14,7 +14,7 @@ class CreateRouteRequest {
   final int srcLocation;
   final int dstLocation;
   final List<Hub> hubs;
-  final String clientId;
+  final int clientId;
   final String remarks;
 
   CreateRouteRequest copyWith({
@@ -22,7 +22,7 @@ class CreateRouteRequest {
     int srcLocation,
     int dstLocation,
     List<Hub> hubs,
-    String clientId,
+    int clientId,
     String remarks,
   }) =>
       CreateRouteRequest(
@@ -50,13 +50,13 @@ class CreateRouteRequest {
       );
 
   Map<String, dynamic> toMap() => {
-    "title": title,
-    "srcLocation": srcLocation,
-    "dstLocation": dstLocation,
-    "hubs": List<dynamic>.from(hubs.map((x) => x.toMap())),
-    "clientId": clientId,
-    "remarks": remarks,
-  };
+        "title": title,
+        "srcLocation": srcLocation,
+        "dstLocation": dstLocation,
+        "hubs": List<dynamic>.from(hubs.map((x) => x.toMap())),
+        "clientId": clientId,
+        "remarks": remarks,
+      };
 }
 
 class Hub {
@@ -69,7 +69,7 @@ class Hub {
 
   final int hub;
   final int sequence;
-   double kms;
+  double kms;
   final String flag;
 
   Hub copyWith({
@@ -90,16 +90,16 @@ class Hub {
   String toJson() => json.encode(toMap());
 
   factory Hub.fromMap(Map<String, dynamic> json) => Hub(
-    hub: json["hub"],
-    sequence: json["sequence"],
-    kms: json["kms"].toDouble(),
-    flag: json["flag"],
-  );
+        hub: json["hub"],
+        sequence: json["sequence"],
+        kms: json["kms"].toDouble(),
+        flag: json["flag"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "hub": hub,
-    "sequence": sequence,
-    "kms": kms,
-    "flag": flag,
-  };
+        "hub": hub,
+        "sequence": sequence,
+        "kms": kms,
+        "flag": flag,
+      };
 }

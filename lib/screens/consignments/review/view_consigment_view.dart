@@ -232,7 +232,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                     children: [
                       Expanded(
                         child: AppTiles(
-                          title: 'Total Collect',
+                          title:
+                              'Total Collect (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.collect ==
                                   0
@@ -250,7 +251,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                       Expanded(
                         child: AppTiles(
-                          title: 'Total Drop',
+                          title:
+                              'Total Drop (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.dropOff ==
                                   0
@@ -552,7 +554,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
       style: getTextFormFieldStyle(),
-      decoration: getInputBorder(hint: "Review Item Weight"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Weight (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       enabled: true,
       controller: weightGController,
       keyboardType: TextInputType.text,
@@ -586,7 +590,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Item Drop"),
+      decoration: getInputBorder(
+          hint:
+              "Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: dropController,
       focusNode: dropFocusNode,
       onFieldSubmitted: (_) {
@@ -605,7 +611,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: true,
-      decoration: getInputBorder(hint: "Review Item Drop"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: gDropController,
       focusNode: gDropFocusNode,
       onFieldSubmitted: (_) {
@@ -631,7 +639,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Item Collect"),
+      decoration: getInputBorder(
+          hint:
+              "Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: collectController,
       focusNode: collectFocusNode,
       onFieldSubmitted: (_) {
@@ -650,7 +660,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: true,
-      decoration: getInputBorder(hint: "Review Item Collect"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: gCollectController,
       focusNode: gCollectFocusNode,
       onFieldSubmitted: (_) {

@@ -9,80 +9,82 @@ import 'package:stacked/stacked.dart';
 
 class SingleHubListView extends StatelessWidget {
   final ItemForCard singleHub;
+  final String itemUnit;
   const SingleHubListView({
     @required this.singleHub,
+    @required this.itemUnit,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SingleHubListViewModel>.reactive(
-      // onModelReady: (viewModel)=> viewModel.getHubDate(singleHub.hubId),
+        // onModelReady: (viewModel)=> viewModel.getHubDate(singleHub.hubId),
         builder: (context, viewModel, child) => Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColorShade5,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(25)),
-                        ),
-                        child: Text(
-                          "#${singleHub.sequence}",
-                          style: AppTextStyles.latoMedium14Black.copyWith(
-                              fontSize: 14, color: AppColors.white),
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColorShade5,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                            ),
+                            child: Text(
+                              "#${singleHub.sequence}",
+                              style: AppTextStyles.latoMedium14Black.copyWith(
+                                  fontSize: 14, color: AppColors.white),
+                            ),
+                          ),
+                          wSizedBox(10),
+                          Text(
+                            singleHub.hubTitle ?? '',
+                            style: AppTextStyles.latoBold14Black.copyWith(
+                                fontSize: 14,
+                                color: AppColors.primaryColorShade5),
+                          )
+                        ],
                       ),
-                      wSizedBox(10),
                       Text(
-                        singleHub.hubTitle ?? '',
-                        style: AppTextStyles.latoBold14Black.copyWith(
-                            fontSize: 14,
-                            color: AppColors.primaryColorShade5),
+                        '(${singleHub.hubCity ?? ''})',
+                        style: AppTextStyles.latoMedium14Black.copyWith(
+                            fontSize: 14, color: AppColors.primaryColorShade5),
                       )
                     ],
                   ),
-                  Text(
-                    '(${singleHub.hubCity ?? ''})',
-                    style: AppTextStyles.latoMedium14Black.copyWith(
-                        fontSize: 14, color: AppColors.primaryColorShade5),
+                  hSizedBox(14),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: AppTextView(
+                          hintText: 'Collect ($itemUnit)',
+                          value: singleHub.collect.toString(),
+                        ),
+                      ),
+                      wSizedBox(6),
+                      Expanded(
+                        child: AppTextView(
+                          hintText: 'Drop ($itemUnit)',
+                          value: singleHub.dropOff.toString(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  hSizedBox(14),
+                  AppTextView(
+                    hintText: 'Payment',
+                    value: singleHub.payment.toString(),
                   )
                 ],
               ),
-              hSizedBox(14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: AppTextView(
-                      hintText: 'Collect',
-                      value: singleHub.collect.toString(),
-                    ),
-                  ),
-                  wSizedBox(6),
-                  Expanded(
-                    child: AppTextView(
-                      hintText: 'Drop',
-                      value: singleHub.dropOff.toString(),
-                    ),
-                  ),
-                ],
-              ),
-              hSizedBox(14),
-              AppTextView(
-                hintText: 'Payment',
-                value: singleHub.payment.toString(),
-              )
-            ],
-          ),
-        ),
+            ),
         viewModelBuilder: () => SingleHubListViewModel());
   }
 }
