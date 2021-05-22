@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/main/app_configs.dart';
 import 'package:bml_supervisor/routes/routes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,10 +8,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import 'app_level/locator.dart';
-import 'app_level/setup_bottomsheet_ui.dart';
-import 'app_level/shared_prefs.dart';
-import 'app_level/themes.dart';
+import '../app_level/locator.dart';
+import '../app_level/setup_bottomsheet_ui.dart';
+import '../app_level/shared_prefs.dart';
+import '../app_level/themes.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -40,11 +41,16 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-void main() async {
+void runBMLAPP({
+  @required String baseUrl,
+}) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await MyPreferences().init();
-  declareDependencies();
+  declareDependencies(
+      configurations: AppConfigs(
+    baseUrl: baseUrl,
+  ));
   setupBottomSheetUi();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(
     ScreenBreakpoints(

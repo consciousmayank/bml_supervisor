@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

@@ -9,7 +9,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_grid_view.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_list_view.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';

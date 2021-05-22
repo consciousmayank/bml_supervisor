@@ -193,8 +193,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(
         paymentId: 'NA',
-        remarks: element.remarks.length == 0 ? 'NA' : element.remarks,
-        title: element.title.length == 0 ? 'NA' : element.title,
+        remarks: element?.remarks?.length == 0 ? 'NA' : element.remarks,
+        title: element?.title?.length == 0 ? 'NA' : element.title,
       );
     });
     ApiResponse apiResponse = await _consignmentApis.updateConsignment(

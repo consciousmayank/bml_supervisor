@@ -809,6 +809,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget collectInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
+    print('collectInput, index = $index');
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(
@@ -854,11 +855,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     bool enabled,
     int index,
   }) {
-    // if (!viewModel.isPaymentEdited) {
-    //   paymentController.text =
-    //       viewModel?.consignmentRequest?.items[index]?.payment?.toString();
-    // }
-
+    print('paymentInput, index = $index');
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(

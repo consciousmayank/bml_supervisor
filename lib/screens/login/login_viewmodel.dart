@@ -25,7 +25,7 @@ class LoginViewModel extends GeneralisedBaseViewModel {
         await _loginApi.login(getBase64String(value: '$userName:$password'));
 
     if (loginResponse != null) {
-      if (loginResponse.designation == 'MANAGER') {
+      if (loginResponse.designation == 'Manager') {
         MyPreferences().setLoggedInUser(
           loginResponse.copyWith(
             isUserLoggedIn: true,

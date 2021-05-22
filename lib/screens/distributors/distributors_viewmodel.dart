@@ -45,7 +45,7 @@ class DistributorsScreenViewModel extends GeneralisedBaseViewModel {
     //* get bar graph data too when populating the client dropdown
 
     List<GetClientsResponse> responseList =
-        await _dashBoardApis.getClientList();
+        await _dashBoardApis.getClientList(pageNumber: 1);
     this.clientsList = copyList(responseList);
 
     setBusy(false);

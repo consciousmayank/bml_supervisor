@@ -44,7 +44,6 @@ dependencies:
   timeline_list: ^0.0.3
   dio_http_cache: ^0.2.11
   url_launcher: ^6.0.3
-  dots_indicator: ^1.2.0
   rive: ^0.6.7
   shimmer: ^1.1.2
   flutter_offline: "^0.3.0"

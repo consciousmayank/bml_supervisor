@@ -6,6 +6,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/main/app_configs.dart';
 import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
@@ -68,8 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
           print('Animation started playing');
         } else {
           locator<AppStartApiImpl>().getAppVersions().then((response) {
-            if (response.major != majorVersion &&
-                response.minor != minorVersion) {
+            if (response.major != AppConfigs.MAJOR_VERSION &&
+                response.minor != AppConfigs.MINOR_VERSION) {
               locator<BottomSheetService>()
                   .showCustomSheet(
                 customData: ConfirmationBottomSheetInputArgs(

@@ -2,7 +2,6 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';

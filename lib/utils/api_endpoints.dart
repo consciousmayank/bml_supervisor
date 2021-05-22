@@ -14,8 +14,7 @@ final GET_LAST_SEVEN_ENTRIES =
 final GET_DAILY_DRIVEN_KMS_BAR_CHART =
     (clientId, period) => "/dailyKilometer/client/$clientId";
 
-final GET_ROUTES_DRIVEN_KM =
-    (clientId, period) => "/route/drivenKm/client/$clientId";
+final GET_ROUTES_DRIVEN_KM = (clientId) => "/route/drivenKm/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
     (clientId, date) => "/consignment/list/client/$clientId/date/$date";

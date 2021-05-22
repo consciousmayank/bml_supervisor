@@ -78,6 +78,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   TextEditingController streetController = TextEditingController();
   FocusNode streetFocusNode = FocusNode();
 
+  TextEditingController houseNoBuildingNameController = TextEditingController();
+  FocusNode houseNoBuildingNameFocusNode = FocusNode();
+
   TextEditingController localityController = TextEditingController();
   FocusNode localityFocusNode = FocusNode();
 
@@ -112,6 +115,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                 buildAlternateMobileNumberTextFormField(
                     viewModel: widget.viewModel),
                 buildEmailTextFormField(),
+                buildHnoBuildingNameTextFormField(),
                 buildStreetTextFormField(),
                 buildLocalityTextFormField(),
                 buildLandmarkTextFormField(),
@@ -368,8 +372,28 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       keyboardType: TextInputType.emailAddress,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
-        fieldFocusChange(context, emailFocusNode, streetFocusNode);
+        fieldFocusChange(context, emailFocusNode, houseNoBuildingNameFocusNode);
       },
+    );
+  }
+
+  Widget buildHnoBuildingNameTextFormField() {
+    return appTextFormField(
+      enabled: true,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
+      ],
+      controller: houseNoBuildingNameController,
+      focusNode: houseNoBuildingNameFocusNode,
+      hintText: addDriverHnoBuildingNameHint,
+      keyboardType: TextInputType.text,
+      onTextChange: (String value) {},
+      onFieldSubmitted: (_) {
+        fieldFocusChange(
+            context, houseNoBuildingNameFocusNode, streetFocusNode);
+      },
+      validator: FormValidators().normalValidator,
     );
   }
 
@@ -585,7 +609,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       controller: latitudeController,
       focusNode: latitudeFocusNode,
       hintText: "Latitude",
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, latitudeFocusNode, longitudeFocusNode);
@@ -604,7 +628,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       controller: longitudeController,
       focusNode: longitudeFocusNode,
       hintText: "Longitude",
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
       onTextChange: (String value) {},
       onFieldSubmitted: (_) {
         fieldFocusChange(context, longitudeFocusNode, remarkFocusNode);

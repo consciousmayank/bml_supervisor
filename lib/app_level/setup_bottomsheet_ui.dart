@@ -15,7 +15,6 @@ import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -260,8 +259,8 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
       {Key key,
       @required this.request,
       @required this.completer,
-      @required this.height,
-      @required this.margin,
+      this.height,
+      this.margin,
       @required this.child})
       : super(key: key);
 

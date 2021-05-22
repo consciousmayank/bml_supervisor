@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
@@ -12,11 +11,9 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -39,7 +36,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     initialPage: 0,
   );
 
-  ScrollController _scrollController = ScrollController();
   TextEditingController hubTitleController = TextEditingController();
   FocusNode hubTitleFocusNode = FocusNode();
 

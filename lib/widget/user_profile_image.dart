@@ -10,7 +10,7 @@ class ProfileImageWidget extends StatelessWidget {
     Key key,
     @required this.image,
     this.size = profileImageSize,
-    @required this.circularBorderRadius,
+    this.circularBorderRadius,
     this.imageFit = BoxFit.cover,
   }) : super(key: key);
 

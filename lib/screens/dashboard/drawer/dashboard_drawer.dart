@@ -144,7 +144,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: review_consig_Icon,
+                            imageName: reviewConsigIcon,
                             text: "Review",
                             onTap: () {
                               widget.dashBoardScreenViewModel
@@ -184,7 +184,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                           DrawerListItem(
                             isSubMenu: true,
-                            imageName: review_consig_Icon,
+                            imageName: reviewConsigIcon,
                             text:
                                 "Completed Trips (${widget?.dashBoardScreenViewModel?.completedTrips?.length ?? 0})",
                             onTap: () {

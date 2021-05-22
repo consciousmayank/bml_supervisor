@@ -1,11 +1,8 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';

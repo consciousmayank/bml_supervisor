@@ -1,6 +1,5 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -25,12 +24,6 @@ class LineChartView extends StatefulWidget {
 }
 
 class _LineChartViewState extends State<LineChartView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LineChartViewModel>.reactive(

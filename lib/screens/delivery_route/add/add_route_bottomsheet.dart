@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
