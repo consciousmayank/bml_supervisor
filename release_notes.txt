@@ -1,20 +1,4 @@
 In this build the things done are:-
 
-1. In Create Consig screen, 
-    - replaced <Docket> with <Kilograms>
-    - add same padding above and below the dottedLine.
-    - show <item value>, in place of ""item weight"".
-
-2. Change title "pending consig" to <review consignment>
-3. Show "No data" at every place where there is not response.
-4. In Complete/verified Trips Page, show ui like this order.
-    - item value, route description(remark)
-    - dispatch time()
-5. Every title in left menu is singular.
-6. Change title in HubList Page to <Hub List>
-7. Show client id on every page app bar.
-8. Remove dialogs(except profile-> email and mobile update)
-9. In Review consignment, copy "create consignment", summary bottomsheet.
-10. On successful creating of anything(driver, vehicle, consignment, hub, routes), show empty form. Donot take back one screen."
-11. Take to HubListPAge on click of "distributor" tile in dashboard.
-12. In Expense View, when applying filters, tiles are not updating.(fixed).
+1. Changed the auth api.
+2. Made clientId an int from String.

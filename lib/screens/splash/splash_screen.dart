@@ -68,7 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
           print('Animation started playing');
         } else {
           locator<AppStartApiImpl>().getAppVersions().then((response) {
-            if (response.major > appVersion) {
+            if (response.major != majorVersion &&
+                response.minor != minorVersion) {
               locator<BottomSheetService>()
                   .showCustomSheet(
                 customData: ConfirmationBottomSheetInputArgs(

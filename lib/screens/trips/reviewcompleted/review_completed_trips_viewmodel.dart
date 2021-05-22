@@ -55,6 +55,7 @@ class ReviewCompletedTripsViewModel extends GeneralisedBaseViewModel {
   }
 
   submitVehicleEntry(EntryLog entryLogRequest) async {
+    print('entryLogRequest :: ${entryLogRequest.toJson()}');
     setBusy(true);
     ApiResponse apiResponse = await _dailyEntryApis.submitVehicleEntry(
         entryLogRequest: entryLogRequest);
