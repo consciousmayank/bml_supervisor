@@ -130,19 +130,19 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
 
   Widget registrationSelector(
       {BuildContext context, ViewExpensesViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
-        ),
-      ],
-    );
+    return registrationNumberTextField(viewModel);
   }
 
   Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
     return appTextFormField(
+      buttonType: ButtonType.SMALL,
+      buttonIcon: Icon(Icons.search),
+      onButtonPressed: () {
+        getExpenses(
+          viewModel: viewModel,
+          registrationNumber: selectedRegNoController.text,
+        );
+      },
       inputDecoration: InputDecoration(
         hintText: 'Vehicle Number',
         hintStyle: TextStyle(

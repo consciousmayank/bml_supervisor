@@ -1,3 +1,4 @@
+import 'package:bml_supervisor/app_level/setup_snackbars.dart';
 import 'package:bml_supervisor/main/app_configs.dart';
 import 'package:bml_supervisor/routes/routes.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -52,6 +53,7 @@ void runBMLAPP({
     baseUrl: baseUrl,
   ));
   setupBottomSheetUi();
+  setupSnackbarUi();
   ResponsiveSizingConfig.instance.setCustomBreakpoints(
     ScreenBreakpoints(
       desktop: 800,

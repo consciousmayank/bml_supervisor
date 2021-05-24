@@ -112,19 +112,19 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
 
   registrationSelector(
       {BuildContext context, ViewDailyKmsViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
-        ),
-      ],
-    );
+    return registrationNumberTextField(viewModel);
   }
 
   registrationNumberTextField(ViewDailyKmsViewModel viewModel) {
     return appTextFormField(
+      buttonType: ButtonType.SMALL,
+      buttonIcon: Icon(Icons.search),
+      onButtonPressed: () {
+        getDailyEntry(
+          viewModel: viewModel,
+          registrationNumber: selectedRegNoController.text,
+        );
+      },
       inputDecoration: InputDecoration(
         hintText: 'Vehicle Number',
         hintStyle: TextStyle(

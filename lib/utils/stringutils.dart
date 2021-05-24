@@ -204,7 +204,11 @@ const String addDriverCountryHint = "Country";
 const String addDriverAadhaarHint = "Aadhaar Card Number";
 const String addDriverDlHint = "Driving License";
 const String addDriverRemarksHint = "Remarks";
-const List<String> genders = ['MALE', 'FEMALE', 'OTHERS'];
+const List<String> genders = [
+  'MALE',
+  'FEMALE',
+  'OTHERS',
+];
 const List<String> bloodGroup = [
   'A+',
   'A-',
@@ -226,3 +230,9 @@ const String addRouteUnSuccessful = "Route not added. Please try again";
 
 const String addHubSuccessful = "Hub added successfully";
 const String addHubUnSuccessful = "Hub not added. Please try again";
+const List<String> addressTypes = [
+  'Residential',
+  'Commercial',
+  'Non-Commercial',
+  'Others'
+];

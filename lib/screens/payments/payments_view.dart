@@ -8,7 +8,6 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
@@ -233,13 +232,7 @@ class _PaymentsViewState extends State<PaymentsView> {
   }
 
   dateSelector({BuildContext context, PaymentsViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
-    );
+    return selectedDateTextField(viewModel);
   }
 
   selectedDateTextField(PaymentsViewModel viewModel) {
@@ -250,25 +243,20 @@ class _PaymentsViewState extends State<PaymentsView> {
       hintText: "Entry Date",
       labelText: "Entry Date",
       keyboardType: TextInputType.text,
-    );
-  }
-
-  selectDateButton(BuildContext context, PaymentsViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Icon(Icons.calendar_today_outlined),
-        onPressed: (() async {
-          DateTime selectedDate = await selectDate(viewModel);
-          if (selectedDate != null) {
-            selectedDateController.text =
-                DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.entryDate = selectedDate;
-            // viewModel.getEntryForSelectedDate();
-            viewModel.emptyDateSelector = true;
-          }
-        }),
+      buttonType: ButtonType.FULL,
+      buttonIcon: Image.asset(
+        calendarIcon,
       ),
+      onButtonPressed: (() async {
+        DateTime selectedDate = await selectDate(viewModel);
+        if (selectedDate != null) {
+          selectedDateController.text =
+              DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+          viewModel.entryDate = selectedDate;
+          // viewModel.getEntryForSelectedDate();
+          viewModel.emptyDateSelector = true;
+        }
+      }),
     );
   }
 

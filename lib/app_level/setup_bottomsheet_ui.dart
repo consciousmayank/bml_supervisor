@@ -5,6 +5,7 @@ import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_route_bottomsheet.dart';
 import 'package:bml_supervisor/screens/dialogs/confirm_consignment_view.dart';
+import 'package:bml_supervisor/screens/driver/add/address_type_bottomsheet.dart';
 import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dart';
@@ -16,6 +17,7 @@ import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.d
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
+import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -59,6 +61,10 @@ void setupBottomSheetUi() {
         HubsListDetailsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.CREATE_ROUTE: (context, sheetRequest, completer) =>
         AddRouteSummaryBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.ADDRESS_TYPE: (context, sheetRequest, completer) =>
+        AddressTypeBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.STRING_LIST: (context, sheetRequest, completer) =>
+        StringListTypeBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

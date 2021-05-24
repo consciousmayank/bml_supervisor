@@ -7,7 +7,6 @@ import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
@@ -69,7 +68,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        dateSelector(context: context, viewModel: viewModel),
+        dateSelector(viewModel: viewModel),
         hSizedBox(4),
         viewModel.consignmentsList.length == 0
             ? Expanded(
@@ -299,51 +298,38 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
     );
   }
 
-  dateSelector(
-      {BuildContext context, ConsignmentListByDateViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
+  dateSelector({@required ConsignmentListByDateViewModel viewModel}) {
+    return selectedDateTextField(
+      viewModel,
     );
   }
 
   selectedDateTextField(ConsignmentListByDateViewModel viewModel) {
     return appTextFormField(
+      buttonType: ButtonType.FULL,
+      buttonIcon: Image.asset(
+        calendarIcon,
+        height: 16,
+        width: 16,
+      ),
+      // Icon(Icons.calendar_today_outlined),
+      onButtonPressed: (() async {
+        DateTime selectedDate = await selectDate();
+        if (selectedDate != null) {
+          selectedDateController.text =
+              DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+          viewModel.entryDate = selectedDate;
+
+          // viewModel.getRoutes(viewModel.selectedClient.id);
+          viewModel.getConsignmentListWithDate();
+        }
+      }),
       enabled: false,
       controller: selectedDateController,
       focusNode: selectedDateFocusNode,
       hintText: "Entry Date",
       labelText: "Entry Date",
       keyboardType: TextInputType.text,
-    );
-  }
-
-  selectDateButton(
-      BuildContext context, ConsignmentListByDateViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Image.asset(
-          calendarIcon,
-          height: 16,
-          width: 16,
-        ),
-        // Icon(Icons.calendar_today_outlined),
-        onPressed: (() async {
-          DateTime selectedDate = await selectDate();
-          if (selectedDate != null) {
-            selectedDateController.text =
-                DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.entryDate = selectedDate;
-
-            // viewModel.getRoutes(viewModel.selectedClient.id);
-            viewModel.getConsignmentListWithDate();
-          }
-        }),
-      ),
     );
   }
 
