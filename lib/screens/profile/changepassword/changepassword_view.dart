@@ -105,7 +105,7 @@ class _BodyWidgetState extends State<BodyWidget> {
               hSizedBox(20),
               Text(
                 // S.of(context).appTitle,
-                'Driver App',
+                'Manager App',
                 style: AppTextStyles.latoMediumItalics20.copyWith(
                   fontSize: 18,
                 ),

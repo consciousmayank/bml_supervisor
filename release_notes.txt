@@ -1,4 +1,5 @@
 In this build the things done are:-
 
-1. Changed the auth api.
-2. Made clientId an int from String.
+1. removed 'driver app' text from change password page.
+2. removed designation check after login.
+3. changed change password api endpoint.

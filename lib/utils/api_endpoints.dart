@@ -72,7 +72,7 @@ final GET_CLIENTS = (pageNumber) => "/manager/client/list/page/$pageNumber";
 const String GET_USER = "/manager/profile";
 const String UPDATE_USER_MOBILE = "/manager/update/mobile";
 const String UPDATE_USER_EMAIL = "/manager/update/email";
-const String CHANGE_PASSWORD = "/user/update/password";
+const String CHANGE_PASSWORD = "/manager/update/password";
 const String GET_APP_VERSION = "/info/get/version";
 const String GET_CITIES = "/location/city/list";
 const String ADD_DRIVER = "/manager/driver/add";
