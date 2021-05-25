@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
@@ -9,6 +10,7 @@ import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -102,7 +104,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       child: ListView(
         children: [
           appTextFormField(
-            buttonType: ButtonType.SMALL,
+            buttonType: ButtonType.FULL,
             buttonIcon: Icon(Icons.calendar_today_outlined),
             onButtonPressed: (() async {
               DateTime selectedDate = await selectDate();
@@ -119,59 +121,85 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
             labelText: "Entry Date",
             keyboardType: TextInputType.text,
           ),
-          viewModel.dailyKmInfoList.length > 0
-              ? DailyKmInfoDropDown(
-                  showUnderLine: false,
-                  selectedInfo: viewModel.selectedDailyKmInfo == null
-                      ? null
-                      : viewModel.selectedDailyKmInfo,
-                  optionList: viewModel.dailyKmInfoList,
-                  hint: "Select Client-Vehicle",
-                  onOptionSelect: (GetDailyKilometerInfo selectedValue) {
-                    viewModel.showSubmitForm = true;
-                    viewModel.selectedDailyKmInfo = selectedValue;
-                  },
-                )
-              : Container(),
 
-          viewModel.showSubmitForm
-              ? AppDropDown(
-                  showUnderLine: true,
-                  selectedValue: viewModel.expenseType != null
-                      ? viewModel.expenseType
-                      : null,
-                  hint: "Select Expense",
-                  onOptionSelect: (selectedValue) {
-                    viewModel.expenseType = selectedValue;
-                    // if (viewModel.selectedSearchVehicle != null &&
-                    //     viewModel.entryDate != null) {
-                    //   viewModel.getExpensesList();
-                    // }
-                  },
-                  optionList: expenseTypes,
-                )
-              : Container(),
+          if (viewModel.entryDate != null)
+            viewModel.dailyKmInfoList.length > 0
+                ? BottomSheetDropDown<
+                    GetDailyKilometerInfo>.getDailyKilometerInfo(
+                    allowedValue: viewModel.dailyKmInfoList,
+                    selectedValue: viewModel.selectedDailyKmInfo == null
+                        ? null
+                        : viewModel.selectedDailyKmInfo,
+                    hintText: "Select Client-Vehicle",
+                    onValueSelected:
+                        (GetDailyKilometerInfo selectedValue, int index) {
+                      viewModel.showSubmitForm = true;
+                      viewModel.selectedDailyKmInfo = selectedValue;
+                    },
+                  )
+                : appTextFormField(
+                    vehicleOwnerName: viewModel.validatedRegistrationNumber ==
+                            null
+                        ? null
+                        : "(${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model})",
+                    enabled: true,
+                    controller: selectedRegNoController,
+                    focusNode: selectedRegNoFocusNode,
+                    hintText: drRegNoHint,
+                    onTextChange: (String value) {
+                      viewModel.selectedDailyKmInfo = viewModel
+                          .selectedDailyKmInfo
+                          .copyWith(vehicleId: value);
+                    },
+                    keyboardType: TextInputType.text,
+                    buttonType: ButtonType.SMALL,
+                    buttonIcon: Icon(Icons.search),
+                    onButtonPressed: () {
+                      viewModel.validateRegistrationNumber(
+                          regNum: viewModel.selectedDailyKmInfo.vehicleId);
+                    },
+                    onFieldSubmitted: (_) {
+                      viewModel.validateRegistrationNumber(
+                          regNum: viewModel.selectedDailyKmInfo.vehicleId);
+                    }),
+
+          /* viewModel.showSubmitForm
+              ?  */
+          if (viewModel.entryDate != null)
+            AppDropDown(
+              showUnderLine: true,
+              selectedValue:
+                  viewModel.expenseType != null ? viewModel.expenseType : null,
+              hint: "Select Expense",
+              onOptionSelect: (selectedValue) {
+                viewModel.expenseType = selectedValue;
+                // if (viewModel.selectedSearchVehicle != null &&
+                //     viewModel.entryDate != null) {
+                //   viewModel.getExpensesList();
+                // }
+              },
+              optionList: expenseTypes,
+            ),
+          // : Container(),
           hSizedBox(10),
-          // viewModel.entryDate == null
-          //     ? Container()
-          //     :
-          viewModel.showSubmitForm
-              ? getAmount(context: context, viewModel: viewModel)
-              : Container(),
+
+          // viewModel.showSubmitForm
+          //     ? getAmount(context: context, viewModel: viewModel)
+          //     : Container(),
+          if (viewModel.entryDate != null)
+            getAmount(context: context, viewModel: viewModel),
           hSizedBox(10),
-          // viewModel.entryDate == null
-          //     ? Container()
-          //     :
-          viewModel.showSubmitForm
-              ? getDescription(context: context, viewModel: viewModel)
-              : Container(),
+          // viewModel.showSubmitForm
+          //     ? getDescription(context: context, viewModel: viewModel)
+          //     : Container(),
+          if (viewModel.entryDate != null)
+            getDescription(context: context, viewModel: viewModel),
           hSizedBox(10),
-          // viewModel.entryDate == null
-          //     ? Container()
-          //     :
-          viewModel.showSubmitForm
-              ? saveExpenseButton(context: context, viewModel: viewModel)
-              : Container(),
+          if (viewModel.entryDate != null)
+            saveExpenseButton(context: context, viewModel: viewModel)
+          // viewModel.showSubmitForm
+          //     ? saveExpenseButton(context: context, viewModel: viewModel)
+          //     : Container(),
         ],
       ),
     );
@@ -254,7 +282,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
             // ignore: todo
             //TODO: Refactor the if(s) and else(s)
             if (viewModel.expenseType != null) {
-              if (viewModel.selectedDailyKmInfo != null) {
+              if (viewModel.selectedDailyKmInfo.vehicleId.length > 1) {
                 viewModel.saveExpense(
                   SaveExpenseRequest(
                     clientId: viewModel.selectedDailyKmInfo.clientId,
@@ -267,15 +295,22 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
                     expenseDesc: descriptionController.text,
                   ),
                 );
-                descriptionFocusNode.unfocus();
-                amountFocusNode.unfocus();
-                if (viewModel.isRegNumCorrect) {
-                  amountController.clear();
-                  descriptionController.clear();
-                }
+              } else if (viewModel.dailyKmInfoList.length == 0) {
+                viewModel.snackBarService.showCustomSnackBar(
+                  variant: SnackbarType.ERROR,
+                  duration: Duration(seconds: 4),
+                  message: 'Please Select Vehicle Id',
+                  mainButtonTitle: 'Ok',
+                  onMainButtonTapped: () {
+                    selectedRegNoFocusNode.requestFocus();
+                  },
+                );
               } else {
-                viewModel.snackBarService
-                    .showSnackbar(message: "Please Select Client-Vehicle");
+                viewModel.snackBarService.showCustomSnackBar(
+                  variant: SnackbarType.ERROR,
+                  duration: Duration(seconds: 4),
+                  message: 'Please Select Client-Vehicle',
+                );
               }
             } else {
               viewModel.snackBarService

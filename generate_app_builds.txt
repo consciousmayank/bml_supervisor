@@ -1,6 +1,21 @@
 PROJECT=$PWD
 readonly PROJECT
 
+ANDROIDDEVAPPID="1:381507904047:android:d6258a9d2e2c8962311cda"
+ANDROIDPRODAPPID="1:157688344073:android:8c4974c35d3631e24312d8"
+
+ANDROIDDEVTESTERS="ankushpofale2@gmail.com, geektechnotonic@gmail.com, vikasrna637@gmail.com"
+ANDROIDPRODTESTERS="ankushpofale2@gmail.com, geektechnotonic@gmail.com, rahul.marketngbml@gmail.com"
+
+
+IOSDEVAPPID="1:381507904047:ios:b24cd7018783773e311cda"
+IOSPRODAPPID="1:157688344073:ios:b2a27ad3c95265154312d8"
+
+IOSTESTERS="bhupendrax86@gmail.com, consciousmayank@gmail.com"
+IOS_TESTERS="bhupendrax86@gmail.com, consciousmayank@gmail.com"
+
+TOKEN="1//0gDPaEovjKe1FCgYIARAAGBASNwF-L9IrBRB38tgkOp1nRiNLnfGUvBMOIGZQM3UBpRY1z-ofnROg-rku9bzghX8LabSGCs0Hs7g"
+
 rm -r $PROJECT/app_builds/ios/adhoc-prod
 rm -r $PROJECT/app_builds/ios/adhoc-dev
 
@@ -16,25 +31,38 @@ mkdir $PROJECT/app_builds/android/dev
 #flutter clean && flutter pub get
 
 flutter build apk --flavor dev -t lib/main/main_dev.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-dev-release.apk $PROJECT/app_builds/android/dev
-flutter build apk --flavor prod -t lib/main/main_prod.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-prod-release.apk $PROJECT/app_builds/android/prod
-flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
-flutter build ipa --flavor prod -t lib/main/main_prod.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-prod -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
 
-echo ''
-echo ''
+firebase appdistribution:distribute $PROJECT/app_builds/android/dev/app-dev-release.apk  \
+    --app $ANDROIDDEVAPPID  \
+    --token $TOKEN \
+    --release-notes-file "$PROJECT/release_notes.txt" --testers $ANDROIDDEVTESTERS
+
+flutter build apk --flavor prod -t lib/main/main_prod.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-prod-release.apk $PROJECT/app_builds/android/prod
+
+firebase appdistribution:distribute $PROJECT/app_builds/android/dev/app-dev-release.apk  \
+    --app $ANDROIDPRODAPPID  \
+    --token $TOKEN \
+    --release-notes-file "$PROJECT/release_notes.txt" --testers $ANDROIDPRODTESTERS
+
+flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+
+firebase appdistribution:distribute /Users/myke/personal/flutter_projects/BML/bml_client/app_builds/ios/adhoc-dev/bml_client.ipa \
+    --app $IOSDEVAPPID \
+    --token $TOKEN \
+    --release-notes-file "/Users/myke/personal/flutter_projects/BML/bml_client/release_notes.txt" \
+    --testers $IOSTESTERS
+
+flutter build ipa --flavor prod -t lib/main/main_prod.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-prod -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+firebase appdistribution:distribute /Users/myke/personal/flutter_projects/BML/bml_client/app_builds/ios/adhoc-dev/bml_client.ipa \
+    --app $IOSPRODAPPID \
+    --token $TOKEN \
+    --release-notes-file "/Users/myke/personal/flutter_projects/BML/bml_client/release_notes.txt" \
+    --testers #IOSTESTERS
+    
 echo ''
 echo '-------------------------------------------------------------------------'
 echo ''
-echo 'Builds are available in'
-echo '1. Android Dev   -' $PROJECT/app_builds/android/dev
-echo ''
-echo '2. Android Prod  -' $PROJECT/app_builds/android/prod
-echo ''
-echo '3. iOS Dev       -' $PROJECT/app_builds/ios/adhoc-dev
-echo ''
-echo '4. iOS Prod      -' $PROJECT/app_builds/ios/adhoc-prod
+echo 'Builds UPLOADED'
 echo ''
 echo '-------------------------------------------------------------------------'
-echo ''
-echo ''
 echo ''

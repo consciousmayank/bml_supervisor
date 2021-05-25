@@ -12,6 +12,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -35,9 +36,13 @@ class _AddHubsViewState extends State<AddHubsView> {
                 title: setAppBarTitle(title: 'Add Hub'),
                 centerTitle: true,
               ),
-              body: AddHubBodyWidget(
-                viewModel: viewModel,
-              ),
+              body: viewModel.isBusy
+                  ? ShimmerContainer(
+                      itemCount: 10,
+                    )
+                  : AddHubBodyWidget(
+                      viewModel: viewModel,
+                    ),
             ),
         viewModelBuilder: () => AddHubsViewModel());
   }
@@ -158,7 +163,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                 if (contactNumberController.text.length >= 10) {
                   widget.viewModel.addHub(
                       newHubObject: AddHubRequest(
-                    // clientId: widget.viewModel.selectedClient.clientId,
+                    addressLine: houseNoBuildingNameController.text,
                     clientId: MyPreferences()?.getSelectedClient()?.clientId,
                     title: hubTitleController.text.trim(),
                     contactPerson: contactPersonController.text.trim(),

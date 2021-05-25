@@ -28,6 +28,7 @@ class AddHubRequest {
     this.geoLatitude,
     this.geoLongitude,
     this.remarks,
+    this.addressLine,
   });
 
   int clientId;
@@ -36,6 +37,7 @@ class AddHubRequest {
   String mobile;
   String phone;
   String email;
+  String addressLine;
   String street;
   String locality;
   String landmark;
@@ -66,6 +68,7 @@ class AddHubRequest {
     double geoLatitude,
     double geoLongitude,
     String remarks,
+    String addressLine,
   }) =>
       AddHubRequest(
         clientId: clientId ?? this.clientId,
@@ -85,6 +88,7 @@ class AddHubRequest {
         geoLatitude: geoLatitude ?? this.geoLatitude,
         geoLongitude: geoLongitude ?? this.geoLongitude,
         remarks: remarks ?? this.remarks,
+        addressLine: addressLine ?? this.addressLine,
       );
 
   factory AddHubRequest.fromJson(String str) =>
@@ -110,6 +114,7 @@ class AddHubRequest {
         geoLatitude: json["geoLatitude"].toDouble(),
         geoLongitude: json["geoLongitude"].toDouble(),
         remarks: json["remarks"],
+        addressLine: json["addressLine"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -130,5 +135,6 @@ class AddHubRequest {
         "geoLatitude": geoLatitude,
         "geoLongitude": geoLongitude,
         "remarks": remarks,
+        "addressLine": addressLine,
       };
 }

@@ -66,6 +66,7 @@ class PendingConsignmentsListViewModel extends GeneralisedBaseViewModel {
     )
         .then((value) {
       if (value) {
+        shouldCallPendingConsignmentsList = true;
         getPendingConsignmentsList(
           showLoading: true,
         );

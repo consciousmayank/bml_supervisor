@@ -104,6 +104,10 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToConsignmentDetailPage({ConsignmentDetailsArgument args}) async {
-    navigationService.navigateTo(consignmentDetailsPageRoute, arguments: args);
+    navigationService
+        .navigateTo(consignmentDetailsPageRoute, arguments: args)
+        .then(
+          (value) => print(value),
+        );
   }
 }

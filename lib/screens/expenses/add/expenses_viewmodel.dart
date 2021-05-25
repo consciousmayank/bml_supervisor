@@ -1,5 +1,9 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
@@ -7,17 +11,28 @@ import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:flutter/material.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
   ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   bool _clearData = false;
   List<GetDailyKilometerInfo> _dailyKmInfoList = [];
+  SearchByRegNoResponse _validatedRegistrationNumber;
+  SearchByRegNoResponse get validatedRegistrationNumber =>
+      _validatedRegistrationNumber;
+
+  set validatedRegistrationNumber(SearchByRegNoResponse value) {
+    _validatedRegistrationNumber = value;
+    notifyListeners();
+  }
 
   List<GetDailyKilometerInfo> get dailyKmInfoList => _dailyKmInfoList;
 
@@ -26,7 +41,12 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  GetDailyKilometerInfo _selectedDailyKmInfo;
+  GetDailyKilometerInfo _selectedDailyKmInfo = GetDailyKilometerInfo(
+    vehicleId: "0",
+    clientId: MyPreferences().getSelectedClient().clientId,
+    routeId: 0,
+    routeTitle: '',
+  );
 
   GetDailyKilometerInfo get selectedDailyKmInfo => _selectedDailyKmInfo;
 
@@ -177,46 +197,32 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   // }
 
   void saveExpense(SaveExpenseRequest saveExpenseRequest) async {
+    setBusy(true);
     isExpenseListLoading = true;
     ApiResponse response =
         await _expensesApi.addExpense(saveExpenseRequest: saveExpenseRequest);
 
     if (response.isSuccessful()) {
-      entryDate = null;
-      selectedDailyKmInfo = null;
-      expenseType = null;
-      clearData = true;
-      showSubmitForm = false;
-      dailyKmInfoList.clear();
+      bottomSheetService
+          .showCustomSheet(
+        customData: ConfirmationBottomSheetInputArgs(
+          title: response.message,
+        ),
+        barrierDismissible: false,
+        isScrollControlled: true,
+        variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+      )
+          .then(
+        (value) {
+          if (response.isSuccessful()) {
+            navigationService.replaceWith(addExpensesPageRoute);
+          }
+        },
+      );
     }
+    setBusy(false);
     isExpenseListLoading = false;
   }
-
-  // void searchByRegistrationNumber(
-  //     SaveExpenseRequest saveExpenseResponse) async {
-  //   setBusy(true);
-
-  //   var entryLog = await apiService
-  //       .searchByRegistrationNumber(saveExpenseResponse.vehicleId);
-  //   if (entryLog is String) {
-  //     snackBarService.showSnackbar(message: entryLog);
-  //   } else if (entryLog.data['status'].toString() == 'failed') {
-  //     setBusy(false);
-  //     snackBarService.showSnackbar(
-  //         message: "Enter Correct Registration Number");
-  //   } else {
-  //     SearchByRegNoResponse singleSearchResult =
-  //         SearchByRegNoResponse.fromMap(entryLog.data);
-  //     // print('init reading - ${singleSearchResult.initReading}');
-  //     isRegNumCorrect = true;
-  //     // vehicleLog = EntryLog.fromMap(entryLog.data);
-
-  //     // *call saveExpense api here
-  //     saveExpense(saveExpenseResponse);
-  //     setBusy(false);
-  //   }
-  //   // return isRegNumCorrect;
-  // }
 
   void getInfo() async {
     setBusy(true);
@@ -224,6 +230,20 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       date: getDateString(entryDate),
     );
     dailyKmInfoList = copyList(response);
+    setBusy(false);
+  }
+
+  void validateRegistrationNumber({@required String regNum}) async {
+    setBusy(true);
+    validatedRegistrationNumber =
+        await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
+    if (validatedRegistrationNumber == null) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        message: 'Vehicle with registration number $regNum not found.',
+      );
+    }
+    notifyListeners();
     setBusy(false);
   }
 }

@@ -1,17 +1,6 @@
-In this build the things done are:-
+In this build the following updates were done :-
 
-Following fixes are done
-
-1. Showing numeric keyboard in latitude and longitude in add hubs
-2. Back button in change password.
-3. Added Address type in add driver.
-4. App versioning to be checked by major, minor. 
-5. Fixed MANAGER APP:: Type conversion error while creating the route.
-6. Removed pop up dropdown, and introduced bottom sheet options in add Driver.(have to implement it in all drop downs).
-7. Fixed the errors reported by Rahul.
-   - Review consignments.
-   - Create consignments. The one he shared in video.
-
-8. removed 'driver app' text from change password page.
-9. removed designation check after login.
-10. changed change password api endpoint.
+1. Review consignment list is now refreshing after successfully reviewing a particular consignment(166).
+2. When selecting consignment=> list => select date => load consignments list along with a Date, the value of "Collect was not correct. It has been fixed now(168).
+3. Now the manager can add expense for a vehicle, on a date when there is no consignment delivered by that Vehicle. In other words, expense entry without consignment dependency is allowed(169).
+4. Added addressline(House no/ Buiulding name) in add hubs(142).

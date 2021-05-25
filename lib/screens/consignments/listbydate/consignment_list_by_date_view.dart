@@ -147,59 +147,71 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       ConsignmentListByDateViewModel viewModel, int outerIndex) {
     return List.generate(
       viewModel.getConsolidatedData(outerIndex).length,
-      (index) => SingleConsignmentItem(
-        args: SingleConsignmentItemArguments(
-          vehicleId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .vehicleId
-              .toString(),
-          drop: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .dropOff
-              .toString(),
-          routeTitle: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeTitle
-              .toString(),
-          collect: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .collect
-              .toString(),
-          payment: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .payment
-              .toString(),
-          routeId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeId
-              .toString(),
-          consignmentId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .consigmentId
-              .toString(),
-          onTap: () {
-            viewModel.takeToConsignmentDetailPage(
-              args: ConsignmentDetailsArgument(
-                vehicleId:
-                    viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
-                callingScreen: CallingScreen.CONSIGNMENT_LIST,
-                consignmentId: viewModel
-                    .getConsolidatedData(outerIndex)[index]
-                    .consigmentId
-                    .toString(),
-                routeId: viewModel
-                    .getConsolidatedData(outerIndex)[index]
-                    .routeId
-                    .toString(),
-                routeName:
-                    viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
-                entryDate:
-                    viewModel.getConsolidatedData(outerIndex)[index].entryDate,
-              ),
-            );
-          },
-        ),
-      ),
+      (index) {
+        print(
+          'getConsolidatedData :: ' +
+              viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .collect
+                  .toString(),
+        );
+        return SingleConsignmentItem(
+          args: SingleConsignmentItemArguments(
+            vehicleId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .vehicleId
+                .toString(),
+            drop: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .dropOff
+                .toString(),
+            routeTitle: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .routeTitle
+                .toString(),
+            collect: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .collect
+                .toString(),
+            payment: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .payment
+                .toString(),
+            routeId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .routeId
+                .toString(),
+            consignmentId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .consigmentId
+                .toString(),
+            onTap: () {
+              viewModel.takeToConsignmentDetailPage(
+                args: ConsignmentDetailsArgument(
+                  vehicleId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .vehicleId,
+                  callingScreen: CallingScreen.CONSIGNMENT_LIST,
+                  consignmentId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .consigmentId
+                      .toString(),
+                  routeId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .routeId
+                      .toString(),
+                  routeName: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .routeTitle,
+                  entryDate: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .entryDate,
+                ),
+              );
+            },
+          ),
+        );
+      },
     ).toList();
   }
 
@@ -273,7 +285,8 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                   Expanded(
                     child: AppTextView(
                       hintText: 'Collect',
-                      value: viewModel.consignmentsList[index].toString(),
+                      value:
+                          viewModel.consignmentsList[index].collect.toString(),
                     ),
                   ),
                   wSizedBox(6),

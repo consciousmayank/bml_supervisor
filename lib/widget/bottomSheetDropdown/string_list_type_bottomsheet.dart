@@ -81,6 +81,9 @@ String getTitle(
     case BottomSheetDropDownType.CREATE_CONSIGNMENT_ROUTES_LIST:
       return 'R#${inputArgs.allowedValues[index].routeId}. ${inputArgs.allowedValues[index].routeTitle}';
 
+    case BottomSheetDropDownType.ADD_EXPENSES_ROUTES_LIST:
+      return '${inputArgs.allowedValues[index].clientId} - ${inputArgs.allowedValues[index].vehicleId}(${inputArgs.allowedValues[index].routeTitle})';
+
       break;
     case BottomSheetDropDownType.STRING:
       return '${inputArgs.allowedValues[index]}';
@@ -93,13 +96,13 @@ String getTitle(
 
 class StringListTypeBottomSheetInputArgs<T> {
   final List<T> allowedValues;
-  final String preSelectedValue;
+  final T preSelectedValue;
   final BottomSheetDropDownType bottomSheetDropDownType;
 
   StringListTypeBottomSheetInputArgs({
     @required this.bottomSheetDropDownType,
     @required this.allowedValues,
-    this.preSelectedValue = 'none',
+    this.preSelectedValue,
   });
 }
 

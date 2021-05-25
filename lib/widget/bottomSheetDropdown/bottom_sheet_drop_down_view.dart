@@ -4,17 +4,16 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class BottomSheetDropDown<T> extends StatefulWidget {
   final List<T> allowedValue;
-  final String selectedValue;
+  T selectedValue;
   final String hintText;
   final Function onValueSelected;
   final BottomSheetDropDownType bottomSheetDropDownType;
 
-  const BottomSheetDropDown({
+  BottomSheetDropDown({
     Key key,
     @required this.allowedValue,
     @required this.selectedValue,
@@ -23,7 +22,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
     this.bottomSheetDropDownType = BottomSheetDropDownType.STRING,
   }) : super(key: key);
 
-  const BottomSheetDropDown.createConsignmentRoutes({
+  BottomSheetDropDown.createConsignmentRoutes({
     Key key,
     @required this.allowedValue,
     @required this.selectedValue,
@@ -33,24 +32,36 @@ class BottomSheetDropDown<T> extends StatefulWidget {
         BottomSheetDropDownType.CREATE_CONSIGNMENT_ROUTES_LIST,
   }) : super(key: key);
 
+  ///To show while adding expenses. Shows a list of clientId+vehicleId+routeTitle
+  BottomSheetDropDown.getDailyKilometerInfo({
+    //${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}(${widget.optionList[i].routeTitle})
+    Key key,
+    @required this.allowedValue,
+    @required this.selectedValue,
+    @required this.hintText,
+    @required this.onValueSelected,
+    this.bottomSheetDropDownType =
+        BottomSheetDropDownType.ADD_EXPENSES_ROUTES_LIST,
+  }) : super(key: key);
+
   @override
   _BottomSheetDropDownState<T> createState() => _BottomSheetDropDownState<T>();
 }
 
 class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
-  String preSelectedValue = '';
+  // T preSelectedValue;
   bool isOpen = false;
   @override
   void initState() {
     super.initState();
-    preSelectedValue = widget.selectedValue;
+    // preSelectedValue = widget.selectedValue;
   }
 
   @override
   Widget build(BuildContext context) {
     return appTextFormField(
       controller: TextEditingController(
-        text: preSelectedValue,
+        text: getTextValue(),
       ),
       enabled: false,
       hintText: widget.hintText,
@@ -80,7 +91,7 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
             StringListTypeBottomSheetOutputArgs args = value.responseData;
             widget.onValueSelected.call(args.selectedValue, args.index);
             setState(() {
-              preSelectedValue = args.selectedTextVale;
+              widget.selectedValue = args.selectedValue;
               isOpen = false;
             });
           } else {
@@ -92,6 +103,32 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
       },
     );
   }
+
+  getTextValue() {
+    switch (widget.bottomSheetDropDownType) {
+      case BottomSheetDropDownType.CREATE_CONSIGNMENT_ROUTES_LIST:
+        return 'R#${widget.selectedValue.routeId}. ${widget.selectedValue.routeTitle}';
+
+      case BottomSheetDropDownType.ADD_EXPENSES_ROUTES_LIST:
+        if (widget.selectedValue.routeTitle.length > 0) {
+          return '${widget.selectedValue.clientId} - ${widget.selectedValue.vehicleId}(${widget.selectedValue.routeTitle})';
+        } else {
+          return '';
+        }
+
+        break;
+      case BottomSheetDropDownType.STRING:
+        return widget.selectedValue.toString();
+        break;
+
+      default:
+        return '';
+    }
+  }
 }
 
-enum BottomSheetDropDownType { CREATE_CONSIGNMENT_ROUTES_LIST, STRING }
+enum BottomSheetDropDownType {
+  CREATE_CONSIGNMENT_ROUTES_LIST,
+  STRING,
+  ADD_EXPENSES_ROUTES_LIST
+}

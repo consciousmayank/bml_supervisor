@@ -152,7 +152,7 @@ class _LoginViewState extends State<LoginView> {
     return loginTextFormField(
         controller: userNameController,
         focusNode: userNameFocusNode,
-        hintText: "UserName",
+        hintText: "Username",
         keyboardType: TextInputType.text,
         onFieldSubmitted: (_) {
           fieldFocusChange(
