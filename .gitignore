@@ -49,3 +49,7 @@ app.*.map.json
 /windows/flutter/generated_plugins.cmake
 /macos/Flutter/GeneratedPluginRegistrant.swift
 /macos/Podfile
+app_builds/android/prod/
+app_builds/android/dev/
+app_builds/ios/adhoc-dev/
+app_builds/ios/adhoc-prod/

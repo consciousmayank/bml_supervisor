@@ -39,3 +39,9 @@ flutter build apk --flavor prod -t lib/main/main_prod.dart
         }
     ]
 }
+
+<key>CFBundleVersion</key>
+<string>$(FLUTTER_BUILD_NUMBER)</string>
+
+<key>CFBundleShortVersionString</key>
+<string>$(FLUTTER_BUILD_NAME</string>

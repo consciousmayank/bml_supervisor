@@ -1,5 +1,17 @@
 In this build the things done are:-
 
-1. removed 'driver app' text from change password page.
-2. removed designation check after login.
-3. changed change password api endpoint.
+Following fixes are done
+
+1. Showing numeric keyboard in latitude and longitude in add hubs
+2. Back button in change password.
+3. Added Address type in add driver.
+4. App versioning to be checked by major, minor. 
+5. Fixed MANAGER APP:: Type conversion error while creating the route.
+6. Removed pop up dropdown, and introduced bottom sheet options in add Driver.(have to implement it in all drop downs).
+7. Fixed the errors reported by Rahul.
+   - Review consignments.
+   - Create consignments. The one he shared in video.
+
+8. removed 'driver app' text from change password page.
+9. removed designation check after login.
+10. changed change password api endpoint.
