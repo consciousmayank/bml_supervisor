@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381507904047",
+    "project_id": "bookmyloadingmanager-dev",
+    "storage_bucket": "bookmyloadingmanager-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381507904047:android:d6258a9d2e2c8962311cda",
+        "android_client_info": {
+          "package_name": "com.mayank.bml_supervisor.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381507904047-4pb1grb6k0ahlibloioa8uoqu38vubjr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7eGtvWceKF7bNSDo8Bem1ZoZNuv1FmVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381507904047-4pb1grb6k0ahlibloioa8uoqu38vubjr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

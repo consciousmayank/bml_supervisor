@@ -65,6 +65,21 @@ android {
             multiDexEnabled true
         }
     }
+    flavorDimensions "app"
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "Bml Manager dev"
+            versionNameSuffix "-dev"
+            applicationId "com.mayank.bml_supervisor.dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", "BML Manager"
+            
+            // applicationId "com.kanily.flavortest.prod"
+        }
+    }
 }
 
 flutter {

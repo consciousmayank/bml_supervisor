@@ -25,21 +25,21 @@ class LoginViewModel extends GeneralisedBaseViewModel {
         await _loginApi.login(getBase64String(value: '$userName:$password'));
 
     if (loginResponse != null) {
-      if (loginResponse.designation == 'MANAGER') {
-        MyPreferences().setLoggedInUser(
-          loginResponse.copyWith(
-            isUserLoggedIn: true,
-          ),
-        );
-        MyPreferences().saveCredentials(
-          getBase64String(value: '$userName:$password'),
-        );
-        // locator<DioConfig>().configureDio();
-        takeToClientSelect();
-      } else {
-        snackBarService.showSnackbar(
-            message: 'You do not have access to use this app.');
-      }
+      // if (loginResponse.designation == 'Manager') {
+      MyPreferences().setLoggedInUser(
+        loginResponse.copyWith(
+          isUserLoggedIn: true,
+        ),
+      );
+      MyPreferences().saveCredentials(
+        getBase64String(value: '$userName:$password'),
+      );
+      // locator<DioConfig>().configureDio();
+      takeToClientSelect();
+      // } else {
+      //   snackBarService.showSnackbar(
+      //       message: 'You do not have access to use this app.');
+      // }
     }
     setBusy(false);
   }

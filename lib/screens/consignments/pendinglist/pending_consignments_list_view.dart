@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/screens/consignments/pendinglist/pending_consignments_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';

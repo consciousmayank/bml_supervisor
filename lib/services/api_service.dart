@@ -11,7 +11,6 @@ import 'package:bml_supervisor/models/app_versioning_request.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
-import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
@@ -215,14 +214,12 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-  Future<ParentApiResponse> getRoutesDrivenKm(
-      {@required int clientId, @required int period}) async {
+  Future<ParentApiResponse> getRoutesDrivenKm({@required int clientId}) async {
     // dashboard line chart api
     Response response;
     DioError error;
     try {
-      response =
-          await dioClient.getDio().get(GET_ROUTES_DRIVEN_KM(clientId, period));
+      response = await dioClient.getDio().get(GET_ROUTES_DRIVEN_KM(clientId));
     } on DioError catch (e) {
       error = e;
     }

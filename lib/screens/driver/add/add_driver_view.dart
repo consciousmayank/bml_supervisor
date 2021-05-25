@@ -1,18 +1,18 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/screens/driver/add/add_driver_viewmodel.dart';
 import 'package:bml_supervisor/screens/pickimage/pick_image_view.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +64,7 @@ class AddDriverBodyWidget extends StatefulWidget {
 }
 
 class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
+  ScrollController _controller = new ScrollController();
   TextEditingController vehicleIdController = TextEditingController();
   FocusNode vehicleIdFocusNode = FocusNode();
 
@@ -115,31 +116,14 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   FocusNode remarksFocusNode = FocusNode();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey> _key = List.generate(25, (index) => GlobalKey());
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.viewModel.isAddDriverSuccessful) {
-    //   vehicleIdController.clear();
-    //   drivingLicenseController.clear();
-    //   aadhaarController.clear();
-    //   fNameController.clear();
-    //   fatherNameController.clear();
-    //   mobileNumberController.clear();
-    //   alternateMobileNumberController.clear();
-    //   whatsAppMobileNumberController.clear();
-    //   workExpController.clear();
-    //   houseNoBuildingNameController.clear();
-    //   streetController.clear();
-    //   localityController.clear();
-    //   landmarkController.clear();
-    //   lNameController.clear();
-    //   dobController.clear();
-    //   remarksController.clear();
-    // }
-
     return Padding(
       padding: getSidePadding(context: context),
       child: SingleChildScrollView(
+        controller: _controller,
         child: Form(
           key: _formKey,
           child: Column(
@@ -153,29 +137,29 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: AppDropDown(
-                      optionList: genders,
-                      hint: 'Select Gender',
+                    child: BottomSheetDropDown<String>(
+                      allowedValue: genders,
                       selectedValue: widget.viewModel.selectedGender.isEmpty
-                          ? null
+                          ? ''
                           : widget.viewModel.selectedGender,
-                      onOptionSelect: (String selectedValue) {
+                      onValueSelected: (String selectedValue, int index) {
                         widget.viewModel.selectedGender = selectedValue;
                       },
+                      hintText: 'Select Gender',
                     ),
                   ),
                   Expanded(
                     flex: 1,
-                    child: AppDropDown(
-                      optionList: bloodGroup,
-                      hint: 'Select Blood Group',
+                    child: BottomSheetDropDown<String>(
+                      allowedValue: bloodGroup,
                       selectedValue: widget.viewModel.selectedBloodGroup.isEmpty
-                          ? null
+                          ? ''
                           : widget.viewModel.selectedBloodGroup,
-                      onOptionSelect: (String selectedValue) {
+                      onValueSelected: (String selectedValue, int index) {
                         widget.viewModel.selectedBloodGroup = selectedValue;
                         fNameFocusNode.requestFocus();
                       },
+                      hintText: 'Select Blood Group',
                     ),
                   ),
                 ],
@@ -192,6 +176,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               buildStreetTextFormField(),
               buildLocalityTextFormField(),
               buildLandmarkTextFormField(),
+              buildAddressSelector(key: _key[18]),
               widget.viewModel.cityList.length > 0
                   ? buildCityTextFormField(viewModel: widget.viewModel)
                   : Container(),
@@ -535,6 +520,22 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     );
   }
 
+  Widget buildAddressSelector({GlobalKey<State<StatefulWidget>> key}) {
+    return BottomSheetDropDown<String>(
+      key: key,
+      allowedValue: addressTypes,
+      selectedValue: widget.viewModel.selectedAddressTypes,
+      hintText: 'Address Type',
+      onValueSelected: (
+        String selectedAddressType,
+        int index,
+      ) {
+        widget.viewModel.selectedAddressTypes = selectedAddressType;
+        widget.viewModel.notifyListeners();
+      },
+    );
+  }
+
   Widget buildPinCodeTextFormField() {
     return appTextFormField(
       enabled: true,
@@ -613,13 +614,27 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   }
 
   Widget buildDobView() {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        buildDobTextField(),
-        selectDateButton(),
-      ],
+    return appTextFormField(
+      enabled: false,
+      controller: dobController,
+      focusNode: dobFocusNode,
+      hintText: addDriverDobHint,
+      keyboardType: TextInputType.text,
+      validator: FormValidators().normalValidator,
+      buttonType: ButtonType.FULL,
+      buttonIcon: Icon(Icons.calendar_today),
+      onButtonPressed: () async {
+        await selectDateOfBirth();
+      },
     );
+
+    // Stack(
+    //   alignment: Alignment.bottomRight,
+    //   children: [
+    //     buildDobTextField(),
+    //     selectDateButton(),
+    //   ],
+    // );
   }
 
   buildDobTextField() {
@@ -630,21 +645,6 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       hintText: addDriverDobHint,
       keyboardType: TextInputType.text,
       validator: FormValidators().normalValidator,
-    );
-  }
-
-  selectDateButton() {
-    return SizedBox(
-      height: 56,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.calendar_today_outlined),
-          onPressed: (() async {
-            await selectDateOfBirth();
-          }),
-        ),
-      ),
     );
   }
 
@@ -689,7 +689,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
             hideKeyboard(context: context);
-            if (_formKey.currentState.validate()) {
+            if (_formKey.currentState.validate() &&
+                checkOtherFields(scrollController: _controller)) {
               widget.viewModel.addDriver(
                   newDriverObject: AddDriverRequest(
                       bloodGroup: widget.viewModel.selectedBloodGroup,
@@ -711,7 +712,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       vehicleId: vehicleIdController.text,
                       address: [
                     Address(
-                      type: 'RESIDENTIAL',
+                      type: widget.viewModel.selectedAddressTypes,
                       addressLine1: houseNoBuildingNameController.text,
                       addressLine2: streetController.text,
                       locality: localityController.text,
@@ -792,5 +793,26 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
         );
       },
     );
+  }
+
+  bool checkOtherFields({@required ScrollController scrollController}) {
+    bool isValidated = true;
+
+    if (widget.viewModel.selectedAddressTypes.length == 0) {
+      widget.viewModel.snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please select an Address Type',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {
+          Scrollable.ensureVisible(_key[18].currentContext);
+          widget.viewModel.openAddressSelectorBottomSheet();
+        },
+      );
+
+      isValidated = false;
+    }
+
+    return isValidated;
   }
 }

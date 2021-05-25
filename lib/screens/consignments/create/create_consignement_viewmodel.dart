@@ -318,7 +318,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   Future consignmentsListBottomSheet() async {
-    var sheetResponse = await bottomSheetService.showCustomSheet(
+    await bottomSheetService.showCustomSheet(
       isScrollControlled: true,
       barrierDismissible: true,
       customData: consignmentsList,

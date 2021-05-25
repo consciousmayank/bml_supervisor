@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../utils/api_endpoints.dart';
-import 'configuration.dart';
 
 class DioConfig {
-  DioConfig() {
+  final String baseUrl;
+  DioConfig({@required this.baseUrl}) {
     configureDio();
   }
 
@@ -18,8 +18,7 @@ class DioConfig {
 
   configureDio() {
     _dio.options
-      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrl
-      // ..baseUrl = baseSecureUrl
+      ..baseUrl = baseUrl
       ..contentType = "application/json";
     _dio.interceptors.add(
       InterceptorsWrapper(

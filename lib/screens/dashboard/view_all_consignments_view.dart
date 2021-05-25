@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 

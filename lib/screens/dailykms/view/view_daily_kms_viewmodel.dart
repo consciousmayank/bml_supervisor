@@ -137,7 +137,7 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   double get totalFuelAmt => _totalFuelAmt;
 
   Future showMonthYearBottomSheet() async {
-    var sheetResponse = await bottomSheetService.showCustomSheet(
+    await bottomSheetService.showCustomSheet(
       barrierDismissible: true,
       isScrollControlled: true,
       customData: tempList,

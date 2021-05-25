@@ -14,7 +14,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
@@ -206,8 +205,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                       ),
                 viewModel.hubsList.length < 1
                     ? Container()
-                    : registrationSelector(
-                        context: context, viewModel: viewModel),
+                    : registrationSelector(viewModel: viewModel),
                 viewModel.hubsList.length < 1
                     ? Container()
                     : consignmentTextField(viewModel: viewModel),
@@ -494,18 +492,8 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   //   );
   // }
 
-  registrationSelector(
-      {BuildContext context, CreateConsignmentModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
-        ),
-        selectRegButton(context, viewModel),
-      ],
-    );
+  registrationSelector({CreateConsignmentModel viewModel}) {
+    return registrationNumberTextField(viewModel);
   }
 
   registrationNumberTextField(CreateConsignmentModel viewModel) {
@@ -518,6 +506,11 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         focusNode: selectedRegNoFocusNode,
         hintText: drRegNoHint,
         keyboardType: TextInputType.text,
+        buttonType: ButtonType.SMALL,
+        buttonIcon: Icon(Icons.search),
+        onButtonPressed: () {
+          validateRegistrationNumber(viewModel: viewModel);
+        },
         onFieldSubmitted: (_) {
           validateRegistrationNumber(viewModel: viewModel);
         });
@@ -548,54 +541,31 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         onFieldSubmitted: (value) => consignmentTitleFocusNode.unfocus());
   }
 
-  selectRegButton(BuildContext context, CreateConsignmentModel viewModel) {
-    return SizedBox(
-      height: 58,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 6.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {
-            validateRegistrationNumber(viewModel: viewModel);
-          },
-        ),
-      ),
-    );
-  }
-
   dateSelector({BuildContext context, CreateConsignmentModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
-    );
+    return selectedDateTextField(viewModel);
   }
 
   dispatchTimeSelectorSelector(
       {BuildContext context, CreateConsignmentModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDispatchTimeField(viewModel),
-        selectDispatchTimeButton(context, viewModel),
-      ],
-    );
+    return selectedDispatchTimeField(viewModel);
   }
 
   selectedDateTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
-      enabled: false,
-      controller: selectedDateController,
-      focusNode: selectedDateFocusNode,
-      inputDecoration: InputDecoration(
-          contentPadding:
-              EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
-          hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
-          hintText: 'Select date to create a new consigment'),
-      keyboardType: TextInputType.text,
-    );
+        enabled: false,
+        controller: selectedDateController,
+        focusNode: selectedDateFocusNode,
+        inputDecoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+            hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
+            hintText: 'Select date to create a new consigment'),
+        keyboardType: TextInputType.text,
+        buttonType: ButtonType.FULL,
+        buttonIcon: Icon(Icons.calendar_today_outlined),
+        onButtonPressed: () {
+          dateSelectListener(viewModel: viewModel);
+        });
   }
 
   selectedDispatchTimeField(CreateConsignmentModel viewModel) {
@@ -609,19 +579,20 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
           hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
           hintText: 'Dispatch Time'),
       keyboardType: TextInputType.text,
-    );
-  }
-
-  selectDateButton(BuildContext context, CreateConsignmentModel viewModel) {
-    return SizedBox(
-      height: 56,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.calendar_today_outlined),
-          onPressed: () => dateSelectListener(viewModel: viewModel),
-        ),
-      ),
+      buttonType: ButtonType.FULL,
+      buttonIcon: Icon(Icons.date_range_outlined),
+      onButtonPressed: (() async {
+        TimeOfDay selectedDispatchTime = await selectTime(context: context);
+        if (selectedDispatchTime != null) {
+          selectedDispatchTimeController.text =
+              selectedDispatchTime.format(context).toLowerCase();
+          viewModel.dispatchTime = selectedDispatchTime;
+          viewModel.getConsignmentListWithDate();
+          selectedRegNoController.clear();
+          consignmentTitleController.clear();
+          viewModel.resetControllerBoolValue();
+        }
+      }),
     );
   }
 
@@ -638,31 +609,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       consignmentTitleController.clear();
       viewModel.resetControllerBoolValue();
     }
-  }
-
-  selectDispatchTimeButton(
-      BuildContext context, CreateConsignmentModel viewModel) {
-    return SizedBox(
-      height: 56,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.date_range_outlined),
-          onPressed: (() async {
-            TimeOfDay selectedDispatchTime = await selectTime(context: context);
-            if (selectedDispatchTime != null) {
-              selectedDispatchTimeController.text =
-                  selectedDispatchTime.format(context).toLowerCase();
-              viewModel.dispatchTime = selectedDispatchTime;
-              viewModel.getConsignmentListWithDate();
-              selectedRegNoController.clear();
-              consignmentTitleController.clear();
-              viewModel.resetControllerBoolValue();
-            }
-          }),
-        ),
-      ),
-    );
   }
 
   Future<DateTime> selectDate() async {
@@ -809,6 +755,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget collectInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
+    print('collectInput, index = $index');
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(
@@ -854,11 +801,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     bool enabled,
     int index,
   }) {
-    // if (!viewModel.isPaymentEdited) {
-    //   paymentController.text =
-    //       viewModel?.consignmentRequest?.items[index]?.payment?.toString();
-    // }
-
+    print('paymentInput, index = $index');
     return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(

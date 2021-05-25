@@ -27,7 +27,6 @@ class AddRoutesView extends StatefulWidget {
 }
 
 class _AddRoutesViewState extends State<AddRoutesView> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
   TextEditingController routeTitleController = TextEditingController();
   FocusNode routeTitleFocusNode = FocusNode();
@@ -140,7 +139,6 @@ class _AddRoutesViewState extends State<AddRoutesView> {
   }
 
   void showHubsList(BuildContext context, AddRoutesViewModel viewModel) {
-    final node = FocusScope.of(context);
     showModalBottomSheet(
         backgroundColor: AppColors.appScaffoldColor,
         shape: RoundedRectangleBorder(

@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-import "package:bml_supervisor/app_level/string_extensions.dart";
 import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPreferences {
-  final String selected_client = "selected_client";
-  final String selected_duration = "selected_duration";
+  final String userSelectedClient = "selected_client";
+  final String userSelectedDuration = "selected_duration";
   final String loggedInUserRole = "logged_in_user_role";
   final String loggedInUserName = "logged_in_user_name";
   final String loggedInUserCredentials = "logged_in_user_credentials";
@@ -25,14 +22,14 @@ class MyPreferences {
 
   void saveSelectedClient(GetClientsResponse selectedClient) {
     if (selectedClient == null) {
-      _sharedPrefs.remove(selected_client);
+      _sharedPrefs.remove(userSelectedClient);
     } else {
-      _sharedPrefs.setString(selected_client, selectedClient.toJson());
+      _sharedPrefs.setString(userSelectedClient, selectedClient.toJson());
     }
   }
 
   GetClientsResponse getSelectedClient() {
-    String savedResponseString = _sharedPrefs.getString(selected_client);
+    String savedResponseString = _sharedPrefs.getString(userSelectedClient);
     if (savedResponseString == null) {
       return null;
     } else {
@@ -42,14 +39,14 @@ class MyPreferences {
 
   void saveSelectedDuration(String selectedDuration) {
     if (selectedDuration == null) {
-      _sharedPrefs.remove(selected_duration);
+      _sharedPrefs.remove(userSelectedDuration);
     } else {
-      _sharedPrefs.setString(selected_duration, selectedDuration);
+      _sharedPrefs.setString(userSelectedDuration, selectedDuration);
     }
   }
 
   String getSelectedDuration() {
-    return _sharedPrefs.getString(selected_duration) ?? "THIS MONTH";
+    return _sharedPrefs.getString(userSelectedDuration) ?? "THIS MONTH";
   }
 
   void saveCredentials(String value) {

@@ -7,6 +7,7 @@ import 'package:bml_supervisor/models/add_driver.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/driver/add/address_type_bottomsheet.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -16,7 +17,7 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
   String _alternatePhNo = '';
   String _whatsAppNo = '';
   String get whatsAppNo => _whatsAppNo;
-
+  String selectedAddressTypes = '';
   set whatsAppNo(String value) {
     _whatsAppNo = value;
     notifyListeners();
@@ -150,5 +151,25 @@ class AddDriverViewModel extends GeneralisedBaseViewModel {
     } else {
       return 'Mrs';
     }
+  }
+
+  openAddressSelectorBottomSheet() {
+    bottomSheetService
+        .showCustomSheet(
+      customData: AddressTypeBottomSheetInputArgs(
+        allowedAddressTypes: addressTypes,
+        preSelectedAddressTypes: selectedAddressTypes,
+      ),
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.ADDRESS_TYPE,
+    )
+        .then((value) {
+      if (value != null && value.confirmed) {
+        AddressTypeBottomSheetOutputArgs args = value.responseData;
+        selectedAddressTypes = args.selectedAddressTypes;
+        notifyListeners();
+      }
+    });
   }
 }

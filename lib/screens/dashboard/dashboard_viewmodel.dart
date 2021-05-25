@@ -11,12 +11,10 @@ import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/payments/payment_args.dart';
-import 'package:bml_supervisor/screens/profile/profile_apis.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +27,6 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   List<ConsignmentTrackingStatusResponse> _completedTrips = [];
   bool openConsignmentGroup = false;
-  ProfileApi _profileApi = locator<ProfileApisImpl>();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
   LoginResponse _userProfile;
   Uint8List _image;

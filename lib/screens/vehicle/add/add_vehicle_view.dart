@@ -2,8 +2,6 @@ import 'dart:ffi';
 
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/add_vehicle_request.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -680,7 +678,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           }
           return null;
         },
-        showButtonOnRight: true,
+        buttonType: ButtonType.SMALL,
         buttonIcon: Icon(Icons.calendar_today_outlined),
         buttonLabelText: 'Select Date',
         onButtonPressed: () async {
@@ -719,7 +717,7 @@ class _AddVehicleViewState extends State<AddVehicleView> {
           }
           return null;
         },
-        showButtonOnRight: true,
+        buttonType: ButtonType.SMALL,
         buttonIcon: Icon(Icons.calendar_today_outlined),
         buttonLabelText: 'Select Date',
         onButtonPressed: () async {

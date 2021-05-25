@@ -1,0 +1,40 @@
+PROJECT=$PWD
+readonly PROJECT
+
+rm -r $PROJECT/app_builds/ios/adhoc-prod
+rm -r $PROJECT/app_builds/ios/adhoc-dev
+
+rm -r $PROJECT/app_builds/android/dev/
+rm -r $PROJECT/app_builds/android/prod/
+
+mkdir $PROJECT/app_builds/ios/adhoc-prod
+mkdir $PROJECT/app_builds/ios/adhoc-dev
+
+mkdir $PROJECT/app_builds/android/prod
+mkdir $PROJECT/app_builds/android/dev
+
+#flutter clean && flutter pub get
+
+flutter build apk --flavor dev -t lib/main/main_dev.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-dev-release.apk $PROJECT/app_builds/android/dev
+flutter build apk --flavor prod -t lib/main/main_prod.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-prod-release.apk $PROJECT/app_builds/android/prod
+flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+flutter build ipa --flavor prod -t lib/main/main_prod.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-prod -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+
+echo ''
+echo ''
+echo ''
+echo '-------------------------------------------------------------------------'
+echo ''
+echo 'Builds are available in'
+echo '1. Android Dev   -' $PROJECT/app_builds/android/dev
+echo ''
+echo '2. Android Prod  -' $PROJECT/app_builds/android/prod
+echo ''
+echo '3. iOS Dev       -' $PROJECT/app_builds/ios/adhoc-dev
+echo ''
+echo '4. iOS Prod      -' $PROJECT/app_builds/ios/adhoc-prod
+echo ''
+echo '-------------------------------------------------------------------------'
+echo ''
+echo ''
+echo ''

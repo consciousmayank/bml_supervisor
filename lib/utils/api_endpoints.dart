@@ -14,8 +14,7 @@ final GET_LAST_SEVEN_ENTRIES =
 final GET_DAILY_DRIVEN_KMS_BAR_CHART =
     (clientId, period) => "/dailyKilometer/client/$clientId";
 
-final GET_ROUTES_DRIVEN_KM =
-    (clientId, period) => "/route/drivenKm/client/$clientId";
+final GET_ROUTES_DRIVEN_KM = (clientId) => "/route/drivenKm/client/$clientId";
 
 final GET_CONSIGNMENT_LIST_FOR_A_CLIENT_AND_DATE =
     (clientId, date) => "/consignment/list/client/$clientId/date/$date";
@@ -73,7 +72,7 @@ final GET_CLIENTS = (pageNumber) => "/manager/client/list/page/$pageNumber";
 const String GET_USER = "/manager/profile";
 const String UPDATE_USER_MOBILE = "/manager/update/mobile";
 const String UPDATE_USER_EMAIL = "/manager/update/email";
-const String CHANGE_PASSWORD = "/user/update/password";
+const String CHANGE_PASSWORD = "/manager/update/password";
 const String GET_APP_VERSION = "/info/get/version";
 const String GET_CITIES = "/location/city/list";
 const String ADD_DRIVER = "/manager/driver/add";

@@ -168,7 +168,7 @@ class _TabbedBodyState extends State<TabbedBody> {
                 widget.viewModel.completedTrips.length == 0
                     ? NoDataWidget()
                     : makeList(
-                        trips: widget.viewModel.completedTrips,
+                        trips: widget.viewModel.completedTrips.reversed,
                         typeOfTrip: TripStatus.COMPLETED),
                 widget.viewModel.verifiedTrips.length == 0
                     ? NoDataWidget()

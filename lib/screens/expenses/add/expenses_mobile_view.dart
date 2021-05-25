@@ -8,7 +8,6 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,32 +101,23 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       key: _formKey,
       child: ListView(
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              appTextFormField(
-                enabled: false,
-                controller: selectedDateController,
-                focusNode: selectedDateFocusNode,
-                hintText: "Select Entry Date",
-                labelText: "Entry Date",
-                keyboardType: TextInputType.text,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-                child: appSuffixIconButton(
-                  icon: Icon(Icons.calendar_today_outlined),
-                  onPressed: (() async {
-                    DateTime selectedDate = await selectDate();
-                    if (selectedDate != null) {
-                      selectedDateController.text = getDateString(selectedDate);
-                      viewModel.entryDate = selectedDate;
-                      viewModel.getInfo();
-                    }
-                  }),
-                ),
-              ),
-            ],
+          appTextFormField(
+            buttonType: ButtonType.SMALL,
+            buttonIcon: Icon(Icons.calendar_today_outlined),
+            onButtonPressed: (() async {
+              DateTime selectedDate = await selectDate();
+              if (selectedDate != null) {
+                selectedDateController.text = getDateString(selectedDate);
+                viewModel.entryDate = selectedDate;
+                viewModel.getInfo();
+              }
+            }),
+            enabled: false,
+            controller: selectedDateController,
+            focusNode: selectedDateFocusNode,
+            hintText: "Select Entry Date",
+            labelText: "Entry Date",
+            keyboardType: TextInputType.text,
           ),
           viewModel.dailyKmInfoList.length > 0
               ? DailyKmInfoDropDown(
