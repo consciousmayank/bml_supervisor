@@ -4,7 +4,10 @@
 
 import 'dart:convert';
 
-class ConsignmentTrackingStatusResponse {
+import 'package:bml_supervisor/utils/datetime_converter.dart';
+
+class ConsignmentTrackingStatusResponse
+    implements Comparable<ConsignmentTrackingStatusResponse> {
   ConsignmentTrackingStatusResponse(
       {this.dstLocation,
       this.consignmentDate,
@@ -129,4 +132,29 @@ class ConsignmentTrackingStatusResponse {
         "remark": remark,
         "routeDesc": routeDesc,
       };
+
+  // Define that two persons are equal if their SSNs are equal
+  bool operator <(ConsignmentTrackingStatusResponse other) {
+    return (StringToDateTimeConverter.ddmmyyhhmmssaa(
+            date: other.dispatchDateTime)
+        .convert()
+        .isAfter(
+            StringToDateTimeConverter.ddmmyyhhmmssaa(date: dispatchDateTime)
+                .convert()));
+  }
+
+  ///This will return negative if [other.dispatchDateTime] comes after [dispatchDateTime], else a positive number.
+  ///This is required to sort set inless time to greater time.
+  @override
+  int compareTo(ConsignmentTrackingStatusResponse other) {
+    if ((StringToDateTimeConverter.ddmmyyhhmmssaa(date: other.dispatchDateTime)
+        .convert()
+        .isAfter(
+            StringToDateTimeConverter.ddmmyyhhmmssaa(date: dispatchDateTime)
+                .convert()))) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
 }

@@ -205,50 +205,108 @@ class BaseBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
   final Widget child;
+  final EdgeInsets margin;
 
-  const BaseBottomSheet(
-      {Key key,
-      @required this.request,
-      @required this.completer,
-      @required this.child})
-      : super(key: key);
+  const BaseBottomSheet({
+    Key key,
+    @required this.request,
+    @required this.completer,
+    @required this.child,
+    this.margin,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: EdgeInsets.all(defaultBorder),
-      // padding: EdgeInsets.all(defaultBorder),
+      margin: margin ?? EdgeInsets.all(0),
+      // padding: margin ?? EdgeInsets.all(0),
       height: MediaQuery.of(context).size.height * 0.84,
       decoration: BoxDecoration(
         color: AppColors.appScaffoldColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(defaultBorder),
           topRight: Radius.circular(defaultBorder),
+          bottomLeft: margin != null
+              ? Radius.circular(defaultBorder)
+              : Radius.circular(0),
+          bottomRight: margin != null
+              ? Radius.circular(defaultBorder)
+              : Radius.circular(0),
         ),
       ),
       child: Column(
         children: [
-          InkWell(
-            onTap: () {
+          BottomSheetTitleBar(
+            onCloseTextClicked: () {
               completer(
                 SheetResponse(confirmed: false, responseData: null),
               );
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Close',
-                    style: AppTextStyles.hyperLinkStyle,
-                  )
-                ],
+          ),
+          Expanded(
+            child: child,
+            flex: 1,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomSheetTitleBar extends StatelessWidget {
+  final Function onCloseTextClicked;
+  final String title;
+  const BottomSheetTitleBar({
+    @required this.onCloseTextClicked,
+    Key key,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.offWhite,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(defaultBorder),
+          topRight: Radius.circular(defaultBorder),
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 2.0, //
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                title ?? '',
+                style: AppTextStyles.hyperLinkStyle,
               ),
             ),
-          ),
-          child,
-        ],
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap:
+                    onCloseTextClicked != null ? onCloseTextClicked.call : null,
+                child: Text(
+                  'Close',
+                  style: AppTextStyles.hyperLinkStyle,
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -291,24 +349,12 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
       ),
       child: Column(
         children: [
-          InkWell(
-            onTap: () {
+          BottomSheetTitleBar(
+            onCloseTextClicked: () {
               completer(
                 SheetResponse(confirmed: false, responseData: null),
               );
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Close',
-                    style: AppTextStyles.hyperLinkStyle,
-                  )
-                ],
-              ),
-            ),
           ),
           child,
         ],

@@ -4,6 +4,7 @@ import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
@@ -185,7 +186,7 @@ class _TabbedBodyState extends State<TabbedBody> {
 
   makeList(
       {List<ConsignmentTrackingStatusResponse> trips, TripStatus typeOfTrip}) {
-    Set<String> dateList = typeOfTrip == TripStatus.COMPLETED
+    Set<DateTime> dateList = typeOfTrip == TripStatus.COMPLETED
         ? widget.viewModel.completeTripsDate
         : widget.viewModel.verifiedTripsDate;
 
@@ -224,14 +225,14 @@ class _TabbedBodyState extends State<TabbedBody> {
                               style: AppTextStyles.latoBold16White,
                             ),
                             Text(
-                              dateList.elementAt(index),
+                              getDateString(dateList.elementAt(index)),
                               style: AppTextStyles.latoBold16White,
                             ),
                           ],
                         ),
                       ),
                       makeSingleTripView(
-                          date: dateList.elementAt(index),
+                          date: getDateString(dateList.elementAt(index)),
                           trips: trips,
                           outerIndex: index),
                     ],
@@ -246,7 +247,7 @@ class _TabbedBodyState extends State<TabbedBody> {
       {@required String date,
       @required List<ConsignmentTrackingStatusResponse> trips,
       @required int outerIndex}) {
-    List<ConsignmentTrackingStatusResponse> tripWithSelectedDate = [];
+    Set<ConsignmentTrackingStatusResponse> tripWithSelectedDate = Set();
 
     trips.forEach((element) {
       if (element.consignmentDate == date) {
@@ -254,8 +255,10 @@ class _TabbedBodyState extends State<TabbedBody> {
       }
     });
 
-    // List<ConsignmentTrackingStatusResponse> tripWithSelectedDate =
-    //     trips.where((element) => element.consignmentDate == date);
+    tripWithSelectedDate = widget.viewModel
+        .sortConsignmentTrackingStatusResponseSet(set: tripWithSelectedDate);
+
+    trips.sort((a, b) => a.compareTo(b));
 
     return Column(
       children: List.generate(
@@ -268,21 +271,33 @@ class _TabbedBodyState extends State<TabbedBody> {
                 bool value,
                 ConsignmentTrackingStatusResponse tappedTrip,
               ) {},
-              singleListItem: tripWithSelectedDate[index],
+              singleListItem: tripWithSelectedDate.elementAt(index),
               onTap: () {
-                if (tripWithSelectedDate[index].statusCode == 1 ||
-                    tripWithSelectedDate[index].statusCode == 2 ||
-                    tripWithSelectedDate[index].statusCode == 4) {
+                print(
+                    "Clicked :: ${tripWithSelectedDate.elementAt(index).dispatchDateTime}");
+
+                print("Clicked :: ${widget.viewModel.completeTripsDate.first}");
+
+                if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
+                    tripWithSelectedDate.elementAt(index).statusCode == 2 ||
+                    tripWithSelectedDate.elementAt(index).statusCode == 4) {
                   widget.viewModel.openBottomSheet(
-                      selectedTrip: tripWithSelectedDate[index]);
-                } else if (tripWithSelectedDate[index].statusCode == 3) {
-                  if (widget.viewModel.completedTrips.first.consignmentId ==
-                      tripWithSelectedDate[index].consignmentId) {
-                    widget.viewModel
-                        .reviewTrip(trip: tripWithSelectedDate[index]);
+                      selectedTrip: tripWithSelectedDate.elementAt(index));
+                } else if (tripWithSelectedDate.elementAt(index).statusCode ==
+                    3) {
+                  if (StringToDateTimeConverter.ddmmyyhhmmssaa(
+                              date: tripWithSelectedDate
+                                  .elementAt(index)
+                                  .dispatchDateTime)
+                          .convert() ==
+                      StringToDateTimeConverter.ddmmyyhhmmssaa(
+                              date: trips.first.dispatchDateTime)
+                          .convert()) {
+                    widget.viewModel.reviewTrip(
+                        trip: tripWithSelectedDate.elementAt(index));
                   } else {
                     widget.viewModel.openWarningBottomSheet(
-                      selectedTrip: tripWithSelectedDate[index],
+                      selectedTrip: tripWithSelectedDate.elementAt(index),
                     );
                   }
                 }

@@ -6,6 +6,7 @@ import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,7 @@ String capitalizeFirstLetter(String title) {
 }
 
 String getDateString(DateTime date) {
-  return DateFormat('dd-MM-yyyy').format(date);
+  return DateTimeToStringConverter.ddmmyy(date: date).convert();
 }
 
 flatButtonTextStyle() {
@@ -280,11 +281,11 @@ Text headerText(String title) {
 }
 
 String getCurrentDate() {
-  return DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
+  return DateTimeToStringConverter.ddmmyy(date: DateTime.now()).convert();
 }
 
 String getConvertedDate(DateTime date) {
-  return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
+  return DateTimeToStringConverter.ddmmyy(date: date).convert();
 }
 
 String getConvertedDateWithTime(DateTime date) {
