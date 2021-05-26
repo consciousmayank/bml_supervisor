@@ -1,6 +1,3 @@
 In this build the following updates were done :-
 
-1. Review consignment list is now refreshing after successfully reviewing a particular consignment(166).
-2. When selecting consignment=> list => select date => load consignments list along with a Date, the value of "Collect was not correct. It has been fixed now(168).
-3. Now the manager can add expense for a vehicle, on a date when there is no consignment delivered by that Vehicle. In other words, expense entry without consignment dependency is allowed(169).
-4. Added addressline(House no/ Buiulding name) in add hubs(142).
+1. Now the completed & verified trips list is being shown.
