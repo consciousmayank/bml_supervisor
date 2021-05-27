@@ -55,7 +55,7 @@ class DriverInfo {
   final String drivingLicense;
   final String aadhaar;
   final List<Address> address;
-  final List<dynamic> bank;
+  final List<Bank> bank;
   final int workExperienceYr;
   final dynamic lastCompany;
   final dynamic lastCompanyDol;
@@ -155,7 +155,7 @@ class DriverInfo {
         aadhaar: json["aadhaar"],
         address:
             List<Address>.from(json["address"].map((x) => Address.fromMap(x))),
-        bank: List<dynamic>.from(json["bank"].map((x) => x)),
+        bank: List<Bank>.from(json["bank"].map((x) => Bank.fromMap(x))),
         workExperienceYr: json["workExperienceYr"],
         lastCompany: json["lastCompany"],
         lastCompanyDol: json["lastCompanyDol"],
@@ -298,4 +298,79 @@ class Address {
         "creationdate": creationdate,
         "lastupdated": lastupdated,
       };
+}
+
+class Bank {
+  Bank({
+    this.id,
+    this.type,
+    this.accountName,
+    this.accountType,
+    this.accountNumber,
+    this.bankName,
+    this.ifsc,
+    this.pan,
+    this.address,
+  });
+
+  int id;
+  String type;
+  String accountName;
+  String accountType;
+  String accountNumber;
+  String bankName;
+  String ifsc;
+  String pan;
+  String address;
+
+  Bank copyWith({
+    int id,
+    String type,
+    String accountName,
+    String accountType,
+    String accountNumber,
+    String bankName,
+    String ifsc,
+    String pan,
+    String address,
+  }) =>
+      Bank(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        accountName: accountName ?? this.accountName,
+        accountType: accountType ?? this.accountType,
+        accountNumber: accountNumber ?? this.accountNumber,
+        bankName: bankName ?? this.bankName,
+        ifsc: ifsc ?? this.ifsc,
+        pan: pan ?? this.pan,
+        address: address ?? this.address,
+      );
+
+  factory Bank.fromJson(String str) => Bank.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Bank.fromMap(Map<String, dynamic> json) => Bank(
+    id: json["id"],
+    type: json["type"],
+    accountName: json["accountName"],
+    accountType: json["accountType"],
+    accountNumber: json["accountNumber"],
+    bankName: json["bankName"],
+    ifsc: json["ifsc"],
+    pan: json["pan"],
+    address: json["address"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "type": type,
+    "accountName": accountName,
+    "accountType": accountType,
+    "accountNumber": accountNumber,
+    "bankName": bankName,
+    "ifsc": ifsc,
+    "pan": pan,
+    "address": address,
+  };
 }
