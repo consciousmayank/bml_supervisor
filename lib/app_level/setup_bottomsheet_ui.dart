@@ -243,10 +243,7 @@ class BaseBottomSheet extends StatelessWidget {
               );
             },
           ),
-          Expanded(
-            child: child,
-            flex: 1,
-          ),
+          child,
         ],
       ),
     );

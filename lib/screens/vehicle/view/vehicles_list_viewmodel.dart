@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/vehicle_info.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/vehicle/vehicle_apis.dart';
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -45,6 +46,20 @@ class VehiclesListViewModel extends GeneralisedBaseViewModel {
       if (showLoading) setBusy(false);
       notifyListeners();
     }
+  }
+
+  List<String> getVehicleNumberForAutoComplete(
+      List<VehicleInfo> hubsList) {
+    List<String> driverNames = [];
+    hubsList.forEach((element) {
+      driverNames.add(element.registrationNumber);
+    });
+    return driverNames;
+  }
+
+  void onAddVehicleClicked() {
+    // navigationService.back();
+    navigationService.navigateTo(addVehiclePageRoute);
   }
 
   Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
