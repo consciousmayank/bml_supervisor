@@ -141,6 +141,7 @@ class ConfirmationBottomSheetInputArgs {
 class _CreateConsignmentDialog extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
+
   // CreateConsignmentDialogParams args;
 
   _CreateConsignmentDialog({
@@ -206,6 +207,7 @@ class BaseBottomSheet extends StatelessWidget {
   final Function(SheetResponse) completer;
   final Widget child;
   final EdgeInsets margin;
+  final String bottomSheetTitle;
 
   const BaseBottomSheet({
     Key key,
@@ -213,6 +215,7 @@ class BaseBottomSheet extends StatelessWidget {
     @required this.completer,
     @required this.child,
     this.margin,
+    this.bottomSheetTitle,
   }) : super(key: key);
 
   @override
@@ -237,6 +240,7 @@ class BaseBottomSheet extends StatelessWidget {
       child: Column(
         children: [
           BottomSheetTitleBar(
+            title: bottomSheetTitle,
             onCloseTextClicked: () {
               completer(
                 SheetResponse(confirmed: false, responseData: null),
@@ -253,6 +257,7 @@ class BaseBottomSheet extends StatelessWidget {
 class BottomSheetTitleBar extends StatelessWidget {
   final Function onCloseTextClicked;
   final String title;
+
   const BottomSheetTitleBar({
     @required this.onCloseTextClicked,
     Key key,
@@ -284,10 +289,12 @@ class BottomSheetTitleBar extends StatelessWidget {
               child: Container(),
             ),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Text(
                 title ?? '',
-                style: AppTextStyles.hyperLinkStyle,
+                style: AppTextStyles.hyperLinkStyle
+                    .copyWith(decoration: TextDecoration.none),
+                textAlign: TextAlign.center,
               ),
             ),
             Expanded(

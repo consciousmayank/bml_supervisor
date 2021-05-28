@@ -3,6 +3,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -26,6 +27,20 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
     _hubsList = copyList(response);
     setBusy(false);
     notifyListeners();
+  }
+
+  void onAddHubClicked() {
+    // navigationService.back();
+    navigationService.navigateTo(addHubRoute);
+  }
+
+  List<String> getVehicleNumberForAutoComplete(
+      List<HubResponse> hubsList) {
+    List<String> hubNames = [];
+    hubsList.forEach((element) {
+      hubNames.add(element.title);
+    });
+    return hubNames;
   }
 
   Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
