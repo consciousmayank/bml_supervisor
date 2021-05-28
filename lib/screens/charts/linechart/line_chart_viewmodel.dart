@@ -89,6 +89,7 @@ class LineChartViewModel extends GeneralisedBaseViewModel {
         }
       },
     );
+    uniqueDatesForLineChart.sort();
     if (uniqueDates.length > 0) {
       chartDate = uniqueDates?.first;
     }

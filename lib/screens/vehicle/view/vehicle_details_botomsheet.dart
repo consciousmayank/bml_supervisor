@@ -25,6 +25,7 @@ class VehicleDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     VehicleDetailsBottomSheetInputArgs args = request.customData;
     return BaseBottomSheet(
+      bottomSheetTitle: 'VEHICLE DETAILS',
       request: request,
       completer: completer,
       child: InfoWidget(
@@ -38,88 +39,213 @@ class InfoWidget extends StatelessWidget {
   final VehicleInfo vehicleInfo;
 
   const InfoWidget({Key key, @required this.vehicleInfo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 1,
+          crossAxisSpacing: 1,
+          mainAxisSpacing: 1,
+          children: [
+            buildGridItem(
+              label: 'Owner Name',
+              value: vehicleInfo.ownerName,
+            ),
+            buildGridItem(
+              label: 'Vehicle Number',
+              value: vehicleInfo.registrationNumber,
+            ),
+            buildGridItem(
+              label: 'Vehicle Class',
+              value: vehicleInfo.vehicleClass,
+            ),
+            buildGridItem(
+              label: 'Owner Level',
+              value: vehicleInfo.ownerLevel.toString(),
+            ),
+            buildGridItem(
+              label: 'Chassis Number',
+              value: vehicleInfo.chassisNumber,
+            ),
+            buildGridItem(
+              label: 'Engine Number',
+              value: vehicleInfo.engineNumber,
+            ),
+            buildGridItem(
+              label: 'Vehicle Model',
+              value: vehicleInfo.model,
+            ),
+            buildGridItem(
+              label: 'Vehicle Company',
+              value: vehicleInfo.make,
+            ),
+            buildGridItem(
+              label: 'Registration Date',
+              value: vehicleInfo.registrationDate,
+            ),
+            buildGridItem(
+              label: 'Registration Expiry Date',
+              value: vehicleInfo.registrationUpto,
+            ),
+            buildGridItem(
+              label: 'Emission Norm',
+              value: vehicleInfo.emission,
+            ),
+            buildGridItem(
+              label: 'Vehicle Color',
+              value: vehicleInfo.color,
+            ),
+            buildGridItem(
+              label: 'Fuel Type',
+              value: vehicleInfo.fuelType,
+            ),
+            buildGridItem(
+              label: 'RTO City',
+              value: vehicleInfo.rto,
+            ),
+
+            buildGridItem(
+              label: 'Initial Reading',
+              value: vehicleInfo.initReading.toString(),
+            ),
+            buildGridItem(
+              label: 'Load Capacity (kg)',
+              value: vehicleInfo.loadCapacity,
+            ),
+            buildGridItem(
+              label: 'Seating Capacity',
+              value: vehicleInfo.seatingCapacity.toString(),
+            ),
+            buildGridItem(
+              label: 'Vehicle Length (mm)',
+              value: vehicleInfo.length.toString(),
+            ),
+
+            buildGridItem(
+              label: 'Vehicle Width (mm)',
+              value: vehicleInfo.width.toString(),
+            ),
+            buildGridItem(
+              label: 'Vehicle Height (mm)',
+              value: vehicleInfo.height.toString(),
+            ),
+            buildGridItem(
+              label: 'Fast Tag ID',
+              value: vehicleInfo.fastTagId,
+            ),
+            buildGridItem(
+              label: 'Fast Tag UPI ID',
+              value: vehicleInfo.fastTagUpiId,
+            ),
+
+            // Card(
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //     crossAxisAlignment: CrossAxisAlignment.end,
+            //     children: [
+            //       Text(
+            //         'Name',
+            //         textAlign: TextAlign.right,
+            //       ),
+            //       Text(
+            //         'Name',
+            //         textAlign: TextAlign.right,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Card(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: AppTextView(
+            //       // lines: linesForValue1,
+            //       labelFontSize: 13,
+            //       valueFontSize: 14,
+            //       showBorder: false,
+            //       textAlign: TextAlign.left,
+            //       isUnderLined: false,
+            //       hintText: 'Owner Name',
+            //       value: args.vehicleInfo.ownerName,
+            //     ),
+            //   ),
+            // ),
+            // Card(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: AppTextView(
+            //       // lines: linesForValue1,
+            //       labelFontSize: 13,
+            //       valueFontSize: 14,
+            //       showBorder: false,
+            //       textAlign: TextAlign.left,
+            //       isUnderLined: false,
+            //       hintText: 'Registration Number',
+            //       value: args.vehicleInfo.registrationNumber,
+            //     ),
+            //   ),
+            // ),
+            // buildContentRow(
+            //   helper: RowHelper(
+            //     label1: 'Owner Name',
+            //     value1: '${args.vehicleInfo.ownerName}',
+            //     label2: 'Registration Number',
+            //     value2: args.vehicleInfo.registrationNumber,
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container buildGridItem({
+    @required String label,
+    @required String value,
+    Function onValueClicked,
+  }) {
+    return Container(
+      color: AppColors.bottomSheetGridTileColors,
+      // decoration: BoxDecoration(
+      // borderRadius: BorderRadius.all(Radius.circular(6)),
+      // color: Colors.white,
+      // border: Border.all(
+      //   color: AppColors.appScaffoldColor,
+      // ),
+      // ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Owner Name',
-              value1: '${vehicleInfo.ownerName}',
-              label2: 'Registration Number',
-              value2: vehicleInfo.registrationNumber,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              label,
+              style: AppTextStyles.latoMedium14Black
+                  .copyWith(color: AppColors.primaryColorShade4, fontSize: 12),
             ),
           ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Vehicle Class',
-              value1: '${vehicleInfo.vehicleClass}',
-              label2: 'Owner Level',
-              value2: vehicleInfo.ownerLevel.toString(),
-              label3: 'Last Owner',
-              value3: vehicleInfo?.lastOwner ?? 'NA',
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Chassis Number',
-              value1: vehicleInfo.chassisNumber,
-              label2: 'Engine Number',
-              value2: vehicleInfo.engineNumber,
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Vehicle Type',
-              value1: '${vehicleInfo.make}, ${vehicleInfo.model}',
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Rto',
-              value1: '${vehicleInfo.rto}',
-              label2: 'Seating Capacity',
-              value2: vehicleInfo.seatingCapacity.toString(),
-              label3: 'Load Capacity',
-              value3: vehicleInfo.loadCapacity,
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Registration Date',
-              value1: '${vehicleInfo.registrationDate}',
-              label2: 'Registration Upto',
-              value2: vehicleInfo.registrationUpto,
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label2: 'Height',
-              value2: '${vehicleInfo.height}',
-              label3: 'Width',
-              value3: vehicleInfo.width.toString(),
-              label1: 'Length',
-              value1: vehicleInfo.length.toString(),
-            ),
-          ),
-          hSizedBox(10),
-          buildContentRow(
-            helper: RowHelper(
-              label1: 'Fast TagId',
-              value1: '${vehicleInfo?.fastTagId ?? 'NA'}',
-              label2: 'Fast Tag UPI Id',
-              value2: vehicleInfo?.fastTagUpiId ?? "NA",
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: InkWell(
+              onTap: onValueClicked == null
+                  ? null
+                  : () {
+                      onValueClicked.call();
+                    },
+              child: Text(
+                value == null ? 'NA' : value,
+                textAlign: TextAlign.left,
+                style: AppTextStyles.latoMedium16Primary5
+                    .copyWith(fontSize: 14, fontWeight: FontWeight.w600),
+                // TextStyle(
+                //     fontSize: 16,
+                //     color: AppColors.primaryColorShade5
+                // )
+              ),
             ),
           ),
         ],
@@ -149,9 +275,7 @@ class RowHelper {
   });
 }
 
-SizedBox buildContentRow({
-  @required RowHelper helper,
-}) {
+SizedBox buildContentRow({@required RowHelper helper}) {
   return SizedBox(
     height: 40,
     child: Row(

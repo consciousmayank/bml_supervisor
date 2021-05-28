@@ -234,7 +234,7 @@ class _PickHubsViewState extends State<PickHubsView> {
         return appTextFormField(
           // hintText: "Hubs",
           inputDecoration: InputDecoration(
-            hintText: 'Select Hubs',
+            hintText: 'Search for hub',
             hintStyle: TextStyle(
               color: Colors.grey,
             ),

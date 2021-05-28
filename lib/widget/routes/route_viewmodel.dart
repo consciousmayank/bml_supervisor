@@ -25,6 +25,20 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  void onAddRouteClicked() {
+    // navigationService.back();
+    navigationService.navigateTo(addRoutesPageRoute);
+  }
+
+  List<String> getRouteTitleForAutoComplete(
+      List<FetchRoutesResponse> routeList) {
+    List<String> routeTitles = [];
+    routeList.forEach((element) {
+      routeTitles.add(element.routeTitle);
+    });
+    return routeTitles;
+  }
+
   takeToViewRoutesPage() {
     navigationService.navigateTo(viewRoutesPageRoute);
   }

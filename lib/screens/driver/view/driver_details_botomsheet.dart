@@ -6,7 +6,9 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
+import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
+import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,59 +27,150 @@ class DriverDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     DriverDetailsBottomSheetInputArgs args = request.customData;
     return BaseBottomSheet(
+      bottomSheetTitle: 'DRIVER DETAILS',
       request: request,
       completer: completer,
-      child: Expanded(
-        child: DefaultTabController(
-          initialIndex: 0,
-          length: 3,
-          child: Column(
-            children: [
-              TabBar(
-                labelStyle: AppTextStyles.latoBold14Black,
-                unselectedLabelStyle: AppTextStyles.latoMedium14Black,
-                labelColor: AppColors.primaryColorShade5,
-                unselectedLabelColor: AppColors.black,
-                indicatorColor: AppColors.primaryColorShade5,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: [
-                  Tab(
-                    text: 'Info',
+      child: DriverInfoWidget(args: args),
+    );
+  }
+}
+
+class DriverInfoWidget extends StatelessWidget {
+  const DriverInfoWidget({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final DriverDetailsBottomSheetInputArgs args;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          hSizedBox(16),
+          ClickableWidget(
+            onTap: () {
+              // widget.userProfileViewModel.showImageBottomSheet();
+            },
+            borderRadius: getBorderRadius(borderRadius: 20),
+            child: ProfileImageWidget(
+              image: args.driverInfo.photo != null &&
+                  args.driverInfo.photo.length == 0
+                  ? null
+                  : getImageFromBase64String(
+                base64String: args.driverInfo.photo,
+              ),
+              // image: null,
+              circularBorderRadius: 100,
+              size: 120,
+            ),
+          ),
+          hSizedBox(8),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '${args.driverInfo?.salutation ?? ''} ',
+                  style: AppTextStyles.latoBold18PrimaryShade5.copyWith(
+                    color: AppColors.primaryColorShade5,
+                    fontSize: 10,
                   ),
-                  Tab(
-                    text: 'Addresses',
+                ),
+                TextSpan(
+                  text:
+                  '${args.driverInfo?.firstName ?? ''} ${args.driverInfo?.lastName ?? ''}',
+                  style: AppTextStyles.latoBold18PrimaryShade5
+                      .copyWith(color: AppColors.primaryColorShade5),
+                ),
+              ],
+            ),
+          ),
+          // Text(
+          //   '${args.driverInfo?.salutation ?? ''}. ${args.driverInfo?.firstName ?? ''} ${args.driverInfo?.lastName ?? ''}',
+          //   // args.driverInfo.na,
+          //   style: AppTextStyles.latoBold18PrimaryShade5
+          //       .copyWith(color: AppColors.primaryColorShade5),
+          // ),
+          hSizedBox(8),
+          Text(
+            '( Exp: ${args.driverInfo.workExperienceYr} Yrs)',
+            style: AppTextStyles.latoBold18PrimaryShade5.copyWith(fontSize: 10),
+          ),
+          hSizedBox(16),
+          // DottedDivider(),
+          // Divider(
+          //   height: 1,
+          //   thickness: 1,
+          //   color: AppColors.primaryColorShade5,
+          // ),
+          // hSizedBox(12),
+          Expanded(
+            child: DefaultTabController(
+              initialIndex: 0,
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    // indicatorWeight: 5,
+                    labelStyle: AppTextStyles.latoBold14Black,
+                    unselectedLabelStyle: AppTextStyles.latoMedium14Black,
+                    // unselectedLabelStyle: AppTextStyles.underLinedText.copyWith(
+                    //     color: AppColors.primaryColorShade5, fontSize: 15),
+
+                    labelColor: AppColors.white,
+                    unselectedLabelColor: AppColors.black,
+                    // indicatorColor: Colors.green,
+                    // unselectedLabelColor: Colors.red,
+                    // automaticIndicatorColorAdjustment: true,
+                    // indicatorColor: AppColors.white,
+                    // indicatorSize: TabBarIndicatorSize.tab,
+                    indicator: BoxDecoration(
+                      color: AppColors.primaryColorShade5,
+                    ),
+                    tabs: [
+                      Tab(
+                        text: 'Personal Info',
+                      ),
+                      Tab(
+                        text: 'Address',
+                      ),
+                      Tab(
+                        text: 'Bank Info',
+                      ),
+                    ],
                   ),
-                  Tab(
-                    text: 'BankDetails',
+                  Divider(
+                    height: 1,
+                    thickness: 2,
+                    color: AppColors.primaryColorShade5,
                   ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Center(
+                        //   child: Text('fun'),
+                        // ),
+                        // Center(
+                        //   child: Text('fun'),
+                        // ),
+                        InfoWidget(
+                          driverInfo: args.driverInfo,
+                        ),
+                        AddressesWidget(
+                          addressList: args.driverInfo.address,
+                        ),
+                        BankDetailsWidget(
+                          bankDetailsList: args.driverInfo.bank,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    Card(
-                      shape: getCardShape(),
-                      elevation: defaultElevation,
-                      child: InfoWidget(
-                        driverInfo: args.driverInfo,
-                      ),
-                    ),
-                    AddressesWidget(
-                      addressList: args.driverInfo.address,
-                    ),
-                    Card(
-                      shape: getCardShape(),
-                      elevation: defaultElevation,
-                      child: BankDetailsWidget(
-                        bankDetailsList: args.driverInfo.bank,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -87,90 +180,201 @@ class InfoWidget extends StatelessWidget {
   final DriverInfo driverInfo;
 
   const InfoWidget({Key key, @required this.driverInfo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 8,
-          bottom: 8,
+    return GridView.count(
+      crossAxisCount: 2,
+      childAspectRatio: 3 / 1,
+      crossAxisSpacing: 1,
+      mainAxisSpacing: 1,
+      children: [
+        buildGridItem(
+          label: 'Vehicle Number',
+          value: driverInfo.vehicleId,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Name',
-                value1:
-                    '${driverInfo.salutation} ${driverInfo.firstName} ${driverInfo.lastName}',
-                label2: 'Father\'s Name',
-                value2: driverInfo.fatherName,
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Vehicle Id',
-                value1: driverInfo.vehicleId,
-                label2: 'Driving License Number',
-                value2: driverInfo.drivingLicense,
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Work Experience (in Years)',
-                value1: driverInfo.workExperienceYr.toString(),
-                label2: 'Aadhar Card Number',
-                value2: driverInfo.aadhaar,
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Mobile No.',
-                onValue1Clicked: () {
-                  launch("tel://+91-${driverInfo.mobile.trim()}");
-                },
-                value1: driverInfo.mobile,
-                onValue2Clicked: () {
-                  launch("tel://+91-${driverInfo.mobileAlternate.trim()}");
-                },
-                label2: 'Mobile No. Alternate',
-                value2: driverInfo.mobileAlternate,
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'WhatsApp No.',
-                value1: driverInfo.mobileWhatsApp,
-                label2: 'Email Id',
-                value2: driverInfo.email ?? 'NA',
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Date Of Birth',
-                value1: driverInfo.dob,
-                label2: 'Date of Joining',
-                value2: driverInfo.dateOfJoin,
-              ),
-            ),
-            hSizedBox(10),
-            buildContentRow(
-              helper: RowHelper(
-                label1: 'Blood Group',
-                value1: driverInfo.bloodGroup,
-                label2: 'Nationality',
-                value2: driverInfo.nationality ?? 'NA',
-              ),
-            ),
-          ],
+        buildGridItem(
+          label: 'Father\'s Name',
+          value: driverInfo.fatherName,
         ),
+        buildGridItem(
+            label: 'Mobile',
+            value: driverInfo.mobile,
+            onValueClicked: () {
+              launch("tel://+91-${driverInfo.mobile.trim()}");
+            }),
+        buildGridItem(
+          label: 'Driving License Number',
+          value: driverInfo.drivingLicense,
+        ),
+        buildGridItem(
+            label: 'Alternate Number',
+            value: driverInfo.mobileAlternate,
+            onValueClicked: () {
+              launch("tel://+91-${driverInfo.mobileAlternate.trim()}");
+            }),
+        buildGridItem(
+          label: 'Aadhar Card Number',
+          value: driverInfo.aadhaar,
+        ),
+        buildGridItem(
+          label: 'WhatsApp No.',
+          value: driverInfo.mobileWhatsApp,
+        ),
+        buildGridItem(
+          label: 'Email ID',
+          value: driverInfo.email,
+        ),
+        buildGridItem(
+          label: 'Date of Birth',
+          value: driverInfo.dob,
+        ),
+        buildGridItem(
+          label: 'Date of Joining',
+          value: driverInfo.dateOfJoin,
+        ),
+        buildGridItem(
+          label: 'Blood Group',
+          value: driverInfo.bloodGroup,
+        ),
+        buildGridItem(
+          label: 'Nationality',
+          value: driverInfo.nationality,
+        ),
+        buildGridItem(
+          label: 'Designation (Change val to Str)',
+          value: driverInfo.designation.toString(),
+        ),
+        buildGridItem(
+          label: 'Gender',
+          value: driverInfo.gender,
+        ),
+        buildGridItem(
+          label: 'Last Company',
+          value: driverInfo.lastCompany,
+        ),
+        buildGridItem(
+          label: 'Last Company Leaving Date',
+          value: driverInfo.lastCompanyDol,
+        ),
+
+        buildGridItem(
+          label: 'Username',
+          value: driverInfo.username,
+        ),
+
+        buildGridItem(
+          label: 'Remarks',
+          value: driverInfo.remarks,
+        ),
+
+        // Card(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //     crossAxisAlignment: CrossAxisAlignment.end,
+        //     children: [
+        //       Text(
+        //         'Name',
+        //         textAlign: TextAlign.right,
+        //       ),
+        //       Text(
+        //         'Name',
+        //         textAlign: TextAlign.right,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // Card(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: AppTextView(
+        //       // lines: linesForValue1,
+        //       labelFontSize: 13,
+        //       valueFontSize: 14,
+        //       showBorder: false,
+        //       textAlign: TextAlign.left,
+        //       isUnderLined: false,
+        //       hintText: 'Owner Name',
+        //       value: args.vehicleInfo.ownerName,
+        //     ),
+        //   ),
+        // ),
+        // Card(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: AppTextView(
+        //       // lines: linesForValue1,
+        //       labelFontSize: 13,
+        //       valueFontSize: 14,
+        //       showBorder: false,
+        //       textAlign: TextAlign.left,
+        //       isUnderLined: false,
+        //       hintText: 'Registration Number',
+        //       value: args.vehicleInfo.registrationNumber,
+        //     ),
+        //   ),
+        // ),
+        // buildContentRow(
+        //   helper: RowHelper(
+        //     label1: 'Owner Name',
+        //     value1: '${args.vehicleInfo.ownerName}',
+        //     label2: 'Registration Number',
+        //     value2: args.vehicleInfo.registrationNumber,
+        //   ),
+        // ),
+      ],
+    );
+  }
+
+  Container buildGridItem({
+    @required String label,
+    @required String value,
+    Function onValueClicked,
+  }) {
+    return Container(
+      color: AppColors.bottomSheetGridTileColors,
+      // decoration: BoxDecoration(
+      // borderRadius: BorderRadius.all(Radius.circular(6)),
+      // color: Colors.white,
+      // border: Border.all(
+      //   color: AppColors.appScaffoldColor,
+      // ),
+      // ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              label,
+              style: AppTextStyles.latoMedium14Black
+                  .copyWith(color: AppColors.primaryColorShade4, fontSize: 12),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: InkWell(
+              onTap: onValueClicked == null
+                  ? null
+                  : () {
+                onValueClicked.call();
+              },
+              child: Text(
+                value == null ? 'NA' : value,
+                textAlign: TextAlign.left,
+                style: AppTextStyles.latoMedium16Primary5.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600
+                ),
+                // TextStyle(
+                //     fontSize: 16,
+                //     color: AppColors.primaryColorShade5
+                // )
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -205,13 +409,13 @@ SizedBox buildContentRow({
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-          flex: 2,
+          flex: 1,
           child: InkWell(
             onTap: helper.onValue1Clicked == null
                 ? null
                 : () {
-                    helper.onValue1Clicked.call();
-                  },
+              helper.onValue1Clicked.call();
+            },
             child: AppTextView(
               labelFontSize: helper.labelFontSize,
               valueFontSize: helper.valueFontSize,
@@ -225,13 +429,13 @@ SizedBox buildContentRow({
         ),
         wSizedBox(10),
         Expanded(
-          flex: 5,
+          flex: 2,
           child: InkWell(
             onTap: helper.onValue2Clicked == null
                 ? null
                 : () {
-                    helper.onValue2Clicked.call();
-                  },
+              helper.onValue2Clicked.call();
+            },
             child: AppTextView(
               labelFontSize: helper.labelFontSize,
               valueFontSize: helper.valueFontSize,
@@ -253,110 +457,196 @@ class AddressesWidget extends StatelessWidget {
 
   const AddressesWidget({Key key, @required this.addressList})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return addressList.length == 0
         ? Expanded(
-            child: Container(
-              child: Center(
-                child: NoDataWidget(),
-              ),
-            ),
-          )
+      child: Container(
+        child: Center(
+          child: NoDataWidget(),
+        ),
+      ),
+    )
         : Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return Card(
-                  shape: getCardShape(),
-                  elevation: defaultElevation,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            color: AppColors.bottomSheetGridTileColors,
+            shape: Border(
+              left: BorderSide(
+                  color: AppColors.primaryColorShade5, width: 4),
+            ),
+            // shape: getCardShape(),
+            elevation: defaultElevation,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
                       children: [
                         addressList[index].addressLine1 != null &&
-                                addressList[index].addressLine1 != 'NA'
-                            ? Text(
-                                addressList[index].addressLine1,
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              )
-                            : Container(),
-                        addressList[index].addressLine2 != null &&
-                                addressList[index].addressLine2 != 'NA'
-                            ? Text(
-                                addressList[index].addressLine2,
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              )
-                            : Container(),
-                        addressList[index].locality != null &&
-                                addressList[index].locality != 'NA'
-                            ? Text(
-                                addressList[index].locality,
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              )
-                            : Container(),
-                        addressList[index].nearby != null &&
-                                addressList[index].nearby != 'NA'
-                            ? Text(
-                                'Landmark : ' + addressList[index].nearby,
-                                style:
-                                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                                  fontSize: 14,
-                                ),
-                              )
-                            : Container(),
-                        Text(
-                          '${addressList[index].city}, ${addressList[index].pincode}, ${addressList[index].state}',
-                          style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          '${addressList[index].country}',
-                          style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                            fontSize: 14,
-                          ),
+                            addressList[index].addressLine1 != 'NA'
+                            ? TextSpan(
+                          text: addressList[index].addressLine1,
+                          style: AppTextStyles.lato20PrimaryShade5
+                              .copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
                         )
+                            : TextSpan(),
+                        addressList[index].addressLine2 != null &&
+                            addressList[index].addressLine2 != 'NA'
+                            ? TextSpan(
+                          text: ', ' +
+                              addressList[index].addressLine2,
+                          style: AppTextStyles.lato20PrimaryShade5
+                              .copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        )
+                            : TextSpan(),
                       ],
                     ),
                   ),
-                );
-              },
-              itemCount: addressList.length,
+                  // addressList[index].addressLine1 != null &&
+                  //         addressList[index].addressLine1 != 'NA'
+                  //     ? Text(
+                  //         addressList[index].addressLine1 + ' :Line 1',
+                  //         style:
+                  //             AppTextStyles.lato20PrimaryShade5.copyWith(
+                  //           fontSize: 14,
+                  //         ),
+                  //       )
+                  //     : Container(),
+                  // addressList[index].addressLine2 != null &&
+                  //         addressList[index].addressLine2 != 'NA'
+                  //     ? Text(
+                  //         addressList[index].addressLine2 + ' :Line 2',
+                  //         style:
+                  //             AppTextStyles.lato20PrimaryShade5.copyWith(
+                  //           fontSize: 14,
+                  //         ),
+                  //       )
+                  //     : Container(),
+                  hSizedBox(6),
+                  addressList[index].locality != null &&
+                      addressList[index].locality != 'NA'
+                      ? Text(
+                    addressList[index].locality,
+                    style:
+                    AppTextStyles.lato20PrimaryShade5.copyWith(
+                      fontSize: 14,
+                    ),
+                  )
+                      : Container(),
+                  addressList[index].nearby != null &&
+                      addressList[index].nearby != 'NA'
+                      ? Text(
+                    'Landmark: ' + addressList[index].nearby,
+                    style:
+                    AppTextStyles.lato20PrimaryShade5.copyWith(
+                      fontSize: 14,
+                    ),
+                  )
+                      : Container(),
+                  Text(
+                    '${addressList[index].city}, ${addressList[index].pincode}',
+                    style: AppTextStyles.lato20PrimaryShade5.copyWith(
+                      fontSize: 14,
+                    ),
+                  ),
+                  hSizedBox(6),
+                  Text(
+                    '${addressList[index].state}, ${addressList[index].country}',
+                    style: AppTextStyles.lato20PrimaryShade5.copyWith(
+                      fontSize: 14,
+                    ),
+                  )
+                ],
+              ),
             ),
           );
+        },
+        itemCount: addressList.length,
+      ),
+    );
   }
 }
 
 class BankDetailsWidget extends StatelessWidget {
-  final List bankDetailsList;
+  final List<Bank> bankDetailsList;
 
   const BankDetailsWidget({Key key, @required this.bankDetailsList})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return bankDetailsList.length == 0
         ? Expanded(
-            child: Container(
-              child: Center(
-                child: NoDataWidget(),
+      child: Container(
+        child: Center(
+          child: NoDataWidget(),
+        ),
+      ),
+    )
+        : Expanded(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            shape: Border(
+              left: BorderSide(
+                  color: AppColors.primaryColorShade5, width: 4),
+            ),
+            // shape: getCardShape(),
+            elevation: defaultElevation,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildContentRow(
+                    helper: RowHelper(
+                      label1: 'Account Type',
+                      value1: bankDetailsList[index].accountType,
+                      label2: 'Account Number',
+                      value2: bankDetailsList[index].accountNumber,
+                    ),
+                  ),
+                  buildContentRow(
+                    helper: RowHelper(
+                      label1: 'Bank Type',
+                      value1: bankDetailsList[index].type,
+                      label2: 'Account Name',
+                      value2: bankDetailsList[index].accountName,
+                    ),
+                  ),
+                  buildContentRow(
+                    helper: RowHelper(
+                      label1: 'IFSC Number',
+                      value1: bankDetailsList[index].ifsc,
+                      label2: 'Bank Name',
+                      value2: bankDetailsList[index].bankName,
+                    ),
+                  ),
+                  buildContentRow(
+                    helper: RowHelper(
+                      label1: 'PAN',
+                      value1: bankDetailsList[index].pan,
+                      label2: 'Address',
+                      value2: bankDetailsList[index].address,
+                    ),
+                  ),
+                ],
               ),
             ),
-          )
-        : Expanded(
-            child: Container(
-              color: Colors.red,
-            ),
           );
+        },
+        itemCount: bankDetailsList.length,
+      ),
+    );
   }
 }
 

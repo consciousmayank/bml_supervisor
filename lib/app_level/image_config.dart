@@ -60,3 +60,4 @@ final String addIcon = _imagePath + 'add_icon.png';
 final String driverIcon = _imagePath + 'driver_icon.png';
 final String vehicleIcon = _imagePath + 'vehicle_icon.png';
 final String viewIcon = _imagePath + 'view_icon.png';
+final String searchBlueIcon = _imagePath + 'search_blue_icon.png';
