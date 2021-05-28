@@ -66,6 +66,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   body(BuildContext context, ExpensesViewModel viewModel) {
     if (viewModel.clearData) clearData(viewModel: viewModel);
 
+
     return AbsorbPointer(
       absorbing: viewModel.isExpenseListLoading,
       child: submitExpensesForm(context: context, viewModel: viewModel),

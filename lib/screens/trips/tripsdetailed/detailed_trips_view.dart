@@ -234,7 +234,8 @@ class _TabbedBodyState extends State<TabbedBody> {
                       makeSingleTripView(
                           date: getDateString(dateList.elementAt(index)),
                           trips: trips,
-                          outerIndex: index),
+                          outerIndex: index,
+                          typeOfTrip: typeOfTrip),
                     ],
                   ),
                 ),
@@ -246,7 +247,8 @@ class _TabbedBodyState extends State<TabbedBody> {
   Widget makeSingleTripView(
       {@required String date,
       @required List<ConsignmentTrackingStatusResponse> trips,
-      @required int outerIndex}) {
+      @required int outerIndex,
+      @required TripStatus typeOfTrip}) {
     Set<ConsignmentTrackingStatusResponse> tripWithSelectedDate = Set();
 
     trips.forEach((element) {

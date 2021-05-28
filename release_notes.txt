@@ -1,4 +1,3 @@
 In this build the following updates were done :-
 
-1. Now Sorting the completed Trips according to consignment date. If the day is same then the list is sorted according to dispatch time. The earlier date/time will be on the top. Also if manager clicks on any completed trip, other then on top of the list, then he will be shown a warning.
-2. The title bar of each bottomSheet is as per design guidelines. Just need to test. Please dev build testers, do that.
+1. In Review Consignments, now manager can send his remarks, while reviewing the Consignments.

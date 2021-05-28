@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ReviewConsignmentRequest reviewConsignmentRequestFromMap(String str) => ReviewConsignmentRequest.fromMap(json.decode(str));
+ReviewConsignmentRequest reviewConsignmentRequestFromMap(String str) =>
+    ReviewConsignmentRequest.fromMap(json.decode(str));
 
-String reviewConsignmentRequestToMap(ReviewConsignmentRequest data) => json.encode(data.toMap());
+String reviewConsignmentRequestToMap(ReviewConsignmentRequest data) =>
+    json.encode(data.toMap());
 
 class ReviewConsignmentRequest {
   ReviewConsignmentRequest({
@@ -26,15 +28,18 @@ class ReviewConsignmentRequest {
         reviewedItems: reviewedItems ?? this.reviewedItems,
       );
 
-  factory ReviewConsignmentRequest.fromMap(Map<String, dynamic> json) => ReviewConsignmentRequest(
-    assessBy: json["assessBy"],
-    reviewedItems: List<Item>.from(json["reviewedItems"].map((x) => Item.fromMap(x))),
-  );
+  factory ReviewConsignmentRequest.fromMap(Map<String, dynamic> json) =>
+      ReviewConsignmentRequest(
+        assessBy: json["assessBy"],
+        reviewedItems:
+            List<Item>.from(json["reviewedItems"].map((x) => Item.fromMap(x))),
+      );
 
   Map<String, dynamic> toMap() => {
-    "assessBy": assessBy,
-    "reviewedItems": List<dynamic>.from(reviewedItems.map((x) => x.toMap())),
-  };
+        "assessBy": assessBy,
+        "reviewedItems":
+            List<dynamic>.from(reviewedItems.map((x) => x.toMap())),
+      };
 }
 
 class Item {
@@ -92,30 +97,30 @@ class Item {
       );
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
-    consignmentId: json["consignmentId"],
-    hubId: json["hubId"],
-    sequence: json["sequence"],
-    title: json["title"],
-    dropOff: json["dropOff"],
-    collect: json["collect"],
-    payment: json["payment"],
-    paymentMode: json["paymentMode"],
-    paymentId: json["paymentId"],
-    remarks: json["remarks"],
-    flag: json["flag"],
-  );
+        consignmentId: json["consignmentId"],
+        hubId: json["hubId"],
+        sequence: json["sequence"],
+        title: json["title"],
+        dropOff: json["dropOff"],
+        collect: json["collect"],
+        payment: json["payment"],
+        paymentMode: json["paymentMode"],
+        paymentId: json["paymentId"],
+        remarks: json["remarks"],
+        flag: json["flag"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "consignmentId": consignmentId,
-    "hubId": hubId,
-    "sequence": sequence,
-    "title": title,
-    "dropOff": dropOff,
-    "collect": collect,
-    "payment": payment,
-    "paymentMode": paymentMode,
-    "paymentId": paymentId,
-    "remarks": remarks,
-    "flag": flag,
-  };
+        "consignmentId": consignmentId,
+        "hubId": hubId,
+        "sequence": sequence,
+        "title": title,
+        "dropOff": dropOff,
+        "collect": collect,
+        "payment": payment,
+        "paymentMode": paymentMode,
+        "paymentId": paymentId,
+        "remarks": remarks,
+        "flag": flag,
+      };
 }
