@@ -36,7 +36,7 @@ class ThemeConfiguration {
       const TextStyle(fontWeight: FontWeight.w700, color: Colors.white);
 
   //also bottom navigation color
-  static const Color appCanvasColor = AppColors.white;
+  static const Color appCanvasColor = AppColors.primaryColorShade4;
   static const Color appScaffoldBackgroundColor = AppColors.appScaffoldColor;
 
   ThemeData getAppThemeComplete() {

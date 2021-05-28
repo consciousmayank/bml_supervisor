@@ -5,7 +5,7 @@ ANDROIDDEVAPPID="1:381507904047:android:d6258a9d2e2c8962311cda"
 ANDROIDPRODAPPID="1:157688344073:android:8c4974c35d3631e24312d8"
 
 ANDROIDDEVTESTERS="ankushpofale2@gmail.com, geektechnotonic@gmail.com, vikasrna637@gmail.com"
-ANDROIDPRODTESTERS="ankushpofale2@gmail.com, geektechnotonic@gmail.com, rahul.marketngbml@gmail.com"
+ANDROIDPRODTESTERS="ankushpofale2@gmail.com, geektechnotonic@gmail.com"
 
 
 IOSDEVAPPID="1:381507904047:ios:b24cd7018783773e311cda"
@@ -20,32 +20,32 @@ TOKEN="1//0gbXbFA8bJ1WlCgYIARAAGBASNwF-L9IrmoB8mjI8-aHktETCS-iByyIFqtKVXMH0hKb7_
 rm -r $PROJECT/app_builds/ios/adhoc-prod
 rm -r $PROJECT/app_builds/ios/adhoc-dev
 
-rm -r $PROJECT/app_builds/android/dev/
-rm -r $PROJECT/app_builds/android/prod/
+#rm -r $PROJECT/app_builds/android/dev/
+#rm -r $PROJECT/app_builds/android/prod/
 
 mkdir $PROJECT/app_builds/ios/adhoc-prod
 mkdir $PROJECT/app_builds/ios/adhoc-dev
 
-mkdir $PROJECT/app_builds/android/prod
-mkdir $PROJECT/app_builds/android/dev
+#mkdir $PROJECT/app_builds/android/prod
+#mkdir $PROJECT/app_builds/android/dev
 
 clear
 
 flutter clean && flutter pub get
 
-flutter build apk --flavor dev -t lib/main/main_dev.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-dev-release.apk $PROJECT/app_builds/android/dev
+#flutter build apk --flavor dev -t lib/main/main_dev.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-dev-release.apk $PROJECT/app_builds/android/dev
 
-firebase appdistribution:distribute "$PROJECT/app_builds/android/dev/app-dev-release.apk"  \
-    --app "$ANDROIDDEVAPPID"  \
-    --token "$TOKEN" \
-    --release-notes-file "$PROJECT/release_notes.txt" --testers "$ANDROIDDEVTESTERS"
+#firebase appdistribution:distribute "$PROJECT/app_builds/android/dev/app-dev-release.apk"  \
+#    --app "$ANDROIDDEVAPPID"  \
+#    --token "$TOKEN" \
+#    --release-notes-file "$PROJECT/release_notes.txt" --testers "$ANDROIDDEVTESTERS"
 
-flutter build apk --flavor prod -t lib/main/main_prod.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-prod-release.apk $PROJECT/app_builds/android/prod
+#flutter build apk --flavor prod -t lib/main/main_prod.dart && cp $PROJECT/build/app/outputs/flutter-apk/app-prod-release.apk $PROJECT/app_builds/android/prod
 
-firebase appdistribution:distribute "$PROJECT/app_builds/android/prod/app-prod-release.apk"  \
-    --app "$ANDROIDPRODAPPID"  \
-    --token "$TOKEN" \
-    --release-notes-file "$PROJECT/release_notes.txt" --testers "$ANDROIDPRODTESTERS"
+#firebase appdistribution:distribute "$PROJECT/app_builds/android/prod/app-prod-release.apk"  \
+#    --app "$ANDROIDPRODAPPID"  \
+#    --token "$TOKEN" \
+#    --release-notes-file "$PROJECT/release_notes.txt" --testers "$ANDROIDPRODTESTERS"
 
 flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
 

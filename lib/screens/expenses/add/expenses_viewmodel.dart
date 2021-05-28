@@ -19,13 +19,41 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
-  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
-  DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
-  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
+  int pageNumber = 1;
+
+  bool _callGetEntriesApi = true;
   bool _clearData = false;
+  List<GetClientsResponse> _clientsList = [];
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
+  DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
   List<GetDailyKilometerInfo> _dailyKmInfoList = [];
+  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
+  DateTime _entryDate;
+  String _expenseType;
+  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
+  List<ExpenseResponse> _expensesList = [];
+  bool _getLastSevenDaysExpenses = false;
+  bool _isExpenseListLoading = false;
+  bool _isRegNumCorrect = false;
+  ApiResponse _saveExpenseResponse;
+  GetClientsResponse _selectedClient;
+  GetDailyKilometerInfo _selectedDailyKmInfo = GetDailyKilometerInfo(
+    vehicleId: "0",
+    clientId: MyPreferences().getSelectedClient().clientId,
+    routeId: 0,
+    routeTitle: '',
+  );
+
+  // set fromDate(DateTime fromDate) {
+  //   _fromDate = fromDate;
+  //   notifyListeners();
+  // }
+
+  SearchByRegNoResponse _selectedSearchVehicle;
+
+  bool _showSubmitForm = false;
   SearchByRegNoResponse _validatedRegistrationNumber;
+
   SearchByRegNoResponse get validatedRegistrationNumber =>
       _validatedRegistrationNumber;
 
@@ -41,13 +69,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  GetDailyKilometerInfo _selectedDailyKmInfo = GetDailyKilometerInfo(
-    vehicleId: "0",
-    clientId: MyPreferences().getSelectedClient().clientId,
-    routeId: 0,
-    routeTitle: '',
-  );
-
   GetDailyKilometerInfo get selectedDailyKmInfo => _selectedDailyKmInfo;
 
   set selectedDailyKmInfo(GetDailyKilometerInfo value) {
@@ -60,8 +81,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     _clearData = value;
   }
 
-  bool _isRegNumCorrect = false;
-
   bool get isRegNumCorrect => _isRegNumCorrect;
 
   set isRegNumCorrect(bool isRegNumCorrect) {
@@ -69,17 +88,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  DateTime _entryDate;
-
   DateTime get entryDate => _entryDate;
-
-  ApiResponse _saveExpenseResponse;
-
-  int pageNumber = 1;
-
-  bool _getLastSevenDaysExpenses = false;
-
-  List<ExpenseResponse> _expensesList = [];
 
   List<ExpenseResponse> get expensesList => _expensesList;
 
@@ -87,10 +96,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     _expensesList = expensesList;
     notifyListeners();
   }
-
-  bool _callGetEntriesApi = true;
-
-  bool _isExpenseListLoading = false;
 
   bool get isExpenseListLoading => _isExpenseListLoading;
 
@@ -131,10 +136,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  String _expenseType;
-
-  bool _showSubmitForm = false;
-
   bool get showSubmitForm => _showSubmitForm;
 
   set showSubmitForm(bool showSubmitForm) {
@@ -151,13 +152,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // set fromDate(DateTime fromDate) {
-  //   _fromDate = fromDate;
-  //   notifyListeners();
-  // }
-
-  SearchByRegNoResponse _selectedSearchVehicle;
-
   SearchByRegNoResponse get selectedSearchVehicle => _selectedSearchVehicle;
 
   set selectedSearchVehicle(SearchByRegNoResponse selectedSearchVehicle) {
@@ -165,16 +159,12 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
   List<GetClientsResponse> get clientsList => _clientsList;
 
   set clientsList(List<GetClientsResponse> value) {
     _clientsList = value;
     notifyListeners();
   }
-
-  GetClientsResponse _selectedClient;
 
   GetClientsResponse get selectedClient => _selectedClient;
 

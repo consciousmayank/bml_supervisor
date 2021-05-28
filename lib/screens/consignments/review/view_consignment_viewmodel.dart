@@ -165,19 +165,21 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
         consignmentId: consignmentId);
 
     consignmentDetailResponseNew.items.forEach((element) {
-      reviewConsignmentRequest.reviewedItems.add(reviewConsignment.Item(
-        consignmentId: element.consignmentId,
-        title: element.title,
-        payment: element.payment,
-        collect: element.collect,
-        dropOff: element.dropOff,
-        flag: element.flag,
-        hubId: element.hubId,
-        paymentId: element.paymentId,
-        paymentMode: element.paymentMode,
-        remarks: element.remarks,
-        sequence: element.sequence,
-      ));
+      reviewConsignmentRequest.reviewedItems.add(
+        reviewConsignment.Item(
+          consignmentId: element.consignmentId,
+          title: element.title,
+          payment: element.payment,
+          collect: element.collect,
+          dropOff: element.dropOff,
+          flag: element.flag,
+          hubId: element.hubId,
+          paymentId: element.paymentId,
+          paymentMode: element.paymentMode,
+          remarks: element.remarks,
+          sequence: element.sequence,
+        ),
+      );
       _formKeyList.add(GlobalKey<FormState>());
     });
 
@@ -185,7 +187,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void updateConsignment() async {
+  void updateConsignment({@required String newRemarks}) async {
     // hit the update Consignment api
     reviewConsignmentRequest = reviewConsignmentRequest.copyWith(
       assessBy: MyPreferences().getUserLoggedIn().userName,
@@ -217,8 +219,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
             variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
           )
           .then((value) => navigationService.back(result: true));
-
-      setBusy(false);
     }
+    setBusy(false);
   }
 }

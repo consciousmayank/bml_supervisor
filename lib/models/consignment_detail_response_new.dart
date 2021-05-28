@@ -135,24 +135,26 @@ class ConsignmentDetailResponseNew {
 }
 
 class Item {
-  Item(
-      {this.consignmentId,
-      this.hubId,
-      this.sequence,
-      this.title,
-      this.dropOff,
-      this.collect,
-      this.payment,
-      this.paymentMode,
-      this.paymentId,
-      this.remarks,
-      this.flag,
-      this.lastupdated,
-      this.hubCity,
-      this.hubTitle,
-      this.hubGeoLatitude,
-      this.hubGeoLongitude,
-      this.hubContactPerson});
+  Item({
+    this.consignmentId,
+    this.hubId,
+    this.sequence,
+    this.title,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.paymentMode,
+    this.paymentId,
+    this.remarks,
+    this.flag,
+    this.lastupdated,
+    this.hubCity,
+    this.hubTitle,
+    this.hubGeoLatitude,
+    this.hubGeoLongitude,
+    this.hubContactPerson,
+    this.reviewRemarks = '',
+  });
 
   int consignmentId;
   String hubTitle;
@@ -171,6 +173,7 @@ class Item {
   String lastupdated;
   final double hubGeoLatitude;
   final double hubGeoLongitude;
+  String reviewRemarks;
 
   Item copyWith(
           {int consignmentId,

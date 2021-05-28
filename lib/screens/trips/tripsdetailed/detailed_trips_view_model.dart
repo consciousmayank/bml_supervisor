@@ -51,9 +51,8 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
       );
     });
 
-    completeTripsDate = sortDateTimeSet(
-      set: completeTripsDate,
-    );
+    completeTripsDate =
+        sortDateTimeSet(set: completeTripsDate, ascending: true);
 
     response = await _dashboardApi.getConsignmentTrackingStatus(
         tripStatus: TripStatus.APPROVED,
@@ -64,6 +63,9 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
           StringToDateTimeConverter.ddmmyy(date: element.consignmentDate)
               .convert());
     });
+
+    verifiedTripsDate =
+        sortDateTimeSet(set: verifiedTripsDate, ascending: false);
     setBusy(false);
     notifyListeners();
   }
@@ -130,11 +132,12 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     }
   }
 
-  Set<DateTime> sortDateTimeSet({@required Set<DateTime> set}) {
+  Set<DateTime> sortDateTimeSet(
+      {@required Set<DateTime> set, bool ascending = true}) {
     Set<DateTime> sortedSet = Set();
     sortedSet = SplayTreeSet.from(
       set,
-      (a, b) => a.compareTo(b),
+      (a, b) => ascending ? a.compareTo(b) : b.compareTo(a),
     );
 
     return sortedSet;

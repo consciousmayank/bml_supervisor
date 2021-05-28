@@ -69,6 +69,7 @@ Widget appTextFormField({
             child: Stack(
               children: [
                 TextFormField(
+                    enableInteractiveSelection: true,
                     initialValue: initialValue,
                     autovalidateMode: autoValidateMode,
                     textAlign: textAlignment,
