@@ -9,14 +9,21 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 
 class ViewExpensesView extends StatefulWidget {
@@ -29,51 +36,17 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
   final FocusNode selectedRegNoFocusNode = FocusNode();
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
-  ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(() {});
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ViewExpensesViewModel>.reactive(
       onModelReady: (viewModel) {
         viewModel.getClients();
-        getExpenses(
-            viewModel: viewModel,
-            registrationNumber: selectedRegNoController.text);
+        viewModel.getExpensesTypes();
+        viewModel.getExpensePeriod();
       },
       builder: (context, viewModel, child) {
-        _scrollController.addListener(() {
-          if (_scrollController.position.userScrollDirection ==
-              ScrollDirection.reverse) {
-            viewModel.hideFloatingActionButton();
-          }
-          if (_scrollController.position.userScrollDirection ==
-              ScrollDirection.forward) {
-            viewModel.showFloatingActionButton();
-          }
-        });
         return Scaffold(
-          floatingActionButton: AnimatedOpacity(
-            duration: Duration(milliseconds: 200),
-            opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                viewModel.navigationService
-                    .navigateTo(addExpensesPageRoute)
-                    .then(
-                      (value) => getExpenses(
-                          viewModel: viewModel,
-                          registrationNumber: selectedRegNoController.text),
-                    );
-              },
-              child: Icon(Icons.add),
-            ),
-          ),
           appBar: AppBar(
             title: setAppBarTitle(title: 'View Expenses'),
             actions: [
@@ -96,15 +69,98 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                   padding: getSidePadding(context: context),
                   child: Column(
                     children: [
-                      // buildSelectDurationTabWidget(viewModel),
-                      // Text('asdf'),
-                      registrationSelector(
-                          context: context, viewModel: viewModel),
-                      viewModel.viewExpensesResponse.length > 0
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 4),
+                        child: SearchWidget(
+                          onClearTextClicked: () {
+                            selectedRegNoController.clear();
+                            viewModel.selectedVehicleId = '';
+                            viewModel.getExpenses(
+                              showLoader: false,
+                            );
+                            hideKeyboard(context: context);
+                          },
+                          hintTitle: 'Search for Vehicle',
+                          onTextChange: (String value) {
+                            viewModel.selectedVehicleId = value;
+                            viewModel.notifyListeners();
+                          },
+                          onEditingComplete: () {
+                            viewModel.getExpenses(
+                              showLoader: true,
+                            );
+                          },
+                          formatter: <TextInputFormatter>[
+                            TextFieldInputFormatter().alphaNumericFormatter,
+                          ],
+                          controller: selectedRegNoController,
+                          focusNode: selectedRegNoFocusNode,
+                          keyboardType: TextInputType.text,
+                          onFieldSubmitted: (String value) {
+                            viewModel.getExpenses(
+                              showLoader: true,
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: CreateNewButtonWidget(
+                            title: 'Add Expense',
+                            onTap: () {
+                              viewModel.navigationService
+                                  .navigateTo(addExpensesPageRoute)
+                                  .then(
+                                    (value) =>
+                                        viewModel.getExpenses(showLoader: true),
+                                  );
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 4,
+                          bottom: 4,
+                        ),
+                        child: DottedDivider(),
+                      ),
+                      if (viewModel.expensePeriodList.length > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8,
+                            right: 8,
+                          ),
+                          child: Container(
+                            height: 25,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'Expenses for ${getMonth(viewModel?.expensePeriodList?.first?.month ?? 0)}, ${viewModel?.expensePeriodList?.first?.year ?? 2024}'),
+                                // Text('Dummy data for May, 2021'),
+                                InkWell(
+                                  onTap: () => viewModel.changeExpenePeriod(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      'Change',
+                                      style: AppTextStyles.hyperLinkStyle,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      viewModel.expenseList.length > 0
                           ? Expanded(
                               child: searchResults(viewModel: viewModel),
                             )
-                          : Container()
+                          : viewModel.expensePeriodList.length > 0 &&
+                                  viewModel.expenseList.length == 0
+                              ? Expanded(child: NoDataWidget())
+                              : Container()
                     ],
                   ),
                 ),
@@ -114,115 +170,14 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
     );
   }
 
-  // Widget selectDuration({ViewExpensesViewModel viewModel}) {
-  //   return AppDropDown(
-  //     optionList: selectDurationList,
-  //     hint: "Select Duration",
-  //     onOptionSelect: (selectedValue) {
-  //       viewModel.selectedDuration = selectedValue;
-  //       print(viewModel.selectedDuration);
-  //     },
-  //     selectedValue: viewModel.selectedDuration.isEmpty
-  //         ? null
-  //         : viewModel.selectedDuration,
-  //   );
-  // }
-
-  Widget registrationSelector(
-      {BuildContext context, ViewExpensesViewModel viewModel}) {
-    return registrationNumberTextField(viewModel);
-  }
-
-  Widget registrationNumberTextField(ViewExpensesViewModel viewModel) {
-    return appTextFormField(
-      buttonType: ButtonType.SMALL,
-      buttonIcon: Icon(Icons.search),
-      onButtonPressed: () {
-        getExpenses(
-          viewModel: viewModel,
-          registrationNumber: selectedRegNoController.text,
-        );
-      },
-      inputDecoration: InputDecoration(
-        hintText: 'Vehicle Number',
-        hintStyle: TextStyle(
-          color: Colors.grey,
-        ),
-      ),
-      enabled: true,
-      controller: selectedRegNoController,
-      onFieldSubmitted: (String value) {
-        getExpenses(viewModel: viewModel, registrationNumber: value);
-      },
-      // hintText: drRegNoHint,
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
-        }
-      },
-    );
-  }
-
-  // Widget getExpenseListButton({ViewExpensesViewModel viewModel}) {
-  //   return SizedBox(
-  //     height: buttonHeight,
-  //     width: double.infinity,
-  //     child: Padding(
-  //       padding: const EdgeInsets.only(bottom: 4.0),
-  //       child: ElevatedButton(
-  //         child: Text("Get Expenses List"),
-  //         onPressed: () {
-  //           if (viewModel.selectedDuration.length != 0) {
-  //             viewModel.getExpensesList(
-  //               regNum: selectedRegNoController.text.trim().toUpperCase(),
-  //               selectedDuration: viewModel.selectedDuration,
-  //               clientId: viewModel.selectedClient != null
-  //                   ? viewModel.selectedClient.clientId
-  //                   : '',
-  //             );
-  //           } else {
-  //             viewModel.snackBarService
-  //                 .showSnackbar(message: 'Please select Duration');
-  //           }
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // SelectDurationTabWidget buildSelectDurationTabWidget(
-  //     ViewExpensesViewModel viewModel) {
-  //   return SelectDurationTabWidget(
-  //     initiallySelectedDuration: viewModel.selectedDuration.isEmpty
-  //         ? null
-  //         : viewModel.selectedDuration,
-  //     onTabSelected: (String selectedValue) {
-  //       viewModel.selectedDuration = selectedValue;
-  //       getExpenses(
-  //           viewModel: viewModel,
-  //           registrationNumber: selectedRegNoController.text);
-  //     },
-  //     title: selectDurationTabWidgetTitle,
-  //   );
-  // }
-
-  void getExpenses(
-      {ViewExpensesViewModel viewModel, String registrationNumber}) {
-    viewModel.getExpensesList(
-      regNum: registrationNumber,
-      // selectedDuration: viewModel.selectedDuration,
-      clientId: viewModel.selectedClient.clientId,
-    );
-  }
-
   searchResults({@required ViewExpensesViewModel viewModel}) {
-    return Scrollbar(
-      // isAlwaysShown: true,
+    return LazyLoadScrollView(
+      scrollOffset: (MediaQuery.of(context).size.height ~/ 6),
+      onEndOfPage: () => viewModel.getExpenses(
+        showLoader: false,
+        shouldGetExpenseAggregate: false,
+      ),
       child: ListView.builder(
-          controller: _scrollController,
           itemBuilder: (context, index) {
             // ! Below code is imp, helps to show custom header in a ListView
             if (index == 0) {
@@ -263,7 +218,9 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                                     style: AppTextStyles.latoBold16White,
                                   ),
                                   Text(
-                                    viewModel.uniqueDates[index].toString(),
+                                    viewModel.uniqueDates
+                                        .elementAt(index)
+                                        .toString(),
                                     style: AppTextStyles.latoBold16White,
                                   ),
                                 ],
@@ -306,7 +263,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                     fontSize: 12,
                     value: viewModel
                         .getConsolidatedData(outerIndex)[index]
-                        .eType
+                        .expenseType
                         .toString(),
                   ),
                 ),
@@ -332,7 +289,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                     hintText: "Amount (INR)",
                     value: viewModel
                         .getConsolidatedData(outerIndex)[index]
-                        .eAmount
+                        .expenseAmount
                         .toString(),
                   ),
                 )
@@ -357,7 +314,8 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 child: Container(
                   child: buildHeaderChip(
                       title: 'TOTAL EXPENSES (INR)',
-                      value: viewModel.totalExpenses.toStringAsFixed(2),
+                      value: viewModel.expenseAggregate.totalAmount
+                          .toStringAsFixed(2),
                       iconName: rupeesIcon),
                 ),
               ),
@@ -366,7 +324,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 child: Container(
                   child: buildHeaderChip(
                       title: 'EXPENSES COUNT',
-                      value: viewModel.expenseCount.toString(),
+                      value: viewModel.expenseAggregate.recordCount.toString(),
                       iconName: expensesCountIcon),
                 ),
               ),

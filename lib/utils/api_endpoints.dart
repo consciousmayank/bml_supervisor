@@ -108,4 +108,10 @@ final GET_VEHICLES_LIST_PAGE_WISE =
 
 final GET_ALL_HUBS_FOR_CLIENT =
     (clientId, pageNumber) => '/hub/list/client/$clientId';
+    
+final GET_EXPESNE_PERIOD =
+    (clientId) => '/expense/client/$clientId/period/list';
+
+    const String GET_EXPENSES_TYPE = "/expense/type/list";
+    const String GET_EXPENSES_AGGREGATE = "/expense/list/aggregate";
 ///////////////////////////////////////////////////////////////
