@@ -37,9 +37,18 @@ class _PieChartViewState extends State<PieChartView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        buildChartTitle(title: 'Top 3 Route Driven Kilometers (%)'),
+                        buildChartTitle(title: 'Route Driven Kilometers (%)'),
+
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
-                          viewModel.buildChartSubTitleNew(),
+
+                          hSizedBox(3),
+                          Row(
+                            children: [
+                              buildChartBadge(badgeTitle: 'Top 3'),
+                              wSizedBox(3),
+                              viewModel.buildChartSubTitleNew(),
+                            ],
+                          ),
                         // buildChartSubTitle(time: viewModel?.selectedDate),
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
                           hSizedBox(5),

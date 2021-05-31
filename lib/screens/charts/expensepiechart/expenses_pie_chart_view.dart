@@ -44,6 +44,7 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
                         // buildChartSubTitle(time: viewModel?.selectedDate),
                         if (viewModel.expensePieChartResponseList.length > 0)
                           viewModel.buildChartSubTitleNew(),
+
                         if (viewModel.expensePieChartResponseList.length > 0)
                           hSizedBox(5),
                         // Text(viewModel.expensePieChartResponseList[0].vehicleId),

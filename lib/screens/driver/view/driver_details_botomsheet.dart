@@ -27,7 +27,7 @@ class DriverDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     DriverDetailsBottomSheetInputArgs args = request.customData;
     return BaseBottomSheet(
-      bottomSheetTitle: 'DRIVER DETAILS',
+      bottomSheetTitle: 'Driver Details',
       request: request,
       completer: completer,
       child: DriverInfoWidget(args: args),

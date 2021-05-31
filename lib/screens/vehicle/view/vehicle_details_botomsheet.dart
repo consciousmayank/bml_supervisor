@@ -25,7 +25,7 @@ class VehicleDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     VehicleDetailsBottomSheetInputArgs args = request.customData;
     return BaseBottomSheet(
-      bottomSheetTitle: 'VEHICLE DETAILS',
+      bottomSheetTitle: 'Vehicle Details',
       request: request,
       completer: completer,
       child: InfoWidget(

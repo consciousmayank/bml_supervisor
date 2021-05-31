@@ -18,6 +18,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
+import 'package:bml_supervisor/widget/routes/route_details_bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -65,6 +66,9 @@ void setupBottomSheetUi() {
         AddressTypeBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.STRING_LIST: (context, sheetRequest, completer) =>
         StringListTypeBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.ROUTE_DETAILS: (context, sheetRequest, completer) =>
+        RouteDetailsBottomSheet(request: sheetRequest, completer: completer),
+
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

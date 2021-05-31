@@ -25,22 +25,13 @@ class HubsListDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     HubsListDetailsBottomSheetInputArgs args = request.customData;
     return BaseBottomSheet(
-      bottomSheetTitle: 'HUB DETAILS',
+      bottomSheetTitle: 'Hub Details',
       request: request,
       completer: completer,
       child: HubInfoWidget(
         singleHubInfo: args.singleHubInfo,
       ),
     );
-    //   BaseHalfScreenBottomSheet(
-    //   request: request,
-    //   completer: completer,
-    //   height: MediaQuery.of(context).size.height * 0.85,
-    //   margin: const EdgeInsets.all(0),
-    //   child: HubInfoWidget(
-    //     singleHubInfo: args.singleHubInfo,
-    //   ),
-    // );
   }
 }
 
@@ -57,9 +48,22 @@ class HubInfoWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          hSizedBox(10),
+          hSizedBox(5),
+          buildHubTitleItem(
+            context: context,
+            label: 'Hub Title',
+            // value: singleHubInfo.title*2,
+            value: 'We are a really big company name private limited. '.toUpperCase(),
+          ),
+          buildHubTitleItem(
+            context: context,
+            label: 'Contact Person',
+            // value: singleHubInfo.contactPerson,
+            value: 'Space for people with really reallly big name',
+          ),
+
           Expanded(
-            flex: 7,
+            flex: 4,
             child: Container(
               // color: Colors.red,
               child: GridView.count(
@@ -69,17 +73,8 @@ class HubInfoWidget extends StatelessWidget {
                 mainAxisSpacing: 1,
                 children: [
                   buildGridItem(
-                    label: 'Hub Title',
-                    value: singleHubInfo.title,
-                  ),
-                  buildGridItem(
-                    label: 'Client ID',
-                    value: singleHubInfo.clientId.toString(),
-                  ),
-
-                  buildGridItem(
-                    label: 'Contact Person',
-                    value: singleHubInfo.contactPerson,
+                    label: 'Registration Date',
+                    value: singleHubInfo.registrationDate,
                   ),
                   buildGridItem(
                       label: 'Mobile',
@@ -97,80 +92,26 @@ class HubInfoWidget extends StatelessWidget {
                       onValueClicked: () {
                         launch("tel://+91-${singleHubInfo.phone.trim()}");
                       }),
-                  buildGridItem(
-                    label: 'Registration Date',
-                    value: singleHubInfo.registrationDate,
-                  ),
-                  buildGridItem(
-                    label: 'Remarks',
-                    value: singleHubInfo.remarks,
-                  ),
-
-                  // Card(
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //     crossAxisAlignment: CrossAxisAlignment.end,
-                  //     children: [
-                  //       Text(
-                  //         'Name',
-                  //         textAlign: TextAlign.right,
-                  //       ),
-                  //       Text(
-                  //         'Name',
-                  //         textAlign: TextAlign.right,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Card(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: AppTextView(
-                  //       // lines: linesForValue1,
-                  //       labelFontSize: 13,
-                  //       valueFontSize: 14,
-                  //       showBorder: false,
-                  //       textAlign: TextAlign.left,
-                  //       isUnderLined: false,
-                  //       hintText: 'Owner Name',
-                  //       value: args.vehicleInfo.ownerName,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Card(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: AppTextView(
-                  //       // lines: linesForValue1,
-                  //       labelFontSize: 13,
-                  //       valueFontSize: 14,
-                  //       showBorder: false,
-                  //       textAlign: TextAlign.left,
-                  //       isUnderLined: false,
-                  //       hintText: 'Registration Number',
-                  //       value: args.vehicleInfo.registrationNumber,
-                  //     ),
-                  //   ),
-                  // ),
-                  // buildContentRow(
-                  //   helper: RowHelper(
-                  //     label1: 'Owner Name',
-                  //     value1: '${args.vehicleInfo.ownerName}',
-                  //     label2: 'Registration Number',
-                  //     value2: args.vehicleInfo.registrationNumber,
-                  //   ),
-                  // ),
                 ],
               ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: buildRemarkItem(
+              context: context,
+              label: 'Remarks',
+              // value: singleHubInfo.remarks,
+              value: 'This is really long remark. ' * 9,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'ADDRESS',
+                  'Address',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.latoMedium16Primary5
                       .copyWith(fontSize: 14, fontWeight: FontWeight.w600),
@@ -179,7 +120,7 @@ class HubInfoWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 5,
+            flex: 6,
             child: Container(
               // color: Colors.deepPurple,
               // height: 200,
@@ -229,7 +170,6 @@ class HubInfoWidget extends StatelessWidget {
                             singleHubInfo.street != null &&
                                     singleHubInfo.street != 'NA'
                                 ? TextSpan(
-
                                     text: singleHubInfo.street + ', ',
                                     style: AppTextStyles.lato20PrimaryShade5
                                         .copyWith(
@@ -250,36 +190,15 @@ class HubInfoWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // addressList[index].addressLine1 != null &&
-                      //         addressList[index].addressLine1 != 'NA'
-                      //     ? Text(
-                      //         addressList[index].addressLine1 + ' :Line 1',
-                      //         style:
-                      //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                      //           fontSize: 14,
-                      //         ),
-                      //       )
-                      //     : Container(),
-                      // addressList[index].addressLine2 != null &&
-                      //         addressList[index].addressLine2 != 'NA'
-                      //     ? Text(
-                      //         addressList[index].addressLine2 + ' :Line 2',
-                      //         style:
-                      //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                      //           fontSize: 14,
-                      //         ),
-                      //       )
-                      //     : Container(),
                       hSizedBox(6),
                       singleHubInfo.landmark != null &&
                               singleHubInfo.landmark != 'NA'
                           ? Text(
-
                               'Landmark: ' + singleHubInfo.landmark,
                               style: AppTextStyles.lato20PrimaryShade5.copyWith(
                                 fontSize: 14,
                               ),
-                        textAlign: TextAlign.center,
+                              textAlign: TextAlign.center,
                             )
                           : Container(),
                       Text(
@@ -291,7 +210,6 @@ class HubInfoWidget extends StatelessWidget {
                       ),
                       hSizedBox(6),
                       Text(
-
                         '${singleHubInfo.state}, ${singleHubInfo.country}',
                         style: AppTextStyles.lato20PrimaryShade5.copyWith(
                           fontSize: 14,
@@ -304,7 +222,7 @@ class HubInfoWidget extends StatelessWidget {
               ),
             ),
           ),
-          hSizedBox(110),
+          hSizedBox(10),
         ],
       ),
     );
@@ -360,334 +278,22 @@ class HubInfoWidget extends StatelessWidget {
       ),
     );
   }
-}
 
-class AddressesWidget extends StatelessWidget {
-  final HubResponse singleHubInfo;
-
-  const AddressesWidget({Key key, @required this.singleHubInfo})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Card(
+  Container buildRemarkItem({
+    @required String label,
+    @required String value,
+    Function onValueClicked,
+    BuildContext context,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
         color: AppColors.bottomSheetGridTileColors,
-        shape: Border(
-          left: BorderSide(color: AppColors.primaryColorShade5, width: 4),
-        ),
-        // shape: getCardShape(),
-        elevation: defaultElevation,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    singleHubInfo.street != null && singleHubInfo.street != 'NA'
-                        ? TextSpan(
-                            text: singleHubInfo.street + ', ',
-                            style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          )
-                        : TextSpan(),
-                    singleHubInfo.locality != null &&
-                            singleHubInfo.locality != 'NA'
-                        ? TextSpan(
-                            text: singleHubInfo.locality,
-                            style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          )
-                        : TextSpan(),
-                  ],
-                ),
-              ),
-              // addressList[index].addressLine1 != null &&
-              //         addressList[index].addressLine1 != 'NA'
-              //     ? Text(
-              //         addressList[index].addressLine1 + ' :Line 1',
-              //         style:
-              //             AppTextStyles.lato20PrimaryShade5.copyWith(
-              //           fontSize: 14,
-              //         ),
-              //       )
-              //     : Container(),
-              // addressList[index].addressLine2 != null &&
-              //         addressList[index].addressLine2 != 'NA'
-              //     ? Text(
-              //         addressList[index].addressLine2 + ' :Line 2',
-              //         style:
-              //             AppTextStyles.lato20PrimaryShade5.copyWith(
-              //           fontSize: 14,
-              //         ),
-              //       )
-              //     : Container(),
-              hSizedBox(6),
-              singleHubInfo.landmark != null && singleHubInfo.landmark != 'NA'
-                  ? Text(
-                      'Landmark: ' + singleHubInfo.landmark,
-                      style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                        fontSize: 14,
-                      ),
-                    )
-                  : Container(),
-              Text(
-                '${singleHubInfo.city}, ${singleHubInfo.pincode}',
-                style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-              hSizedBox(6),
-              Text(
-                '${singleHubInfo.state}, ${singleHubInfo.country}',
-                style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                  fontSize: 14,
-                ),
-              )
-            ],
-          ),
+        border: Border(
+          top: BorderSide(color: AppColors.appScaffoldColor, width: 0.1),
         ),
       ),
-    );
-  }
-}
-
-class InfoWidget extends StatelessWidget {
-  final HubResponse singleHubInfo;
-
-  const InfoWidget({Key key, @required this.singleHubInfo}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 7,
-            child: Container(
-              // color: Colors.red,
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 1,
-                crossAxisSpacing: 1,
-                mainAxisSpacing: 1,
-                children: [
-                  buildGridItem(
-                    label: 'Hub Title',
-                    value: singleHubInfo.title,
-                  ),
-                  buildGridItem(
-                    label: 'Client ID',
-                    value: singleHubInfo.clientId.toString(),
-                  ),
-
-                  buildGridItem(
-                    label: 'Contact Person',
-                    value: singleHubInfo.contactPerson,
-                  ),
-                  buildGridItem(
-                      label: 'Mobile',
-                      value: singleHubInfo.mobile,
-                      onValueClicked: () {
-                        launch("tel://+91-${singleHubInfo.mobile.trim()}");
-                      }),
-                  buildGridItem(
-                    label: 'Emil ID',
-                    value: singleHubInfo.email.toLowerCase(),
-                  ),
-                  buildGridItem(
-                      label: 'Alternate Number',
-                      value: singleHubInfo.phone,
-                      onValueClicked: () {
-                        launch("tel://+91-${singleHubInfo.phone.trim()}");
-                      }),
-                  buildGridItem(
-                    label: 'Registration Date',
-                    value: singleHubInfo.registrationDate,
-                  ),
-                  buildGridItem(
-                    label: 'Remarks',
-                    value: singleHubInfo.remarks,
-                  ),
-
-                  // Card(
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //     crossAxisAlignment: CrossAxisAlignment.end,
-                  //     children: [
-                  //       Text(
-                  //         'Name',
-                  //         textAlign: TextAlign.right,
-                  //       ),
-                  //       Text(
-                  //         'Name',
-                  //         textAlign: TextAlign.right,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Card(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: AppTextView(
-                  //       // lines: linesForValue1,
-                  //       labelFontSize: 13,
-                  //       valueFontSize: 14,
-                  //       showBorder: false,
-                  //       textAlign: TextAlign.left,
-                  //       isUnderLined: false,
-                  //       hintText: 'Owner Name',
-                  //       value: args.vehicleInfo.ownerName,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Card(
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: AppTextView(
-                  //       // lines: linesForValue1,
-                  //       labelFontSize: 13,
-                  //       valueFontSize: 14,
-                  //       showBorder: false,
-                  //       textAlign: TextAlign.left,
-                  //       isUnderLined: false,
-                  //       hintText: 'Registration Number',
-                  //       value: args.vehicleInfo.registrationNumber,
-                  //     ),
-                  //   ),
-                  // ),
-                  // buildContentRow(
-                  //   helper: RowHelper(
-                  //     label1: 'Owner Name',
-                  //     value1: '${args.vehicleInfo.ownerName}',
-                  //     label2: 'Registration Number',
-                  //     value2: args.vehicleInfo.registrationNumber,
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     'Address',
-          //     style: AppTextStyles.latoBold18Black,
-          //   ),
-          // ),
-          Expanded(
-            flex: 6,
-            child: Container(
-              // color: Colors.deepPurple,
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              child: Card(
-                // color: Colors.lightBlue,
-                color: AppColors.bottomSheetGridTileColors,
-                shape: Border(
-                  left:
-                      BorderSide(color: AppColors.primaryColorShade5, width: 4),
-                ),
-                // shape: getCardShape(),
-                elevation: defaultElevation,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            singleHubInfo.street != null &&
-                                    singleHubInfo.street != 'NA'
-                                ? TextSpan(
-                                    text: singleHubInfo.street + ', ',
-                                    style: AppTextStyles.lato20PrimaryShade5
-                                        .copyWith(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                  )
-                                : TextSpan(),
-                            singleHubInfo.locality != null &&
-                                    singleHubInfo.locality != 'NA'
-                                ? TextSpan(
-                                    text: singleHubInfo.locality,
-                                    style: AppTextStyles.lato20PrimaryShade5
-                                        .copyWith(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                  )
-                                : TextSpan(),
-                          ],
-                        ),
-                      ),
-                      // addressList[index].addressLine1 != null &&
-                      //         addressList[index].addressLine1 != 'NA'
-                      //     ? Text(
-                      //         addressList[index].addressLine1 + ' :Line 1',
-                      //         style:
-                      //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                      //           fontSize: 14,
-                      //         ),
-                      //       )
-                      //     : Container(),
-                      // addressList[index].addressLine2 != null &&
-                      //         addressList[index].addressLine2 != 'NA'
-                      //     ? Text(
-                      //         addressList[index].addressLine2 + ' :Line 2',
-                      //         style:
-                      //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                      //           fontSize: 14,
-                      //         ),
-                      //       )
-                      //     : Container(),
-                      hSizedBox(6),
-                      singleHubInfo.landmark != null &&
-                              singleHubInfo.landmark != 'NA'
-                          ? Text(
-                              'Landmark: ' + singleHubInfo.landmark,
-                              style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                                fontSize: 14,
-                              ),
-                            )
-                          : Container(),
-                      Text(
-                        '${singleHubInfo.city}, ${singleHubInfo.pincode}',
-                        style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                          fontSize: 14,
-                        ),
-                      ),
-                      hSizedBox(6),
-                      Text(
-                        '${singleHubInfo.state}, ${singleHubInfo.country}',
-                        style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                          fontSize: 14,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container buildGridItem({
-    @required String label,
-    @required String value,
-    Function onValueClicked,
-  }) {
-    return Container(
-      color: AppColors.bottomSheetGridTileColors,
+      // height: 80,
+      width: MediaQuery.of(context).size.width,
       // decoration: BoxDecoration(
       // borderRadius: BorderRadius.all(Radius.circular(6)),
       // color: Colors.white,
@@ -718,8 +324,10 @@ class InfoWidget extends StatelessWidget {
               child: Text(
                 value == null ? 'NA' : value,
                 textAlign: TextAlign.left,
-                style: AppTextStyles.latoMedium16Primary5
-                    .copyWith(fontSize: 14, fontWeight: FontWeight.w600),
+                style: AppTextStyles.latoMedium16Primary5.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
                 // TextStyle(
                 //     fontSize: 16,
                 //     color: AppColors.primaryColorShade5
@@ -731,129 +339,68 @@ class InfoWidget extends StatelessWidget {
       ),
     );
   }
-}
 
-class RowHelper {
-  final String label1, label2, label3;
-  final String value1, value2, value3;
-  final double valueFontSize, labelFontSize;
-  final Function onValue1Clicked, onValue2Clicked, onValue3Clicked;
-
-  RowHelper({
-    @required this.label1,
-    this.label2,
-    this.label3,
-    @required this.value1,
-    this.value2,
-    this.value3,
-    this.valueFontSize = 14,
-    this.labelFontSize = 13,
-    this.onValue1Clicked,
-    this.onValue2Clicked,
-    this.onValue3Clicked,
-  });
-}
-
-SizedBox buildContentRow({
-  @required RowHelper helper,
-}) {
-  return SizedBox(
-    height: 40,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          flex: 1,
-          child: InkWell(
-            onTap: helper.onValue1Clicked == null
-                ? null
-                : () {
-                    helper.onValue1Clicked.call();
-                  },
-            child: AppTextView(
-              labelFontSize: helper.labelFontSize,
-              valueFontSize: helper.valueFontSize,
-              showBorder: false,
-              textAlign: TextAlign.left,
-              isUnderLined: false,
-              hintText: helper.label1,
-              value: helper.value1,
-            ),
-          ),
+  Container buildHubTitleItem({
+    @required String label,
+    @required String value,
+    Function onValueClicked,
+    BuildContext context,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.bottomSheetGridTileColors,
+        border: Border(
+          bottom: BorderSide(color: AppColors.appScaffoldColor, width: 1),
         ),
-        wSizedBox(10),
-        if (helper.label2 != null)
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: helper.onValue2Clicked == null
+      ),
+      height: 70,
+      width: MediaQuery.of(context).size.width,
+      // decoration: BoxDecoration(
+      // borderRadius: BorderRadius.all(Radius.circular(6)),
+      // color: Colors.white,
+      // border: Border.all(
+      //   color: AppColors.appScaffoldColor,
+      // ),
+      // ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: AppTextStyles.latoMedium14Black
+                  .copyWith(color: AppColors.primaryColorShade4, fontSize: 12),
+            ),
+            InkWell(
+              onTap: onValueClicked == null
                   ? null
                   : () {
-                      helper.onValue2Clicked.call();
+                      onValueClicked.call();
                     },
-              child: AppTextView(
-                labelFontSize: helper.labelFontSize,
-                valueFontSize: helper.valueFontSize,
-                showBorder: false,
+              child: Text(
+                value == null ? 'NA' : value,
                 textAlign: TextAlign.left,
-                isUnderLined: false,
-                hintText: helper.label2,
-                value: helper.value2,
+                style: AppTextStyles.latoMedium16Primary5.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+                // TextStyle(
+                //     fontSize: 16,
+                //     color: AppColors.primaryColorShade5
+                // )
               ),
             ),
-          ),
-        if (helper.label3 != null)
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: helper.onValue3Clicked == null
-                  ? null
-                  : () {
-                      helper.onValue3Clicked.call();
-                    },
-              child: AppTextView(
-                labelFontSize: helper.labelFontSize,
-                valueFontSize: helper.valueFontSize,
-                showBorder: false,
-                textAlign: TextAlign.left,
-                isUnderLined: false,
-                hintText: helper.label3,
-                value: helper.value3,
-              ),
-            ),
-          ),
-      ],
-    ),
-  );
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class HubsListDetailsBottomSheetInputArgs {
   final HubResponse singleHubInfo;
 
   HubsListDetailsBottomSheetInputArgs({@required this.singleHubInfo});
-}
-
-class HubsListTextView extends StatelessWidget {
-  final String label, value;
-
-  const HubsListTextView({
-    Key key,
-    @required this.label,
-    @required this.value,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppTextView(
-      labelFontSize: 12,
-      valueFontSize: 13,
-      showBorder: false,
-      textAlign: TextAlign.left,
-      isUnderLined: false,
-      hintText: label,
-      value: value,
-    );
-  }
 }

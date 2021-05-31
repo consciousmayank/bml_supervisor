@@ -3,15 +3,18 @@ import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+// import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app_button.dart';
@@ -88,70 +91,95 @@ class _RoutesViewState extends State<RoutesView> {
   }
 
   Widget buildRoutesView(RoutesViewModel viewModel, int index) {
-
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                widget.onRoutesPageInView(viewModel.routesList[index]);
-              },
-              child: Text(
-                'R#${viewModel.routesList[index].routeId.toString()}',
-                textAlign: TextAlign.center,
-                // style: AppTextStyles.latoMedium14Black.copyWith(color: AppColors.primaryColorShade5),
+      padding: const EdgeInsets.all(12.0),
+      child: InkWell(
+        onTap: widget.isInDashBoard
+            ? null
+            : () {
+                /// open bottom sheet here
+          viewModel.openRouteDetailsBottomSheet(index: index);
 
-                style: AppTextStyles.underLinedText.copyWith(
-                    color: AppColors.primaryColorShade5, fontSize: 15),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Tooltip(
-              // preferBelow: false,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColorShade11,
-                borderRadius: BorderRadius.all(Radius.circular(defaultBorder)),
-              ),
-              // message: viewModel.routesList[index].routeTitle,
-              message: 'Route desc/remarks not coming from api',
-              textStyle: AppTextStyles.latoMedium12Black
-                  .copyWith(color: AppColors.white),
+              },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              flex: 1,
               child: Text(
-                viewModel.routesList[index].routeTitle,
-                maxLines: 3,
-                textAlign: TextAlign.center,
+                '${viewModel.routesList[index].routeId.toString()}',
+                textAlign: TextAlign.right,
+                style: AppTextStyles.latoMedium14Black,
+
+                // style: AppTextStyles.underLinedText.copyWith(
+                //     color: AppColors.primaryColorShade5, fontSize: 15),
               ),
+              // InkWell(
+              //   onTap: () {
+              //     widget.onRoutesPageInView(viewModel.routesList[index]);
+              //   },
+              //   child: Text(
+              //     '${viewModel.routesList[index].routeId.toString()}',
+              //     textAlign: TextAlign.center,
+              //     // style: AppTextStyles.latoMedium14Black.copyWith(color: AppColors.primaryColorShade5),
+              //
+              //     style: AppTextStyles.underLinedText.copyWith(
+              //         color: AppColors.primaryColorShade5, fontSize: 15),
+              //   ),
+              // ),
             ),
-            flex: 2,
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+            Expanded(
+              child: Tooltip(
+                // preferBelow: false,
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColorShade11,
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(defaultBorder)),
                 ),
-                color: AppColors.primaryColorShade5,
-              ),
-              padding: EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 5),
-              child: Center(
+                // message: viewModel.routesList[index].routeTitle,
+                message: 'Route desc/remarks not coming from api',
+                textStyle: AppTextStyles.latoMedium12Black
+                    .copyWith(color: AppColors.white),
                 child: Text(
-                  viewModel.routesList[index].kilometers.toString(),
-                  // maxLines: 3,
+                  viewModel.routesList[index].routeTitle,
+                  maxLines: 3,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.whiteRegular,
+                ),
+              ),
+              flex: 5,
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  color: AppColors.primaryColorShade5,
+                ),
+                padding: EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 5),
+                child: Center(
+                  child: Text(
+                    viewModel.routesList[index].kilometers.toString(),
+                    // maxLines: 3,
+                    textAlign: TextAlign.left,
+                    style: AppTextStyles.whiteRegular,
+                  ),
                 ),
               ),
             ),
-            flex: 1,
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                forwardArrowIcon,
+                height: 10,
+                width: 10,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -256,8 +284,44 @@ class _RoutesViewState extends State<RoutesView> {
             style: AppTextStyles.latoBold14primaryColorShade6,
           ),
         ),
-        buildSearchDriverTextFormField(viewModel: viewModel),
         hSizedBox(5),
+        // Padding(
+        //   padding: const EdgeInsets.only(left: 4, right: 4),
+        //   child: SearchWidget(
+        //     onClearTextClicked: () {
+        //       // selectedRegNoController.clear();
+        //       // viewModel.selectedVehicleId = '';
+        //       // viewModel.getExpenses(
+        //       //   showLoader: false,
+        //       // );
+        //       hideKeyboard(context: context);
+        //     },
+        //     hintTitle: 'Search for route',
+        //     onTextChange: (String value) {
+        //       // viewModel.selectedVehicleId = value;
+        //       // viewModel.notifyListeners();
+        //     },
+        //     onEditingComplete: () {
+        //       // viewModel.getExpenses(
+        //       //   showLoader: true,
+        //       // );
+        //     },
+        //     formatter: <TextInputFormatter>[
+        //       TextFieldInputFormatter().alphaNumericFormatter,
+        //     ],
+        //     controller: TextEditingController(),
+        //     // focusNode: selectedRegNoFocusNode,
+        //     keyboardType: TextInputType.text,
+        //     onFieldSubmitted: (String value) {
+        //       // viewModel.getExpenses(
+        //       //   showLoader: true,
+        //       // );
+        //     },
+        //   ),
+        // ),
+
+        // buildSearchDriverTextFormField(viewModel: viewModel),
+        hSizedBox(10),
         if (viewModel.routesList.length > 0)
           Container(
             color: AppColors.primaryColorShade5,
@@ -282,99 +346,100 @@ class _RoutesViewState extends State<RoutesView> {
     );
   }
 
-  buildSearchDriverTextFormField({RoutesViewModel viewModel}) {
-    return RawAutocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        return viewModel
-            .getRouteTitleForAutoComplete(viewModel.routesList)
-            .where((String option) {
-          return option.contains(textEditingValue.text.toUpperCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        /// Add the selected Item into the list
+  // buildSearchDriverTextFormField({RoutesViewModel viewModel}) {
+  //   return RawAutocomplete<String>(
+  //     optionsBuilder: (TextEditingValue textEditingValue) {
+  //       return viewModel
+  //           .getRouteTitleForAutoComplete(viewModel.routesList)
+  //           .where((String option) {
+  //         return option.contains(textEditingValue.text.toUpperCase());
+  //       }).toList();
+  //     },
+  //     onSelected: (String selection) {
+  //       /// Add the selected Item into the list
+  //
+  //       // CitiesResponse temp;
+  //       // viewModel.cityList.forEach((element) {
+  //       //   if (element.city == selection) {
+  //       //     temp = element;
+  //       //   }
+  //       // });
+  //       // viewModel.selectedCity = temp;
+  //     },
+  //     fieldViewBuilder: (BuildContext context,
+  //         TextEditingController textEditingController,
+  //         FocusNode focusNode,
+  //         VoidCallback onFieldSubmitted) {
+  //       return appTextFormField(
+  //         // hintText: "Hubs",
+  //         inputDecoration: InputDecoration(
+  //           icon: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Container(
+  //               height: 40,
+  //               width: 40,
+  //               decoration: BoxDecoration(
+  //                 color: AppColors.drawerIconsBackgroundColor,
+  //                 borderRadius: getBorderRadius(),
+  //               ),
+  //               child: Center(
+  //                 child: Image.asset(
+  //                   searchBlueIcon,
+  //                   height: 20,
+  //                   width: 20,
+  //                   // color: AppColors.primaryColorShade5,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           hintText: 'Search for route',
+  //           hintStyle: TextStyle(
+  //             color: Colors.grey,
+  //           ),
+  //         ),
+  //         controller: textEditingController,
+  //         focusNode: focusNode,
+  //         onFieldSubmitted: (String value) {
+  //           onFieldSubmitted();
+  //         },
+  //         validator: (String value) {
+  //           if (!viewModel
+  //               .getRouteTitleForAutoComplete(viewModel.routesList)
+  //               .contains(value)) {
+  //             return 'Nothing selected.';
+  //           }
+  //           return null;
+  //         },
+  //       );
+  //     },
+  //     optionsViewBuilder: (BuildContext context,
+  //         AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+  //       return Align(
+  //         alignment: Alignment.topLeft,
+  //         child: Material(
+  //           elevation: 4.0,
+  //           child: SizedBox(
+  //             height: 200.0,
+  //             child: ListView(
+  //               padding: EdgeInsets.all(8.0),
+  //               children: options
+  //                   .map((String option) => GestureDetector(
+  //                         onTap: () {
+  //                           onSelected(option);
+  //                         },
+  //                         child: ListTile(
+  //                           title: Text(option),
+  //                         ),
+  //                       ))
+  //                   .toList(),
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-        // CitiesResponse temp;
-        // viewModel.cityList.forEach((element) {
-        //   if (element.city == selection) {
-        //     temp = element;
-        //   }
-        // });
-        // viewModel.selectedCity = temp;
-      },
-      fieldViewBuilder: (BuildContext context,
-          TextEditingController textEditingController,
-          FocusNode focusNode,
-          VoidCallback onFieldSubmitted) {
-        return appTextFormField(
-          // hintText: "Hubs",
-          inputDecoration: InputDecoration(
-            icon: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.drawerIconsBackgroundColor,
-                  borderRadius: getBorderRadius(),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    searchBlueIcon,
-                    height: 20,
-                    width: 20,
-                    // color: AppColors.primaryColorShade5,
-                  ),
-                ),
-              ),
-            ),
-            hintText: 'Search for route',
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-          controller: textEditingController,
-          focusNode: focusNode,
-          onFieldSubmitted: (String value) {
-            onFieldSubmitted();
-          },
-          validator: (String value) {
-            if (!viewModel
-                .getRouteTitleForAutoComplete(viewModel.routesList)
-                .contains(value)) {
-              return 'Nothing selected.';
-            }
-            return null;
-          },
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: SizedBox(
-              height: 200.0,
-              child: ListView(
-                padding: EdgeInsets.all(8.0),
-                children: options
-                    .map((String option) => GestureDetector(
-                  onTap: () {
-                    onSelected(option);
-                  },
-                  child: ListTile(
-                    title: Text(option),
-                  ),
-                ))
-                    .toList(),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
   Widget addDriverView({String text, String iconName, Function onTap}) {
     return Padding(
       padding: const EdgeInsets.only(top: 2, bottom: 2),
@@ -395,11 +460,11 @@ class _RoutesViewState extends State<RoutesView> {
                     iconName == null
                         ? Container()
                         : Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: IconBlueBackground(
-                        iconName: iconName,
-                      ),
-                    ),
+                            padding: const EdgeInsets.all(2.0),
+                            child: IconBlueBackground(
+                              iconName: iconName,
+                            ),
+                          ),
                     iconName == null ? Container() : wSizedBox(20),
                     Expanded(
                       child: Text(
@@ -433,24 +498,27 @@ class _RoutesViewState extends State<RoutesView> {
         Expanded(
           flex: 1,
           child: Text(
-            ('#'),
+            ('Route No'),
             textAlign: TextAlign.center,
             style: AppTextStyles.whiteRegular,
           ),
         ),
         Expanded(
           flex: 2,
-          child: Text(
-            ('Title'),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.whiteRegular,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 26.0),
+            child: Text(
+              ('Title'),
+              textAlign: TextAlign.center,
+              style: AppTextStyles.whiteRegular,
+            ),
           ),
         ),
         Expanded(
           flex: 1,
           child: Text(
             'Kilometer',
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.center,
             style: AppTextStyles.whiteRegular,
           ),
         ),

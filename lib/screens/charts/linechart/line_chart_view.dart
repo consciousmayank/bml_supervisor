@@ -1,12 +1,14 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/screens/charts/linechart/line_chart_viewmodel.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
+
 // ignore: implementation_imports
 import 'package:flutter/src/painting/text_style.dart' as axisTextStyle;
 import 'package:intl/intl.dart';
@@ -51,11 +53,20 @@ class _LineChartViewState extends State<LineChartView> {
                           ? MainAxisAlignment.center
                           : MainAxisAlignment.start,
                   children: [
-                    buildChartTitle(title: "Top 3 Routes Driven Kilometers"),
+                    buildChartTitle(title: "Routes Driven Kilometers"),
                     // buildChartSubTitle(
                     //     time: viewModel?.selectedDateForLineChart),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
-                      buildChartSubTitleNew(date: viewModel.chartDate),
+
+                      hSizedBox(2),
+                      Row(
+                        children: [
+                          buildChartBadge(badgeTitle: 'Top 3'),
+                          wSizedBox(3),
+                          buildChartSubTitleNew(date: viewModel.chartDate),
+                        ],
+                      ),
+
                     viewModel.routesDrivenKmListForLineChart.length > 0
                         ? Expanded(
                             child: BezierChart(
@@ -125,6 +136,8 @@ class _LineChartViewState extends State<LineChartView> {
     );
   }
 }
+
+
 
 Widget buildColorLegendListView(LineChartViewModel viewModel) {
   // return ListView(children: getWidgets(viewModel), scrollDirection: axisMaterial.Axis.horizontal,);
