@@ -44,7 +44,7 @@ class CreateNewButtonWidget extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => onTap.call,
+      onTap: () => onTap.call(),
       borderRadius: getBorderRadius(),
     );
   }

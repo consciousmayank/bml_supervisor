@@ -18,6 +18,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
+import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -65,6 +66,8 @@ void setupBottomSheetUi() {
         AddressTypeBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.STRING_LIST: (context, sheetRequest, completer) =>
         StringListTypeBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.EXPENSE_DETIALS: (context, sheetRequest, completer) =>
+        GridViewBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
@@ -111,7 +114,12 @@ class _ConfirmationBottomSheet extends StatelessWidget {
             ),
           if (customData.description != null)
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 4,
+                bottom: 16,
+              ),
               child: Text(
                 customData.description,
                 style: TextStyle(color: Colors.black),
@@ -261,57 +269,66 @@ class BottomSheetTitleBar extends StatelessWidget {
   const BottomSheetTitleBar({
     @required this.onCloseTextClicked,
     Key key,
-    this.title,
+    @required this.title,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.offWhite,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
+    return Stack(
+      children: [
+        Container(
+          height: 52,
         ),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 2.0, //
-          )
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(),
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: AppColors.offWhite,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(defaultBorder),
+              topRight: Radius.circular(defaultBorder),
             ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                title ?? '',
-                style: AppTextStyles.hyperLinkStyle
-                    .copyWith(decoration: TextDecoration.none),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: InkWell(
-                onTap:
-                    onCloseTextClicked != null ? onCloseTextClicked.call : null,
-                child: Text(
-                  'Close',
-                  style: AppTextStyles.hyperLinkStyle,
-                  textAlign: TextAlign.end,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2.0, //
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    title ?? '',
+                    style: AppTextStyles.hyperLinkStyle
+                        .copyWith(decoration: TextDecoration.none),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 1,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: onCloseTextClicked != null
+                        ? onCloseTextClicked.call
+                        : null,
+                    child: Text(
+                      'Close',
+                      style: AppTextStyles.hyperLinkStyle,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -322,6 +339,7 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
   final Widget child;
   final double height;
   final EdgeInsets margin;
+  final String bottomSheetTitle;
 
   const BaseHalfScreenBottomSheet(
       {Key key,
@@ -329,7 +347,8 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
       @required this.completer,
       this.height,
       this.margin,
-      @required this.child})
+      @required this.child, 
+      this.bottomSheetTitle = '',})
       : super(key: key);
 
   @override
@@ -354,6 +373,7 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
       child: Column(
         children: [
           BottomSheetTitleBar(
+            title: bottomSheetTitle,
             onCloseTextClicked: () {
               completer(
                 SheetResponse(confirmed: false, responseData: null),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Widget appTextFormField({
+  TextInputAction textInputAction = TextInputAction.next,
   String vehicleOwnerName, //required only in create consignment
   bool showRupeesSymbol = false,
   TextEditingController controller,
@@ -89,26 +90,20 @@ Widget appTextFormField({
                     validator: validator),
                 buttonType == ButtonType.NONE
                     ? Container()
-                    : buttonType == ButtonType.SMALL
-                        ? Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton.icon(
-                              label: Text(buttonLabelText ?? ''),
-                              icon: buttonIcon,
-                              onPressed: buttonType == ButtonType.FULL
-                                  ? null
-                                  : onButtonPressed.call,
-                            ),
-                          )
-                        : Positioned(
-                            top: 10,
-                            bottom: 10,
-                            right: 20,
-                            child: buttonIcon,
-                          ),
+                    : Positioned(
+                        top: 10,
+                        bottom: 10,
+                        right: 14,
+                        child: InkWell(
+                          onTap: buttonType == ButtonType.SMALL
+                              ? () => onButtonPressed.call()
+                              : null,
+                          child: buttonIcon,
+                        ),
+                      ),
                 errorText != null
                     ? Positioned(
-                        left: 4,
+                        left: 19,
                         bottom: 0,
                         child: Text(
                           errorText,
@@ -128,7 +123,18 @@ Widget appTextFormField({
 
 InputDecoration textFieldDecoration(bool showRupeesSymbol, String errorText) {
   return new InputDecoration(
-    prefix: showRupeesSymbol ? Text(rupeeSymbol) : null,
+    prefix: showRupeesSymbol
+        ? Text(
+            rupeeSymbol,
+            style: AppTextStyles.latoBold15Black.copyWith(
+              fontSize: 12,
+            ),
+          )
+        : null,
+    // prefixText: showRupeesSymbol ? rupeeSymbol : '',
+    // prefixStyle: AppTextStyles.latoBold15Black.copyWith(
+    // fontSize: 24,
+    // ),
     hintStyle: TextStyle(fontSize: 14, color: Colors.white),
     focusedBorder: normalTextFormFieldBorder(),
     enabledBorder: normalTextFormFieldBorder(),

@@ -2,17 +2,18 @@
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/expense_aggregate.dart';
 import 'package:bml_supervisor/models/expense_period_response.dart';
-import 'package:bml_supervisor/models/expense_pie_chart_response.dart';
-import 'package:bml_supervisor/models/expense_response.dart';
-import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/single_expense.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expense_helper.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -63,7 +64,21 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     );
 
     if (sheetResponse != null) {
-      if (sheetResponse.confirmed) {}
+      if (sheetResponse.confirmed) {
+        ExpensesFilterBottomSheetOutputArgs args = sheetResponse.responseData;
+
+        String argument = args.selectedExpense as String;
+        if (argument == 'All') {
+          selectedExpenseType = '';
+        } else {
+          selectedExpenseType = argument;
+        }
+
+        getExpenses(
+          showLoader: true,
+          shouldGetExpenseAggregate: true,
+        );
+      }
     }
   }
 
@@ -264,6 +279,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     var response = await _expensesApi.getExpensesTypes();
     expensesTypes = copyList(response);
+    expensesTypes.insert(0, "All");
     notifyListeners();
   }
 
@@ -347,5 +363,78 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         shouldGetExpenseAggregate: shouldGetExpenseAggregate,
       );
     }
+  }
+
+  void takeToAddExpense() {
+    List<String> argument = copyList(expensesTypes);
+    argument.removeAt(0);
+    navigationService
+        .navigateTo(
+          addExpensesPageRoute,
+          arguments: AddExpenseArguments(
+            expensesTypes: expensesTypes,
+          ),
+        )
+        .then(
+          (value) => loadData(),
+        );
+  }
+
+  void loadData() {
+    getExpensesTypes();
+    getExpensePeriod();
+  }
+
+  void openExpenseDetialsBottomSheet({ExpenseListResponse clickedExpense}) {
+    List<GridViewHelper> helperList = [
+      GridViewHelper(
+        label: 'Vehicle Number',
+        value: clickedExpense.vehicleId,
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Entry Date',
+        value: clickedExpense.entryDate,
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Expense Amount',
+        value: clickedExpense.expenseAmount.toString(),
+        onValueClick: null,
+      ),
+      if (clickedExpense.fuelLtr > 0)
+        GridViewHelper(
+          label: 'Fuel Liter',
+          value: clickedExpense.fuelLtr.toStringAsFixed(2),
+          onValueClick: null,
+        ),
+      if (clickedExpense.fuelMeterReading > 0)
+        GridViewHelper(
+          label: 'Fuel Meter Reading',
+          value: clickedExpense.fuelMeterReading.toString(),
+          onValueClick: null,
+        ),
+      if (clickedExpense.ratePerLtr > 0)
+        GridViewHelper(
+          label: 'Fuel Rate',
+          value: clickedExpense.ratePerLtr.toStringAsFixed(2),
+          onValueClick: null,
+        ),
+      GridViewHelper(
+        label: 'Expense Description',
+        value: clickedExpense.expenseDesc,
+        onValueClick: null,
+      ),
+    ];
+
+    bottomSheetService.showCustomSheet(
+      customData: GridViewBottomSheetInputArgument(
+        title: 'Expense Details',
+        helperList: helperList,
+      ),
+      barrierDismissible: true,
+      isScrollControlled: false,
+      variant: BottomSheetType.EXPENSE_DETIALS,
+    );
   }
 }

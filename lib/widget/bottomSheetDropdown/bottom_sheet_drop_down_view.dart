@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
@@ -10,11 +11,13 @@ class BottomSheetDropDown<T> extends StatefulWidget {
   final List<T> allowedValue;
   T selectedValue;
   final String hintText;
+  final String errorText;
   final Function onValueSelected;
   final BottomSheetDropDownType bottomSheetDropDownType;
 
   BottomSheetDropDown({
     Key key,
+    this.errorText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -24,6 +27,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
 
   BottomSheetDropDown.createConsignmentRoutes({
     Key key,
+    this.errorText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -34,8 +38,8 @@ class BottomSheetDropDown<T> extends StatefulWidget {
 
   ///To show while adding expenses. Shows a list of clientId+vehicleId+routeTitle
   BottomSheetDropDown.getDailyKilometerInfo({
-    //${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}(${widget.optionList[i].routeTitle})
     Key key,
+    this.errorText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -60,11 +64,12 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
   @override
   Widget build(BuildContext context) {
     return appTextFormField(
+      errorText: widget.errorText,
       controller: TextEditingController(
         text: getTextValue(),
       ),
       enabled: false,
-      hintText: widget.hintText,
+      hintText: widget.hintText ?? '',
       keyboardType: TextInputType.text,
       buttonType: ButtonType.FULL,
       buttonIcon: isOpen

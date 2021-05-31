@@ -60,6 +60,7 @@ class RegularExpressions {
       RegExp(r'[a-zA-Z0-9 -/_]');
   RegExp alphabeticSpaceRegEx = RegExp(r'[a-zA-Z ]');
   RegExp numericRegEx = RegExp(r'[0-9]');
+  RegExp numericWithDecimalRegEx = RegExp(r'[0-9],');
 }
 
 class TextFieldInputFormatter {
@@ -74,6 +75,8 @@ class TextFieldInputFormatter {
           RegularExpressions().alphabeticSpaceRegEx);
   final TextInputFormatter numericFormatter =
       FilteringTextInputFormatter.allow(RegularExpressions().numericRegEx);
+      final TextInputFormatter numericWithDecimalFormatter =
+      FilteringTextInputFormatter.allow(RegularExpressions().numericWithDecimalRegEx);
 
   TextInputFormatter maxLengthFormatter({@required int maxLength}) {
     return LengthLimitingTextInputFormatter(maxLength);
