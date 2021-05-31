@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
           print('Animation started playing');
         } else {
           locator<AppStartApiImpl>().getAppVersions().then((response) {
-            if (response.major != AppConfigs.MAJOR_VERSION &&
+            if (response.major != AppConfigs.MAJOR_VERSION ||
                 response.minor != AppConfigs.MINOR_VERSION) {
               locator<BottomSheetService>()
                   .showCustomSheet(
