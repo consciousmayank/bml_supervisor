@@ -259,6 +259,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                                 .singleClientTileData
                                                 .totalExpenseVariance,
                                             title: 'Total Expense',
+                                            // value: 888888888.0.toString(),
                                             value: viewModel
                                                 .singleClientTileData
                                                 .totalExpense
@@ -306,14 +307,14 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                               ),
 
                               ///line chart (Routes Driven Kilometers)
-                              LineChartView(
-                                key: ValueKey(4),
-                                clientId: MyPreferences()
-                                    ?.getSelectedClient()
-                                    ?.clientId,
-                                selectedDuration:
-                                    MyPreferences().getSelectedDuration(),
-                              ),
+                              // LineChartView(
+                              //   key: ValueKey(4),
+                              //   clientId: MyPreferences()
+                              //       ?.getSelectedClient()
+                              //       ?.clientId,
+                              //   selectedDuration:
+                              //       MyPreferences().getSelectedDuration(),
+                              // ),
 
                               /// Driven Km % pie chart
                               PieChartView(

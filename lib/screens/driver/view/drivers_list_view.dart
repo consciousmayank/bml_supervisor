@@ -16,7 +16,9 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
@@ -75,88 +77,130 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: getSidePadding(context: context),
-      child: LazyLoadScrollView(
-          scrollOffset: 300,
-          onEndOfPage: () =>
-              widget.viewModel.getDriversList(showLoading: false),
-          child:  ListView.builder(
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    addDriverView(
-                      iconName: addIcon,
-                      text: "Add New Driver",
-                      onTap: () {
-                        widget.viewModel.onAddDriverClicked();
-                      },
-                    ),
-                    hSizedBox(5),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        'Drivers List',
-                        style: AppTextStyles.latoBold14primaryColorShade6,
-                      ),
-                    ),
-                    buildSearchDriverTextFormField(viewModel: widget.viewModel),
-                    hSizedBox(5),
-                  ],
-                );
-              }
-              if (index == 1) {
-                return Container(
-                  color: AppColors.primaryColorShade5,
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // Expanded(
-                      //   child: Text(
-                      //     ('S.No'),
-                      //     textAlign: TextAlign.start,
-                      //     style: AppTextStyles.whiteRegular,
-                      //   ),
-                      // ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          ('VEHICLE NO.'),
-                          textAlign: TextAlign.left,
-                          style: AppTextStyles.whiteRegular,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            ('DRIVER NAME'),
-                            textAlign: TextAlign.left,
-                            style: AppTextStyles.whiteRegular,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          'EXP(YRS)',
-                          textAlign: TextAlign.right,
-                          style: AppTextStyles.whiteRegular,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              index -= 2;
-              return buildDriverCardWithPic(context, index);
+      child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: 4,
+              top: 2,
+            ),
+            child: CreateNewButtonWidget(
+                title: 'Add New Driver',
+                onTap: () {
+                  widget.viewModel.onAddDriverClicked();
+                }),
+          ),
+          // addHubView(
+          //   iconName: addIcon,
+          //   text: "Add New Hub",
+          //   onTap: () {
+          //     widget.viewModel.onAddHubClicked();
+          //   },
+          // ),
+          hSizedBox(5),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              'Drivers List',
+              style: AppTextStyles.latoBold14primaryColorShade6,
+            ),
+          ),
+          SearchWidget(
+            onClearTextClicked: () {
+              // selectedRegNoController.clear();
+              // viewModel.selectedVehicleId = '';
+              // viewModel.getExpenses(
+              //   showLoader: false,
+              // );
+              hideKeyboard(context: context);
             },
-            itemCount: widget.viewModel.driversList.length + 2,
-          )),
+            hintTitle: 'Search for driver',
+            onTextChange: (String value) {
+              // viewModel.selectedVehicleId = value;
+              // viewModel.notifyListeners();
+            },
+            onEditingComplete: () {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+            formatter: <TextInputFormatter>[
+              TextFieldInputFormatter().alphaNumericFormatter,
+            ],
+            controller: TextEditingController(),
+            // focusNode: selectedRegNoFocusNode,
+            keyboardType: TextInputType.text,
+            onFieldSubmitted: (String value) {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+          ),
+          // buildSearchDriverTextFormField(viewModel: widget.viewModel),
+
+          hSizedBox(8),
+          Container(
+            color: AppColors.primaryColorShade5,
+            padding: EdgeInsets.all(15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Expanded(
+                //   child: Text(
+                //     ('S.No'),
+                //     textAlign: TextAlign.start,
+                //     style: AppTextStyles.whiteRegular,
+                //   ),
+                // ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    ('VEHICLE NO.'),
+                    textAlign: TextAlign.left,
+                    style: AppTextStyles.whiteRegular,
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      ('DRIVER NAME'),
+                      textAlign: TextAlign.left,
+                      style: AppTextStyles.whiteRegular,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    'EXP(YRS)',
+                    textAlign: TextAlign.right,
+                    style: AppTextStyles.whiteRegular,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: LazyLoadScrollView(
+                scrollOffset: 300,
+                onEndOfPage: () =>
+                    widget.viewModel.getDriversList(showLoading: false),
+                child:  ListView.builder(
+                  itemBuilder: (context, index) {
+
+                    return buildDriverCardWithPic(context, index);
+                  },
+                  itemCount: widget.viewModel.driversList.length,
+                )),
+          ),
+        ],
+      ),
     );
   }
 

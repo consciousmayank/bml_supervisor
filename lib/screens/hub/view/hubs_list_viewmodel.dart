@@ -31,7 +31,7 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
 
   void onAddHubClicked() {
     // navigationService.back();
-    navigationService.navigateTo(addHubRoute);
+    navigationService.navigateTo(addHubRoute, arguments: hubList);
   }
 
   List<String> getVehicleNumberForAutoComplete(

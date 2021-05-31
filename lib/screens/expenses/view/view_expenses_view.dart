@@ -272,7 +272,8 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 flex: 1,
                 child: Container(
                   child: buildHeaderChip(
-                      title: 'TOTAL EXPENSES (INR)',
+                      title: 'Total Expense',
+                      // value: 888888888888.toString(),
                       value: viewModel.expenseAggregate.totalAmount
                           .toStringAsFixed(2),
                       iconName: rupeesIcon),
@@ -282,7 +283,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                 flex: 1,
                 child: Container(
                   child: buildHeaderChip(
-                      title: 'EXPENSES COUNT',
+                      title: 'Expense count',
                       value: viewModel.expenseAggregate.recordCount.toString(),
                       iconName: expensesCountIcon),
                 ),

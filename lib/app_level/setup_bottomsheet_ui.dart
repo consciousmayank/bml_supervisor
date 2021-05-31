@@ -317,15 +317,21 @@ class BottomSheetTitleBar extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: InkWell(
-                    onTap: onCloseTextClicked != null
-                        ? onCloseTextClicked.call
-                        : null,
-                    child: Text(
-                      'Close',
-                      style: AppTextStyles.hyperLinkStyle,
-                      textAlign: TextAlign.end,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: onCloseTextClicked != null
+                            ? onCloseTextClicked.call
+                            : null,
+                        child: Icon(Icons.close),
+                        // Text(
+                        //   'Close',
+                        //   style: AppTextStyles.hyperLinkStyle,
+                        //   textAlign: TextAlign.end,
+                        // ),
+                      ),
+                    ],
                   ),
                 ),
               ],

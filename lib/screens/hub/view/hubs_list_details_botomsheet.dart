@@ -48,18 +48,18 @@ class HubInfoWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          hSizedBox(5),
+          // hSizedBox(5),
           buildHubTitleItem(
             context: context,
             label: 'Hub Title',
-            // value: singleHubInfo.title*2,
-            value: 'We are a really big company name private limited. '.toUpperCase(),
+            value: singleHubInfo.title,
+            // value: 'We are a really big company name private limited. '.toUpperCase(),
           ),
           buildHubTitleItem(
             context: context,
             label: 'Contact Person',
-            // value: singleHubInfo.contactPerson,
-            value: 'Space for people with really reallly big name',
+            value: singleHubInfo.contactPerson,
+            // value: 'Space for people with really reallly big name',
           ),
 
           Expanded(
@@ -101,8 +101,8 @@ class HubInfoWidget extends StatelessWidget {
             child: buildRemarkItem(
               context: context,
               label: 'Remarks',
-              // value: singleHubInfo.remarks,
-              value: 'This is really long remark. ' * 9,
+              value: singleHubInfo.remarks,
+              // value: 'This is really long remark. ' * 9,
             ),
           ),
           Padding(

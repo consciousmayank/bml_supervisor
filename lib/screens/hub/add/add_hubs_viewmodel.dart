@@ -6,6 +6,7 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
+import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
@@ -22,6 +23,15 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
 
   set alternateMobileNumber(String value) {
     _alternateMobileNumber = value;
+    notifyListeners();
+  }
+
+  bool _isHubTitleExists;
+
+  bool get isHubTitleExists => _isHubTitleExists;
+
+  set isHubTitleExists(bool value) {
+    _isHubTitleExists = value;
     notifyListeners();
   }
 
@@ -63,6 +73,21 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
   set clientsList(List<GetClientsResponse> value) {
     _clientsList = value;
     notifyListeners();
+  }
+
+  bool isHubPresent({
+    List<HubResponse> hubsList, String hubTitle
+  }) {
+    bool status = false;
+    isHubTitleExists = false;
+    hubsList.forEach((element) {
+      if(element.title == hubTitle.toUpperCase() || element.title == hubTitle.toLowerCase()){
+        isHubTitleExists = true;
+        status = true;
+      }
+    });
+
+    return status;
   }
 
   GetClientsResponse _selectedClient;

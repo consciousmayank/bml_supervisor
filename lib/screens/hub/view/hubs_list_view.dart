@@ -3,14 +3,18 @@ import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 
@@ -67,13 +71,24 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          addHubView(
-            iconName: addIcon,
-            text: "Add New Hub",
-            onTap: () {
-              widget.viewModel.onAddHubClicked();
-            },
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: 4,
+              top: 2,
+            ),
+            child: CreateNewButtonWidget(
+                title: 'Add New Hub',
+                onTap: () {
+                  widget.viewModel.onAddHubClicked();
+                }),
           ),
+          // addHubView(
+          //   iconName: addIcon,
+          //   text: "Add New Hub",
+          //   onTap: () {
+          //     widget.viewModel.onAddHubClicked();
+          //   },
+          // ),
           hSizedBox(5),
           Padding(
             padding: const EdgeInsets.all(4.0),
@@ -82,7 +97,38 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               style: AppTextStyles.latoBold14primaryColorShade6,
             ),
           ),
-          buildSearchDriverTextFormField(viewModel: widget.viewModel),
+          SearchWidget(
+            onClearTextClicked: () {
+              // selectedRegNoController.clear();
+              // viewModel.selectedVehicleId = '';
+              // viewModel.getExpenses(
+              //   showLoader: false,
+              // );
+              hideKeyboard(context: context);
+            },
+            hintTitle: 'Search for hub',
+            onTextChange: (String value) {
+              // viewModel.selectedVehicleId = value;
+              // viewModel.notifyListeners();
+            },
+            onEditingComplete: () {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+            formatter: <TextInputFormatter>[
+              TextFieldInputFormatter().alphaNumericFormatter,
+            ],
+            controller: TextEditingController(),
+            // focusNode: selectedRegNoFocusNode,
+            keyboardType: TextInputType.text,
+            onFieldSubmitted: (String value) {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+          ),
+          // buildSearchDriverTextFormField(viewModel: widget.viewModel),
           hSizedBox(8),
           Container(
             decoration: BoxDecoration(

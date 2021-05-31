@@ -8,7 +8,10 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
+
 // import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
@@ -98,8 +101,10 @@ class _RoutesViewState extends State<RoutesView> {
             ? null
             : () {
                 /// open bottom sheet here
-          viewModel.openRouteDetailsBottomSheet(index: index);
-
+                viewModel.openRouteDetailsBottomSheet(
+                  index: index,
+                  route: viewModel.routesList[index],
+                );
               },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,13 +274,24 @@ class _RoutesViewState extends State<RoutesView> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        addDriverView(
-          iconName: addIcon,
-          text: "Add New Route",
-          onTap: () {
-            viewModel.onAddRouteClicked();
-          },
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 4,
+            top: 2,
+          ),
+          child: CreateNewButtonWidget(
+              title: 'Add New Route',
+              onTap: () {
+                viewModel.onAddRouteClicked();
+              }),
         ),
+        // addDriverView(
+        //   iconName: addIcon,
+        //   text: "Add New Route",
+        //   onTap: () {
+        //     viewModel.onAddRouteClicked();
+        //   },
+        // ),
         hSizedBox(5),
         Padding(
           padding: const EdgeInsets.all(4.0),
@@ -285,40 +301,38 @@ class _RoutesViewState extends State<RoutesView> {
           ),
         ),
         hSizedBox(5),
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 4, right: 4),
-        //   child: SearchWidget(
-        //     onClearTextClicked: () {
-        //       // selectedRegNoController.clear();
-        //       // viewModel.selectedVehicleId = '';
-        //       // viewModel.getExpenses(
-        //       //   showLoader: false,
-        //       // );
-        //       hideKeyboard(context: context);
-        //     },
-        //     hintTitle: 'Search for route',
-        //     onTextChange: (String value) {
-        //       // viewModel.selectedVehicleId = value;
-        //       // viewModel.notifyListeners();
-        //     },
-        //     onEditingComplete: () {
-        //       // viewModel.getExpenses(
-        //       //   showLoader: true,
-        //       // );
-        //     },
-        //     formatter: <TextInputFormatter>[
-        //       TextFieldInputFormatter().alphaNumericFormatter,
-        //     ],
-        //     controller: TextEditingController(),
-        //     // focusNode: selectedRegNoFocusNode,
-        //     keyboardType: TextInputType.text,
-        //     onFieldSubmitted: (String value) {
-        //       // viewModel.getExpenses(
-        //       //   showLoader: true,
-        //       // );
-        //     },
-        //   ),
-        // ),
+        SearchWidget(
+            onClearTextClicked: () {
+              // selectedRegNoController.clear();
+              // viewModel.selectedVehicleId = '';
+              // viewModel.getExpenses(
+              //   showLoader: false,
+              // );
+              hideKeyboard(context: context);
+            },
+            hintTitle: 'Search for route',
+            onTextChange: (String value) {
+              // viewModel.selectedVehicleId = value;
+              // viewModel.notifyListeners();
+            },
+            onEditingComplete: () {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+            formatter: <TextInputFormatter>[
+              TextFieldInputFormatter().alphaNumericFormatter,
+            ],
+            controller: TextEditingController(),
+            // focusNode: selectedRegNoFocusNode,
+            keyboardType: TextInputType.text,
+            onFieldSubmitted: (String value) {
+              // viewModel.getExpenses(
+              //   showLoader: true,
+              // );
+            },
+          ),
+
 
         // buildSearchDriverTextFormField(viewModel: viewModel),
         hSizedBox(10),
