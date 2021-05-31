@@ -239,7 +239,7 @@ class _TabbedBodyState extends State<TabbedBody> {
                     ],
                   ),
                 ),
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(2),
               )),
     );
   }

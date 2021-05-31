@@ -36,9 +36,11 @@ class _ClickableWidgetState extends State<ClickableWidget> {
         child: InkWell(
           splashColor: AppColors.primaryColorShade5,
           child: widget.child,
-          onTap: () {
-            widget.onTap.call();
-          },
+          onTap: widget.onTap != null
+              ? () {
+                  widget.onTap.call();
+                }
+              : null,
         ),
       ),
     );

@@ -47,10 +47,10 @@ class SingleTripItem extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              top: 8,
-              bottom: 8,
-              right: 16,
-              left: 16,
+              top: 4,
+              bottom: 4,
+              right: 4,
+              left: 4,
             ),
             child: buildTitle(context),
           ),
@@ -70,8 +70,8 @@ class SingleTripItem extends StatelessWidget {
                 ),
                 buildContentRow(
                   helper: RowHelper(
-                    label1: 'Dispatch Time',
-                    value1: singleListItem.dispatchDateTime.toString(),
+                    label1: 'Description',
+                    value1: singleListItem.routeDesc,
                     label2: null,
                     value2: null,
                     label3: null,

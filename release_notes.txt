@@ -1,3 +1,11 @@
 In this build the following updates were done :-
 
-1. In Review Consignments, now manager can send his remarks, while reviewing the Consignments.
+1. Expenses were implemented freshly.
+    - now calling get expenseType.
+    - then expense period, to show user the list of months for which expenses were entered.
+    - Major UI changes in expenses list view.
+    - Added fuel liter, fuel meter, fuel rate reading, which will be shown only if "FUEL" expense type is selected by user. Other wise they will be 0.
+2. Now showing routeDescription in completed, verified, upcoming, ongoing tips' individual UI.
+3. Made a generic bottomsheet which can show UI in GridView.
+4. Made the bottomsheet title to show shadow in all scenarios.
+  

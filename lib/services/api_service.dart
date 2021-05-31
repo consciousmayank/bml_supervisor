@@ -391,22 +391,10 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
-  Future<ParentApiResponse> getExpensesList({
-    String registrationNumber,
-    int clientId,
-  }) async {
+  Future<ParentApiResponse> getExpensesList({@required Map body}) async {
     Response response;
     DioError error;
     try {
-      var request = new Map();
-      if (registrationNumber != null) {
-        request['vehicleId'] = registrationNumber;
-      }
-      if (clientId != null) {
-        request['clientId'] = clientId;
-      }
-
-      String body = json.encode(request);
       response = await dioClient.getDio().post(
             GET_EXPENSES_LIST,
             data: body,
@@ -651,6 +639,7 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
+
   ////////////////////////////////////////////////////////////////
 
   Future<Response> search({String registrationNumber}) async {
@@ -837,6 +826,42 @@ class ApiService {
       response = await dioClient
           .getDio()
           .get(GET_ALL_HUBS_FOR_CLIENT(clientId, pageIndex));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getExpensePeriod({int clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_EXPESNE_PERIOD(clientId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getExpensesTypes() async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_EXPENSES_TYPE);
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getExpenseAggregate({@required Map body}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().post(
+            GET_EXPENSES_AGGREGATE,
+            data: body,
+          );
     } on DioError catch (e) {
       error = e;
     }

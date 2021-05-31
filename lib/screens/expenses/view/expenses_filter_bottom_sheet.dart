@@ -1,5 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import "package:bml_supervisor/app_level/string_extensions.dart";
+import 'package:bml_supervisor/models/expense_period_response.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -22,101 +24,103 @@ class ExpensesFilterBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     ExpensesFilterBottomSheetInputArgs args = request.customData;
 
-    return Container(
-      // margin: EdgeInsets.all(defaultBorder),
-      // padding: EdgeInsets.all(defaultBorder),
-      height: MediaQuery.of(context).size.height * 0.84,
-      decoration: BoxDecoration(
-        color: AppColors.appScaffoldColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
-        ),
+    return BaseBottomSheet(
+      bottomSheetTitle: getBottomSheetTitle(
+        args: args,
       ),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              completer(
-                SheetResponse(confirmed: false, responseData: null),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Close',
-                    style: AppTextStyles.hyperLinkStyle,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    index != 0 ? DottedDivider() : Container(),
-                    ClickableWidget(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            '${args.expenseTypes[index]}'
-                                .toLowerCase()
-                                .capitalizeFirstLetter(),
-                            style: args.selectedExpense ==
-                                    args.expenseTypes[index]
-                                ? AppTextStyles.latoBold18PrimaryShade5
-                                    .copyWith(fontSize: 14)
-                                : AppTextStyles.latoBold18PrimaryShade5
-                                    .copyWith(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 14),
-                          ),
+      request: request,
+      completer: completer,
+      child: Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                index != 0 ? DottedDivider() : Container(),
+                ClickableWidget(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: getItemRowText(
+                        args: args,
+                        index: index,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    completer(
+                      SheetResponse(
+                        confirmed: true,
+                        responseData: ExpensesFilterBottomSheetOutputArgs(
+                          selectedExpense: args.options[index],
+                          index: index,
                         ),
                       ),
-                      onTap: () {
-                        completer(
-                          SheetResponse(
-                            confirmed: true,
-                            responseData: ExpensesFilterBottomSheetOutputArgs(
-                              selectedExpense: args.expenseTypes[index],
-                              index: index,
-                            ),
-                          ),
-                        );
-                      },
-                      borderRadius: getBorderRadius(borderRadius: 0),
-                    ),
-                  ],
-                );
-              },
-              itemCount: args.expenseTypes.length,
-            ),
-          ),
-        ],
+                    );
+                  },
+                  borderRadius: getBorderRadius(borderRadius: 0),
+                ),
+              ],
+            );
+          },
+          itemCount: args.options.length,
+        ),
       ),
     );
   }
+
+  Text getItemRowText(
+      {@required ExpensesFilterBottomSheetInputArgs args,
+      @required int index}) {
+    if (args.selectedOption is String) {
+      return Text(
+        '${args.options[index]}'.toLowerCase().capitalizeFirstLetter(),
+        style: args.selectedOption == args.options[index]
+            ? AppTextStyles.latoBold18PrimaryShade5.copyWith(fontSize: 14)
+            : AppTextStyles.latoBold18PrimaryShade5
+                .copyWith(fontWeight: FontWeight.normal, fontSize: 14),
+      );
+    } else if (args.selectedOption is ExpensePeriodResponse) {
+      ExpensePeriodResponse _selectedOption = args.selectedOption;
+      List<ExpensePeriodResponse> _options = args.options;
+      return Text(
+          '${getMonth(_options[index].month)}, ${_options[index].year}'
+              .toLowerCase()
+              .capitalizeFirstLetter(),
+          style: _selectedOption == _options[index]
+              ? AppTextStyles.latoBold18PrimaryShade5.copyWith(fontSize: 14)
+              : AppTextStyles.latoBold18PrimaryShade5
+                  .copyWith(fontWeight: FontWeight.normal, fontSize: 14));
+    } else {
+      return Text('${args.selectedOption.toString()}');
+    }
+  }
 }
 
-class ExpensesFilterBottomSheetInputArgs {
-  final List<String> expenseTypes;
-  final String selectedExpense;
+String getBottomSheetTitle({
+  @required ExpensesFilterBottomSheetInputArgs args,
+}) {
+  if (args.selectedOption is String) {
+    return 'Expense Types';
+  } else if (args.selectedOption is ExpensePeriodResponse) {
+    return 'Expense Period';
+  } else {
+    return 'Normal';
+  }
+}
+
+class ExpensesFilterBottomSheetInputArgs<T> {
+  final List<T> options;
+  final T selectedOption;
 
   ExpensesFilterBottomSheetInputArgs(
-      {@required this.expenseTypes, @required this.selectedExpense});
+      {@required this.options, @required this.selectedOption});
 }
 
-class ExpensesFilterBottomSheetOutputArgs {
+class ExpensesFilterBottomSheetOutputArgs<T> {
   final int index;
-  final String selectedExpense;
+  final T selectedExpense;
 
   ExpensesFilterBottomSheetOutputArgs(
       {@required this.index, @required this.selectedExpense});

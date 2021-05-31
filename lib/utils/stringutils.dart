@@ -40,6 +40,7 @@ const String vehicleInitialReadingHint = "Enter Start Reading : ";
 const String fuelReadingHint = "Enter Fuel (in Litres)";
 const String fuelRateHint = "Enter Fuel Rate";
 const String fuelAmountHint = "Total Amount Paid";
+const String fuelLitreHint = "Fuel (in Liters)";
 const String fuelMeterReadingHint = "Meter Reading ";
 const String invalidVehicleInitialReading = "Invalid Reading";
 
