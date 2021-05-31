@@ -13,6 +13,7 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
 import 'package:bml_supervisor/utils/datetime_converter.dart';
@@ -58,6 +59,8 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
   SearchByRegNoResponse _selectedSearchVehicle;
   bool _showSubmitForm = false;
   SearchByRegNoResponse _validatedRegistrationNumber;
+
+  List<String> expenseTypes;
 
   SearchByRegNoResponse get validatedRegistrationNumber =>
       _validatedRegistrationNumber;
@@ -199,7 +202,9 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
           .then(
         (value) {
           if (response.isSuccessful()) {
-            navigationService.replaceWith(addExpensesPageRoute);
+            navigationService.replaceWith(addExpensesPageRoute, arguments: AddExpenseArguments(
+            expensesTypes: expenseTypes,
+          ));
           }
         },
       );

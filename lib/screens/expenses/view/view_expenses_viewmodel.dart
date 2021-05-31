@@ -372,7 +372,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
         .navigateTo(
           addExpensesPageRoute,
           arguments: AddExpenseArguments(
-            expensesTypes: expensesTypes,
+            expensesTypes: argument,
           ),
         )
         .then(
