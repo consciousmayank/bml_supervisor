@@ -1,24 +1,24 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
-import 'package:bml_supervisor/models/save_expense_request.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
+import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 import 'expenses_viewmodel.dart';
 
 class ExpensesMobileView extends StatefulWidget {
+  final AddExpenseArguments args;
+
+  const ExpensesMobileView({Key key, @required this.args}) : super(key: key);
   @override
   _ExpensesMobileViewState createState() => _ExpensesMobileViewState();
 }
@@ -28,9 +28,11 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   final FocusNode selectedDateFocusNode = FocusNode();
   TextEditingController selectedRegNoController = TextEditingController();
   TextEditingController selectedDateController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
   FocusNode amountFocusNode = FocusNode();
+  FocusNode fuelLitreFocusNode = FocusNode();
+  FocusNode fuelReadingFocusNode = FocusNode();
+  FocusNode fuelRateFocusNode = FocusNode();
   ScrollController scrollController;
 
   TextEditingController descriptionController = TextEditingController();
@@ -44,15 +46,15 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
 
   @override
   Widget build(BuildContext context) {
+    widget.args.expensesTypes.removeAt(0);
     return ViewModelBuilder<ExpensesViewModel>.reactive(
-      // onModelReady: (viewModel) => viewModel.getClients(),
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: setAppBarTitle(title: 'Add Expense'),
         ),
         body: viewModel.isBusy
-            ? Center(
-                child: CircularProgressIndicator(),
+            ? ShimmerContainer(
+                itemCount: 10,
               )
             : Padding(
                 padding: getSidePadding(context: context),
@@ -64,9 +66,6 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   }
 
   body(BuildContext context, ExpensesViewModel viewModel) {
-    if (viewModel.clearData) clearData(viewModel: viewModel);
-
-
     return AbsorbPointer(
       absorbing: viewModel.isExpenseListLoading,
       child: submitExpensesForm(context: context, viewModel: viewModel),
@@ -100,223 +99,211 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   }
 
   submitExpensesForm({BuildContext context, ExpensesViewModel viewModel}) {
-    return Form(
-      key: _formKey,
-      child: ListView(
-        children: [
-          appTextFormField(
-            buttonType: ButtonType.FULL,
-            buttonIcon: Icon(Icons.calendar_today_outlined),
-            onButtonPressed: (() async {
-              DateTime selectedDate = await selectDate();
-              if (selectedDate != null) {
-                selectedDateController.text = getDateString(selectedDate);
-                viewModel.entryDate = selectedDate;
-                viewModel.getInfo();
-              }
-            }),
-            enabled: false,
-            controller: selectedDateController,
-            focusNode: selectedDateFocusNode,
-            hintText: "Select Entry Date",
-            labelText: "Entry Date",
+    return ListView(
+      children: [
+        appTextFormField(
+          errorText: viewModel.entryDateError.length > 0
+              ? viewModel.entryDateError
+              : '',
+          hintText: "Select Entry Date",
+          buttonType: ButtonType.FULL,
+          buttonIcon: Icon(Icons.calendar_today_outlined),
+          onButtonPressed: (() async {
+            selectDateFunction(viewModel: viewModel);
+          }),
+          enabled: false,
+          controller: selectedDateController,
+          focusNode: selectedDateFocusNode,
+          keyboardType: TextInputType.text,
+        ),
+        // if (viewModel.entryDate != null)
+        appTextFormField(
+            errorText: viewModel.vehicleIdError.length > 0
+                ? viewModel.vehicleIdError
+                : '',
+            hintText: 'Search for Vechicle',
+            vehicleOwnerName: viewModel.validatedRegistrationNumber == null
+                ? null
+                : "(${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model})",
+            enabled: true,
+            controller: selectedRegNoController,
+            focusNode: selectedRegNoFocusNode,
+            onTextChange: (String value) {
+              viewModel.selectedDailyKmInfo =
+                  viewModel.selectedDailyKmInfo.copyWith(vehicleId: value);
+              viewModel.vehicleIdError = '';
+              viewModel.notifyListeners();
+            },
             keyboardType: TextInputType.text,
+            buttonType: ButtonType.SMALL,
+            buttonIcon: Icon(Icons.search),
+            onButtonPressed: () {
+              viewModel.validateRegistrationNumber(
+                  regNum: viewModel.selectedDailyKmInfo.vehicleId);
+            },
+            onFieldSubmitted: (_) {
+              viewModel.validateRegistrationNumber(
+                  regNum: viewModel.selectedDailyKmInfo.vehicleId);
+            }),
+        // if (viewModel.entryDate != null)
+        BottomSheetDropDown<String>(
+          errorText: viewModel.expenseTypeError.length > 0
+              ? viewModel.expenseTypeError
+              : '',
+          allowedValue: widget.args.expensesTypes,
+          selectedValue:
+              viewModel.expenseType == null ? '' : viewModel.expenseType,
+          hintText: 'Select Expense Type',
+          onValueSelected: (String selectedValue, int index) {
+            viewModel.expenseType = selectedValue;
+            viewModel.expenseTypeError = '';
+            viewModel.notifyListeners();
+          },
+        ),
+        if (viewModel.expenseType == "FUEL")
+          getFuelDetailsRow(
+            context: context,
+            viewModel: viewModel,
           ),
-
-          if (viewModel.entryDate != null)
-            viewModel.dailyKmInfoList.length > 0
-                ? BottomSheetDropDown<
-                    GetDailyKilometerInfo>.getDailyKilometerInfo(
-                    allowedValue: viewModel.dailyKmInfoList,
-                    selectedValue: viewModel.selectedDailyKmInfo == null
-                        ? null
-                        : viewModel.selectedDailyKmInfo,
-                    hintText: "Select Client-Vehicle",
-                    onValueSelected:
-                        (GetDailyKilometerInfo selectedValue, int index) {
-                      viewModel.showSubmitForm = true;
-                      viewModel.selectedDailyKmInfo = selectedValue;
-                    },
-                  )
-                : appTextFormField(
-                    vehicleOwnerName: viewModel.validatedRegistrationNumber ==
-                            null
-                        ? null
-                        : "(${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model})",
-                    enabled: true,
-                    controller: selectedRegNoController,
-                    focusNode: selectedRegNoFocusNode,
-                    hintText: drRegNoHint,
-                    onTextChange: (String value) {
-                      viewModel.selectedDailyKmInfo = viewModel
-                          .selectedDailyKmInfo
-                          .copyWith(vehicleId: value);
-                    },
-                    keyboardType: TextInputType.text,
-                    buttonType: ButtonType.SMALL,
-                    buttonIcon: Icon(Icons.search),
-                    onButtonPressed: () {
-                      viewModel.validateRegistrationNumber(
-                          regNum: viewModel.selectedDailyKmInfo.vehicleId);
-                    },
-                    onFieldSubmitted: (_) {
-                      viewModel.validateRegistrationNumber(
-                          regNum: viewModel.selectedDailyKmInfo.vehicleId);
-                    }),
-
-          /* viewModel.showSubmitForm
-              ?  */
-          if (viewModel.entryDate != null)
-            AppDropDown(
-              showUnderLine: true,
-              selectedValue:
-                  viewModel.expenseType != null ? viewModel.expenseType : null,
-              hint: "Select Expense",
-              onOptionSelect: (selectedValue) {
-                viewModel.expenseType = selectedValue;
-                // if (viewModel.selectedSearchVehicle != null &&
-                //     viewModel.entryDate != null) {
-                //   viewModel.getExpensesList();
-                // }
-              },
-              optionList: expenseTypes,
-            ),
-          // : Container(),
-          hSizedBox(10),
-
-          // viewModel.showSubmitForm
-          //     ? getAmount(context: context, viewModel: viewModel)
-          //     : Container(),
-          if (viewModel.entryDate != null)
-            getAmount(context: context, viewModel: viewModel),
-          hSizedBox(10),
-          // viewModel.showSubmitForm
-          //     ? getDescription(context: context, viewModel: viewModel)
-          //     : Container(),
-          if (viewModel.entryDate != null)
-            getDescription(context: context, viewModel: viewModel),
-          hSizedBox(10),
-          if (viewModel.entryDate != null)
-            saveExpenseButton(context: context, viewModel: viewModel)
-          // viewModel.showSubmitForm
-          //     ? saveExpenseButton(context: context, viewModel: viewModel)
-          //     : Container(),
-        ],
-      ),
+        // if (viewModel.entryDate != null)
+        getAmount(context: context, viewModel: viewModel),
+        // if (viewModel.entryDate != null)
+        getDescription(context: context, viewModel: viewModel),
+        // if (viewModel.entryDate != null)
+        Padding(
+          padding: const EdgeInsets.all(4),
+          child: saveExpenseButton(context: context, viewModel: viewModel),
+        )
+      ],
     );
   }
 
-  // Widget selectClient({ExpensesViewModel viewModel}) {
-  //   return ClientsDropDown(
-  //     optionList: viewModel.clientsList,
-  //     hint: "Select Client",
-  //     onOptionSelect: (GetClientsResponse selectedValue) {
-  //       viewModel.selectedClient = selectedValue;
-  //       // ! use print() it for debugging
-  //       // print('selected client id: ${viewModel.selectedClient.id}');
-  //       // print('selected client: ${viewModel.selectedClient.title}');
-  //     },
-  //     selectedClient:
-  //         viewModel.selectedClient == null ? null : viewModel.selectedClient,
-  //   );
-  // }
-
   getAmount({BuildContext context, ExpensesViewModel viewModel}) {
     return appTextFormField(
-      showRupeesSymbol: true,
+      onTextChange: (String value) {
+        viewModel.expenseAmount = double.parse(value.length > 0 ? value : 0);
+        viewModel.totalAmountError = '';
+        viewModel.notifyListeners();
+      },
+      errorText: viewModel.totalAmountError.length > 0
+          ? viewModel.totalAmountError
+          : '',
+      hintText: fuelAmountHint,
+      showRupeesSymbol: false,
       enabled: true,
       formatter: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
       ],
       controller: amountController,
       focusNode: amountFocusNode,
-      hintText: fuelAmountHint,
-      labelText: "Amount",
       onFieldSubmitted: (_) {
         fieldFocusChange(context, amountFocusNode, descriptionFocusNode);
       },
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
+          viewModel.totalAmountError = textRequired;
         } else if (double.parse(value) == 0) {
-          return "cannot be 0";
-        } else {
-          return null;
+          viewModel.totalAmountError = "cannot be 0";
         }
+        viewModel.notifyListeners();
+        return null;
       },
     );
   }
 
   getDescription({BuildContext context, ExpensesViewModel viewModel}) {
     return appTextFormField(
-      maxLines: 3,
+      onTextChange: (String value) {
+        viewModel.expenseDescription = value;
+        viewModel.descriptionError = '';
+        viewModel.notifyListeners();
+      },
+      inputDecoration: InputDecoration(
+        contentPadding: EdgeInsets.only(
+          top: 8,
+          left: 16,
+          right: 16,
+          bottom: 8,
+        ),
+      ),
+      hintText: 'Description',
+      maxLines: 6,
       enabled: true,
-      formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
-      ],
       controller: descriptionController,
       focusNode: descriptionFocusNode,
       onFieldSubmitted: (_) {
         descriptionFocusNode.unfocus();
       },
-      hintText: "Description",
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.descriptionError = textRequired;
         }
+        viewModel.notifyListeners();
+        return null;
       },
     );
   }
 
-  saveExpenseButton({BuildContext context, ExpensesViewModel viewModel}) {
+  selectDateFunction({@required ExpensesViewModel viewModel}) async {
+    DateTime selectedDate = await selectDate();
+    if (selectedDate != null) {
+      selectedDateController.text = getDateString(selectedDate);
+      viewModel.entryDate = selectedDate;
+      viewModel.entryDateError = '';
+      viewModel.notifyListeners();
+    }
+  }
+
+  onErrorOccured({
+    @required WidgetType widgetType,
+    @required ExpensesViewModel viewModel,
+  }) {
+    switch (widgetType) {
+      case WidgetType.VEHICLE_SEARCH_WIDGET:
+        selectedRegNoFocusNode.requestFocus();
+        break;
+      case WidgetType.SELECTE_EXPENSE_WIDGET:
+        break;
+      case WidgetType.AMOUNT_WIDGET:
+        amountFocusNode.requestFocus();
+        break;
+      case WidgetType.DESCRIPTION_WIDGET:
+        descriptionFocusNode.requestFocus();
+        break;
+      case WidgetType.FUEL_METER_READING:
+        fuelReadingFocusNode.requestFocus();
+        break;
+      case WidgetType.FUEL_LITERS:
+        fuelLitreFocusNode.requestFocus();
+        break;
+      case WidgetType.FUEL_RATE:
+        fuelRateFocusNode.requestFocus();
+        break;
+      case WidgetType.ENTRY_DATE_WIDGET:
+        selectDateFunction(
+          viewModel: viewModel,
+        );
+        break;
+    }
+  }
+
+  saveExpenseButton({
+    BuildContext context,
+    ExpensesViewModel viewModel,
+  }) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: buttonHeight,
       child: ElevatedButton(
         onPressed: () {
           // ! Validation Code Below
-          if (_formKey.currentState.validate()) {
-            // ignore: todo
-            //TODO: Refactor the if(s) and else(s)
-            if (viewModel.expenseType != null) {
-              if (viewModel.selectedDailyKmInfo.vehicleId.length > 1) {
-                viewModel.saveExpense(
-                  SaveExpenseRequest(
-                    clientId: viewModel.selectedDailyKmInfo.clientId,
-                    vehicleId: viewModel.selectedDailyKmInfo.vehicleId,
-                    // viewModel.selectedSearchVehicle.registrationNumber,
-                    entryDate:
-                        DateFormat('dd-MM-yyyy').format(viewModel.entryDate),
-                    expenseType: viewModel.expenseType,
-                    expenseAmount: double.parse(amountController.text),
-                    expenseDesc: descriptionController.text,
-                  ),
-                );
-              } else if (viewModel.dailyKmInfoList.length == 0) {
-                viewModel.snackBarService.showCustomSnackBar(
-                  variant: SnackbarType.ERROR,
-                  duration: Duration(seconds: 4),
-                  message: 'Please Select Vehicle Id',
-                  mainButtonTitle: 'Ok',
-                  onMainButtonTapped: () {
-                    selectedRegNoFocusNode.requestFocus();
-                  },
-                );
-              } else {
-                viewModel.snackBarService.showCustomSnackBar(
-                  variant: SnackbarType.ERROR,
-                  duration: Duration(seconds: 4),
-                  message: 'Please Select Client-Vehicle',
-                );
-              }
-            } else {
-              viewModel.snackBarService
-                  .showSnackbar(message: "Please Select Expense Type");
-            }
+          if (viewModel.validateViews(
+              onErrorOccured: (widgetType) => onErrorOccured(
+                  widgetType: widgetType, viewModel: viewModel))) {
+            viewModel.saveExpense();
           }
         },
         child: Text("Submit"),
@@ -324,121 +311,105 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
     );
   }
 
-  expenseTypeAndAmount(ExpenseResponse singleEntry) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        singleColumn("Expense Type: ", singleEntry.expenseType),
-        singleColumn("Amount: ", "$rupeeSymbol${singleEntry.expenseAmount}")
-      ]),
-    );
-  }
-
-  description(ExpenseResponse singleEntry) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        singleColumn("Description: ", singleEntry.expenseDesc),
-      ]),
-    );
-  }
-
-  void clearData({ExpensesViewModel viewModel}) {
-    selectedRegNoController.clear();
-    selectedDateController.clear();
-    amountController.clear();
-    descriptionController.clear();
-    viewModel.clearData = false;
-  }
-}
-
-class DailyKmInfoDropDown extends StatefulWidget {
-  final List<GetDailyKilometerInfo> optionList;
-  final GetDailyKilometerInfo selectedInfo;
-  final String hint;
-  final Function onOptionSelect;
-  final showUnderLine;
-
-  DailyKmInfoDropDown(
-      {@required this.optionList,
-      this.selectedInfo,
-      @required this.hint,
-      @required this.onOptionSelect,
-      this.showUnderLine = true});
-
-  @override
-  _ClientsDropDownState createState() => _ClientsDropDownState();
-}
-
-class _ClientsDropDownState extends State<DailyKmInfoDropDown> {
-  List<DropdownMenuItem<GetDailyKilometerInfo>> dropdown = [];
-
-  List<DropdownMenuItem<GetDailyKilometerInfo>> getDropDownItems() {
-    List<DropdownMenuItem<GetDailyKilometerInfo>> dropdown =
-        <DropdownMenuItem<GetDailyKilometerInfo>>[];
-
-    for (int i = 0; i < widget.optionList.length; i++) {
-      dropdown.add(DropdownMenuItem(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Text(
-            "${widget.optionList[i].clientId} - ${widget.optionList[i].vehicleId}(${widget.optionList[i].routeTitle})",
-            style: TextStyle(
-              color: Colors.black54,
-            ),
+  getFuelDetailsRow({BuildContext context, ExpensesViewModel viewModel}) {
+    return Row(
+      children: [
+        Expanded(
+          child: getFuelMeterReading(
+            context: context,
+            viewModel: viewModel,
           ),
+          flex: 1,
         ),
-        value: widget.optionList[i],
-      ));
-    }
-    return dropdown;
+        Expanded(
+          child: getFuelLitre(
+            context: context,
+            viewModel: viewModel,
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: getFuelRate(
+            context: context,
+            viewModel: viewModel,
+          ),
+          flex: 1,
+        ),
+      ],
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return widget.optionList.isEmpty
-        ? Container()
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(widget.hint ?? ""),
-              ),
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 4),
-                  child: DropdownButton(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: ThemeConfiguration.primaryBackground,
-                      ),
-                    ),
-                    underline: Container(),
-                    isExpanded: true,
-                    style: textFieldStyle(
-                        fontSize: 15.0, textColor: Colors.black54),
-                    value: widget.selectedInfo,
-                    items: getDropDownItems(),
-                    onChanged: (value) {
-                      widget.onOptionSelect(value);
-                    },
-                  ),
-                ),
-              ),
-            ],
-          );
+  getFuelLitre({BuildContext context, ExpensesViewModel viewModel}) {
+    return appTextFormField(
+      onTextChange: (String value) {
+        viewModel.fuelLitre = double.parse(value.length > 0 ? value : 0);
+        viewModel.fuelLitreError = '';
+        viewModel.notifyListeners();
+      },
+      errorText:
+          viewModel.fuelLitreError.length > 0 ? viewModel.fuelLitreError : '',
+      hintText: fuelLitreHint,
+      enabled: true,
+      focusNode: fuelLitreFocusNode,
+      onFieldSubmitted: (_) {
+        fieldFocusChange(context, fuelLitreFocusNode, fuelRateFocusNode);
+      },
+      keyboardType: TextInputType.number,
+    );
   }
 
-  TextStyle textFieldStyle({double fontSize, Color textColor}) {
-    return TextStyle(
-        color: textColor,
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal);
+  getFuelMeterReading({BuildContext context, ExpensesViewModel viewModel}) {
+    return appTextFormField(
+      onTextChange: (String value) {
+        viewModel.fuelMeterReading = int.parse(value.length > 0 ? value : 0);
+        viewModel.fuelMeterReadingError = '';
+        viewModel.notifyListeners();
+      },
+      errorText: viewModel.fuelMeterReadingError.length > 0
+          ? viewModel.fuelMeterReadingError
+          : '',
+      hintText: fuelMeterReadingHint,
+      enabled: true,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().numericFormatter,
+      ],
+      focusNode: fuelReadingFocusNode,
+      onFieldSubmitted: (_) {
+        fieldFocusChange(context, fuelReadingFocusNode, fuelLitreFocusNode);
+      },
+      keyboardType: TextInputType.number,
+    );
   }
+
+  getFuelRate({BuildContext context, ExpensesViewModel viewModel}) {
+    return appTextFormField(
+      onTextChange: (String value) {
+        viewModel.fuelRate = double.parse(value.length > 0 ? value : 0);
+        viewModel.fuelRateError = '';
+        viewModel.notifyListeners();
+      },
+      errorText:
+          viewModel.fuelRateError.length > 0 ? viewModel.fuelRateError : '',
+      hintText: fuelRateHint,
+      enabled: true,
+      focusNode: fuelRateFocusNode,
+      onFieldSubmitted: (_) {
+        viewModel.expenseAmount = viewModel.fuelRate * viewModel.fuelLitre;
+        amountController.text = viewModel.expenseAmount.toStringAsFixed(2);
+        fieldFocusChange(context, fuelRateFocusNode, descriptionFocusNode);
+      },
+      keyboardType: TextInputType.number,
+    );
+  }
+}
+
+enum WidgetType {
+  ENTRY_DATE_WIDGET,
+  VEHICLE_SEARCH_WIDGET,
+  SELECTE_EXPENSE_WIDGET,
+  AMOUNT_WIDGET,
+  DESCRIPTION_WIDGET,
+  FUEL_METER_READING,
+  FUEL_LITERS,
+  FUEL_RATE,
 }

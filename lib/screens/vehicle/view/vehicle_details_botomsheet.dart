@@ -43,161 +43,158 @@ class InfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 1,
-          crossAxisSpacing: 1,
-          mainAxisSpacing: 1,
-          children: [
-            buildGridItem(
-              label: 'Owner Name',
-              value: vehicleInfo.ownerName,
-            ),
-            buildGridItem(
-              label: 'Vehicle Number',
-              value: vehicleInfo.registrationNumber,
-            ),
-            buildGridItem(
-              label: 'Vehicle Class',
-              value: vehicleInfo.vehicleClass,
-            ),
-            buildGridItem(
-              label: 'Owner Level',
-              value: vehicleInfo.ownerLevel.toString(),
-            ),
-            buildGridItem(
-              label: 'Chassis Number',
-              value: vehicleInfo.chassisNumber,
-            ),
-            buildGridItem(
-              label: 'Engine Number',
-              value: vehicleInfo.engineNumber,
-            ),
-            buildGridItem(
-              label: 'Vehicle Model',
-              value: vehicleInfo.model,
-            ),
-            buildGridItem(
-              label: 'Vehicle Company',
-              value: vehicleInfo.make,
-            ),
-            buildGridItem(
-              label: 'Registration Date',
-              value: vehicleInfo.registrationDate,
-            ),
-            buildGridItem(
-              label: 'Registration Expiry Date',
-              value: vehicleInfo.registrationUpto,
-            ),
-            buildGridItem(
-              label: 'Emission Norm',
-              value: vehicleInfo.emission,
-            ),
-            buildGridItem(
-              label: 'Vehicle Color',
-              value: vehicleInfo.color,
-            ),
-            buildGridItem(
-              label: 'Fuel Type',
-              value: vehicleInfo.fuelType,
-            ),
-            buildGridItem(
-              label: 'RTO City',
-              value: vehicleInfo.rto,
-            ),
+      child: GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: 3 / 1,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 1,
+        children: [
+          buildGridItem(
+            label: 'Owner Name',
+            value: vehicleInfo.ownerName,
+          ),
+          buildGridItem(
+            label: 'Vehicle Number',
+            value: vehicleInfo.registrationNumber,
+          ),
+          buildGridItem(
+            label: 'Vehicle Class',
+            value: vehicleInfo.vehicleClass,
+          ),
+          buildGridItem(
+            label: 'Owner Level',
+            value: vehicleInfo.ownerLevel.toString(),
+          ),
+          buildGridItem(
+            label: 'Chassis Number',
+            value: vehicleInfo.chassisNumber,
+          ),
+          buildGridItem(
+            label: 'Engine Number',
+            value: vehicleInfo.engineNumber,
+          ),
+          buildGridItem(
+            label: 'Vehicle Model',
+            value: vehicleInfo.model,
+          ),
+          buildGridItem(
+            label: 'Vehicle Company',
+            value: vehicleInfo.make,
+          ),
+          buildGridItem(
+            label: 'Registration Date',
+            value: vehicleInfo.registrationDate,
+          ),
+          buildGridItem(
+            label: 'Registration Expiry Date',
+            value: vehicleInfo.registrationUpto,
+          ),
+          buildGridItem(
+            label: 'Emission Norm',
+            value: vehicleInfo.emission,
+          ),
+          buildGridItem(
+            label: 'Vehicle Color',
+            value: vehicleInfo.color,
+          ),
+          buildGridItem(
+            label: 'Fuel Type',
+            value: vehicleInfo.fuelType,
+          ),
+          buildGridItem(
+            label: 'RTO City',
+            value: vehicleInfo.rto,
+          ),
 
-            buildGridItem(
-              label: 'Initial Reading',
-              value: vehicleInfo.initReading.toString(),
-            ),
-            buildGridItem(
-              label: 'Load Capacity (kg)',
-              value: vehicleInfo.loadCapacity,
-            ),
-            buildGridItem(
-              label: 'Seating Capacity',
-              value: vehicleInfo.seatingCapacity.toString(),
-            ),
-            buildGridItem(
-              label: 'Vehicle Length (mm)',
-              value: vehicleInfo.length.toString(),
-            ),
+          buildGridItem(
+            label: 'Initial Reading',
+            value: vehicleInfo.initReading.toString(),
+          ),
+          buildGridItem(
+            label: 'Load Capacity (kg)',
+            value: vehicleInfo.loadCapacity,
+          ),
+          buildGridItem(
+            label: 'Seating Capacity',
+            value: vehicleInfo.seatingCapacity.toString(),
+          ),
+          buildGridItem(
+            label: 'Vehicle Length (mm)',
+            value: vehicleInfo.length.toString(),
+          ),
 
-            buildGridItem(
-              label: 'Vehicle Width (mm)',
-              value: vehicleInfo.width.toString(),
-            ),
-            buildGridItem(
-              label: 'Vehicle Height (mm)',
-              value: vehicleInfo.height.toString(),
-            ),
-            buildGridItem(
-              label: 'Fast Tag ID',
-              value: vehicleInfo.fastTagId,
-            ),
-            buildGridItem(
-              label: 'Fast Tag UPI ID',
-              value: vehicleInfo.fastTagUpiId,
-            ),
+          buildGridItem(
+            label: 'Vehicle Width (mm)',
+            value: vehicleInfo.width.toString(),
+          ),
+          buildGridItem(
+            label: 'Vehicle Height (mm)',
+            value: vehicleInfo.height.toString(),
+          ),
+          buildGridItem(
+            label: 'Fast Tag ID',
+            value: vehicleInfo.fastTagId,
+          ),
+          buildGridItem(
+            label: 'Fast Tag UPI ID',
+            value: vehicleInfo.fastTagUpiId,
+          ),
 
-            // Card(
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     children: [
-            //       Text(
-            //         'Name',
-            //         textAlign: TextAlign.right,
-            //       ),
-            //       Text(
-            //         'Name',
-            //         textAlign: TextAlign.right,
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // Card(
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: AppTextView(
-            //       // lines: linesForValue1,
-            //       labelFontSize: 13,
-            //       valueFontSize: 14,
-            //       showBorder: false,
-            //       textAlign: TextAlign.left,
-            //       isUnderLined: false,
-            //       hintText: 'Owner Name',
-            //       value: args.vehicleInfo.ownerName,
-            //     ),
-            //   ),
-            // ),
-            // Card(
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: AppTextView(
-            //       // lines: linesForValue1,
-            //       labelFontSize: 13,
-            //       valueFontSize: 14,
-            //       showBorder: false,
-            //       textAlign: TextAlign.left,
-            //       isUnderLined: false,
-            //       hintText: 'Registration Number',
-            //       value: args.vehicleInfo.registrationNumber,
-            //     ),
-            //   ),
-            // ),
-            // buildContentRow(
-            //   helper: RowHelper(
-            //     label1: 'Owner Name',
-            //     value1: '${args.vehicleInfo.ownerName}',
-            //     label2: 'Registration Number',
-            //     value2: args.vehicleInfo.registrationNumber,
-            //   ),
-            // ),
-          ],
-        ),
+          // Card(
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //     crossAxisAlignment: CrossAxisAlignment.end,
+          //     children: [
+          //       Text(
+          //         'Name',
+          //         textAlign: TextAlign.right,
+          //       ),
+          //       Text(
+          //         'Name',
+          //         textAlign: TextAlign.right,
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // Card(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: AppTextView(
+          //       // lines: linesForValue1,
+          //       labelFontSize: 13,
+          //       valueFontSize: 14,
+          //       showBorder: false,
+          //       textAlign: TextAlign.left,
+          //       isUnderLined: false,
+          //       hintText: 'Owner Name',
+          //       value: args.vehicleInfo.ownerName,
+          //     ),
+          //   ),
+          // ),
+          // Card(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: AppTextView(
+          //       // lines: linesForValue1,
+          //       labelFontSize: 13,
+          //       valueFontSize: 14,
+          //       showBorder: false,
+          //       textAlign: TextAlign.left,
+          //       isUnderLined: false,
+          //       hintText: 'Registration Number',
+          //       value: args.vehicleInfo.registrationNumber,
+          //     ),
+          //   ),
+          // ),
+          // buildContentRow(
+          //   helper: RowHelper(
+          //     label1: 'Owner Name',
+          //     value1: '${args.vehicleInfo.ownerName}',
+          //     label2: 'Registration Number',
+          //     value2: args.vehicleInfo.registrationNumber,
+          //   ),
+          // ),
+        ],
       ),
     );
   }

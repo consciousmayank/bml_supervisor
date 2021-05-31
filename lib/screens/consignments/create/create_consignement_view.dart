@@ -16,6 +16,8 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list.dart';
 import 'package:flutter/material.dart';
@@ -105,29 +107,9 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
               // dateSelector(context: context, viewModel: viewModel),
               Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: ClickableWidget(
-                  childColor: AppColors.white,
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        IconBlueBackground(
-                          iconName: addIcon,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: Text('Create Consignment'),
-                          ),
-                        ),
-                        Icon(Icons.arrow_right)
-                      ],
-                    ),
-                  ),
+                child: CreateNewButtonWidget(
+                  title: 'Create Consignment',
                   onTap: () => dateSelectListener(viewModel: viewModel),
-                  borderRadius: getBorderRadius(),
                 ),
               ),
               Padding(

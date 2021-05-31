@@ -13,7 +13,7 @@
                 "--flavor",
                 "dev"
             ],
-        }
+        },
         {
             "name": "bml manager prod",
             "program": "lib/main/main_prod.dart",
@@ -23,6 +23,17 @@
                 "--flavor",
                 "prod" //development or staging or production
             ],
+        },
+        {
+            "name": "bml manager profile",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main/main_dev.dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+            "flutterMode": "profile"
         }
     ]
 }

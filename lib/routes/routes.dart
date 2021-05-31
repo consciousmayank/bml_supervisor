@@ -27,6 +27,7 @@ import 'package:bml_supervisor/screens/dashboard/dashboard_view.dart';
 import 'package:bml_supervisor/screens/dashboard/view_all_consignments_view.dart';
 import 'package:bml_supervisor/screens/distributors/distributors_view.dart';
 import 'package:bml_supervisor/screens/driver/view/drivers_list_view.dart';
+import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
@@ -165,9 +166,10 @@ class AppRouter {
         );
 
       case addExpensesPageRoute:
+        AddExpenseArguments args = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => NetworkSensitive(
-            child: ExpensesMobileView(),
+            child: ExpensesMobileView(args: args),
           ),
         );
 

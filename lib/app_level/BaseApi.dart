@@ -43,6 +43,16 @@ class BaseApi {
           isScrollControlled: true,
           variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
         );
+      } else if (apiResponse.error.response.statusCode == 500) {
+        bottomSheetService.showCustomSheet(
+          customData: ConfirmationBottomSheetInputArgs(
+            title: apiResponse.error.response.data['status'],
+            description: apiResponse.error.response.data['errors'].first,
+          ),
+          barrierDismissible: false,
+          isScrollControlled: true,
+          variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+        );
       } else {
         if (showSnackBar)
           snackBarService.showSnackbar(
