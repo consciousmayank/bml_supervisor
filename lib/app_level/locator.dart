@@ -14,6 +14,7 @@ import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
 import 'package:bml_supervisor/screens/trips/trips_apis.dart';
 import 'package:bml_supervisor/screens/vehicle/vehicle_apis.dart';
 import 'package:bml_supervisor/services/api_service.dart';
+import 'package:bml_supervisor/widget/routes/routes_apis.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -50,6 +51,7 @@ void declareDependencies({@required AppConfigs configurations}) {
   locator.registerLazySingleton(() => TripsApisImpl());
   locator.registerLazySingleton(() => VehicleApisImpl());
   locator.registerSingleton(BottomSheetService());
+  locator.registerLazySingleton(() => RoutesApisImpl());
 
   //A Factory will return a new instance of the service anytime it is called.
   // locator.registerFactory(() => DashBoardApisImpl());

@@ -867,4 +867,29 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
+
+  /// fetch route details on the basis of routeID
+  Future<ParentApiResponse> getRouteDetailsByRouteId(
+      {@required int routeId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_ROUTE_DETAILS(routeId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  /// fetch particular hub details on the basis of hubID
+  Future<ParentApiResponse> getHubDetailsByHubId({@required int hubId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(GET_HUB_DETAILS(hubId));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
 }

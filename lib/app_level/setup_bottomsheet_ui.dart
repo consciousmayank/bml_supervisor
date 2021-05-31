@@ -18,6 +18,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
+import 'package:bml_supervisor/widget/routes/route_details_bottomsheet.dart';
 import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -66,6 +67,9 @@ void setupBottomSheetUi() {
         AddressTypeBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.STRING_LIST: (context, sheetRequest, completer) =>
         StringListTypeBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.ROUTE_DETAILS: (context, sheetRequest, completer) =>
+        RouteDetailsBottomSheet(request: sheetRequest, completer: completer),
+
     BottomSheetType.EXPENSE_DETIALS: (context, sheetRequest, completer) =>
         GridViewBottomSheet(request: sheetRequest, completer: completer),
   };
@@ -313,15 +317,21 @@ class BottomSheetTitleBar extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: InkWell(
-                    onTap: onCloseTextClicked != null
-                        ? onCloseTextClicked.call
-                        : null,
-                    child: Text(
-                      'Close',
-                      style: AppTextStyles.hyperLinkStyle,
-                      textAlign: TextAlign.end,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: onCloseTextClicked != null
+                            ? onCloseTextClicked.call
+                            : null,
+                        child: Icon(Icons.close),
+                        // Text(
+                        //   'Close',
+                        //   style: AppTextStyles.hyperLinkStyle,
+                        //   textAlign: TextAlign.end,
+                        // ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -347,7 +357,7 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
       @required this.completer,
       this.height,
       this.margin,
-      @required this.child, 
+      @required this.child,
       this.bottomSheetTitle = '',})
       : super(key: key);
 

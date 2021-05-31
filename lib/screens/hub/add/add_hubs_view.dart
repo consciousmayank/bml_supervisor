@@ -3,6 +3,7 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
+import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/hub/add/add_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -19,6 +20,10 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 class AddHubsView extends StatefulWidget {
+  final List<HubResponse> hubsList;
+
+  AddHubsView({@required this.hubsList});
+
   @override
   _AddHubsViewState createState() => _AddHubsViewState();
 }
@@ -42,6 +47,7 @@ class _AddHubsViewState extends State<AddHubsView> {
                     )
                   : AddHubBodyWidget(
                       viewModel: viewModel,
+                      hubsList: widget.hubsList,
                     ),
             ),
         viewModelBuilder: () => AddHubsViewModel());
@@ -50,8 +56,11 @@ class _AddHubsViewState extends State<AddHubsView> {
 
 class AddHubBodyWidget extends StatefulWidget {
   final AddHubsViewModel viewModel;
+  final List<HubResponse> hubsList;
 
-  const AddHubBodyWidget({Key key, @required this.viewModel}) : super(key: key);
+  const AddHubBodyWidget(
+      {Key key, @required this.viewModel, @required this.hubsList})
+      : super(key: key);
 
   @override
   _AddHubBodyWidgetState createState() => _AddHubBodyWidgetState();
@@ -110,9 +119,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             key: _formKey,
             child: Column(
               children: [
-                // selectClientForDashboardStats(viewModel: widget.viewModel),
                 buildHubTitleTextFormField(),
                 buildDateOfRegistrationView(),
+
                 buildContactPersonView(),
                 buildContactNumberTextFormField(),
                 buildAlternateMobileNumberTextFormField(

@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/network_sensitive_screen.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
+import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_arguments.dart';
@@ -125,9 +126,10 @@ class AppRouter {
         );
 
       case addHubRoute:
+        List<HubResponse> hubsList = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
-                  child: AddHubsView(),
+                  child: AddHubsView(hubsList: hubsList,),
                 ) //EntryLogsView(),
             );
 

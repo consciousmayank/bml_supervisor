@@ -38,6 +38,22 @@ Text buildChartSubTitleNew({String date}) {
   );
 }
 
+Widget buildChartBadge({
+  String badgeTitle,
+}) {
+  return Container(
+    padding: EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      borderRadius:BorderRadius.all(Radius.circular(4)) ,
+      color:  AppColors.primaryColorShade5,
+    ),
+    child: Text(
+      badgeTitle,
+      style: AppTextStyles.latoMedium18White.copyWith(fontSize: 11),
+    ),
+  );
+}
+
 String getChartYear({String date}) {
   return date.split('-').last;
 }
