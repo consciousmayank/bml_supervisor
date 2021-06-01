@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
@@ -18,51 +19,22 @@ class SelectClientBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // margin: EdgeInsets.all(defaultBorder),
-      // padding: EdgeInsets.all(defaultBorder),
-      height: MediaQuery.of(context).size.height * 0.84,
-      decoration: BoxDecoration(
-        color: AppColors.appScaffoldColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
+    return BaseBottomSheet(
+      bottomSheetTitle: 'Select client',
+      request: request,
+      completer: completer,
+      child: Expanded(
+        child: ClientSelectView(
+          preSelectedClient: request.customData,
+          isCalledFromBottomSheet: true,
+          onClientSelected: (GetClientsResponse selectedClient) {
+            completer(
+              SheetResponse(confirmed: true, responseData: selectedClient),
+            );
+          },
         ),
-      ),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              completer(
-                SheetResponse(confirmed: false, responseData: null),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Close',
-                    style: AppTextStyles.hyperLinkStyle,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: ClientSelectView(
-              preSelectedClient: request.customData,
-              isCalledFromBottomSheet: true,
-              onClientSelected: (GetClientsResponse selectedClient) {
-                completer(
-                  SheetResponse(confirmed: true, responseData: selectedClient),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      )
     );
+
   }
 }

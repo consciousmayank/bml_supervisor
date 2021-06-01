@@ -26,12 +26,20 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  bool _isHubTitleExists;
+  HubResponse _selectedExistingHubTitle;
 
-  bool get isHubTitleExists => _isHubTitleExists;
+  HubResponse get selectedExistingHubTitle => _selectedExistingHubTitle;
 
-  set isHubTitleExists(bool value) {
-    _isHubTitleExists = value;
+  set selectedExistingHubTitle(HubResponse value) {
+    _selectedExistingHubTitle = value;
+  }
+
+  List<HubResponse> _existingHubsList = [];
+
+  List<HubResponse> get existingHubsList => _existingHubsList;
+
+  set existingHubsList(List<HubResponse> value) {
+    _existingHubsList = value;
     notifyListeners();
   }
 
@@ -75,21 +83,6 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  bool isHubPresent({
-    List<HubResponse> hubsList, String hubTitle
-  }) {
-    bool status = false;
-    isHubTitleExists = false;
-    hubsList.forEach((element) {
-      if(element.title == hubTitle.toUpperCase() || element.title == hubTitle.toLowerCase()){
-        isHubTitleExists = true;
-        status = true;
-      }
-    });
-
-    return status;
-  }
-
   GetClientsResponse _selectedClient;
 
   GetClientsResponse get selectedClient => _selectedClient;
@@ -109,6 +102,16 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     return _citiesList;
   }
 
+  List<String> getHubTitleListForAutoComplete() {
+    List<String> _hubTitles = [];
+    existingHubsList.forEach((element) {
+      _hubTitles.add(element.title);
+    });
+    return _hubTitles;
+  }
+
+
+
   set cityList(List<CitiesResponse> value) {
     _cityList = value;
     notifyListeners();
@@ -120,6 +123,15 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     var citiesList = await _driverApis.getCities();
     cityList = copyList(citiesList);
   }
+
+  void checkForExistingHubTitleContainsApi(String hubTitle) async{
+    // setBusy(true);
+    var list  = await _addHubsApis.checkForExistingHubTitleContainsApi(hubTitle: hubTitle);
+    existingHubsList = copyList(list);
+    // setBusy(false);
+    notifyListeners();
+  }
+
 
   void getPinCodeState() async {
     cityLocation = await _driverApis.getCityLocation(cityId: selectedCity.id);

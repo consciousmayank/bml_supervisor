@@ -14,10 +14,12 @@ class BottomSheetDropDown<T> extends StatefulWidget {
   final String errorText;
   final Function onValueSelected;
   final BottomSheetDropDownType bottomSheetDropDownType;
+  final String supportText;
 
   BottomSheetDropDown({
     Key key,
     this.errorText,
+    this.supportText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -28,6 +30,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
   BottomSheetDropDown.createConsignmentRoutes({
     Key key,
     this.errorText,
+    this.supportText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -40,6 +43,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
   BottomSheetDropDown.getDailyKilometerInfo({
     Key key,
     this.errorText,
+    this.supportText,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -55,6 +59,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
 class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
   // T preSelectedValue;
   bool isOpen = false;
+
   @override
   void initState() {
     super.initState();
@@ -95,6 +100,7 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
           if (value != null && value.confirmed) {
             StringListTypeBottomSheetOutputArgs args = value.responseData;
             widget.onValueSelected.call(args.selectedValue, args.index);
+
             setState(() {
               widget.selectedValue = args.selectedValue;
               isOpen = false;
@@ -126,6 +132,16 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
         return widget.selectedValue.toString();
         break;
 
+      case BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST:
+        String hubLabel;
+        if (widget.allowedValue.length > 1) {
+          hubLabel = 'hubs';
+        } else {
+          hubLabel = 'hub';
+        }
+        return '${widget.allowedValue.length.toString()} $hubLabel matches title \'${widget.supportText}\''.toUpperCase();
+        break;
+
       default:
         return '';
     }
@@ -135,5 +151,6 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
 enum BottomSheetDropDownType {
   CREATE_CONSIGNMENT_ROUTES_LIST,
   STRING,
-  ADD_EXPENSES_ROUTES_LIST
+  ADD_EXPENSES_ROUTES_LIST,
+  EXISTING_HUB_TITLE_LIST,
 }

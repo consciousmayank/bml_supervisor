@@ -12,7 +12,9 @@ import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -109,6 +111,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   FocusNode remarkFocusNode = FocusNode();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey> _key = List.generate(25, (index) => GlobalKey());
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +122,37 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             key: _formKey,
             child: Column(
               children: [
-                buildHubTitleTextFormField(),
+                buildHubTitleTextFormField(viewModel: widget.viewModel),
+                hubTitleController.text.trim().length > 0 &&
+                        (widget.viewModel.existingHubsList.length > 0)
+                    ? BottomSheetDropDown<HubResponse>(
+                        supportText: hubTitleController.text.trim(),
+                        bottomSheetDropDownType:
+                            BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST,
+                        key: _key[19],
+                        allowedValue: widget.viewModel.existingHubsList,
+                        selectedValue: widget.viewModel.existingHubsList.isEmpty
+                            ? null
+                            : widget.viewModel.selectedExistingHubTitle,
+                        hintText: 'Existing Hub(s)',
+                        onValueSelected: (
+                          String selectedAddressType,
+                          int index,
+                        ) {
+                          widget.viewModel.existingHubsList.clear();
+                          hubTitleController.text = '';
+                        },
+                      )
+                    : Container(),
+                // Card(
+                //   child: Column(
+                //     children: [
+                //       ...fun2(widget.viewModel, context),
+                //     ],
+                //   ),
+                // ),
+
+                // buildNewHubTitleTextFormField(),
                 buildDateOfRegistrationView(),
 
                 buildContactPersonView(),
@@ -145,6 +178,37 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             )),
       ),
     );
+  }
+
+  List<Widget> fun2(AddHubsViewModel viewModel, BuildContext context) {
+    return List.generate(widget.viewModel.existingHubsList.length, (index) {
+      return InkWell(
+        onTap: () {
+          widget.viewModel.existingHubsList = [];
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.viewModel.existingHubsList[index].title,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            hSizedBox(5),
+            widget.viewModel.existingHubsList.length > 1
+                ? index + 1 == widget.viewModel.existingHubsList.length
+                    ? Container()
+                    : DottedDivider()
+                : Container(),
+          ],
+        ),
+      );
+    }).toList();
   }
 
   Widget selectClientForDashboardStats({AddHubsViewModel viewModel}) {
@@ -210,14 +274,18 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
-  Widget buildHubTitleTextFormField() {
+  Widget buildHubTitleTextFormField({AddHubsViewModel viewModel}) {
     return appTextFormField(
       enabled: true,
       controller: hubTitleController,
       focusNode: hubTitleFocusNode,
       hintText: addHubsHubNameHint,
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        if (value.length > 3) {
+          viewModel.checkForExistingHubTitleContainsApi(value.trim());
+        }
+      },
       onFieldSubmitted: (_) {
         hubTitleFocusNode.unfocus();
       },
@@ -449,6 +517,85 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, landmarkFocusNode, widget.viewModel.cityFocusNode);
+      },
+    );
+  }
+
+  buildNewHubTitleTextFormField({AddHubsViewModel viewModel}) {
+    return RawAutocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        /// call api here
+
+        if (viewModel.existingHubsList.length == 0) {
+          return viewModel
+              .getHubTitleListForAutoComplete()
+              .where((String option) {
+            return option.contains(textEditingValue.text.toUpperCase());
+          }).toList();
+        }
+        return null;
+      },
+      onSelected: (String selection) {
+        // CitiesResponse temp;
+        // viewModel.cityList.forEach((element) {
+        //   if (element.city == selection) {
+        //     temp = element;
+        //   }
+        // });
+        // viewModel.selectedCity = temp;
+      },
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController textEditingController,
+          FocusNode focusNode,
+          VoidCallback onFieldSubmitted) {
+        return appTextFormField(
+          onTextChange: (String value) {
+            /// call check title api here
+            if (textEditingController.text.trim().length > 3) {
+              viewModel.checkForExistingHubTitleContainsApi(
+                  textEditingController.text.trim());
+            }
+          },
+          hintText: "New Hub title",
+          controller: textEditingController,
+          focusNode: focusNode,
+          onFieldSubmitted: (String value) {
+            onFieldSubmitted();
+          },
+          validator: (String value) {
+            // if (!widget.viewModel
+            //     .getCitiesListForAutoComplete()
+            //     .contains(value)) {
+            //   return 'Nothing selected.';
+            // }
+            return null;
+          },
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: SizedBox(
+              height: 200.0,
+              child: ListView(
+                padding: EdgeInsets.all(8.0),
+                children: options
+                    .map((String option) => GestureDetector(
+                          onTap: () {
+                            onSelected(option);
+                          },
+                          child: ListTile(
+                            title: Text(option),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+        );
       },
     );
   }
