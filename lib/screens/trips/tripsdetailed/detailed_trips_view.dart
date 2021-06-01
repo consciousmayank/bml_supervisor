@@ -275,12 +275,7 @@ class _TabbedBodyState extends State<TabbedBody> {
               ) {},
               singleListItem: tripWithSelectedDate.elementAt(index),
               onTap: () {
-                print(
-                    "Clicked :: ${tripWithSelectedDate.elementAt(index).dispatchDateTime}");
-
-                print("Clicked :: ${widget.viewModel.completeTripsDate.first}");
-
-                if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
+               if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 2 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 4) {
                   widget.viewModel.openBottomSheet(

@@ -46,8 +46,11 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
 
   @override
   Widget build(BuildContext context) {
-    widget.args.expensesTypes.removeAt(0);
+    // widget.args.expensesTypes.removeAt(0);
     return ViewModelBuilder<ExpensesViewModel>.reactive(
+      onModelReady: (model) {
+        model.expenseTypes = widget.args.expensesTypes;
+      },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
           title: setAppBarTitle(title: 'Add Expense'),
