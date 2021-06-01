@@ -89,6 +89,10 @@ String getTitle(
       return '${inputArgs.allowedValues[index]}';
       break;
 
+    case BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST:
+      return '${inputArgs.allowedValues[index].title}';
+      break;
+
     default:
       return 'No Value';
   }

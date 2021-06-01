@@ -162,7 +162,7 @@ class HubInfoWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      hSizedBox(8),
+                      hSizedBox(6),
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
@@ -190,7 +190,7 @@ class HubInfoWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      hSizedBox(6),
+                      hSizedBox(4),
                       singleHubInfo.landmark != null &&
                               singleHubInfo.landmark != 'NA'
                           ? Text(
@@ -208,7 +208,7 @@ class HubInfoWidget extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      hSizedBox(6),
+                      hSizedBox(4),
                       Text(
                         '${singleHubInfo.state}, ${singleHubInfo.country}',
                         style: AppTextStyles.lato20PrimaryShade5.copyWith(

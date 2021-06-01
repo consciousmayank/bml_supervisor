@@ -164,7 +164,9 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           Expanded(
             child: LazyLoadScrollView(
                 scrollOffset: 300,
-                onEndOfPage: () {},
+                onEndOfPage: () {
+                  widget.viewModel.gethubList(showLoading: false);
+                },
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return Column(
@@ -192,7 +194,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                                 wSizedBox(10),
                                 Expanded(
                                   child: Text(
-                                    widget.viewModel.hubList[index].title,
+                                    widget.viewModel.hubsList[index].title,
                                     textAlign: TextAlign.left,
                                   ),
                                   flex: 5,
@@ -205,7 +207,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       ],
                     );
                   },
-                  itemCount: widget.viewModel.hubList.length,
+                  itemCount: widget.viewModel.hubsList.length,
                 )),
           ),
         ],
@@ -217,7 +219,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return RawAutocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
         return viewModel
-            .getVehicleNumberForAutoComplete(viewModel.hubList)
+            .getVehicleNumberForAutoComplete(viewModel.hubsList)
             .where((String option) {
           return option.contains(textEditingValue.text.toUpperCase());
         }).toList();
@@ -271,7 +273,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           },
           validator: (String value) {
             if (!viewModel
-                .getVehicleNumberForAutoComplete(viewModel.hubList)
+                .getVehicleNumberForAutoComplete(viewModel.hubsList)
                 .contains(value)) {
               return 'Nothing selected.';
             }

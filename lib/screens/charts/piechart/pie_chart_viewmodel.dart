@@ -65,7 +65,6 @@ class PieChartViewModel extends GeneralisedBaseViewModel {
       }
       eMonth = element.eMonth;
       eYear = element.eYear;
-      print('%%%%%%%%%%%%%eMonth ${element.eMonth}');
       totalDrivenKmG += element.drivenKmG;
     });
 

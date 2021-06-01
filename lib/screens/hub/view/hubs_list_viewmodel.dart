@@ -15,27 +15,49 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
   int pageNumber = 1;
   List<HubResponse> _hubsList = [];
 
-  List<HubResponse> get hubList => _hubsList;
+  List<HubResponse> get hubsList => _hubsList;
+
+  set hubsList(List<HubResponse> value) {
+    _hubsList = value;
+    notifyListeners();
+  }
+
+  bool shouldCallGetHubListApi = true;
+
+  // List<HubResponse> get hubList => _hubsList;
 
   gethubList({@required bool showLoading}) async {
-    setBusy(true);
+    if (shouldCallGetHubListApi) {
+      if (showLoading) {
+        setBusy(true);
+        hubsList = [];
+      }
 
-    List<HubResponse> response = await _addHubsApis.getAllHubsForClient(
-        pageNumber: pageNumber,
-        clientId: MyPreferences()?.getSelectedClient()?.clientId);
+      List<HubResponse> response = await _addHubsApis.getAllHubsForClient(
+          pageNumber: pageNumber,
+          clientId: MyPreferences()?.getSelectedClient()?.clientId);
+      if (response.length > 0) {
+        if (pageNumber == 0) {
+          hubsList = copyList(response);
+        } else {
+          hubsList.addAll(response);
+        }
 
-    _hubsList = copyList(response);
-    setBusy(false);
-    notifyListeners();
+        pageNumber++;
+      } else {
+        shouldCallGetHubListApi = false;
+      }
+      if (showLoading) setBusy(false);
+      notifyListeners();
+    }
   }
 
   void onAddHubClicked() {
     // navigationService.back();
-    navigationService.navigateTo(addHubRoute, arguments: hubList);
+    navigationService.navigateTo(addHubRoute, arguments: hubsList);
   }
 
-  List<String> getVehicleNumberForAutoComplete(
-      List<HubResponse> hubsList) {
+  List<String> getVehicleNumberForAutoComplete(List<HubResponse> hubsList) {
     List<String> hubNames = [];
     hubsList.forEach((element) {
       hubNames.add(element.title);
@@ -49,7 +71,7 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
       isScrollControlled: true,
       variant: BottomSheetType.HUBS_DETAILS,
       customData: HubsListDetailsBottomSheetInputArgs(
-        singleHubInfo: _hubsList[selectedDriverIndex],
+        singleHubInfo: hubsList[selectedDriverIndex],
       ),
     );
   }

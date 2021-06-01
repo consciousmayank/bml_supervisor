@@ -892,4 +892,18 @@ class ApiService {
     }
     return ParentApiResponse(response: response, error: error);
   }
+
+  Future<ParentApiResponse> checkForExistingHubTitleContainsApi(
+      {String hubTitle}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
 }

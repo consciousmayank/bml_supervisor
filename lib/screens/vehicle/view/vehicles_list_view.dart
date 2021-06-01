@@ -11,6 +11,7 @@ import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/new_search_widget.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,101 +83,108 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 }),
           ),
           hSizedBox(5),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Text(
-              'Vehicle List',
-              style: AppTextStyles.latoBold14primaryColorShade6,
-            ),
-          ),
-          SearchWidget(
-            onClearTextClicked: () {
-              // selectedRegNoController.clear();
-              // viewModel.selectedVehicleId = '';
-              // viewModel.getExpenses(
-              //   showLoader: false,
-              // );
-              hideKeyboard(context: context);
-            },
-            hintTitle: 'Search for vehicle',
-            onTextChange: (String value) {
-              // viewModel.selectedVehicleId = value;
-              // viewModel.notifyListeners();
-            },
-            onEditingComplete: () {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-            formatter: <TextInputFormatter>[
-              TextFieldInputFormatter().alphaNumericFormatter,
-            ],
-            controller: TextEditingController(),
-            // focusNode: selectedRegNoFocusNode,
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (String value) {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-          ),
-          hSizedBox(8),
-          Container(
-            color: AppColors.primaryColorShade5,
-            padding: EdgeInsets.all(15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Expanded(
-                //   child: Text(
-                //     ('S.No'),
-                //     textAlign: TextAlign.start,
-                //     style: AppTextStyles.whiteRegular,
-                //   ),
-                // ),
-                Expanded(
-                  flex: 1,
+          widget.viewModel.vehiclesList.length == 0
+              ? NoDataWidget(label: 'No vehicles yet',)
+              : Padding(
+                  padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    ('VEHICLE NO.'),
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
+                    'Vehicle List',
+                    style: AppTextStyles.latoBold14primaryColorShade6,
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      ('OWNER NAME'),
-                      textAlign: TextAlign.left,
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'MODEL',
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: LazyLoadScrollView(
-                scrollOffset: 300,
-                onEndOfPage: () =>
-                    widget.viewModel.getVehiclesList(showLoading: false),
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return buildSingleVehicleItem(context, index);
+          widget.viewModel.vehiclesList.length == 0
+              ? Container()
+              : SearchWidget(
+                  onClearTextClicked: () {
+                    // selectedRegNoController.clear();
+                    // viewModel.selectedVehicleId = '';
+                    // viewModel.getExpenses(
+                    //   showLoader: false,
+                    // );
+                    hideKeyboard(context: context);
                   },
-                  itemCount: widget.viewModel.vehiclesList.length,
-                )),
-          ),
+                  hintTitle: 'Search for vehicle',
+                  onTextChange: (String value) {
+                    // viewModel.selectedVehicleId = value;
+                    // viewModel.notifyListeners();
+                  },
+                  onEditingComplete: () {
+                    // viewModel.getExpenses(
+                    //   showLoader: true,
+                    // );
+                  },
+                  formatter: <TextInputFormatter>[
+                    TextFieldInputFormatter().alphaNumericFormatter,
+                  ],
+                  controller: TextEditingController(),
+                  // focusNode: selectedRegNoFocusNode,
+                  keyboardType: TextInputType.text,
+                  onFieldSubmitted: (String value) {
+                    // viewModel.getExpenses(
+                    //   showLoader: true,
+                    // );
+                  },
+                ),
+          hSizedBox(8),
+          widget.viewModel.vehiclesList.length == 0
+              ? Container()
+              : Container(
+                  color: AppColors.primaryColorShade5,
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Expanded(
+                      //   child: Text(
+                      //     ('S.No'),
+                      //     textAlign: TextAlign.start,
+                      //     style: AppTextStyles.whiteRegular,
+                      //   ),
+                      // ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          ('VEHICLE NO.'),
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            ('OWNER NAME'),
+                            textAlign: TextAlign.left,
+                            style: AppTextStyles.whiteRegular,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'MODEL',
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          widget.viewModel.vehiclesList.length == 0
+              ? Container()
+              : Expanded(
+                  child: LazyLoadScrollView(
+                      scrollOffset: 300,
+                      onEndOfPage: () =>
+                          widget.viewModel.getVehiclesList(showLoading: false),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return buildSingleVehicleItem(context, index);
+                        },
+                        itemCount: widget.viewModel.vehiclesList.length,
+                      )),
+                ),
         ],
       ),
     );
@@ -331,7 +339,6 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     //         ),
     //       );
   }
-
 
   Container rightAlignedText({@required String text}) {
     return Container(

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:bml_supervisor/utils/widget_utils.dart';
+
 class GetClientsResponse {
   GetClientsResponse({
     this.id,
@@ -112,6 +114,12 @@ class GetClientsResponse {
         "creationdate": creationdate,
         "lastupdated": lastupdated,
       };
+
+  getClientPhoto() {
+    return this.photo == null || this.photo.length == 0
+        ? null
+        : getImageFromBase64String(base64String: this.photo);
+  }
 }
 
 class Address {
