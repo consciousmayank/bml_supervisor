@@ -78,11 +78,8 @@ class _BarChartViewState extends State<BarChartView> {
                                           //     charts.SmallTickRendererSpec(
                                           //         labelRotation: 60),
                                           viewport: charts.OrdinalViewport(
-                                            widget.selectedDuration ==
-                                                    'THIS MONTH REPORT'
-                                                ? viewModel.uniqueDates.last
-                                                    .split('-')[0]
-                                                : '',
+                                             viewModel.uniqueDates.last
+                                                    .split('-')[0],
                                             7,
                                           ),
                                         ),

@@ -20,6 +20,7 @@ class StringListTypeBottomSheet extends StatelessWidget {
     StringListTypeBottomSheetInputArgs args =
         request.customData as StringListTypeBottomSheetInputArgs;
     return BaseHalfScreenBottomSheet(
+      bottomSheetTitle: args.bottomSheetTitle,
       completer: completer,
       request: request,
       child: Expanded(
@@ -102,11 +103,13 @@ class StringListTypeBottomSheetInputArgs<T> {
   final List<T> allowedValues;
   final T preSelectedValue;
   final BottomSheetDropDownType bottomSheetDropDownType;
+  final String bottomSheetTitle;
 
   StringListTypeBottomSheetInputArgs({
     @required this.bottomSheetDropDownType,
     @required this.allowedValues,
     this.preSelectedValue,
+    this.bottomSheetTitle,
   });
 }
 

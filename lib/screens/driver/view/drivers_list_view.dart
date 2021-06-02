@@ -79,8 +79,8 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     return Padding(
       padding: getSidePadding(context: context),
       child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.only(
@@ -101,109 +101,114 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           //   },
           // ),
           hSizedBox(5),
-          widget.viewModel.driversList.length==0? NoDataWidget(label: 'No drivers yet',):
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Text(
-              'Drivers List',
-              style: AppTextStyles.latoBold14primaryColorShade6,
-            ),
-          ),
-          widget.viewModel.driversList.length==0? Container():
-          SearchWidget(
-            onClearTextClicked: () {
-              // selectedRegNoController.clear();
-              // viewModel.selectedVehicleId = '';
-              // viewModel.getExpenses(
-              //   showLoader: false,
-              // );
-              hideKeyboard(context: context);
-            },
-            hintTitle: 'Search for driver',
-            onTextChange: (String value) {
-              // viewModel.selectedVehicleId = value;
-              // viewModel.notifyListeners();
-            },
-            onEditingComplete: () {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-            formatter: <TextInputFormatter>[
-              TextFieldInputFormatter().alphaNumericFormatter,
-            ],
-            controller: TextEditingController(),
-            // focusNode: selectedRegNoFocusNode,
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (String value) {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-          ),
+          widget.viewModel.driversList.length == 0
+              ? NoDataWidget(
+                  label: 'No drivers yet',
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    'Drivers List',
+                    style: AppTextStyles.latoBold14primaryColorShade6,
+                  ),
+                ),
+          widget.viewModel.driversList.length == 0
+              ? Container()
+              : SearchWidget(
+                  onClearTextClicked: () {
+                    // selectedRegNoController.clear();
+                    // viewModel.selectedVehicleId = '';
+                    // viewModel.getExpenses(
+                    //   showLoader: false,
+                    // );
+                    hideKeyboard(context: context);
+                  },
+                  hintTitle: 'Search for driver',
+                  onTextChange: (String value) {
+                    // viewModel.selectedVehicleId = value;
+                    // viewModel.notifyListeners();
+                  },
+                  onEditingComplete: () {
+                    // viewModel.getExpenses(
+                    //   showLoader: true,
+                    // );
+                  },
+                  formatter: <TextInputFormatter>[
+                    TextFieldInputFormatter().alphaNumericFormatter,
+                  ],
+                  controller: TextEditingController(),
+                  // focusNode: selectedRegNoFocusNode,
+                  keyboardType: TextInputType.text,
+                  onFieldSubmitted: (String value) {
+                    // viewModel.getExpenses(
+                    //   showLoader: true,
+                    // );
+                  },
+                ),
           // buildSearchDriverTextFormField(viewModel: widget.viewModel),
 
           hSizedBox(8),
-          widget.viewModel.driversList.length==0? Container():
-          Container(
-            color: AppColors.primaryColorShade5,
-            padding: EdgeInsets.all(15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Expanded(
-                //   child: Text(
-                //     ('S.No'),
-                //     textAlign: TextAlign.start,
-                //     style: AppTextStyles.whiteRegular,
-                //   ),
-                // ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    ('VEHICLE NO.'),
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
+          widget.viewModel.driversList.length == 0
+              ? Container()
+              : Container(
+                  color: AppColors.primaryColorShade5,
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Expanded(
+                      //   child: Text(
+                      //     ('S.No'),
+                      //     textAlign: TextAlign.start,
+                      //     style: AppTextStyles.whiteRegular,
+                      //   ),
+                      // ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          ('VEHICLE NO.'),
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            ('DRIVER NAME'),
+                            textAlign: TextAlign.left,
+                            style: AppTextStyles.whiteRegular,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'EXP(YRS)',
+                          textAlign: TextAlign.right,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      ('DRIVER NAME'),
-                      textAlign: TextAlign.left,
-                      style: AppTextStyles.whiteRegular,
-                    ),
-                  ),
+          widget.viewModel.driversList.length == 0
+              ? Container()
+              : Expanded(
+                  child: LazyLoadScrollView(
+                      scrollOffset: 300,
+                      onEndOfPage: () =>
+                          widget.viewModel.getDriversList(showLoading: false),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return buildDriverCardWithPic(context, index);
+                        },
+                        itemCount: widget.viewModel.driversList.length,
+                      )),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    'EXP(YRS)',
-                    textAlign: TextAlign.right,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          widget.viewModel.driversList.length==0? Container():
-          Expanded(
-            child: LazyLoadScrollView(
-                scrollOffset: 300,
-                onEndOfPage: () =>
-                    widget.viewModel.getDriversList(showLoading: false),
-                child:  ListView.builder(
-                  itemBuilder: (context, index) {
-
-                    return buildDriverCardWithPic(context, index);
-                  },
-                  itemCount: widget.viewModel.driversList.length,
-                )),
-          ),
         ],
       ),
     );
@@ -213,7 +218,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
     String driverName =
         '${widget.viewModel.driversList[index].firstName.toUpperCase()} ${widget.viewModel.driversList[index].lastName.toUpperCase()}';
 
-    if(driverName.length>15){
+    if (driverName.length > 15) {
       driverName = driverName.characters.take(15).toString() + '...';
     }
     return Column(
@@ -257,7 +262,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                     child: Container(
                       // alignment: Alignment.,
                       padding:
-                      EdgeInsets.only(top: 5, bottom: 5, left: 8, right: 8),
+                          EdgeInsets.only(top: 5, bottom: 5, left: 8, right: 8),
                       decoration: BoxDecoration(
                         color: AppColors.primaryColorShade5,
                         borderRadius: getBorderRadius(),
@@ -436,13 +441,13 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 padding: EdgeInsets.all(8.0),
                 children: options
                     .map((String option) => GestureDetector(
-                  onTap: () {
-                    onSelected(option);
-                  },
-                  child: ListTile(
-                    title: Text(option),
-                  ),
-                ))
+                          onTap: () {
+                            onSelected(option);
+                          },
+                          child: ListTile(
+                            title: Text(option),
+                          ),
+                        ))
                     .toList(),
               ),
             ),
@@ -472,11 +477,11 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                     iconName == null
                         ? Container()
                         : Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: IconBlueBackground(
-                        iconName: iconName,
-                      ),
-                    ),
+                            padding: const EdgeInsets.all(2.0),
+                            child: IconBlueBackground(
+                              iconName: iconName,
+                            ),
+                          ),
                     iconName == null ? Container() : wSizedBox(20),
                     Expanded(
                       child: Text(

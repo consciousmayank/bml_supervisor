@@ -123,38 +123,12 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             child: Column(
               children: [
                 buildHubTitleTextFormField(viewModel: widget.viewModel),
-                hubTitleController.text.trim().length > 0 &&
-                        (widget.viewModel.existingHubsList.length > 0)
-                    ? BottomSheetDropDown<HubResponse>(
-                        supportText: hubTitleController.text.trim(),
-                        bottomSheetDropDownType:
-                            BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST,
-                        key: _key[19],
-                        allowedValue: widget.viewModel.existingHubsList,
-                        selectedValue: widget.viewModel.existingHubsList.isEmpty
-                            ? null
-                            : widget.viewModel.selectedExistingHubTitle,
-                        hintText: 'Existing Hub(s)',
-                        onValueSelected: (
-                          String selectedAddressType,
-                          int index,
-                        ) {
-                          widget.viewModel.existingHubsList.clear();
-                          hubTitleController.text = '';
-                        },
-                      )
+                widget.viewModel.existingHubsList.length > 0
+                    ? hubTitleController.text.trim().length > 0
+                        ? buildExistingHubBottomSheetDropDown()
+                        : Container()
                     : Container(),
-                // Card(
-                //   child: Column(
-                //     children: [
-                //       ...fun2(widget.viewModel, context),
-                //     ],
-                //   ),
-                // ),
-
-                // buildNewHubTitleTextFormField(),
                 buildDateOfRegistrationView(),
-
                 buildContactPersonView(),
                 buildContactNumberTextFormField(),
                 buildAlternateMobileNumberTextFormField(
@@ -180,35 +154,22 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
-  List<Widget> fun2(AddHubsViewModel viewModel, BuildContext context) {
-    return List.generate(widget.viewModel.existingHubsList.length, (index) {
-      return InkWell(
-        onTap: () {
-          widget.viewModel.existingHubsList = [];
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.viewModel.existingHubsList[index].title,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            hSizedBox(5),
-            widget.viewModel.existingHubsList.length > 1
-                ? index + 1 == widget.viewModel.existingHubsList.length
-                    ? Container()
-                    : DottedDivider()
-                : Container(),
-          ],
-        ),
-      );
-    }).toList();
+  BottomSheetDropDown<HubResponse> buildExistingHubBottomSheetDropDown() {
+    return BottomSheetDropDown<HubResponse>(
+      bottomSheetTitle: 'Existing Hub(s)',
+      supportText: hubTitleController.text.trim(),
+      bottomSheetDropDownType: BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST,
+      key: _key[19],
+      allowedValue: widget.viewModel.existingHubsList,
+      selectedValue: widget.viewModel.existingHubsList.isEmpty
+          ? null
+          : widget.viewModel.selectedExistingHubTitle,
+      hintText: 'Existing Hub(s)',
+      onValueSelected: () {
+        widget.viewModel.existingHubsList.clear();
+        hubTitleController.text = '';
+      },
+    );
   }
 
   Widget selectClientForDashboardStats({AddHubsViewModel viewModel}) {

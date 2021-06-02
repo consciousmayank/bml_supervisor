@@ -15,6 +15,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
   final Function onValueSelected;
   final BottomSheetDropDownType bottomSheetDropDownType;
   final String supportText;
+  final String bottomSheetTitle;
 
   BottomSheetDropDown({
     Key key,
@@ -24,6 +25,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
     @required this.selectedValue,
     @required this.hintText,
     @required this.onValueSelected,
+    this.bottomSheetTitle,
     this.bottomSheetDropDownType = BottomSheetDropDownType.STRING,
   }) : super(key: key);
 
@@ -31,6 +33,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
     Key key,
     this.errorText,
     this.supportText,
+    this.bottomSheetTitle,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -44,6 +47,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
     Key key,
     this.errorText,
     this.supportText,
+    this.bottomSheetTitle,
     @required this.allowedValue,
     @required this.selectedValue,
     @required this.hintText,
@@ -88,6 +92,7 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
         locator<BottomSheetService>()
             .showCustomSheet(
           customData: StringListTypeBottomSheetInputArgs<T>(
+            bottomSheetTitle: widget.bottomSheetTitle,
             allowedValues: widget.allowedValue,
             preSelectedValue: widget.selectedValue,
             bottomSheetDropDownType: widget.bottomSheetDropDownType,
@@ -97,18 +102,29 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
           variant: BottomSheetType.STRING_LIST,
         )
             .then((value) {
-          if (value != null && value.confirmed) {
-            StringListTypeBottomSheetOutputArgs args = value.responseData;
-            widget.onValueSelected.call(args.selectedValue, args.index);
-
-            setState(() {
-              widget.selectedValue = args.selectedValue;
-              isOpen = false;
-            });
+          if (widget.bottomSheetDropDownType ==
+              BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST) {
+            if(value.confirmed) {
+              setState(() {
+                isOpen = true;
+              });
+            }
           } else {
-            setState(() {
-              isOpen = false;
-            });
+            if (value != null && value.confirmed) {
+              StringListTypeBottomSheetOutputArgs args = value.responseData;
+              widget.onValueSelected.call(args.selectedValue, args.index);
+
+              setState(() {
+                print('inside if');
+                widget.selectedValue = args.selectedValue;
+                isOpen = false;
+              });
+            } else {
+              print('inside else');
+              setState(() {
+                isOpen = false;
+              });
+            }
           }
         });
       },
@@ -139,7 +155,8 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
         } else {
           hubLabel = 'hub';
         }
-        return '${widget.allowedValue.length.toString()} $hubLabel matches title \'${widget.supportText}\''.toUpperCase();
+        return '${widget.allowedValue.length.toString()} $hubLabel matches title \'${widget.supportText}\''
+            .toUpperCase();
         break;
 
       default:
