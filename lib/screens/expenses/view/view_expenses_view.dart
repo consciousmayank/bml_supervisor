@@ -393,7 +393,10 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                    'Expenses for ${getMonth(viewModel?.expensePeriodList?.first?.month ?? 0)}, ${viewModel?.expensePeriodList?.first?.year ?? 2024}'),
+                                  'Expenses for ${getMonth(viewModel?.expensePeriodList?.first?.month ?? 0)}, ${viewModel?.expensePeriodList?.first?.year ?? 2024}',
+                                  style: AppTextStyles.expensesPeriodTitle()
+                                      .textStyle,
+                                ),
                                 // Text('Dummy data for May, 2021'),
                                 InkWell(
                                   onTap: () => viewModel.changeExpenePeriod(),

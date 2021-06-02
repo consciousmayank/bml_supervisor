@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
@@ -15,7 +16,7 @@ class SearchWidget extends StatelessWidget {
   final Function onTextChange;
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter> formatter;
-  final bool enabled = true;
+  final bool enabled;
   final TextEditingController controller;
   final FocusNode focusNode;
   final TextInputType keyboardType;
@@ -24,6 +25,7 @@ class SearchWidget extends StatelessWidget {
   const SearchWidget({
     Key key,
     @required this.hintTitle,
+    this.enabled = true,
     @required this.onEditingComplete,
     @required this.onClearTextClicked,
     this.onTextChange,
@@ -32,6 +34,21 @@ class SearchWidget extends StatelessWidget {
     @required this.focusNode,
     @required this.keyboardType,
     @required this.onFieldSubmitted,
+    this.textCapitalization = TextCapitalization.none,
+  }) : super(key: key);
+  
+  const SearchWidget.buttonLike({
+    Key key,
+    @required this.hintTitle,
+    this.enabled = false,
+    this.onEditingComplete,
+    @required this.onClearTextClicked,
+    this.onTextChange,
+    this.formatter,
+    @required this.controller,
+    this.focusNode,
+    this.keyboardType,
+    this.onFieldSubmitted,
     this.textCapitalization = TextCapitalization.none,
   }) : super(key: key);
 
@@ -53,9 +70,8 @@ class SearchWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 2, right: 2),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: hintTitle,
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
-                  ),
+                      hintText: hintTitle,
+                      hintStyle: AppTextStyles().hintTextStyle),
                   onEditingComplete: onEditingComplete,
                   onChanged: onTextChange,
                   textCapitalization: textCapitalization,

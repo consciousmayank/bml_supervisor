@@ -6,13 +6,16 @@ import 'package:bml_supervisor/screens/consignments/details/consignment_details_
 import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_by_date_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
@@ -312,9 +315,15 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
   }
 
   dateSelector({@required ConsignmentListByDateViewModel viewModel}) {
-    return selectedDateTextField(
-      viewModel,
+    return SearchWidget.buttonLike(
+      hintTitle: 'Search consignemnt by date',
+      onClearTextClicked: () {},
+      controller: TextEditingController(),
     );
+
+    // return selectedDateTextField(
+    //   viewModel,
+    // );
   }
 
   selectedDateTextField(ConsignmentListByDateViewModel viewModel) {
