@@ -93,8 +93,12 @@ class BottomSheetGridView extends StatelessWidget {
       child: CustomScrollView(slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) => Padding(
-                    padding: const EdgeInsets.all(1.0),
+              (BuildContext context, int index) => Container(
+                    constraints: BoxConstraints(
+                      minHeight: 80,
+                      minWidth: double.infinity,
+                    ),
+                    padding: const EdgeInsets.all(1),
                     child: BottomSheetGridViewItem(
                       label: headerList[index].label,
                       value: headerList[index].value,
@@ -124,8 +128,12 @@ class BottomSheetGridView extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) => Padding(
-                    padding: const EdgeInsets.all(1.0),
+              (BuildContext context, int index) => Container(
+                    constraints: BoxConstraints(
+                      minHeight: 80,
+                      minWidth: double.infinity,
+                    ),
+                    padding: const EdgeInsets.all(1),
                     child: BottomSheetGridViewItem(
                       label: footerList[index].label,
                       value: footerList[index].value,
