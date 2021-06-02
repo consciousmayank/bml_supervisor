@@ -6,11 +6,14 @@ import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
+import 'package:bml_supervisor/models/get_hub_details_response.dart';
+import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
+import 'package:bml_supervisor/widget/routes/routes_apis.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -23,6 +26,26 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
   Set<DateTime> completeTripsDate = Set();
   Set<DateTime> verifiedTripsDate = Set();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
+  RoutesApis _routesApis = locator<RoutesApisImpl>();
+  GetHubDetailsResponse _srcHub;
+  GetHubDetailsResponse _dstHub;
+
+  GetHubDetailsResponse get srcHub => _srcHub;
+
+  set srcHub(GetHubDetailsResponse value) {
+    _srcHub = value;
+    notifyListeners();
+  }
+
+  GetHubDetailsResponse _hubResponse;
+
+  GetHubDetailsResponse get hubResponse => _hubResponse;
+
+  set hubResponse(GetHubDetailsResponse value) {
+    _hubResponse = value;
+    notifyListeners();
+  }
+
   ConsignmentTrackingStatusResponse _selectedTripForEndingTrip;
 
   ConsignmentTrackingStatusResponse get selectedTripForEndingTrip =>
@@ -36,6 +59,28 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
 
   set trips(List<ConsignmentTrackingStatusResponse> value) {
     _trips = value;
+  }
+
+  void getSourceAndDestinationDetails(
+      {int srcLocation,
+      int dstLocation,
+      ConsignmentTrackingStatusResponse selectedTrip}) async {
+    setBusy(true);
+    srcHub = await getHubDetailsByRouteId(hubId: srcLocation);
+    dstHub = await getHubDetailsByRouteId(hubId: dstLocation);
+    setBusy(false);
+
+    notifyListeners();
+    openDetailTripsBottomSheet(selectedTrip: selectedTrip);
+  }
+
+  Future<GetHubDetailsResponse> getHubDetailsByRouteId(
+      {@required int hubId}) async {
+    // setBusy(true);
+    hubResponse = await _routesApis.getHubDetailsByHubId(hubId: hubId);
+    // setBusy(false);
+    notifyListeners();
+    return hubResponse;
   }
 
   void getCompletedAndVerifiedTrips() async {
@@ -82,55 +127,92 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void openBottomSheet({ConsignmentTrackingStatusResponse selectedTrip}) async {
-    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
-      barrierDismissible: false,
-      isScrollControlled: false,
-      customData: DetailedTripsBottomSheetInputArgs(clickedTrip: selectedTrip),
-      variant: BottomSheetType.upcomingTrips,
-    );
+  // void openBottomSheet({ConsignmentTrackingStatusResponse selectedTrip}) async {
+  //   SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+  //     barrierDismissible: false,
+  //     isScrollControlled: false,
+  //     customData: DetailedTripsBottomSheetInputArgs(clickedTrip: selectedTrip),
+  //     variant: BottomSheetType.upcomingTrips,
+  //   );
+  //
+  //   if (sheetResponse != null) {
+  //     if (sheetResponse.confirmed) {
+  //       DetailedTripsBottomSheetOutputArgs args = sheetResponse.responseData;
+  //       if (args != null) {
+  //         reviewTrip(trip: args.clickedTrip);
+  //       }
+  //     }
+  //   }
+  // }
 
-    if (sheetResponse != null) {
-      if (sheetResponse.confirmed) {
-        DetailedTripsBottomSheetOutputArgs args = sheetResponse.responseData;
-        if (args != null) {
-          reviewTrip(trip: args.clickedTrip);
-        }
-      }
-    }
+  String getHubDetailsForBottomSheet(GetHubDetailsResponse hub) {
+    String hubDetails = hub.title;
+    hubDetails = hubDetails + ', ' + hub.locality;
+    if (hub.locality != hub.city) hubDetails = hubDetails + ', ' + hub.city;
+    return hubDetails;
   }
 
-  void openDetailTripsBottomSheet({ConsignmentTrackingStatusResponse selectedTrip}) {
-    List<GridViewHelper> helperList = [
 
+
+  void openDetailTripsBottomSheet(
+      {ConsignmentTrackingStatusResponse selectedTrip}) {
+
+    List<GridViewHelper> footerList = [
+      GridViewHelper(
+        label: 'Remark',
+        value: selectedTrip?.remark?.toString(),
+        onValueClick: null,
+      ),
+    ];
+
+    List<GridViewHelper> headerList = [
       GridViewHelper(
         label: 'Consignment Title',
-        value: selectedTrip.consignmentTitle.toString(),
+        value: selectedTrip.consignmentTitle,
         onValueClick: null,
       ),
-      GridViewHelper(
-        label: 'Dispatch Time',
-        value: selectedTrip.dispatchDateTime.toString(),
-        onValueClick: null,
-      ),
+
       GridViewHelper(
         label: 'Route Id',
         value: selectedTrip.routeId.toString(),
         onValueClick: null,
       ),
       GridViewHelper(
-        label: 'Collect (${selectedTrip.itemUnit})',
-        value: selectedTrip.itemCollect.toString(),
+        label: 'Route Title',
+        value: selectedTrip.routeTitle,
         onValueClick: null,
       ),
-        GridViewHelper(
-          label: 'Date',
-          value: selectedTrip.consignmentDate.toString(),
-          onValueClick: null,
-        ),
+
       GridViewHelper(
-        label: 'Consignment Id',
-        value: selectedTrip.consignmentId.toString(),
+        label: 'Route Description',
+        value: selectedTrip.routeDesc,
+        onValueClick: null,
+      ),
+
+      GridViewHelper(
+        label: 'Source',
+        value: getHubDetailsForBottomSheet(srcHub),
+        onValueClick: null,
+      ),
+
+    ];
+
+    List<GridViewHelper> helperList = [
+
+      GridViewHelper(
+        label: 'Dispatch Time',
+        value: selectedTrip.dispatchDateTime.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Item',
+        value:
+            '${selectedTrip.itemWeight.toString()} ${selectedTrip.itemUnit.toString()}',
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Collect (${selectedTrip.itemUnit})',
+        value: selectedTrip.itemCollect.toString(),
         onValueClick: null,
       ),
       GridViewHelper(
@@ -148,21 +230,19 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         value: selectedTrip.vehicleId.toString(),
         onValueClick: null,
       ),
-      GridViewHelper(
-        label: 'Item',
-        value: '${selectedTrip.itemWeight.toString()} ${selectedTrip.itemUnit.toString()}',
-        onValueClick: null,
-      ),
+
 
     ];
 
     bottomSheetService.showCustomSheet(
       customData: GridViewBottomSheetInputArgument(
         title: 'C#${selectedTrip.consignmentId}',
-        helperList: helperList,
+        gridList: helperList,
+        footerList: footerList,
+        headerList: headerList,
       ),
       barrierDismissible: true,
-      isScrollControlled: false,
+      isScrollControlled: true,
       variant: BottomSheetType.UPCOMING_TRIPS,
     );
   }
@@ -218,5 +298,12 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     sortedSet = SplayTreeSet.from(set, (a, b) => a.compareTo(b));
 
     return sortedSet;
+  }
+
+  GetHubDetailsResponse get dstHub => _dstHub;
+
+  set dstHub(GetHubDetailsResponse value) {
+    _dstHub = value;
+    notifyListeners();
   }
 }

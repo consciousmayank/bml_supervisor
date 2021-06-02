@@ -45,8 +45,8 @@ void setupBottomSheetUi() {
         ExpensesFilterBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.clientSelect: (context, sheetRequest, completer) =>
         SelectClientBottomSheet(request: sheetRequest, completer: completer),
-    BottomSheetType.upcomingTrips: (context, sheetRequest, completer) =>
-        DetailedTripsBottomSheet(request: sheetRequest, completer: completer),
+    // BottomSheetType.upcomingTrips: (context, sheetRequest, completer) =>
+    //     DetailedTripsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.REJECT_DRIVER_TRIP: (context, sheetRequest, completer) =>
         ReviewRejectConfirmationBottomSheet(
             request: sheetRequest, completer: completer),
