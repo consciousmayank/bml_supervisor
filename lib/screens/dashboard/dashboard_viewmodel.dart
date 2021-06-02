@@ -5,6 +5,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statistics_response.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
@@ -21,11 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
-  List<ConsignmentTrackingStatusResponse> _upcomingTrips = [];
-  List<ConsignmentTrackingStatusResponse> _ongoingTrips = [];
-  bool _isGettingTripsStatus = false;
 
-  List<ConsignmentTrackingStatusResponse> _completedTrips = [];
   bool openConsignmentGroup = false;
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
   LoginResponse _userProfile;
@@ -35,13 +32,6 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   set image(Uint8List value) {
     _image = value;
-  }
-
-  bool get isGettingTripsStatus => _isGettingTripsStatus;
-
-  set isGettingTripsStatus(bool value) {
-    _isGettingTripsStatus = value;
-    notifyListeners();
   }
 
   LoginResponse get userProfile => _userProfile;
@@ -267,7 +257,7 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   void reloadPage() {
     // getClients();
     getClientDashboardStats();
-    getConsignmentTrackingStatus();
+    getConsignmentTrackingStatistics();
   }
 
   takeToDistributorsPage() {
@@ -357,52 +347,21 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     }
   }
 
-  void getConsignmentTrackingStatus() async {
-    isGettingTripsStatus = true;
-    List<ConsignmentTrackingStatusResponse> response;
-    response = await _dashboardApi.getConsignmentTrackingStatus(
-        clientId: selectedClient.clientId, tripStatus: TripStatus.UPCOMING);
-    upcomingTrips = copyList(response);
+  ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
 
-    response = await _dashboardApi.getConsignmentTrackingStatus(
-        clientId: selectedClient.clientId, tripStatus: TripStatus.ONGOING);
-    ongoingTrips = copyList(response);
-    response = await _dashboardApi.getConsignmentTrackingStatus(
-        clientId: selectedClient.clientId, tripStatus: TripStatus.COMPLETED);
-    completedTrips = copyList(response);
-    response = await _dashboardApi.getConsignmentTrackingStatus(
-        clientId: selectedClient.clientId, tripStatus: TripStatus.APPROVED);
-    _completedTrips.addAll(
-      copyList(response),
-    );
-    isGettingTripsStatus = false;
-    // notifyListeners();
+  void getConsignmentTrackingStatistics() async {
+    consignmentTrackingStatistics =
+        await _dashboardApi.getConsignmentTrackingStatistics(clientId: selectedClient.clientId);
+    notifyListeners();
   }
 
-  get completedTrips => _completedTrips;
-
-  set completedTrips(value) {
-    _completedTrips = value;
-  }
-
-  get ongoingTrips => _ongoingTrips;
-
-  set ongoingTrips(value) {
-    _ongoingTrips = value;
-  }
-
-  List<ConsignmentTrackingStatusResponse> get upcomingTrips => _upcomingTrips;
-
-  set upcomingTrips(List<ConsignmentTrackingStatusResponse> value) {
-    _upcomingTrips = value;
-  }
 
   void takeToUpcomingTripsDetailsView({@required TripStatus tripStatus}) {
     navigationService.back();
     navigationService
         .navigateTo(
           tripsDetailsPageRoute,
-          arguments: DetailedTripsViewArgs(tripStatus: tripStatus),
+          arguments: DetailedTripsViewArgs(tripStatus: tripStatus, consignmentTrackingStatistics: consignmentTrackingStatistics,),
         )
         .then((value) => reloadPage());
   }

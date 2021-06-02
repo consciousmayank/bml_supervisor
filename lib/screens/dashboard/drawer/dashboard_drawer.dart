@@ -155,7 +155,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                         ],
                       ),
-                      DrawerListItem(
+                      if(widget.dashBoardScreenViewModel.consignmentTrackingStatistics != null) DrawerListItem(
                         imageName: expensesIcon,
                         text: "Tracking",
                         onTap: () {},
@@ -164,7 +164,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                             isSubMenu: true,
                             imageName: consignmentIcon,
                             text:
-                                "Upcoming Trips (${widget?.dashBoardScreenViewModel?.upcomingTrips?.length ?? 0})",
+                                "Upcoming Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.created})",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .takeToUpcomingTripsDetailsView(
@@ -175,7 +175,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                             isSubMenu: true,
                             imageName: consignmentListIcon,
                             text:
-                                "OnGoing Trips (${widget?.dashBoardScreenViewModel?.ongoingTrips?.length ?? 0})",
+                                "OnGoing Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.ongoing})",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .takeToUpcomingTripsDetailsView(
@@ -186,7 +186,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                             isSubMenu: true,
                             imageName: reviewConsigIcon,
                             text:
-                                "Completed Trips (${widget?.dashBoardScreenViewModel?.completedTrips?.length ?? 0})",
+                                "Completed Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.completed + widget.dashBoardScreenViewModel.consignmentTrackingStatistics.approved})",
                             onTap: () {
                               widget.dashBoardScreenViewModel
                                   .takeToUpcomingTripsDetailsView(

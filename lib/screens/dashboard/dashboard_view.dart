@@ -60,7 +60,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
           viewModel.selectedClient = MyPreferences()?.getSelectedClient();
           viewModel.getClientDashboardStats();
           viewModel.selectedDuration = MyPreferences().getSelectedDuration();
-          viewModel.getConsignmentTrackingStatus();
+          viewModel.getConsignmentTrackingStatistics();
           // viewModel.getBarGraphKmReport(
           //   selectedDuration: viewModel.selectedDuration,
           // );
@@ -115,7 +115,8 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                         : ListView(
                             children: [
                               hSizedBox(5),
-                              viewModel.isGettingTripsStatus
+
+                              viewModel.consignmentTrackingStatistics == null
                                   ? Container(
                                       height: 50,
                                       child: ShimmerContainer(
@@ -126,8 +127,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                       key: ValueKey(1),
                                       iconName: consignmentIcon,
                                       notificationTitle: 'Upcoming trips',
-                                      taskNumber:
-                                          viewModel?.upcomingTrips?.length,
+                                      taskNumber: viewModel
+                                          ?.consignmentTrackingStatistics
+                                          ?.created,
                                       onTap: () {
                                         viewModel
                                             .takeToUpcomingTripsDetailsView(
@@ -136,7 +138,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                       },
                                     ),
 
-                              viewModel.isGettingTripsStatus
+                              viewModel.consignmentTrackingStatistics == null
                                   ? Container(
                                       height: 50,
                                       child: ShimmerContainer(
@@ -146,8 +148,9 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                   : NotificationTile(
                                       iconName: blueRouteIcon,
                                       notificationTitle: 'Ongoing Trips',
-                                      taskNumber:
-                                          viewModel?.ongoingTrips?.length,
+                                      taskNumber: viewModel
+                                          ?.consignmentTrackingStatistics
+                                          ?.ongoing,
                                       onTap: () {
                                         viewModel
                                             .takeToUpcomingTripsDetailsView(
@@ -156,7 +159,7 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                       },
                                     ),
 
-                              viewModel.isGettingTripsStatus
+                              viewModel.consignmentTrackingStatistics == null
                                   ? Container(
                                       height: 50,
                                       child: ShimmerContainer(
@@ -166,8 +169,12 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                                   : NotificationTile(
                                       iconName: completedTripsIcon,
                                       notificationTitle: 'Completed Trips',
-                                      taskNumber:
-                                          viewModel?.completedTrips?.length,
+                                      taskNumber: viewModel
+                                              .consignmentTrackingStatistics
+                                              .completed +
+                                          viewModel
+                                              .consignmentTrackingStatistics
+                                              .approved,
                                       onTap: () {
                                         viewModel
                                             .takeToUpcomingTripsDetailsView(

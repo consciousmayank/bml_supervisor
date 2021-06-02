@@ -576,6 +576,23 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
+  Future<ParentApiResponse> getConsignmentTrackingStatistics({
+    int clientId,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_TRIPS_STATISTICS(
+              clientId,
+            ),
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
   Future<ParentApiResponse> getConsignmentTrackingStatus(
       {int clientId, @required TripStatus tripStatus}) async {
     Response response;
@@ -898,9 +915,8 @@ class ApiService {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
+      response =
+          await dioClient.getDio().get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
     } on DioError catch (e) {
       error = e;
     }

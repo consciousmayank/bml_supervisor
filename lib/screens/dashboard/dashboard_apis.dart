@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statistics_response.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
@@ -22,6 +23,11 @@ abstract class DashBoardApis {
       {@required int clientId});
   Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
       {@required int clientId, @required TripStatus tripStatus});
+
+  Future<ConsignmentTrackingStatisticsResponse>
+      getConsignmentTrackingStatistics({
+    @required int clientId,
+  });
 }
 
 class DashBoardApisImpl extends BaseApi implements DashBoardApis {
@@ -147,5 +153,24 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
       }
     }
     return _responseList;
+  }
+
+  @override
+  Future<ConsignmentTrackingStatisticsResponse>
+      getConsignmentTrackingStatistics({int clientId}) async {
+    ConsignmentTrackingStatisticsResponse consignmentTrackingStatistic =
+        ConsignmentTrackingStatisticsResponse(
+            ongoing: 0, created: 0, completed: 0, discarded: 0, approved: 0);
+
+    ParentApiResponse dashboardTilesData =
+        await apiService.getConsignmentTrackingStatistics(clientId: clientId);
+
+    if (filterResponse(dashboardTilesData, showSnackBar: false) != null) {
+      consignmentTrackingStatistic =
+          ConsignmentTrackingStatisticsResponse.fromMap(
+              dashboardTilesData.response.data);
+    }
+
+    return consignmentTrackingStatistic;
   }
 }

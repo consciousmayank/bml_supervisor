@@ -1,13 +1,13 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statistics_response.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_view_model.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
@@ -48,6 +48,8 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
               )
             : widget.args.tripStatus == TripStatus.COMPLETED
                 ? TabbedBody(
+                    consignmentTrackingStatistics:
+                        widget.args.consignmentTrackingStatistics,
                     viewModel: viewModel,
                     tripStatus: widget.args.tripStatus,
                   )
@@ -108,14 +110,15 @@ class _NormalBodyState extends State<NormalBody> {
                     ) {},
                     singleListItem: widget.viewModel.trips[index],
                     onTap: () {
-
                       if (widget.viewModel.trips[index].statusCode == 1 ||
                           widget.viewModel.trips[index].statusCode == 2 ||
                           widget.viewModel.trips[index].statusCode == 4) {
                         /// calling getHubDetails API
                         widget.viewModel.getSourceAndDestinationDetails(
-                          srcLocation: widget.viewModel.trips[index].srcLocation,
-                          dstLocation: widget.viewModel.trips[index].dstLocation,
+                          srcLocation:
+                              widget.viewModel.trips[index].srcLocation,
+                          dstLocation:
+                              widget.viewModel.trips[index].dstLocation,
                           selectedTrip: widget.viewModel.trips[index],
                         );
                         // widget.viewModel.openDetailTripsBottomSheet(
@@ -138,10 +141,13 @@ class _NormalBodyState extends State<NormalBody> {
 class TabbedBody extends StatefulWidget {
   final DetailedTripsViewModel viewModel;
   final TripStatus tripStatus;
-
-  const TabbedBody(
-      {Key key, @required this.viewModel, @required this.tripStatus})
-      : super(key: key);
+  final ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
+  const TabbedBody({
+    Key key,
+    @required this.viewModel,
+    @required this.tripStatus,
+    @required this.consignmentTrackingStatistics,
+  }) : super(key: key);
   @override
   _TabbedBodyState createState() => _TabbedBodyState();
 }
@@ -150,7 +156,7 @@ class _TabbedBodyState extends State<TabbedBody> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 0,
+      initialIndex: widget.viewModel.selectedTab,
       length: 2,
       child: Column(
         children: [
@@ -163,10 +169,12 @@ class _TabbedBodyState extends State<TabbedBody> {
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               Tab(
-                text: 'Completed (${widget.viewModel.completedTrips.length})',
+                text:
+                    'Completed (${widget.consignmentTrackingStatistics.completed})',
               ),
               Tab(
-                text: 'Verified (${widget.viewModel.verifiedTrips.length})',
+                text:
+                    'Verified (${widget.consignmentTrackingStatistics.approved})',
               ),
             ],
           ),
@@ -264,10 +272,10 @@ class _TabbedBodyState extends State<TabbedBody> {
       }
     });
 
-    tripWithSelectedDate = widget.viewModel
-        .sortConsignmentTrackingStatusResponseSet(set: tripWithSelectedDate);
+    // tripWithSelectedDate = widget.viewModel
+    //     .sortConsignmentTrackingStatusResponseSet(set: tripWithSelectedDate);
 
-    trips.sort((a, b) => a.compareTo(b));
+    // trips.sort((a, b) => a.compareTo(b));
 
     return Column(
       children: List.generate(
@@ -282,15 +290,17 @@ class _TabbedBodyState extends State<TabbedBody> {
               ) {},
               singleListItem: tripWithSelectedDate.elementAt(index),
               onTap: () {
-               if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
+                if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 2 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 4) {
-                 /// calling getHubDetails API
-                 widget.viewModel.getSourceAndDestinationDetails(
-                   srcLocation: tripWithSelectedDate.elementAt(index).srcLocation,
-                   dstLocation: tripWithSelectedDate.elementAt(index).dstLocation,
-                   selectedTrip: tripWithSelectedDate.elementAt(index),
-                 );
+                  /// calling getHubDetails API
+                  widget.viewModel.getSourceAndDestinationDetails(
+                    srcLocation:
+                        tripWithSelectedDate.elementAt(index).srcLocation,
+                    dstLocation:
+                        tripWithSelectedDate.elementAt(index).dstLocation,
+                    selectedTrip: tripWithSelectedDate.elementAt(index),
+                  );
                   // widget.viewModel.openDetailTripsBottomSheet(
                   //     selectedTrip: tripWithSelectedDate.elementAt(index));
                 } else if (tripWithSelectedDate.elementAt(index).statusCode ==

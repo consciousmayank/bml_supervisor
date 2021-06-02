@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NoDataWidget extends StatefulWidget {
   final String label;
 
-  NoDataWidget({@required this.label});
+  NoDataWidget({this.label});
 
   @override
   _NoDataWidgetState createState() => _NoDataWidgetState();

@@ -91,7 +91,10 @@ final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
     (consignmentId) => '/consignment/$consignmentId/discard';
 
-final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId) =>
+final GET_TRIPS_STATISTICS = (clientId) =>
+    "/consignment/tracking/statistics/client/$clientId";
+    
+    final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId) =>
     "/consignment/tracking/status/created/client/$clientId";
 final GET_ONGOING_TRIPS_STATUS_LIST = (clientId) =>
     "/consignment/tracking/status/ongoing/client/$clientId";
