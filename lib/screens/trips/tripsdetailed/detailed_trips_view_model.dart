@@ -152,20 +152,53 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     return hubDetails;
   }
 
+
+
   void openDetailTripsBottomSheet(
       {ConsignmentTrackingStatusResponse selectedTrip}) {
-    List<GridViewHelper> helperList = [
+
+    List<GridViewHelper> footerList = [
       GridViewHelper(
-        label: 'Source (row)',
+        label: 'Remark',
+        value: selectedTrip?.remark?.toString(),
+        onValueClick: null,
+      ),
+    ];
+
+    List<GridViewHelper> headerList = [
+      GridViewHelper(
+        label: 'Consignment Title',
+        value: selectedTrip.consignmentTitle,
+        onValueClick: null,
+      ),
+
+      GridViewHelper(
+        label: 'Route Id',
+        value: selectedTrip.routeId.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Route Title',
+        value: selectedTrip.routeTitle,
+        onValueClick: null,
+      ),
+
+      GridViewHelper(
+        label: 'Route Description',
+        value: selectedTrip.routeDesc,
+        onValueClick: null,
+      ),
+
+      GridViewHelper(
+        label: 'Source',
         value: getHubDetailsForBottomSheet(srcHub),
         onValueClick: null,
       ),
-      GridViewHelper(
-        label: 'Consignment Title (row)',
-        value: selectedTrip.consignmentTitle.toString(),
-        // value:  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \n\n Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco',
-        onValueClick: null,
-      ),
+
+    ];
+
+    List<GridViewHelper> helperList = [
+
       GridViewHelper(
         label: 'Dispatch Time',
         value: selectedTrip.dispatchDateTime.toString(),
@@ -178,23 +211,8 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         onValueClick: null,
       ),
       GridViewHelper(
-        label: 'Route Id',
-        value: selectedTrip.routeId.toString(),
-        onValueClick: null,
-      ),
-      GridViewHelper(
         label: 'Collect (${selectedTrip.itemUnit})',
         value: selectedTrip.itemCollect.toString(),
-        onValueClick: null,
-      ),
-      GridViewHelper(
-        label: 'Date',
-        value: selectedTrip.consignmentDate.toString(),
-        onValueClick: null,
-      ),
-      GridViewHelper(
-        label: 'Consignment Id',
-        value: selectedTrip.consignmentId.toString(),
         onValueClick: null,
       ),
       GridViewHelper(
@@ -212,32 +230,16 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         value: selectedTrip.vehicleId.toString(),
         onValueClick: null,
       ),
-      GridViewHelper(
-        label: 'Remark (row)',
-        value: selectedTrip?.remark?.toString(),
-        onValueClick: null,
-      ),
-      GridViewHelper(
-        label: 'Destination (row)',
-        value: getHubDetailsForBottomSheet(dstHub),
-        onValueClick: null,
-      ),
-      GridViewHelper(
-        label: 'Route Title (row)',
-        value: selectedTrip.routeTitle.toString(),
-        onValueClick: null,
-      ),
-      GridViewHelper(
-        label: 'Route Desc (row)',
-        value: selectedTrip.routeDesc.toString(),
-        onValueClick: null,
-      ),
+
+
     ];
 
     bottomSheetService.showCustomSheet(
       customData: GridViewBottomSheetInputArgument(
         title: 'C#${selectedTrip.consignmentId}',
         gridList: helperList,
+        footerList: footerList,
+        headerList: headerList,
       ),
       barrierDismissible: true,
       isScrollControlled: true,
