@@ -31,7 +31,7 @@ final GET_RECENT_CONSIGNMENTS_FOR_CREATE_CONSIGNMENT =
 final GET_CONSIGNMENT_LIST_BY_ID =
     (consignmentId) => "/consignment/$consignmentId";
 final GET_COMPLETED_TRIPS_BY_ID = (consignmentId, clientId) =>
-    "/manager/consignment/$consignmentId/client/$clientId/tracking/status/completed";
+    "/consignment/$consignmentId/client/$clientId/tracking/status/completed";
 
 final GET_ROUTES_DRIVEN_KM_PERCENTAGE = //06 Get Client Aggregate Driven Km (Donut Chart)
     (clientId) => "/route/drivenKm/aggregate/client/$clientId";
@@ -86,7 +86,7 @@ final GET_HUB_DETAILS = (hubId) => "/hub/$hubId";
 final GET_EXPENSE_PIE_CHART =
     (clientId) => "/expense/aggregate/client/$clientId";
 final GET_CONSIGNMENT_TRACKING_STATUS =
-    (clientId) => "/manager/consignment/tracking/status/client/$clientId";
+    (clientId) => "/consignment/tracking/status/client/$clientId";
 final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
     (consignmentId) => '/consignment/$consignmentId/discard';

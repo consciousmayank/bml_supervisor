@@ -111,7 +111,7 @@ class _NormalBodyState extends State<NormalBody> {
                       if (widget.viewModel.trips[index].statusCode == 1 ||
                           widget.viewModel.trips[index].statusCode == 2 ||
                           widget.viewModel.trips[index].statusCode == 4) {
-                        widget.viewModel.openBottomSheet(
+                        widget.viewModel.openDetailTripsBottomSheet(
                             selectedTrip: widget.viewModel.trips[index]);
                       } else if (widget.viewModel.trips[index].statusCode ==
                           3) {
@@ -278,7 +278,7 @@ class _TabbedBodyState extends State<TabbedBody> {
                if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 2 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 4) {
-                  widget.viewModel.openBottomSheet(
+                  widget.viewModel.openDetailTripsBottomSheet(
                       selectedTrip: tripWithSelectedDate.elementAt(index));
                 } else if (tripWithSelectedDate.elementAt(index).statusCode ==
                     3) {

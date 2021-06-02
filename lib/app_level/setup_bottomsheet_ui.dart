@@ -72,6 +72,8 @@ void setupBottomSheetUi() {
 
     BottomSheetType.EXPENSE_DETIALS: (context, sheetRequest, completer) =>
         GridViewBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.UPCOMING_TRIPS: (context, sheetRequest, completer) =>
+        GridViewBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

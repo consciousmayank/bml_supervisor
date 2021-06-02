@@ -12,6 +12,7 @@ import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/new_search_widget.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,6 +91,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           //   },
           // ),
           hSizedBox(5),
+          widget.viewModel.hubsList.length ==0?NoDataWidget(label: 'No hubs yet'):
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Text(
@@ -97,6 +99,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               style: AppTextStyles.latoBold14primaryColorShade6,
             ),
           ),
+          widget.viewModel.hubsList.length ==0?Container():
           SearchWidget(
             onClearTextClicked: () {
               // selectedRegNoController.clear();
@@ -130,6 +133,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           ),
           // buildSearchDriverTextFormField(viewModel: widget.viewModel),
           hSizedBox(8),
+          widget.viewModel.hubsList.length ==0?Container():
           Container(
             decoration: BoxDecoration(
               color: AppColors.primaryColorShade5,
@@ -161,6 +165,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               ],
             ),
           ),
+          widget.viewModel.hubsList.length ==0?Container():
           Expanded(
             child: LazyLoadScrollView(
                 scrollOffset: 300,

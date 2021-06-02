@@ -10,6 +10,7 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -97,6 +98,73 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         }
       }
     }
+  }
+
+  void openDetailTripsBottomSheet({ConsignmentTrackingStatusResponse selectedTrip}) {
+    List<GridViewHelper> helperList = [
+
+      GridViewHelper(
+        label: 'Consignment Title',
+        value: selectedTrip.consignmentTitle.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Dispatch Time',
+        value: selectedTrip.dispatchDateTime.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Route Id',
+        value: selectedTrip.routeId.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Collect (${selectedTrip.itemUnit})',
+        value: selectedTrip.itemCollect.toString(),
+        onValueClick: null,
+      ),
+        GridViewHelper(
+          label: 'Date',
+          value: selectedTrip.consignmentDate.toString(),
+          onValueClick: null,
+        ),
+      GridViewHelper(
+        label: 'Consignment Id',
+        value: selectedTrip.consignmentId.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Drop (${selectedTrip.itemUnit})',
+        value: selectedTrip.itemDrop.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Payment',
+        value: selectedTrip.payment.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Vehicle Number',
+        value: selectedTrip.vehicleId.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Item',
+        value: '${selectedTrip.itemWeight.toString()} ${selectedTrip.itemUnit.toString()}',
+        onValueClick: null,
+      ),
+
+    ];
+
+    bottomSheetService.showCustomSheet(
+      customData: GridViewBottomSheetInputArgument(
+        title: 'C#${selectedTrip.consignmentId}',
+        helperList: helperList,
+      ),
+      barrierDismissible: true,
+      isScrollControlled: false,
+      variant: BottomSheetType.UPCOMING_TRIPS,
+    );
   }
 
   void reviewTrip({ConsignmentTrackingStatusResponse trip}) {

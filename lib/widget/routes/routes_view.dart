@@ -293,46 +293,51 @@ class _RoutesViewState extends State<RoutesView> {
         //   },
         // ),
         hSizedBox(5),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            'Routes List',
-            style: AppTextStyles.latoBold14primaryColorShade6,
-          ),
-        ),
+        viewModel.routesList.length == 0
+            ? NoDataWidget(
+                label: 'No routes yet',
+              )
+            : Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  'Routes List',
+                  style: AppTextStyles.latoBold14primaryColorShade6,
+                ),
+              ),
         hSizedBox(5),
-        SearchWidget(
-            onClearTextClicked: () {
-              // selectedRegNoController.clear();
-              // viewModel.selectedVehicleId = '';
-              // viewModel.getExpenses(
-              //   showLoader: false,
-              // );
-              hideKeyboard(context: context);
-            },
-            hintTitle: 'Search for route',
-            onTextChange: (String value) {
-              // viewModel.selectedVehicleId = value;
-              // viewModel.notifyListeners();
-            },
-            onEditingComplete: () {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-            formatter: <TextInputFormatter>[
-              TextFieldInputFormatter().alphaNumericFormatter,
-            ],
-            controller: TextEditingController(),
-            // focusNode: selectedRegNoFocusNode,
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (String value) {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
-            },
-          ),
-
+        viewModel.routesList.length == 0
+            ? Container()
+            : SearchWidget(
+                onClearTextClicked: () {
+                  // selectedRegNoController.clear();
+                  // viewModel.selectedVehicleId = '';
+                  // viewModel.getExpenses(
+                  //   showLoader: false,
+                  // );
+                  hideKeyboard(context: context);
+                },
+                hintTitle: 'Search for route',
+                onTextChange: (String value) {
+                  // viewModel.selectedVehicleId = value;
+                  // viewModel.notifyListeners();
+                },
+                onEditingComplete: () {
+                  // viewModel.getExpenses(
+                  //   showLoader: true,
+                  // );
+                },
+                formatter: <TextInputFormatter>[
+                  TextFieldInputFormatter().alphaNumericFormatter,
+                ],
+                controller: TextEditingController(),
+                // focusNode: selectedRegNoFocusNode,
+                keyboardType: TextInputType.text,
+                onFieldSubmitted: (String value) {
+                  // viewModel.getExpenses(
+                  //   showLoader: true,
+                  // );
+                },
+              ),
 
         // buildSearchDriverTextFormField(viewModel: viewModel),
         hSizedBox(10),
@@ -353,9 +358,7 @@ class _RoutesViewState extends State<RoutesView> {
                   ),
                 ),
               )
-            : Expanded(
-                child: NoDataWidget(),
-              ),
+            : Container(),
       ],
     );
   }
