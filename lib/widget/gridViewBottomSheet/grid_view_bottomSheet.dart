@@ -24,23 +24,30 @@ class GridViewBottomSheet extends StatelessWidget {
       request: request,
       completer: completer,
       child: BottomSheetGridView(
-        itemList: args.helperList,
+        gridList: args.gridList,
+        headerList: args.headerList,
+        footerList: args.footerList,
       ),
     );
   }
 }
 
 /// # Class to get list of items to be shown in gridview.
-/// 
-/// [helperList] The list that will be shown in GridView.
+///
+/// [gridList] The list that will be shown in GridView.
 /// The last item will be shown in bottom of the bottomsheet. (Most probably used to show multiline Description.).
 /// If the length is odd then one blank item will be added, to make the gridview even.
 /// [title] the title to be shown in bottomSheet.
 class GridViewBottomSheetInputArgument {
-  final List<GridViewHelper> helperList;
+  final List<GridViewHelper> gridList;
+  final List<GridViewHelper> headerList;
+  final List<GridViewHelper> footerList;
   final String title;
+
   GridViewBottomSheetInputArgument({
-    @required this.helperList,
+    @required this.gridList,
+    @required this.headerList,
+    @required this.footerList,
     @required this.title,
   });
 }
@@ -59,16 +66,20 @@ class GridViewHelper {
 }
 
 class BottomSheetGridView extends StatelessWidget {
-  final List<GridViewHelper> itemList;
+  final List<GridViewHelper> gridList;
+  final List<GridViewHelper> headerList;
+  final List<GridViewHelper> footerList;
 
-  const BottomSheetGridView({Key key, @required this.itemList})
-      : super(key: key);
+  const BottomSheetGridView({
+    Key key,
+    @required this.gridList,
+    @required this.headerList,
+    @required this.footerList,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    GridViewHelper lastItem = itemList.removeLast();
-
-    if (itemList.length % 2 != 0)
-      itemList.add(
+    if (gridList.length % 2 != 0)
+      gridList.add(
         GridViewHelper(
           label: '',
           value: '',
@@ -80,6 +91,18 @@ class BottomSheetGridView extends StatelessWidget {
       flex: 1,
       fit: FlexFit.loose,
       child: CustomScrollView(slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) => Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: BottomSheetGridViewItem(
+                      label: headerList[index].label,
+                      value: headerList[index].value,
+                      onValueClicked: headerList[index].onValueClick,
+                    ),
+                  ),
+              childCount: headerList.length),
+        ),
         SliverGrid(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -88,7 +111,7 @@ class BottomSheetGridView extends StatelessWidget {
             childAspectRatio: 3 / 1,
           ),
           delegate: SliverChildListDelegate(
-            itemList
+            gridList
                 .map(
                   (singleItem) => BottomSheetGridViewItem(
                     label: singleItem.label,
@@ -99,19 +122,17 @@ class BottomSheetGridView extends StatelessWidget {
                 .toList(),
           ),
         ),
-        SliverToBoxAdapter(
-          child: Container(
-            constraints: BoxConstraints(
-              minHeight: 80,
-              minWidth: double.infinity,
-            ),
-            padding: const EdgeInsets.all(1),
-            child: BottomSheetGridViewItem(
-              label: lastItem.label,
-              value: lastItem.value,
-              onValueClicked: lastItem.onValueClick,
-            ),
-          ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) => Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: BottomSheetGridViewItem(
+                      label: footerList[index].label,
+                      value: footerList[index].value,
+                      onValueClicked: footerList[index].onValueClick,
+                    ),
+                  ),
+              childCount: footerList.length),
         ),
       ]),
     );

@@ -13,6 +13,7 @@ class ClientSelectViewModel extends GeneralisedBaseViewModel {
   int pageNumber = 1;
   GetClientsResponse _preSelectedClient;
 
+
   GetClientsResponse get preSelectedClient => _preSelectedClient;
 
   set preSelectedClient(GetClientsResponse value) {
