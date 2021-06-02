@@ -108,11 +108,18 @@ class _NormalBodyState extends State<NormalBody> {
                     ) {},
                     singleListItem: widget.viewModel.trips[index],
                     onTap: () {
+
                       if (widget.viewModel.trips[index].statusCode == 1 ||
                           widget.viewModel.trips[index].statusCode == 2 ||
                           widget.viewModel.trips[index].statusCode == 4) {
-                        widget.viewModel.openDetailTripsBottomSheet(
-                            selectedTrip: widget.viewModel.trips[index]);
+                        /// calling getHubDetails API
+                        widget.viewModel.getSourceAndDestinationDetails(
+                          srcLocation: widget.viewModel.trips[index].srcLocation,
+                          dstLocation: widget.viewModel.trips[index].dstLocation,
+                          selectedTrip: widget.viewModel.trips[index],
+                        );
+                        // widget.viewModel.openDetailTripsBottomSheet(
+                        //     selectedTrip: widget.viewModel.trips[index]);
                       } else if (widget.viewModel.trips[index].statusCode ==
                           3) {
                         widget.viewModel
@@ -278,8 +285,14 @@ class _TabbedBodyState extends State<TabbedBody> {
                if (tripWithSelectedDate.elementAt(index).statusCode == 1 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 2 ||
                     tripWithSelectedDate.elementAt(index).statusCode == 4) {
-                  widget.viewModel.openDetailTripsBottomSheet(
-                      selectedTrip: tripWithSelectedDate.elementAt(index));
+                 /// calling getHubDetails API
+                 widget.viewModel.getSourceAndDestinationDetails(
+                   srcLocation: tripWithSelectedDate.elementAt(index).srcLocation,
+                   dstLocation: tripWithSelectedDate.elementAt(index).dstLocation,
+                   selectedTrip: tripWithSelectedDate.elementAt(index),
+                 );
+                  // widget.viewModel.openDetailTripsBottomSheet(
+                  //     selectedTrip: tripWithSelectedDate.elementAt(index));
                 } else if (tripWithSelectedDate.elementAt(index).statusCode ==
                     3) {
                   if (StringToDateTimeConverter.ddmmyyhhmmssaa(
