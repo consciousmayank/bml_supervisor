@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -18,15 +19,7 @@ class GridViewBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GridViewBottomSheetInputArgument args = request.customData;
-    if (args.helperList.length % 2 != 0)
-      args.helperList.add(
-        GridViewHelper(
-          label: '',
-          value: '',
-          onValueClick: null,
-        ),
-      );
-    return BaseHalfScreenBottomSheet(
+    return BaseBottomSheet(
       bottomSheetTitle: args.title,
       request: request,
       completer: completer,
@@ -37,11 +30,19 @@ class GridViewBottomSheet extends StatelessWidget {
   }
 }
 
+/// # Class to get list of items to be shown in gridview.
+/// 
+/// [helperList] The list that will be shown in GridView.
+/// The last item will be shown in bottom of the bottomsheet. (Most probably used to show multiline Description.).
+/// If the length is odd then one blank item will be added, to make the gridview even.
+/// [title] the title to be shown in bottomSheet.
 class GridViewBottomSheetInputArgument {
   final List<GridViewHelper> helperList;
   final String title;
-  GridViewBottomSheetInputArgument(
-      {@required this.helperList, @required this.title});
+  GridViewBottomSheetInputArgument({
+    @required this.helperList,
+    @required this.title,
+  });
 }
 
 class GridViewBottomSheetOutputArguments {}
@@ -64,23 +65,55 @@ class BottomSheetGridView extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        itemCount: itemList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 1.0,
-          mainAxisSpacing: 1.0,
-          childAspectRatio: 3 / 1,
+    GridViewHelper lastItem = itemList.removeLast();
+
+    if (itemList.length % 2 != 0)
+      itemList.add(
+        GridViewHelper(
+          label: '',
+          value: '',
+          onValueClick: null,
         ),
-        itemBuilder: (BuildContext context, int index) {
-          return BottomSheetGridViewItem(
-            label: itemList[index].label,
-            value: itemList[index].value,
-            onValueClicked: itemList[index].onValueClick,
-          );
-        },
-      ),
+      );
+
+    return Flexible(
+      flex: 1,
+      fit: FlexFit.loose,
+      child: CustomScrollView(slivers: <Widget>[
+        SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 1.0,
+            mainAxisSpacing: 1.0,
+            childAspectRatio: 3 / 1,
+          ),
+          delegate: SliverChildListDelegate(
+            itemList
+                .map(
+                  (singleItem) => BottomSheetGridViewItem(
+                    label: singleItem.label,
+                    value: singleItem.value,
+                    onValueClicked: singleItem.onValueClick,
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: 80,
+              minWidth: double.infinity,
+            ),
+            padding: const EdgeInsets.all(1),
+            child: BottomSheetGridViewItem(
+              label: lastItem.label,
+              value: lastItem.value,
+              onValueClicked: lastItem.onValueClick,
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }
@@ -101,18 +134,20 @@ class BottomSheetGridViewItem extends StatelessWidget {
     return Container(
       color: AppColors.bottomSheetGridTileColors,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
             child: Text(
               label.trim(),
               style: AppTextStyles.bsGridViewLabelStyle().textStyle,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
             child: InkWell(
               onTap: onValueClicked == null
                   ? null

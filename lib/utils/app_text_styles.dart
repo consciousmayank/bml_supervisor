@@ -44,6 +44,12 @@ class AppTextStyles {
     this.fontWeight = FontWeight.w600,
     this.textColor = AppColors.primaryColorShade4,
   });
+  
+  AppTextStyles.expensesPeriodTitle({
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.bold,
+    this.textColor = AppColors.primaryColorShade4,
+  });
 
   //Todo : delete in someTime.
   static const TextStyle latoBold18Black = TextStyle(
