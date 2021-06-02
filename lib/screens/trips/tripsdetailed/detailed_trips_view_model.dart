@@ -237,7 +237,7 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
     bottomSheetService.showCustomSheet(
       customData: GridViewBottomSheetInputArgument(
         title: 'C#${selectedTrip.consignmentId}',
-        helperList: helperList,
+        gridList: helperList,
       ),
       barrierDismissible: true,
       isScrollControlled: true,
