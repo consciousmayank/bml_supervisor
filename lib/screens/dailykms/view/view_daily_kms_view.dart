@@ -91,7 +91,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
                           getDailyEntry(
                             viewModel: viewModel,
                             registrationNumber:
-                            selectedRegNoController.text.trim(),
+                                selectedRegNoController.text.trim(),
                           );
                           hideKeyboard(context: context);
                         },
@@ -114,7 +114,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
                           getDailyEntry(
                             viewModel: viewModel,
                             registrationNumber:
-                            selectedRegNoController.text.trim(),
+                                selectedRegNoController.text.trim(),
                           );
                         },
                       ),
@@ -474,8 +474,12 @@ class _SingleEntryWidget extends StatelessWidget {
                     hSizedBox(5),
                     InkWell(
                       onTap: () {
-                        showViewEntryDetailPreview(context,
-                            viewModel.vehicleEntrySearchResponseList[index]);
+                        viewModel.openDailyEntryDetailsBottomSheet(
+                          clickedDailyEntry:
+                              viewModel.vehicleEntrySearchResponseList[index],
+                        );
+                        // showViewEntryDetailPreview(context,
+                        //     viewModel.vehicleEntrySearchResponseList[index]);
                       },
                       child: Text(
                         'More Info',

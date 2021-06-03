@@ -33,7 +33,7 @@ void setupBottomSheetUi() {
     BottomSheetType.CONFIRMATION_BOTTOM_SHEET: (context, sheetRequest,
             completer) =>
         _ConfirmationBottomSheet(request: sheetRequest, completer: completer),
-    BottomSheetType.viewEntry: (context, sheetRequest, completer) =>
+    BottomSheetType.VIEW_ENTRY_PERIOD: (context, sheetRequest, completer) =>
         DailyKmsBottomSheet(request: sheetRequest, completer: completer),
     BottomSheetType.consignmentList: (context, sheetRequest, completer) =>
         ExistingConsignmentBottomSheet(
@@ -72,6 +72,9 @@ void setupBottomSheetUi() {
 
     BottomSheetType.EXPENSE_DETIALS: (context, sheetRequest, completer) =>
         GridViewBottomSheet(request: sheetRequest, completer: completer),
+    BottomSheetType.VIEW_ENTRY_DETAILS: (context, sheetRequest, completer) =>
+        GridViewBottomSheet(request: sheetRequest, completer: completer),
+
     BottomSheetType.UPCOMING_TRIPS: (context, sheetRequest, completer) =>
         GridViewBottomSheet(request: sheetRequest, completer: completer),
   };
@@ -353,15 +356,15 @@ class BaseHalfScreenBottomSheet extends StatelessWidget {
   final EdgeInsets margin;
   final String bottomSheetTitle;
 
-  const BaseHalfScreenBottomSheet(
-      {Key key,
-      @required this.request,
-      @required this.completer,
-      this.height,
-      this.margin,
-      @required this.child,
-      this.bottomSheetTitle = '',})
-      : super(key: key);
+  const BaseHalfScreenBottomSheet({
+    Key key,
+    @required this.request,
+    @required this.completer,
+    this.height,
+    this.margin,
+    @required this.child,
+    this.bottomSheetTitle = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
