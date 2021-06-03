@@ -23,6 +23,7 @@ const String viewEntryDetailedView2PointOPageRoute =
     '/viewEntryDetailedView2Point0Page';
 const String paymentsPageRoute = '/paymentsPageRoute';
 const String addDriverPageRoute = '/addDriverPageRoute';
+const String addPaymentPageRoute = '/addPaymentPageRoute';
 const String viewAllConsignmentsViewPageRoute = '/viewAllConsignmentsViewPage';
 const String consignmentsListPageRoute = '/consignmentsListPageRoute';
 const String logInPageRoute = '/logInPageRoute';

@@ -35,8 +35,9 @@ import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
 import 'package:bml_supervisor/screens/hub/add/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
-import 'package:bml_supervisor/screens/payments/payment_args.dart';
-import 'package:bml_supervisor/screens/payments/payments_view.dart';
+import 'package:bml_supervisor/screens/payments/add/add_payment_view.dart';
+import '../screens/payments/view/payment_args.dart';
+import '../screens/payments/view/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
 import 'package:bml_supervisor/screens/profile/userprofile/userprofile_view.dart';
 import 'package:bml_supervisor/screens/search/search_view.dart';
@@ -253,6 +254,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => AddDriverView(),
         );
+
+        case addPaymentPageRoute:
+        return MaterialPageRoute(
+          builder: (_) => AddPaymentView(),
+        );
+
+
 
       case hubsViewPageRoute:
         ViewRoutesArguments args = settings.arguments;
