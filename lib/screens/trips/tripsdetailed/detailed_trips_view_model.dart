@@ -194,6 +194,12 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         value: getHubDetailsForBottomSheet(srcHub),
         onValueClick: null,
       ),
+      GridViewHelper(
+        label: 'Destination',
+        value: getHubDetailsForBottomSheet(dstHub),
+        onValueClick: null,
+      ),
+
 
     ];
 
