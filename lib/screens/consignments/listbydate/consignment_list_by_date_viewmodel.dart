@@ -14,7 +14,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
   double _grandPayment = 0.0;
   List<SinglePendingConsignmentListItem> pendingConsignmentsList = [];
   Set<String> pendingConsignmentsDateList = Set();
-  int pageIndex = 0;
+  int pageIndex = 1;
 
   double get grandPayment => _grandPayment;
 
@@ -68,32 +68,39 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  bool shouldCallGetConsignmentListPageWise = true;
+
   getConsignmentListPageWise({
     @required showLoading,
   }) async {
     // ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
-    if (showLoading) {
-      setBusy(true);
-      pendingConsignmentsList = [];
-      pendingConsignmentsDateList = Set();
-    }
+    if (shouldCallGetConsignmentListPageWise) {
+      if (showLoading) {
+        setBusy(true);
+        pendingConsignmentsList = [];
+        pendingConsignmentsDateList = Set();
+      }
 
-    List<SinglePendingConsignmentListItem> response =
-        await _consignmentApis.getConsignmentListPageWise(
-            clientId: MyPreferences()?.getSelectedClient()?.clientId,
-            pageIndex: pageIndex);
-    response.forEach((element) {
-      pendingConsignmentsDateList.add(element.entryDate);
-    });
-    if (pageIndex == 0) {
-      pendingConsignmentsList = copyList(response);
-    } else {
-      pendingConsignmentsList.addAll(response);
-    }
+      List<SinglePendingConsignmentListItem> response =
+          await _consignmentApis.getConsignmentListPageWise(
+              clientId: MyPreferences()?.getSelectedClient()?.clientId,
+              pageIndex: pageIndex);
+      response.forEach((element) {
+        pendingConsignmentsDateList.add(element.entryDate);
+      });
+      if (response.length == 0) {
+        shouldCallGetConsignmentListPageWise = false;
+      }
+      if (pageIndex == 0) {
+        pendingConsignmentsList = copyList(response);
+      } else {
+        pendingConsignmentsList.addAll(response);
+      }
 
-    pageIndex++;
-    if (showLoading) setBusy(false);
-    notifyListeners();
+      pageIndex++;
+      if (showLoading) setBusy(false);
+      notifyListeners();
+    }
   }
 
   List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {

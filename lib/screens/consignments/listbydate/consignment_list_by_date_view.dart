@@ -316,7 +316,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
 
   dateSelector({@required ConsignmentListByDateViewModel viewModel}) {
     return SearchWidget.buttonLike(
-      hintTitle: 'Search consignemnt by date',
+      hintTitle: 'Search Consignment by Date',
       onClearTextClicked: () {},
       controller: TextEditingController(),
     );

@@ -21,8 +21,11 @@ abstract class DashBoardApis {
       {@required int clientId});
   Future<List<GetDistributorsResponse>> getDistributors(
       {@required int clientId});
-  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required int clientId, @required TripStatus tripStatus});
+  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus({
+    @required int clientId,
+    @required TripStatus tripStatus,
+    @required int pageNumber,
+  });
 
   Future<ConsignmentTrackingStatisticsResponse>
       getConsignmentTrackingStatistics({
@@ -137,11 +140,14 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   }
 
   @override
-  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus(
-      {@required int clientId, @required TripStatus tripStatus}) async {
+  Future<List<ConsignmentTrackingStatusResponse>> getConsignmentTrackingStatus({
+    @required int clientId,
+    @required TripStatus tripStatus,
+    @required int pageNumber,
+  }) async {
     List<ConsignmentTrackingStatusResponse> _responseList = [];
     ParentApiResponse response = await apiService.getConsignmentTrackingStatus(
-        clientId: clientId, tripStatus: tripStatus);
+        clientId: clientId, tripStatus: tripStatus, pageNumber: pageNumber);
     if (filterResponse(response, showSnackBar: false) != null) {
       var list = response.response.data as List;
       if (list.length > 0) {

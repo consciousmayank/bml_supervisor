@@ -55,7 +55,7 @@ class SingleTripItem extends StatelessWidget {
             child: buildTitle(context),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
             color: AppColors.routesCardColor,
             child: Column(
               children: [
@@ -68,6 +68,7 @@ class SingleTripItem extends StatelessWidget {
                     value2: singleListItem.routeDesc,
                   ),
                 ),
+                hSizedBox(5),
                 buildContentRow(
                   helper: RowHelper(
                     label1: 'Description',
@@ -86,14 +87,13 @@ class SingleTripItem extends StatelessWidget {
     );
   }
 
-  SizedBox buildContentRow({
+  Widget buildContentRow({
     @required RowHelper helper,
   }) {
     return SizedBox(
-      height: 40,
+      height: 30,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
           if (helper.label1 != null)

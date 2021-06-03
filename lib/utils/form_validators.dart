@@ -60,7 +60,7 @@ class RegularExpressions {
       RegExp(r'[a-zA-Z0-9 -/_]');
   RegExp alphabeticSpaceRegEx = RegExp(r'[a-zA-Z ]');
   RegExp numericRegEx = RegExp(r'[0-9]');
-  RegExp numericWithDecimalRegEx = RegExp(r'[0-9],');
+  RegExp numericWithDecimalRegEx = RegExp(r'^\d+\.?\d{0,2}');
 }
 
 class TextFieldInputFormatter {

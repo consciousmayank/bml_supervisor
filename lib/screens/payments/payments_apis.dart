@@ -8,8 +8,10 @@ import 'package:flutter/cupertino.dart';
 abstract class PaymentsApis {
   Future<ApiResponse> addNewPayment(
       {@required SavePaymentRequest savePaymentRequest});
-  Future<List<PaymentHistoryResponse>> getPaymentHistory(
-      {@required int clientId});
+  Future<List<PaymentHistoryResponse>> getPaymentHistory({
+    @required int clientId,
+    @required int pageNumber,
+  });
 }
 
 class PaymentsApisImpl extends BaseApi implements PaymentsApis {
@@ -30,11 +32,14 @@ class PaymentsApisImpl extends BaseApi implements PaymentsApis {
   }
 
   @override
-  Future<List<PaymentHistoryResponse>> getPaymentHistory({int clientId}) async {
+  Future<List<PaymentHistoryResponse>> getPaymentHistory({
+    int clientId,
+    @required int pageNumber,
+  }) async {
     List<PaymentHistoryResponse> _responseList = [];
 
-    ParentApiResponse apiResponse =
-        await apiService.getPaymentHistory(clientId: clientId, pageNumber: 1);
+    ParentApiResponse apiResponse = await apiService.getPaymentHistory(
+        clientId: clientId, pageNumber: pageNumber);
 
     if (filterResponse(apiResponse) != null) {
       var list = apiResponse.response.data as List;

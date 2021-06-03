@@ -873,12 +873,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   //         color: AppColors.primaryColorShade1,
   //       ),
   //     ),
-  //     enabledBorder: OutlineInputBorder(
-  //       borderRadius: BorderRadius.circular(5.0),
-  //       borderSide: BorderSide(
-  //         color: AppColors.primaryColorShade1,
-  //       ),
-  //     ),
+      // enabledBorder: OutlineInputBorder(
+      //   borderRadius: BorderRadius.circular(5.0),
+      //   borderSide: BorderSide(
+      //     color: AppColors.primaryColorShade1,
+      //   ),
+      // ),
   //     errorBorder: OutlineInputBorder(
   //       borderRadius: BorderRadius.circular(5.0),
   //       borderSide: BorderSide(

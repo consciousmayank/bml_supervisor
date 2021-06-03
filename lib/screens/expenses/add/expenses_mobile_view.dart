@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
@@ -29,6 +31,8 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   TextEditingController selectedRegNoController = TextEditingController();
   TextEditingController selectedDateController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+  TextEditingController fuelLitreController = TextEditingController();
+  TextEditingController fuelRateController = TextEditingController();
   FocusNode amountFocusNode = FocusNode();
   FocusNode fuelLitreFocusNode = FocusNode();
   FocusNode fuelReadingFocusNode = FocusNode();
@@ -42,6 +46,16 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
+    fuelRateFocusNode.addListener(() {
+      if (!fuelRateFocusNode.hasFocus) {
+        if (fuelLitreController.text.trim().length > 0 &&
+            fuelRateController.text.trim().length > 0) {
+          double fuelRate = double.parse(fuelRateController.text.trim());
+          double fuelLitre = double.parse(fuelLitreController.text.trim());
+          amountController.text = (fuelLitre * fuelRate).toString();
+        }
+      }
+    });
   }
 
   @override
@@ -193,16 +207,18 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
           : '',
       hintText: fuelAmountHint,
       showRupeesSymbol: false,
-      enabled: true,
-      formatter: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      ],
+      enabled: viewModel.expenseType == "FUEL" ? false : true,
       controller: amountController,
       focusNode: amountFocusNode,
       onFieldSubmitted: (_) {
         fieldFocusChange(context, amountFocusNode, descriptionFocusNode);
       },
-      keyboardType: TextInputType.number,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().numericWithDecimalFormatter,
+      ],
+      keyboardType: Platform.isAndroid
+          ? TextInputType.number
+          : TextInputType.numberWithOptions(decimal: true),
       validator: (value) {
         if (value.isEmpty) {
           viewModel.totalAmountError = textRequired;
@@ -354,10 +370,16 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       hintText: fuelLitreHint,
       enabled: true,
       focusNode: fuelLitreFocusNode,
+      controller: fuelLitreController,
       onFieldSubmitted: (_) {
         fieldFocusChange(context, fuelLitreFocusNode, fuelRateFocusNode);
       },
-      keyboardType: TextInputType.number,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().numericWithDecimalFormatter,
+      ],
+      keyboardType: Platform.isAndroid
+          ? TextInputType.number
+          : TextInputType.numberWithOptions(decimal: true),
     );
   }
 
@@ -374,13 +396,15 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       hintText: fuelMeterReadingHint,
       enabled: true,
       formatter: <TextInputFormatter>[
-        TextFieldInputFormatter().numericFormatter,
+        TextFieldInputFormatter().numericWithDecimalFormatter,
       ],
       focusNode: fuelReadingFocusNode,
       onFieldSubmitted: (_) {
         fieldFocusChange(context, fuelReadingFocusNode, fuelLitreFocusNode);
       },
-      keyboardType: TextInputType.number,
+      keyboardType: Platform.isAndroid
+          ? TextInputType.number
+          : TextInputType.numberWithOptions(decimal: true),
     );
   }
 
@@ -391,6 +415,10 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
         viewModel.fuelRateError = '';
         viewModel.notifyListeners();
       },
+      controller: fuelRateController,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter().numericWithDecimalFormatter,
+      ],
       errorText:
           viewModel.fuelRateError.length > 0 ? viewModel.fuelRateError : '',
       hintText: fuelRateHint,
@@ -401,7 +429,9 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
         amountController.text = viewModel.expenseAmount.toStringAsFixed(2);
         fieldFocusChange(context, fuelRateFocusNode, descriptionFocusNode);
       },
-      keyboardType: TextInputType.number,
+      keyboardType: Platform.isAndroid
+          ? TextInputType.number
+          : TextInputType.numberWithOptions(decimal: true),
     );
   }
 }

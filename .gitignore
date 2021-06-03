@@ -53,3 +53,4 @@ app_builds/android/prod/
 app_builds/android/dev/
 app_builds/ios/adhoc-dev/
 app_builds/ios/adhoc-prod/
+open_avd.txt

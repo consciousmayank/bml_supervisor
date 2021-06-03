@@ -12,6 +12,7 @@ import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_trip_item.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 
 import 'detailedTripsArgs.dart';
@@ -30,10 +31,13 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DetailedTripsViewModel>.reactive(
       onModelReady: (viewModel) {
-        widget.args.tripStatus == TripStatus.COMPLETED
-            ? viewModel.getCompletedAndVerifiedTrips()
-            : viewModel.getConsignmentTrackingStatus(
-                tripStatus: widget.args.tripStatus);
+        if (widget.args.tripStatus == TripStatus.COMPLETED) {
+          viewModel.getCompletedTrips();
+          viewModel.getVerifiedTrips();
+        } else {
+          viewModel.getConsignmentTrackingStatus(
+              tripStatus: widget.args.tripStatus);
+        }
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -56,7 +60,8 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
                 : NormalBody(
                     viewModel: viewModel,
                     tripStatus: widget.args.tripStatus,
-                  ),
+                    consignmentTrackingStatistics:
+                        widget.args.consignmentTrackingStatistics),
       ),
       viewModelBuilder: () => DetailedTripsViewModel(),
     );
@@ -82,11 +87,12 @@ class _DetailedTripsViewState extends State<DetailedTripsView> {
 class NormalBody extends StatefulWidget {
   final DetailedTripsViewModel viewModel;
   final TripStatus tripStatus;
-
+  final ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
   const NormalBody({
     Key key,
     @required this.viewModel,
     @required this.tripStatus,
+    @required this.consignmentTrackingStatistics,
   }) : super(key: key);
   @override
   _NormalBodyState createState() => _NormalBodyState();
@@ -100,37 +106,48 @@ class _NormalBodyState extends State<NormalBody> {
         : Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) =>
-                      SingleTripItem(
-                    status: widget.tripStatus,
-                    onCheckBoxTapped: (
-                      bool value,
-                      ConsignmentTrackingStatusResponse tappedTrip,
-                    ) {},
-                    singleListItem: widget.viewModel.trips[index],
-                    onTap: () {
-                      if (widget.viewModel.trips[index].statusCode == 1 ||
-                          widget.viewModel.trips[index].statusCode == 2 ||
-                          widget.viewModel.trips[index].statusCode == 4) {
-                        /// calling getHubDetails API
-                        widget.viewModel.getSourceAndDestinationDetails(
-                          srcLocation:
-                              widget.viewModel.trips[index].srcLocation,
-                          dstLocation:
-                              widget.viewModel.trips[index].dstLocation,
-                          selectedTrip: widget.viewModel.trips[index],
-                        );
-                        // widget.viewModel.openDetailTripsBottomSheet(
-                        //     selectedTrip: widget.viewModel.trips[index]);
-                      } else if (widget.viewModel.trips[index].statusCode ==
-                          3) {
-                        widget.viewModel
-                            .reviewTrip(trip: widget.viewModel.trips[index]);
-                      }
-                    },
+                child: LazyLoadScrollView(
+                  onEndOfPage: () {
+                    callAppropriateApi(
+                      tripStatus: widget.tripStatus,
+                      consignmentTrackingStatistics:
+                          widget.consignmentTrackingStatistics,
+                      tripList: widget.viewModel.trips,
+                      viewModel: widget.viewModel,
+                    );
+                  },
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, int index) =>
+                        SingleTripItem(
+                      status: widget.tripStatus,
+                      onCheckBoxTapped: (
+                        bool value,
+                        ConsignmentTrackingStatusResponse tappedTrip,
+                      ) {},
+                      singleListItem: widget.viewModel.trips[index],
+                      onTap: () {
+                        if (widget.viewModel.trips[index].statusCode == 1 ||
+                            widget.viewModel.trips[index].statusCode == 2 ||
+                            widget.viewModel.trips[index].statusCode == 4) {
+                          /// calling getHubDetails API
+                          widget.viewModel.getSourceAndDestinationDetails(
+                            srcLocation:
+                                widget.viewModel.trips[index].srcLocation,
+                            dstLocation:
+                                widget.viewModel.trips[index].dstLocation,
+                            selectedTrip: widget.viewModel.trips[index],
+                          );
+                          // widget.viewModel.openDetailTripsBottomSheet(
+                          //     selectedTrip: widget.viewModel.trips[index]);
+                        } else if (widget.viewModel.trips[index].statusCode ==
+                            3) {
+                          widget.viewModel
+                              .reviewTrip(trip: widget.viewModel.trips[index]);
+                        }
+                      },
+                    ),
+                    itemCount: widget.viewModel.trips.length,
                   ),
-                  itemCount: widget.viewModel.trips.length,
                 ),
               ),
             ],
@@ -138,10 +155,65 @@ class _NormalBodyState extends State<NormalBody> {
   }
 }
 
+void callAppropriateApi(
+    {@required
+        TripStatus tripStatus,
+    @required
+        ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics,
+    @required
+        List<ConsignmentTrackingStatusResponse> tripList,
+    @required
+        DetailedTripsViewModel viewModel,
+    a}) {
+  switch (tripStatus) {
+    case TripStatus.UPCOMING:
+      if (consignmentTrackingStatistics.completed < tripList.length) {
+        viewModel.getConsignmentTrackingStatus(
+          tripStatus: tripStatus,
+          page: viewModel.otherTripsPageNumber,
+        );
+      }
+      break;
+    case TripStatus.ONGOING:
+      if (consignmentTrackingStatistics.ongoing < tripList.length) {
+        viewModel.getConsignmentTrackingStatus(
+          tripStatus: tripStatus,
+          page: viewModel.otherTripsPageNumber,
+        );
+      }
+      break;
+    case TripStatus.COMPLETED:
+    case TripStatus.APPROVED:
+      if (consignmentTrackingStatistics.completed > tripList.length &&
+          viewModel.tabselected == 0) {
+        viewModel.getCompletedTrips(
+          page: viewModel.completedTripsPageNumber,
+        );
+      }
+
+      if (consignmentTrackingStatistics.approved > tripList.length &&
+          viewModel.tabselected == 1) {
+        viewModel.getVerifiedTrips(
+          page: viewModel.verifiedTripsPageNumber,
+        );
+      }
+      break;
+    case TripStatus.DISCARDED:
+      if (consignmentTrackingStatistics.discarded < tripList.length) {
+        viewModel.getConsignmentTrackingStatus(
+          tripStatus: tripStatus,
+          page: viewModel.otherTripsPageNumber,
+        );
+      }
+      break;
+  }
+}
+
 class TabbedBody extends StatefulWidget {
   final DetailedTripsViewModel viewModel;
   final TripStatus tripStatus;
   final ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
+
   const TabbedBody({
     Key key,
     @required this.viewModel,
@@ -154,48 +226,57 @@ class TabbedBody extends StatefulWidget {
 
 class _TabbedBodyState extends State<TabbedBody> {
   @override
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: widget.viewModel.selectedTab,
+      initialIndex: widget.viewModel.tabselected,
       length: 2,
-      child: Column(
-        children: [
-          TabBar(
-            labelStyle: AppTextStyles.latoBold14Black,
-            unselectedLabelStyle: AppTextStyles.latoMedium14Black,
-            labelColor: AppColors.primaryColorShade5,
-            unselectedLabelColor: AppColors.black,
-            indicatorColor: AppColors.primaryColorShade5,
-            indicatorSize: TabBarIndicatorSize.tab,
-            tabs: [
-              Tab(
-                text:
-                    'Completed (${widget.consignmentTrackingStatistics.completed})',
-              ),
-              Tab(
-                text:
-                    'Verified (${widget.consignmentTrackingStatistics.approved})',
-              ),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                widget.viewModel.completedTrips.length == 0
-                    ? NoDataWidget()
-                    : makeList(
-                        trips: widget.viewModel.completedTrips,
-                        typeOfTrip: TripStatus.COMPLETED),
-                widget.viewModel.verifiedTrips.length == 0
-                    ? NoDataWidget()
-                    : makeList(
-                        trips: widget.viewModel.verifiedTrips,
-                        typeOfTrip: TripStatus.APPROVED),
+      child: Builder(builder: (BuildContext context) {
+        final TabController controller = DefaultTabController.of(context);
+        controller.addListener(() {
+          if (!controller.indexIsChanging)
+            widget.viewModel.tabselected = controller.index;
+        });
+        return Column(
+          children: [
+            TabBar(
+              controller: controller,
+              labelStyle: AppTextStyles.latoBold14Black,
+              unselectedLabelStyle: AppTextStyles.latoMedium14Black,
+              labelColor: AppColors.primaryColorShade5,
+              unselectedLabelColor: AppColors.black,
+              indicatorColor: AppColors.primaryColorShade5,
+              indicatorSize: TabBarIndicatorSize.tab,
+              tabs: [
+                Tab(
+                  text:
+                      'Completed (${widget.consignmentTrackingStatistics.completed})',
+                ),
+                Tab(
+                  text:
+                      'Verified (${widget.consignmentTrackingStatistics.approved})',
+                ),
               ],
             ),
-          )
-        ],
-      ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  widget.viewModel.completedTrips.length == 0
+                      ? NoDataWidget()
+                      : makeList(
+                          trips: widget.viewModel.completedTrips,
+                          typeOfTrip: TripStatus.COMPLETED),
+                  widget.viewModel.verifiedTrips.length == 0
+                      ? NoDataWidget()
+                      : makeList(
+                          trips: widget.viewModel.verifiedTrips,
+                          typeOfTrip: TripStatus.APPROVED),
+                ],
+              ),
+            )
+          ],
+        );
+      }),
     );
   }
 
@@ -205,57 +286,59 @@ class _TabbedBodyState extends State<TabbedBody> {
         ? widget.viewModel.completeTripsDate
         : widget.viewModel.verifiedTripsDate;
 
-    return ListView(
-      children: List.generate(
-          dateList.length,
-          (index) => Container(
-                child:
-
-                    // Container(
-                    // child: Container(
-                    //   height: 100,
-                    //   color: Colors.red,
-                    // ),
-
-                    Card(
-                  elevation: defaultElevation,
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: ThemeConfiguration.primaryBackground,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
+    return LazyLoadScrollView(
+      onEndOfPage: () {
+        callAppropriateApi(
+          tripStatus: widget.tripStatus,
+          consignmentTrackingStatistics: widget.consignmentTrackingStatistics,
+          tripList: widget.viewModel.trips,
+          viewModel: widget.viewModel,
+        );
+      },
+      child: ListView(
+        children: List.generate(
+            dateList.length,
+            (index) => Container(
+                  child: Card(
+                    elevation: defaultElevation,
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ThemeConfiguration.primaryBackground,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5),
+                            ),
+                          ),
+                          height: 50.0,
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Date',
+                                style: AppTextStyles.latoBold16White,
+                              ),
+                              Text(
+                                getDateString(dateList.elementAt(index)),
+                                style: AppTextStyles.latoBold16White,
+                              ),
+                            ],
                           ),
                         ),
-                        height: 50.0,
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Date',
-                              style: AppTextStyles.latoBold16White,
-                            ),
-                            Text(
-                              getDateString(dateList.elementAt(index)),
-                              style: AppTextStyles.latoBold16White,
-                            ),
-                          ],
-                        ),
-                      ),
-                      makeSingleTripView(
-                          date: getDateString(dateList.elementAt(index)),
-                          trips: trips,
-                          outerIndex: index,
-                          typeOfTrip: typeOfTrip),
-                    ],
+                        makeSingleTripView(
+                            date: getDateString(dateList.elementAt(index)),
+                            trips: trips,
+                            outerIndex: index,
+                            typeOfTrip: typeOfTrip),
+                      ],
+                    ),
                   ),
-                ),
-                padding: const EdgeInsets.all(2),
-              )),
+                  padding: const EdgeInsets.all(2),
+                )),
+      ),
     );
   }
 
