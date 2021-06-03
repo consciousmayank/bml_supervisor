@@ -1,6 +1,6 @@
 enum BottomSheetType {
   CONFIRMATION_BOTTOM_SHEET,
-  viewEntry,
+  VIEW_ENTRY_PERIOD,
   consignmentList,
   createConsignmentSummary,
   expenseFilters,
@@ -18,4 +18,5 @@ enum BottomSheetType {
   ROUTE_DETAILS,
   EXPENSE_DETIALS,
   UPCOMING_TRIPS,
+  VIEW_ENTRY_DETAILS,
 }

@@ -225,8 +225,10 @@ const List<String> selectDurationListDashBoard = [
   "LAST MONTH REPORT",
 ];
 const String addDriverSuccessful = "Driver added successfully";
+const String addPaymentSuccessful = "Payemnt added successfully";
 const String addRouteSuccessful = "Route added successfully";
 const String addDriverUnSuccessful = "Driver not added. Please try again";
+const String addPaymentUnSuccessful = "Payment not added. Please try again";
 const String addRouteUnSuccessful = "Route not added. Please try again";
 
 const String addHubSuccessful = "Hub added successfully";

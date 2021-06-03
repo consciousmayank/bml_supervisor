@@ -102,11 +102,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           widget.viewModel.hubsList.length ==0?Container():
           SearchWidget(
             onClearTextClicked: () {
-              // selectedRegNoController.clear();
-              // viewModel.selectedVehicleId = '';
-              // viewModel.getExpenses(
-              //   showLoader: false,
-              // );
+
               hideKeyboard(context: context);
             },
             hintTitle: 'Search for hub',
@@ -115,9 +111,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               // viewModel.notifyListeners();
             },
             onEditingComplete: () {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
+
             },
             formatter: <TextInputFormatter>[
               TextFieldInputFormatter().alphaNumericFormatter,
@@ -126,9 +120,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
             // focusNode: selectedRegNoFocusNode,
             keyboardType: TextInputType.text,
             onFieldSubmitted: (String value) {
-              // viewModel.getExpenses(
-              //   showLoader: true,
-              // );
+
             },
           ),
           // buildSearchDriverTextFormField(viewModel: widget.viewModel),
