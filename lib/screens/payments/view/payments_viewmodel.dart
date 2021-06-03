@@ -11,7 +11,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 
 class PaymentsViewModel extends GeneralisedBaseViewModel {
   PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();
-
+  int pageNumber = 1;
   double _totalAmt = 0.0;
 
   double get totalAmt => _totalAmt;
@@ -33,23 +33,34 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
   List<PaymentHistoryResponse> paymentHistoryResponseList = [];
 
   void onAddPaymentClicked() {
-    navigationService
-        .navigateTo(addPaymentPageRoute)
-        .then((value) => getPaymentHistory());
+    navigationService.navigateTo(addPaymentPageRoute).then((value) {
+      pageNumber = 1;
+      notifyListeners();
+      getPaymentHistory();
+    });
   }
 
   getPaymentHistory() async {
-    setBusy(true);
-    totalAmt = 0.0;
-    noOfPayments = 0;
-    paymentHistoryResponseList.clear();
+    if (pageNumber <= 1) {
+      setBusy(true);
+      totalAmt = 0.0;
+      noOfPayments = 0;
+      paymentHistoryResponseList.clear();
+    }
+
     notifyListeners();
 
     var response = await _paymentsApis.getPaymentHistory(
-      clientId: MyPreferences().getSelectedClient().id,
-    );
-    paymentHistoryResponseList = copyList(response);
-
+        clientId: MyPreferences().getSelectedClient().id,
+        pageNumber: pageNumber);
+    if (pageNumber <= 1) {
+      paymentHistoryResponseList = copyList(response);
+    } else {
+      paymentHistoryResponseList.addAll(
+        copyList(response),
+      );
+    }
+    pageNumber++;
     paymentHistoryResponseList.forEach((element) {
       totalAmt += element.amount;
       noOfPayments++;

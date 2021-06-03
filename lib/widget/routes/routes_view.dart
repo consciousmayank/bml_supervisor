@@ -316,7 +316,7 @@ class _RoutesViewState extends State<RoutesView> {
                   // );
                   hideKeyboard(context: context);
                 },
-                hintTitle: 'Search for route',
+                hintTitle: 'Search for Route',
                 onTextChange: (String value) {
                   // viewModel.selectedVehicleId = value;
                   // viewModel.notifyListeners();

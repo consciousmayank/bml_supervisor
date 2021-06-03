@@ -91,16 +91,19 @@ final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
     (consignmentId) => '/consignment/$consignmentId/discard';
 
-final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId) =>
-    "/consignment/tracking/status/created/client/$clientId";
-final GET_ONGOING_TRIPS_STATUS_LIST = (clientId) =>
-    "/consignment/tracking/status/ongoing/client/$clientId";
-final GET_COMPLETED_TRIPS_STATUS_LIST = (clientId) =>
-    "/consignment/tracking/status/completed/client/$clientId";
-final GET_APPROVED_TRIPS_STATUS_LIST = (clientId) =>
-    "/consignment/tracking/status/approved/client/$clientId";
-final GET_DISCARDED_TRIPS_STATUS_LIST = (clientId) =>
-    "/consignment/tracking/status/discarded/client/$clientId";
+final GET_TRIPS_STATISTICS = (clientId) =>
+    "/consignment/tracking/statistics/client/$clientId";
+    
+    final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+    "/consignment/tracking/status/created/client/$clientId/page/$pageNumber";
+final GET_ONGOING_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+    "/consignment/tracking/status/ongoing/client/$clientId/page/$pageNumber";
+final GET_COMPLETED_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+    "/consignment/tracking/status/completed/client/$clientId/page/$pageNumber";
+final GET_APPROVED_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+    "/consignment/tracking/status/approved/client/$clientId/page/$pageNumber";
+final GET_DISCARDED_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+    "/consignment/tracking/status/discarded/client/$clientId/page/$pageNumber";
 
 final GET_DRIVERS_LIST_PAGE_WISE =
     (pageIndex) => "/manager/driver/list/page/$pageIndex";

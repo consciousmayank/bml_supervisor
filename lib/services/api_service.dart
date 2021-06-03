@@ -576,13 +576,16 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future<ParentApiResponse> getConsignmentTrackingStatus(
-      {int clientId, @required TripStatus tripStatus}) async {
+  Future<ParentApiResponse> getConsignmentTrackingStatistics({
+    int clientId,
+  }) async {
     Response response;
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            getApiCall(tripStatus: tripStatus, clientId: clientId),
+            GET_TRIPS_STATISTICS(
+              clientId,
+            ),
           );
     } on DioError catch (e) {
       error = e;
@@ -590,25 +593,40 @@ class ApiService {
     return ParentApiResponse(response: response, error: error);
   }
 
-  String getApiCall({@required TripStatus tripStatus, @required int clientId}) {
+  Future<ParentApiResponse> getConsignmentTrackingStatus(
+      {int clientId, @required TripStatus tripStatus, @required int pageNumber,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            getApiCall(tripStatus: tripStatus, clientId: clientId, pageNumber: pageNumber),
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(response: response, error: error);
+  }
+
+  String getApiCall({@required TripStatus tripStatus, @required int clientId, @required int pageNumber}) {
     switch (tripStatus) {
       case TripStatus.UPCOMING:
-        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId, pageNumber);
         break;
       case TripStatus.ONGOING:
-        return GET_ONGOING_TRIPS_STATUS_LIST(clientId);
+        return GET_ONGOING_TRIPS_STATUS_LIST(clientId, pageNumber);
         break;
       case TripStatus.COMPLETED:
-        return GET_COMPLETED_TRIPS_STATUS_LIST(clientId);
+        return GET_COMPLETED_TRIPS_STATUS_LIST(clientId, pageNumber);
         break;
       case TripStatus.APPROVED:
-        return GET_APPROVED_TRIPS_STATUS_LIST(clientId);
+        return GET_APPROVED_TRIPS_STATUS_LIST(clientId, pageNumber);
         break;
       case TripStatus.DISCARDED:
-        return GET_DISCARDED_TRIPS_STATUS_LIST(clientId);
+        return GET_DISCARDED_TRIPS_STATUS_LIST(clientId, pageNumber);
         break;
       default:
-        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId);
+        return GET_UPCOMING_TRIPS_STATUS_LIST(clientId, pageNumber);
     }
   }
 
@@ -898,9 +916,8 @@ class ApiService {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
+      response =
+          await dioClient.getDio().get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
     } on DioError catch (e) {
       error = e;
     }

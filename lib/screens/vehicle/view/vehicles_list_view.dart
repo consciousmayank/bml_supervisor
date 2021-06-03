@@ -84,7 +84,9 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           ),
           hSizedBox(5),
           widget.viewModel.vehiclesList.length == 0
-              ? NoDataWidget(label: 'No vehicles yet',)
+              ? NoDataWidget(
+                  label: 'No vehicles yet',
+                )
               : Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
@@ -160,14 +162,14 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'MODEL',
-                          textAlign: TextAlign.left,
-                          style: AppTextStyles.whiteRegular,
-                        ),
-                      ),
+                      // Expanded(
+                      //   flex: 1,
+                      //   child: Text(
+                      //     'MODEL',
+                      //     textAlign: TextAlign.left,
+                      //     style: AppTextStyles.whiteRegular,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -218,7 +220,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
               children: [
                 // Expanded(flex: 0.5, child: Text('${index}')),
                 Expanded(
-                  flex: 4,
+                  flex: 1,
                   child: Container(
                     // color:Colors.yellow,
                     child: Text(
@@ -232,7 +234,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                   ),
                 ),
                 Expanded(
-                  flex: 6,
+                  flex: 2,
                   child: Container(
                     // color: Colors.green,
                     child: Padding(
@@ -245,22 +247,22 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    // color: Colors.red,
-                    child: Text(
-                      model,
-                      // overflow: TextOverflow.ellipsis,
-                      // softWrap: true,
-                      // maxLines: 3,
-                      textAlign: TextAlign.center,
-                      // style: AppTextStyles.latoMedium12Black.copyWith(
-                      //   fontSize: 14,
-                      // ),
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   flex: 5,
+                //   child: Container(
+                //     // color: Colors.red,
+                //     child: Text(
+                //       model,
+                //       // overflow: TextOverflow.ellipsis,
+                //       // softWrap: true,
+                //       // maxLines: 3,
+                //       textAlign: TextAlign.center,
+                //       // style: AppTextStyles.latoMedium12Black.copyWith(
+                //       //   fontSize: 14,
+                //       // ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
