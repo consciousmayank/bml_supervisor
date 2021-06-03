@@ -112,6 +112,7 @@ class _HubsViewState extends State<HubsView> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+
               children: [
                 Image.asset(
                   hubTitleIcon,
@@ -120,8 +121,11 @@ class _HubsViewState extends State<HubsView> {
                 ),
                 wSizedBox(5),
                 Text(
+
                   viewModel.hubsList[index].title,
-                  style: AppTextStyles.latoBold18PrimaryShade5,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.latoBold18PrimaryShade5.copyWith(fontSize: 17),
+                  // overFlow: TextOverflow.ellipsis,
                 ),
               ],
             ),
