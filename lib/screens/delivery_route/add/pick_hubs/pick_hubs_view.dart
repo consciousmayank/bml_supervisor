@@ -3,11 +3,14 @@ import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_ar
 import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 
 class PickHubsView extends StatefulWidget {
@@ -35,7 +38,30 @@ class _PickHubsViewState extends State<PickHubsView> {
                 padding: const EdgeInsets.all(4.0),
                 child: Column(
                   children: [
-                    buildCityTextFormField(viewModel: viewModel),
+                    SearchWidget(
+                      onClearTextClicked: () {
+
+                        hideKeyboard(context: context);
+                      },
+                      hintTitle: 'Search for hub',
+                      onTextChange: (String value) {
+                        // viewModel.selectedVehicleId = value;
+                        // viewModel.notifyListeners();
+                      },
+                      onEditingComplete: () {
+
+                      },
+                      formatter: <TextInputFormatter>[
+                        TextFieldInputFormatter().alphaNumericFormatter,
+                      ],
+                      controller: TextEditingController(),
+                      // focusNode: selectedRegNoFocusNode,
+                      keyboardType: TextInputType.text,
+                      onFieldSubmitted: (String value) {
+
+                      },
+                    ),
+                    // buildCityTextFormField(viewModel: viewModel),
                     hSizedBox(10),
                     Container(
                       color: AppColors.primaryColorShade5,
