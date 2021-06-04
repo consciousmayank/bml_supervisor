@@ -67,7 +67,7 @@ class _PaymentsViewState extends State<PaymentsView> {
       BuildContext context, PaymentsViewModel viewModel) {
     return LazyLoadScrollView(
       onEndOfPage: () {
-        if (viewModel.noOfPayments >
+        if (viewModel.paymentListAggregate.paymentCount >
             viewModel.paymentHistoryResponseList.length) {
           viewModel.getPaymentHistory();
         }
@@ -107,63 +107,17 @@ class _PaymentsViewState extends State<PaymentsView> {
                               style: AppTextStyles.latoBold16White,
                             ),
                             Text(
-                              viewModel
-                                  .paymentHistoryResponseList[index].entryDate
-                                  .toString(),
+                              viewModel.paymentDates.elementAt(index),
                               style: AppTextStyles.latoBold16White,
                             ),
                           ],
                         ),
                       ),
-                      viewModel.paymentHistoryResponseList.length > 0
-                          ? Container(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                // mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      // Text("Driven Km"),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AppTextView(
-                                          hintText: "Transaction ID",
-                                          value: viewModel
-                                              .paymentHistoryResponseList[index]
-                                              .transactionId
-                                              .toString(),
-                                        ),
-                                      ),
-                                      wSizedBox(8),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AppTextView(
-                                          hintText: "Kilometers",
-                                          value: viewModel
-                                              .paymentHistoryResponseList[index]
-                                              .kilometers
-                                              .toString(),
-                                        ),
-                                      ),
-                                      wSizedBox(8),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AppTextView(
-                                          hintText: "Amount (INR)",
-                                          value: viewModel
-                                              .paymentHistoryResponseList[index]
-                                              .amount
-                                              .toString(),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                      if (viewModel.paymentHistoryResponseList.length > 0)
+                        ...makePaymentsBody(
+                          outerListIndex: index,
+                          viewModel: viewModel,
+                        )
                     ],
                   ),
                 ),
@@ -171,7 +125,7 @@ class _PaymentsViewState extends State<PaymentsView> {
             ],
           );
         },
-        itemCount: viewModel.paymentHistoryResponseList.length + 1,
+        itemCount: viewModel.paymentDates.length + 1,
       ),
     );
   }
@@ -204,7 +158,7 @@ class _PaymentsViewState extends State<PaymentsView> {
               flex: 1,
               child: AppTiles(
                 title: 'Total Amount',
-                value: viewModel.totalAmt.toString(),
+                value: viewModel.paymentListAggregate.paymentTotal.toString(),
                 iconName: rupeesIcon,
               ),
             ),
@@ -213,7 +167,7 @@ class _PaymentsViewState extends State<PaymentsView> {
               flex: 1,
               child: AppTiles(
                 title: 'Payment Count',
-                value: viewModel.noOfPayments.toString(),
+                value: viewModel.paymentListAggregate.paymentCount.toString(),
                 iconName: paymentsIcon,
               ),
             ),
@@ -226,7 +180,7 @@ class _PaymentsViewState extends State<PaymentsView> {
               flex: 1,
               child: AppTiles(
                 title: 'Total Kilometer',
-                value: widget?.args?.totalKm?.toString() ?? "",
+                value: viewModel.paymentListAggregate.totalKm.toString() ?? "",
                 iconName: totalKmIcon,
               ),
             ),
@@ -235,7 +189,7 @@ class _PaymentsViewState extends State<PaymentsView> {
               flex: 1,
               child: AppTiles(
                 title: 'Due Kilometer',
-                value: widget?.args?.dueKm?.toString() ?? "",
+                value: viewModel.paymentListAggregate.dueKm.toString() ?? "",
                 iconName: paymentsIcon,
               ),
             ),
@@ -249,7 +203,7 @@ class _PaymentsViewState extends State<PaymentsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<PaymentsViewModel>.reactive(
       onModelReady: (viewModel) {
-        viewModel.getPaymentHistory();
+        viewModel.getPaymentListAggregate();
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
@@ -331,5 +285,51 @@ class _PaymentsViewState extends State<PaymentsView> {
       ),
       viewModelBuilder: () => PaymentsViewModel(),
     );
+  }
+
+  makePaymentsBody(
+      {@required int outerListIndex, @required PaymentsViewModel viewModel}) {
+    List<dynamic> subList = viewModel.getConsolidatedList(outerListIndex);
+
+    return List.generate(
+        subList.length,
+        (index) => Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Text("Driven Km"),
+                      Expanded(
+                        flex: 1,
+                        child: AppTextView(
+                          hintText: "Transaction ID",
+                          value: subList[index].transactionId.toString(),
+                        ),
+                      ),
+                      wSizedBox(8),
+                      Expanded(
+                        flex: 1,
+                        child: AppTextView(
+                          hintText: "Kilometers",
+                          value: subList[index].kilometers.toString(),
+                        ),
+                      ),
+                      wSizedBox(8),
+                      Expanded(
+                        flex: 1,
+                        child: AppTextView(
+                          hintText: "Amount (INR)",
+                          value: subList[index].amount.toString(),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )).toList();
   }
 }

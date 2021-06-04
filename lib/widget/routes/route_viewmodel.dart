@@ -14,13 +14,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class RoutesViewModel extends GeneralisedBaseViewModel {
-  List<FetchRoutesResponse> _routesList = [];
+  int pageIndex = 1;
+  bool shouldGetRoutesBeCalled = true;
+
   DashBoardApisImpl _dashBoardApis = locator<DashBoardApisImpl>();
+  GetHubDetailsResponse _dstHub;
+  GetHubDetailsResponse _hubResponse;
+  GetRouteDetailsResponse _routeResponse;
   RoutesApis _routesApis = locator<RoutesApisImpl>();
+  List<FetchRoutesResponse> _routesList = [];
+  GetHubDetailsResponse _srcHub;
 
   List<FetchRoutesResponse> get routesList => _routesList;
-
-  GetRouteDetailsResponse _routeResponse;
 
   GetRouteDetailsResponse get routeResponse => _routeResponse;
 
@@ -29,17 +34,12 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  GetHubDetailsResponse _hubResponse;
-
   GetHubDetailsResponse get srcHub => _srcHub;
 
   set srcHub(GetHubDetailsResponse value) {
     _srcHub = value;
     notifyListeners();
   }
-
-  GetHubDetailsResponse _srcHub;
-  GetHubDetailsResponse _dstHub;
 
   GetHubDetailsResponse get hubResponse => _hubResponse;
 
@@ -81,15 +81,27 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  Future getRoutesForClient(int selectedClient) async {
-    setBusy(true);
-    // setBusy(true);
-    routesList = [];
-    List<FetchRoutesResponse> response =
-        await _dashBoardApis.getRoutes(clientId: selectedClient);
-    this.routesList = copyList(response);
-    setBusy(false);
-    notifyListeners();
+  Future getRoutesForClient(int selectedClient, {int pageNumber = 1}) async {
+    if (shouldGetRoutesBeCalled) {
+      if (pageNumber <= 1) {
+        setBusy(true);
+      }
+      List<FetchRoutesResponse> response = await _dashBoardApis.getRoutes(
+          clientId: selectedClient, pageNumber: pageNumber);
+      if (response.length == 0) {
+        shouldGetRoutesBeCalled = false;
+      }
+
+      if (pageNumber <= 1) {
+        this.routesList = copyList(response);
+      } else {
+        this.routesList.addAll(copyList(response));
+      }
+      pageIndex++;
+
+      setBusy(false);
+      notifyListeners();
+    }
   }
 
   void onAddRouteClicked() {

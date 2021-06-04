@@ -44,7 +44,6 @@ final GET_EXPENSES_LIST = '/expense/view';
 const String ADD_EXPENSE = "/expense/add";
 const String VIEW_ENTRY = "/vehicle/entrylog/view";
 //new Apis
-const String GET_ROUTES_FOR_CLIENT_ID = "/route/list/client/";
 const String GET_ROUTES_FOR_CLIENT_ID_new = "/route/list/client/";
 const String GET_HUB_DATA = "/hub/find/";
 const String ADD_CONSIGNMENT_DATA_TO_HUB = "/consignment/add";
@@ -52,12 +51,12 @@ const String ADD_VEHICLE = "/vehicle/add";
 const String GET_CONSIGNMENTS_LIST = "/consignment/find/";
 
 final GET_HUBS = (routeId) => "/route/$routeId/hub/list";
-final GET_ROUTES_FOR_CLIENT_AND_DATE =
-    (clientId, date) => "/consignment/route/list/client/$clientId/date/$date";
 final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
     "/consignment/client/$clientId/route/$routeId/date/$date";
 final GET_PAYMENT_HISTORY =
     (clientId, pageNumber) => "/payment/list/client/$clientId/page/$pageNumber";
+final GET_PAYMENT_LIST_AGGREGATE =
+    (clientId) => "/payment/list/aggregate/client/$clientId";
 
 final GET_EXPENSES_FOR_CLIENT_AND_PERIOD =
     (clientId, period) => "/expense/list/client/$clientId/period/$period";

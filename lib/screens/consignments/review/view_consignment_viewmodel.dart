@@ -13,12 +13,10 @@ import 'package:bml_supervisor/models/review_consignment_request.dart'
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
-import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
-  DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
 
   bool isInitiallyDataSet = false;
@@ -127,19 +125,19 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(false);
   }
 
-  getRoutes(int clientId) async {
-    setBusy(true);
-    routesList = [];
-    hubList = [];
-    List<RoutesForSelectedClientAndDateResponse> response =
-        await _dailyEntryApis.getRoutesForSelectedClientAndDate(
-      clientId: clientId,
-      date: getDateString(entryDate),
-    );
-    this.routesList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
+  // getRoutes(int clientId) async {
+  //   setBusy(true);
+  //   routesList = [];
+  //   hubList = [];
+  //   List<RoutesForSelectedClientAndDateResponse> response =
+  //       await _dailyEntryApis.getRoutesForSelectedClientAndDate(
+  //     clientId: clientId,
+  //     date: getDateString(entryDate),
+  //   );
+  //   this.routesList = copyList(response);
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
   // get Consignments' list for it's dropdown
 

@@ -1,8 +1,3 @@
 In this build the following updates were done :-
 
-1. New fields added while selecting "Fuel" as expense type.
-2. Ui enhancements in expense details, and expenses list view page.
-3. Ui enhancements in consignment list page.
-4. Showing trips_statistics now in dashboard and drawer.
-5. TODO - Paginated Completed and Verified Trips. 
-  -- As of now only showing top 20 items in both, and showing the total count in top tab.
+1. Now the Fuel and average card are hidden in Daily Kilometer Screen.

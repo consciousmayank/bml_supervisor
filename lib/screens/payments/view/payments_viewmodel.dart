@@ -3,6 +3,7 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
+import 'package:bml_supervisor/models/payment_list_aggregate.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -12,22 +13,12 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 class PaymentsViewModel extends GeneralisedBaseViewModel {
   PaymentsApis _paymentsApis = locator<PaymentsApisImpl>();
   int pageNumber = 1;
-  double _totalAmt = 0.0;
+  PaymentListAggregate _paymentListAggregate;
+  Set<String> paymentDates = Set();
+  PaymentListAggregate get paymentListAggregate => _paymentListAggregate;
 
-  double get totalAmt => _totalAmt;
-
-  set totalAmt(double value) {
-    _totalAmt = value;
-    notifyListeners();
-  }
-
-  int _noOfPayments = 0;
-
-  int get noOfPayments => _noOfPayments;
-
-  set noOfPayments(int value) {
-    _noOfPayments = value;
-    notifyListeners();
+  set paymentListAggregate(PaymentListAggregate paymentListAggregate) {
+    _paymentListAggregate = paymentListAggregate;
   }
 
   List<PaymentHistoryResponse> paymentHistoryResponseList = [];
@@ -37,14 +28,13 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
       pageNumber = 1;
       notifyListeners();
       getPaymentHistory();
+      getPaymentListAggregate();
     });
   }
 
   getPaymentHistory() async {
     if (pageNumber <= 1) {
       setBusy(true);
-      totalAmt = 0.0;
-      noOfPayments = 0;
       paymentHistoryResponseList.clear();
     }
 
@@ -60,12 +50,27 @@ class PaymentsViewModel extends GeneralisedBaseViewModel {
         copyList(response),
       );
     }
-    pageNumber++;
     paymentHistoryResponseList.forEach((element) {
-      totalAmt += element.amount;
-      noOfPayments++;
+      paymentDates.add(element.entryDate);
     });
+    pageNumber++;
+    paymentHistoryResponseList.forEach((element) {});
     notifyListeners();
     setBusy(false);
+  }
+
+  void getPaymentListAggregate() async {
+    setBusy(true);
+    paymentListAggregate = await _paymentsApis.getPaymentListAggregate(
+      clientId: MyPreferences().getSelectedClient().id,
+    );
+    getPaymentHistory();
+  }
+
+  List getConsolidatedList(int outerListIndex) {
+    return paymentHistoryResponseList
+        .where((element) =>
+            element.entryDate == paymentDates.elementAt(outerListIndex))
+        .toList();
   }
 }

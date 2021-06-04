@@ -194,77 +194,6 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.only(
-          //     bottom: 4,
-          //   ),
-          //   child: CreateNewButtonWidget(
-          //       title: 'Add Expense',
-          //       onTap: () {
-          //         viewModel.takeToAddExpense();
-          //       }),
-          // ),
-          // SearchWidget(
-          //   onClearTextClicked: () {
-          //     selectedRegNoController.clear();
-          //     viewModel.selectedVehicleId = '';
-          //     viewModel.getExpenses(
-          //       showLoader: false,
-          //     );
-          //     hideKeyboard(context: context);
-          //   },
-          //   hintTitle: 'Search for Vehicle',
-          //   onTextChange: (String value) {
-          //     viewModel.selectedVehicleId = value;
-          //     viewModel.notifyListeners();
-          //   },
-          //   onEditingComplete: () {
-          //     viewModel.getExpenses(
-          //       showLoader: true,
-          //     );
-          //   },
-          //   formatter: <TextInputFormatter>[
-          //     TextFieldInputFormatter().alphaNumericFormatter,
-          //   ],
-          //   controller: selectedRegNoController,
-          //   focusNode: selectedRegNoFocusNode,
-          //   keyboardType: TextInputType.text,
-          //   onFieldSubmitted: (String value) {
-          //     viewModel.getExpenses(
-          //       showLoader: true,
-          //     );
-          //   },
-          // ),
-          // if (viewModel.expensePeriodList.length > 0)
-          //   Padding(
-          //     padding: const EdgeInsets.only(
-          //       left: 8,
-          //       right: 8,
-          //     ),
-          //     child: Container(
-          //       height: 25,
-          //       child: Row(
-          //         mainAxisSize: MainAxisSize.max,
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         crossAxisAlignment: CrossAxisAlignment.center,
-          //         children: [
-          //           Text(
-          //               'Expenses for ${getMonth(viewModel?.expensePeriodList?.first?.month ?? 0)}, ${viewModel?.expensePeriodList?.first?.year ?? 2024}'),
-          //           // Text('Dummy data for May, 2021'),
-          //           InkWell(
-          //             onTap: () => viewModel.changeExpenePeriod(),
-          //             child: Padding(
-          //               padding: const EdgeInsets.all(2.0),
-          //               child: Text(
-          //                 'Change',
-          //                 style: AppTextStyles.hyperLinkStyle,
-          //               ),
-          //             ),
-          //           )
-          //         ],
-          //       ),
-          //     ),
-          //   ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -393,7 +322,7 @@ class _ViewExpensesViewState extends State<ViewExpensesView> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Expenses for ${getMonth(viewModel?.expensePeriodList?.first?.month ?? 0)}, ${viewModel?.expensePeriodList?.first?.year ?? 2024}',
+                                  'Expenses for ${getMonth(viewModel?.selectedExpensePeriod?.month ?? 0)}, ${viewModel?.selectedExpensePeriod?.year ?? 2024}',
                                   style: AppTextStyles.expensesPeriodTitle()
                                       .textStyle,
                                 ),

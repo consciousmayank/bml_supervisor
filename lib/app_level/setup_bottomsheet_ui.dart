@@ -1,6 +1,7 @@
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignment_params.dart';
 import 'package:bml_supervisor/screens/consignments/create/existing_consignment_bottom_sheet.dart';
+import 'package:bml_supervisor/screens/consignments/create/routes_bottomsheet/routes_list_bottomsheet_view.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/dashboard/select_client_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_route_bottomsheet.dart';
@@ -77,6 +78,9 @@ void setupBottomSheetUi() {
 
     BottomSheetType.UPCOMING_TRIPS: (context, sheetRequest, completer) =>
         GridViewBottomSheet(request: sheetRequest, completer: completer),
+
+    BottomSheetType.ROUTES_BOTTOM_SHEET: (context, sheetRequest, completer) =>
+        RoutesListBottomSheetView(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
@@ -171,49 +175,19 @@ class _CreateConsignmentDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     CreateConsignmentDialogParams args = request.customData;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.appScaffoldColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
-        ),
-      ),
-      height: MediaQuery.of(context).size.height * 0.84,
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              completer(
-                SheetResponse(confirmed: false, responseData: null),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Close',
-                    style: AppTextStyles.hyperLinkStyle,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: ConfirmConsignmentView(
-              selectedClient: args.selectedClient,
-              consignmentRequest: args.consignmentRequest,
-              selectedRoute: args.selectedRoute,
-              itemUnit: args.itemUnit,
-              validatedRegistrationNumber: args.validatedRegistrationNumber,
-              onSubmitClicked: (bool value) {
-                completer(SheetResponse(confirmed: value));
-              },
-            ),
-          ),
-        ],
+    return BaseBottomSheet(
+      bottomSheetTitle: 'Consignment Summary',
+      request: request,
+      completer: completer,
+      child: ConfirmConsignmentView(
+        selectedClient: args.selectedClient,
+        consignmentRequest: args.consignmentRequest,
+        selectedRoute: args.selectedRoute,
+        itemUnit: args.itemUnit,
+        validatedRegistrationNumber: args.validatedRegistrationNumber,
+        onSubmitClicked: (bool value) {
+          completer(SheetResponse(confirmed: value));
+        },
       ),
     );
   }

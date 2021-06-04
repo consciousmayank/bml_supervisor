@@ -18,6 +18,7 @@ import 'package:bml_supervisor/widget/routes/route_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
 
 import '../app_button.dart';
@@ -116,42 +117,13 @@ class _RoutesViewState extends State<RoutesView> {
                 '${viewModel.routesList[index].routeId.toString()}',
                 textAlign: TextAlign.right,
                 style: AppTextStyles.latoMedium14Black,
-
-                // style: AppTextStyles.underLinedText.copyWith(
-                //     color: AppColors.primaryColorShade5, fontSize: 15),
               ),
-              // InkWell(
-              //   onTap: () {
-              //     widget.onRoutesPageInView(viewModel.routesList[index]);
-              //   },
-              //   child: Text(
-              //     '${viewModel.routesList[index].routeId.toString()}',
-              //     textAlign: TextAlign.center,
-              //     // style: AppTextStyles.latoMedium14Black.copyWith(color: AppColors.primaryColorShade5),
-              //
-              //     style: AppTextStyles.underLinedText.copyWith(
-              //         color: AppColors.primaryColorShade5, fontSize: 15),
-              //   ),
-              // ),
             ),
             Expanded(
-              child: Tooltip(
-                // preferBelow: false,
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColorShade11,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(defaultBorder)),
-                ),
-                // message: viewModel.routesList[index].routeTitle,
-                message: 'Route desc/remarks not coming from api',
-                textStyle: AppTextStyles.latoMedium12Black
-                    .copyWith(color: AppColors.white),
-                child: Text(
-                  viewModel.routesList[index].routeTitle,
-                  maxLines: 3,
-                  textAlign: TextAlign.center,
-                ),
+              child: Text(
+                viewModel.routesList[index].routeTitle,
+                maxLines: 3,
+                textAlign: TextAlign.center,
               ),
               flex: 5,
             ),
@@ -349,11 +321,19 @@ class _RoutesViewState extends State<RoutesView> {
           ),
         viewModel.routesList.length > 0
             ? Expanded(
-                child: ListView(
-                  children: getRoutesList(
-                    viewModel: viewModel,
-                    listLength: getListLength(
+                child: LazyLoadScrollView(
+                  onEndOfPage: () {
+                    viewModel.getRoutesForClient(
+                      widget.selectedClient.clientId,
+                      pageNumber: viewModel.pageIndex,
+                    );
+                  },
+                  child: ListView(
+                    children: getRoutesList(
                       viewModel: viewModel,
+                      listLength: getListLength(
+                        viewModel: viewModel,
+                      ),
                     ),
                   ),
                 ),
