@@ -19,7 +19,7 @@ class StringListTypeBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     StringListTypeBottomSheetInputArgs args =
         request.customData as StringListTypeBottomSheetInputArgs;
-    return BaseHalfScreenBottomSheet(
+    return BaseBottomSheet(
       bottomSheetTitle: args.bottomSheetTitle,
       completer: completer,
       request: request,

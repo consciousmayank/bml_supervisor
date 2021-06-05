@@ -23,7 +23,7 @@ class DetailedTripsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     DetailedTripsBottomSheetInputArgs args = request.customData;
 
-    return BaseHalfScreenBottomSheet(
+    return BaseBottomSheet(
       request: request,
       completer: completer,
       child: Column(

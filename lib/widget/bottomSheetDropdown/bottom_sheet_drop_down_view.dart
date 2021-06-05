@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
@@ -9,7 +8,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 class BottomSheetDropDown<T> extends StatefulWidget {
   final List<T> allowedValue;
-  T selectedValue;
+  final T selectedValue;
   final String hintText;
   final String errorText;
   final Function onValueSelected;
@@ -62,6 +61,7 @@ class BottomSheetDropDown<T> extends StatefulWidget {
 
 class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
   // T preSelectedValue;
+  TextEditingController _controller = TextEditingController();
   bool isOpen = false;
 
   @override
@@ -72,11 +72,10 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    _controller.text = getTextValue();
     return appTextFormField(
       errorText: widget.errorText,
-      controller: TextEditingController(
-        text: getTextValue(),
-      ),
+      controller: _controller,
       enabled: false,
       hintText: widget.hintText ?? '',
       keyboardType: TextInputType.text,
@@ -98,13 +97,13 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
             bottomSheetDropDownType: widget.bottomSheetDropDownType,
           ),
           barrierDismissible: false,
-          isScrollControlled: false,
+          isScrollControlled: true,
           variant: BottomSheetType.STRING_LIST,
         )
             .then((value) {
           if (widget.bottomSheetDropDownType ==
               BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST) {
-            if(value.confirmed) {
+            if (value.confirmed) {
               setState(() {
                 isOpen = true;
               });
@@ -116,7 +115,7 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
 
               setState(() {
                 print('inside if');
-                widget.selectedValue = args.selectedValue;
+                _controller.text = args.selectedValue;
                 isOpen = false;
               });
             } else {

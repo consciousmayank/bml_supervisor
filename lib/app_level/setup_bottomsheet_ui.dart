@@ -13,7 +13,6 @@ import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dar
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_warning_bottom_sheet.dart';
-import 'package:bml_supervisor/screens/trips/tripsdetailed/detailed_trips_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -197,7 +196,7 @@ class BaseBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
   final Widget child;
-  final EdgeInsets margin;
+  // final EdgeInsets margin;
   final String bottomSheetTitle;
 
   const BaseBottomSheet({
@@ -205,14 +204,14 @@ class BaseBottomSheet extends StatelessWidget {
     @required this.request,
     @required this.completer,
     @required this.child,
-    this.margin,
+    // this.margin,
     this.bottomSheetTitle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin ?? EdgeInsets.all(0),
+      // margin: margin ?? EdgeInsets.all(0),
       // padding: margin ?? EdgeInsets.all(0),
       height: MediaQuery.of(context).size.height * 0.84,
       decoration: BoxDecoration(
@@ -220,12 +219,12 @@ class BaseBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(defaultBorder),
           topRight: Radius.circular(defaultBorder),
-          bottomLeft: margin != null
-              ? Radius.circular(defaultBorder)
-              : Radius.circular(0),
-          bottomRight: margin != null
-              ? Radius.circular(defaultBorder)
-              : Radius.circular(0),
+          // bottomLeft: margin != null
+          //     ? Radius.circular(defaultBorder)
+          //     : Radius.circular(0),
+          // bottomRight: margin != null
+          //     ? Radius.circular(defaultBorder)
+          //     : Radius.circular(0),
         ),
       ),
       child: Column(
@@ -322,56 +321,56 @@ class BottomSheetTitleBar extends StatelessWidget {
   }
 }
 
-class BaseHalfScreenBottomSheet extends StatelessWidget {
-  final SheetRequest request;
-  final Function(SheetResponse) completer;
-  final Widget child;
-  final double height;
-  final EdgeInsets margin;
-  final String bottomSheetTitle;
+// class BaseHalfScreenBottomSheet extends StatelessWidget {
+//   final SheetRequest request;
+//   final Function(SheetResponse) completer;
+//   final Widget child;
+//   final double height;
+//   final EdgeInsets margin;
+//   final String bottomSheetTitle;
 
-  const BaseHalfScreenBottomSheet({
-    Key key,
-    @required this.request,
-    @required this.completer,
-    this.height,
-    this.margin,
-    @required this.child,
-    this.bottomSheetTitle = '',
-  }) : super(key: key);
+//   const BaseHalfScreenBottomSheet({
+//     Key key,
+//     @required this.request,
+//     @required this.completer,
+//     this.height,
+//     this.margin,
+//     @required this.child,
+//     this.bottomSheetTitle = '',
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: margin ?? EdgeInsets.all(0),
-      padding: margin ?? EdgeInsets.all(0),
-      height: height,
-      decoration: BoxDecoration(
-        color: AppColors.appScaffoldColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultBorder),
-          topRight: Radius.circular(defaultBorder),
-          bottomLeft: margin != null
-              ? Radius.circular(defaultBorder)
-              : Radius.circular(0),
-          bottomRight: margin != null
-              ? Radius.circular(defaultBorder)
-              : Radius.circular(0),
-        ),
-      ),
-      child: Column(
-        children: [
-          BottomSheetTitleBar(
-            title: bottomSheetTitle,
-            onCloseTextClicked: () {
-              completer(
-                SheetResponse(confirmed: false, responseData: null),
-              );
-            },
-          ),
-          child,
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: margin ?? EdgeInsets.all(0),
+//       padding: margin ?? EdgeInsets.all(0),
+//       height: height,
+//       decoration: BoxDecoration(
+//         color: AppColors.appScaffoldColor,
+//         borderRadius: BorderRadius.only(
+//           topLeft: Radius.circular(defaultBorder),
+//           topRight: Radius.circular(defaultBorder),
+//           bottomLeft: margin != null
+//               ? Radius.circular(defaultBorder)
+//               : Radius.circular(0),
+//           bottomRight: margin != null
+//               ? Radius.circular(defaultBorder)
+//               : Radius.circular(0),
+//         ),
+//       ),
+//       child: Column(
+//         children: [
+//           BottomSheetTitleBar(
+//             title: bottomSheetTitle,
+//             onCloseTextClicked: () {
+//               completer(
+//                 SheetResponse(confirmed: false, responseData: null),
+//               );
+//             },
+//           ),
+//           child,
+//         ],
+//       ),
+//     );
+//   }
+// }

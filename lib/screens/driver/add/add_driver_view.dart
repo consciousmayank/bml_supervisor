@@ -10,7 +10,6 @@ import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
@@ -138,6 +137,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                   Expanded(
                     flex: 1,
                     child: BottomSheetDropDown<String>(
+                      bottomSheetTitle: 'Select Gender',
                       allowedValue: genders,
                       selectedValue: widget.viewModel.selectedGender.isEmpty
                           ? ''
@@ -151,6 +151,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                   Expanded(
                     flex: 1,
                     child: BottomSheetDropDown<String>(
+                      bottomSheetTitle: 'Select Blood Group',
                       allowedValue: bloodGroup,
                       selectedValue: widget.viewModel.selectedBloodGroup.isEmpty
                           ? ''
@@ -526,6 +527,7 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
       allowedValue: addressTypes,
       selectedValue: widget.viewModel.selectedAddressTypes,
       hintText: 'Address Type',
+      bottomSheetTitle: 'Address Type',
       onValueSelected: (
         String selectedAddressType,
         int index,

@@ -1,7 +1,6 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/models/driver-info.dart';
-import 'package:bml_supervisor/models/vehicle_info.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';

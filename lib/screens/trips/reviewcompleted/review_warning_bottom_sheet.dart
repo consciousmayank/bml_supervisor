@@ -21,7 +21,7 @@ class RevieWarningBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBottomSheet(
-      margin: const EdgeInsets.all(defaultBorder),
+      // margin: const EdgeInsets.all(defaultBorder),
       request: request,
       completer: completer,
       child: Padding(

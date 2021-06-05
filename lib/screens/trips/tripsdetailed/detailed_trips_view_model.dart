@@ -252,9 +252,8 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
         onValueClick: null,
       ),
       GridViewHelper(
-        label: 'Item',
-        value:
-            '${selectedTrip.itemWeight.toString()} ${selectedTrip.itemUnit.toString()}',
+        label: '',
+        value: '',
         onValueClick: null,
       ),
     ];

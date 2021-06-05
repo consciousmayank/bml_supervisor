@@ -61,11 +61,11 @@ class SingleTripItem extends StatelessWidget {
               children: [
                 buildContentRow(
                   helper: RowHelper(
-                    label1: 'Item Value',
-                    value1:
+                    label2: 'Item Value',
+                    value2:
                         '${singleListItem.itemWeight.toString()} ${singleListItem.itemUnit.toString()}',
-                    label2: 'Remarks',
-                    value2: singleListItem.routeDesc,
+                    label1: 'Route Title',
+                    value1: singleListItem.routeTitle,
                   ),
                 ),
                 hSizedBox(5),

@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/expense_response.dart';
-import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
@@ -185,6 +183,7 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
           selectedValue:
               viewModel.expenseType == null ? '' : viewModel.expenseType,
           hintText: 'Select Expense Type',
+          bottomSheetTitle: 'Select Expense Type',
           onValueSelected: (String selectedValue, int index) {
             viewModel.expenseType = selectedValue;
             viewModel.expenseTypeError = '';

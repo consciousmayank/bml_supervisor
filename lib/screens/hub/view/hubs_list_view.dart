@@ -2,7 +2,6 @@ import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
