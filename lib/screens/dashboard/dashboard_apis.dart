@@ -15,7 +15,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 abstract class DashBoardApis {
   Future<List<GetClientsResponse>> getClientList({@required int pageNumber});
-  Future<List<FetchRoutesResponse>> getRoutes({@required int clientId});
+  Future<List<FetchRoutesResponse>> getRoutes({@required int clientId,int pageNumber});
   Future<List<FetchHubsResponse>> getHubs({@required int routeId});
   Future<DashboardTilesStatsResponse> getDashboardTilesStats(
       {@required int clientId});
@@ -80,10 +80,10 @@ class DashBoardApisImpl extends BaseApi implements DashBoardApis {
   }
 
   @override
-  Future<List<FetchRoutesResponse>> getRoutes({int clientId}) async {
+  Future<List<FetchRoutesResponse>> getRoutes({int clientId, int pageNumber}) async {
     List<FetchRoutesResponse> _routesList = [];
     ParentApiResponse routesListResponse =
-        await apiService.getRoutesForClientId(clientId: clientId);
+        await apiService.getRoutesForClientId(clientId: clientId, pageindex: pageNumber);
 
     if (filterResponse(routesListResponse, showSnackBar: false) != null) {
       if (routesListResponse.isNoDataFound()) {

@@ -239,26 +239,27 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: buildViewEntrySummary(
-                  title: 'FUEL (LTR)',
-                  value: viewModel.totalFuelInLtr.toStringAsFixed(2),
-                  iconName: fuelIcon,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: buildViewEntrySummary(
-                  title: 'AVG./LTR',
-                  value: viewModel.avgPerLitre.toStringAsFixed(2),
-                  iconName: fuelIcon,
-                ),
-              ),
-            ],
-          ),
+          // Removed for V1
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       flex: 1,
+          //       child: buildViewEntrySummary(
+          //         title: 'FUEL (LTR)',
+          //         value: viewModel.totalFuelInLtr.toStringAsFixed(2),
+          //         iconName: fuelIcon,
+          //       ),
+          //     ),
+          //     Expanded(
+          //       flex: 1,
+          //       child: buildViewEntrySummary(
+          //         title: 'AVG./LTR',
+          //         value: viewModel.avgPerLitre.toStringAsFixed(2),
+          //         iconName: fuelIcon,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

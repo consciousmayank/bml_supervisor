@@ -2,6 +2,7 @@ import 'package:bml_supervisor/app_level/BaseApi.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/payment_history_response.dart';
+import 'package:bml_supervisor/models/payment_list_aggregate.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -11,6 +12,10 @@ abstract class PaymentsApis {
   Future<List<PaymentHistoryResponse>> getPaymentHistory({
     @required int clientId,
     @required int pageNumber,
+  });
+
+  Future<PaymentListAggregate> getPaymentListAggregate({
+    @required int clientId,
   });
 }
 
@@ -52,5 +57,22 @@ class PaymentsApisImpl extends BaseApi implements PaymentsApis {
     }
 
     return _responseList;
+  }
+
+  @override
+  Future<PaymentListAggregate> getPaymentListAggregate({
+    int clientId,
+  }) async {
+    PaymentListAggregate _response = PaymentListAggregate.zero();
+
+    ParentApiResponse apiResponse = await apiService.getPaymentListAggregate(
+      clientId: clientId,
+    );
+
+    if (filterResponse(apiResponse) != null) {
+      _response = PaymentListAggregate.fromMap(apiResponse.response.data);
+    }
+
+    return _response;
   }
 }

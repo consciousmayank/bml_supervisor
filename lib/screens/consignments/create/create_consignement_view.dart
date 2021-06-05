@@ -157,30 +157,47 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                     context: context, viewModel: viewModel),
                 viewModel.entryDate == null
                     ? Container()
-                    : RoutesDropDown(
-                        optionList: viewModel.routesList,
-                        hint: "Select Routes",
-                        onOptionSelect: (FetchRoutesResponse selectedValue) {
-                          viewModel.selectedRoute = selectedValue;
+                    : appTextFormField(
+                        errorText: '',
+                        controller: TextEditingController(
+                          text: viewModel.selectedRoute == null
+                              ? ''
+                              : viewModel.selectedRoute.routeTitle,
+                        ),
+                        enabled: false,
+                        hintText: "Select Routes",
+                        keyboardType: TextInputType.text,
+                        buttonType: ButtonType.FULL,
+                        buttonIcon:
+                            // isOpen
+                            //     ? Icon(Icons.arrow_drop_up_sharp)
+                            // :
+                            Icon(Icons.arrow_drop_down_sharp),
+                        onButtonPressed: () {
+                          viewModel.bottomSheetService
+                              .showCustomSheet(
+                            isScrollControlled: true,
+                            barrierDismissible: true,
+                            variant: BottomSheetType.ROUTES_BOTTOM_SHEET,
+                          )
+                              .then((routesBottomSheetReponse) {
+                            if (routesBottomSheetReponse != null) {
+                              if (routesBottomSheetReponse.confirmed) {
+                                viewModel.selectedRoute =
+                                    routesBottomSheetReponse.responseData;
 
-                          selectedRegNoController.clear();
-                          consignmentTitleController.clear();
-                          viewModel.validatedRegistrationNumber = null;
-                          viewModel.consignmentRequest = null;
+                                selectedRegNoController.clear();
+                                consignmentTitleController.clear();
+                                viewModel.validatedRegistrationNumber = null;
+                                viewModel.consignmentRequest = null;
 
-                          viewModel.getHubs();
-                          consignmentTitleController.clear();
-                          // hubTitleController.clear();
-                          // dropController.clear();
-                          // collectController.clear();
-                          // paymentController.clear();
-                          // remarksController.clear();
-                          viewModel.resetControllerBoolValue();
-                        },
-                        selectedValue: viewModel.selectedRoute == null
-                            ? null
-                            : viewModel.selectedRoute,
-                      ),
+                                viewModel.getHubs();
+                                consignmentTitleController.clear();
+                                viewModel.resetControllerBoolValue();
+                              }
+                            }
+                          });
+                        }),
                 viewModel.hubsList.length < 1
                     ? Container()
                     : registrationSelector(viewModel: viewModel),
@@ -355,10 +372,12 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                                 showSummaryBottomSheet(
                                                         viewModel: viewModel)
                                                     .then((value) {
-                                                  viewModel.createConsignment(
-                                                      consignmentTitle:
-                                                          consignmentTitleController
-                                                              .text);
+                                                  if (value) {
+                                                    viewModel.createConsignment(
+                                                        consignmentTitle:
+                                                            consignmentTitleController
+                                                                .text);
+                                                  }
                                                 });
 
                                                 // viewModel.createConsignment();
@@ -1018,13 +1037,19 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       customData: CreateConsignmentDialogParams(
         selectedClient: viewModel.selectedClient,
         validatedRegistrationNumber: viewModel.validatedRegistrationNumber,
-        consignmentRequest: viewModel.consignmentRequest,
+        consignmentRequest: viewModel.consignmentRequest.copyWith(
+          weight: viewModel.totalWeight,
+        ),
         selectedRoute: viewModel.selectedRoute,
         itemUnit: viewModel.itemUnit,
       ),
     );
 
-    return createConsignment.confirmed;
+    if (createConsignment != null) {
+      return createConsignment.confirmed;
+    } else {
+      return false;
+    }
   }
 
   getPaymentLabelInnitialValue({

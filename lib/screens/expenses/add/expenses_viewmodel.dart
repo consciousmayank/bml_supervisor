@@ -202,9 +202,10 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
           .then(
         (value) {
           if (response.isSuccessful()) {
-            navigationService.replaceWith(addExpensesPageRoute, arguments: AddExpenseArguments(
-            expensesTypes: expenseTypes,
-          ));
+            navigationService.replaceWith(addExpensesPageRoute,
+                arguments: AddExpenseArguments(
+                  expensesTypes: expenseTypes,
+                ));
           }
         },
       );
@@ -252,8 +253,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
       );
       entryDateError = textRequired;
       return false;
-    }
-    if (selectedDailyKmInfo.vehicleId == null) {
+    } else if (selectedDailyKmInfo.vehicleId == null) {
       snackBarService.showCustomSnackBar(
         variant: SnackbarType.ERROR,
         duration: Duration(seconds: 4),
@@ -381,6 +381,5 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     } else {
       return true;
     }
-    
   }
 }

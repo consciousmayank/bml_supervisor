@@ -46,16 +46,13 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    fuelRateFocusNode.addListener(() {
-      if (!fuelRateFocusNode.hasFocus) {
-        if (fuelLitreController.text.trim().length > 0 &&
-            fuelRateController.text.trim().length > 0) {
-          double fuelRate = double.parse(fuelRateController.text.trim());
-          double fuelLitre = double.parse(fuelLitreController.text.trim());
-          amountController.text = (fuelLitre * fuelRate).toString();
-        }
-      }
-    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+    fuelRateFocusNode.dispose();
   }
 
   @override
@@ -65,19 +62,36 @@ class _ExpensesMobileViewState extends State<ExpensesMobileView> {
       onModelReady: (model) {
         model.expenseTypes = widget.args.expensesTypes;
       },
-      builder: (context, viewModel, child) => Scaffold(
-        appBar: AppBar(
-          title: setAppBarTitle(title: 'Add Expense'),
-        ),
-        body: viewModel.isBusy
-            ? ShimmerContainer(
-                itemCount: 10,
-              )
-            : Padding(
-                padding: getSidePadding(context: context),
-                child: body(context, viewModel),
-              ),
-      ),
+      builder: (context, viewModel, child) {
+        fuelRateFocusNode.addListener(() {
+          if (!fuelRateFocusNode.hasFocus) {
+            if (fuelLitreController.text.trim().length > 0 &&
+                fuelRateController.text.trim().length > 0) {
+              double fuelRate = double.parse(fuelRateController.text.trim());
+              double fuelLitre = double.parse(fuelLitreController.text.trim());
+              double amt = (fuelLitre * fuelRate);
+              amountController.text = amt.toString();
+              viewModel.expenseAmount = amt;
+              viewModel.totalAmountError = '';
+              viewModel.notifyListeners();
+            }
+          }
+        });
+
+        return Scaffold(
+          appBar: AppBar(
+            title: setAppBarTitle(title: 'Add Expense'),
+          ),
+          body: viewModel.isBusy
+              ? ShimmerContainer(
+                  itemCount: 10,
+                )
+              : Padding(
+                  padding: getSidePadding(context: context),
+                  child: body(context, viewModel),
+                ),
+        );
+      },
       viewModelBuilder: () => ExpensesViewModel(),
     );
   }

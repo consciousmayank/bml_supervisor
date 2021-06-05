@@ -2,7 +2,6 @@
 // Subject to change
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/expense_aggregate.dart';
@@ -258,6 +257,7 @@ class ViewExpensesViewModel extends GeneralisedBaseViewModel {
     setBusy(true);
     _expensesApi.getExpensePeriod(clientId: selectedClient.id).then((response) {
       expensePeriodList = copyList(response);
+      selectedExpensePeriod = expensePeriodList.first;
       selectedExpensePeriod = expensePeriodList.first;
       notifyListeners();
 

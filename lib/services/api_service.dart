@@ -67,12 +67,12 @@ class ApiService {
 
   ///Get All the routes for the selected client
   Future<ParentApiResponse> getRoutesForClientId(
-      {@required int clientId}) async {
+      {@required int clientId, int pageindex}) async {
     Response response;
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            "$GET_ROUTES_FOR_CLIENT_ID_new$clientId/page/1",
+            "$GET_ROUTES_FOR_CLIENT_ID_new$clientId/page/$pageindex",
           );
     } on DioError catch (e) {
       error = e;
@@ -119,22 +119,6 @@ class ApiService {
       response = await dioClient
           .getDio()
           .post(ADD_CONSIGNMENT_DATA_TO_HUB, data: request.toJson());
-    } on DioError catch (e) {
-      error = e;
-    }
-    return ParentApiResponse(error: error, response: response);
-  }
-
-  Future<ParentApiResponse> getRoutesForSelectedClientAndDate({
-    @required int clientId,
-    @required String date,
-  }) async {
-    Response response;
-    DioError error;
-    try {
-      response = await dioClient.getDio().get(
-            GET_ROUTES_FOR_CLIENT_AND_DATE(clientId, date),
-          );
     } on DioError catch (e) {
       error = e;
     }
@@ -372,6 +356,19 @@ class ApiService {
       response = await dioClient
           .getDio()
           .get(GET_PAYMENT_HISTORY(clientId, pageNumber));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+Future<ParentApiResponse> getPaymentListAggregate(
+      {@required int clientId}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_PAYMENT_LIST_AGGREGATE(clientId));
     } on DioError catch (e) {
       error = e;
     }

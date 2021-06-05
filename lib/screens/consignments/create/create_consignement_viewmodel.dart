@@ -15,6 +15,7 @@ import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class CreateConsignmentModel extends GeneralisedBaseViewModel {
   double _totalWeight = 0.00;
@@ -119,15 +120,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   FetchRoutesResponse _selectedRoute;
-  List<FetchRoutesResponse> _routesList = [];
-
-  List<FetchRoutesResponse> get routesList => _routesList;
-
-  set routesList(List<FetchRoutesResponse> value) {
-    _routesList = value;
-    notifyListeners();
-  }
-
   FetchRoutesResponse get selectedRoute => _selectedRoute;
 
   set selectedRoute(FetchRoutesResponse selectedRoute) {
@@ -135,25 +127,9 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getRoutes(int clientId) async {
-    entryDate = null;
-    validatedRegistrationNumber = null;
-    consignmentRequest = null;
-
-    setBusy(true);
-    routesList = [];
-    hubsList = [];
-    List<FetchRoutesResponse> response =
-        await _dashBoardApis.getRoutes(clientId: clientId);
-    this.routesList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
-
   getClients() async {
     setBusy(true);
     selectedClient = MyPreferences()?.getSelectedClient();
-    getRoutes(selectedClient.clientId);
     setBusy(false);
   }
 

@@ -31,167 +31,177 @@ class ConfirmConsignmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                "SUMMARY",
-                style: AppTextStyles.latoBold16White
-                    .copyWith(color: AppColors.primaryColorShade5),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Client'),
-                      Text(selectedClient.username),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('Date'),
-                      Text(consignmentRequest.entryDate),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Route'),
-                      Text(consignmentRequest.routeTitle),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('Vehicle'),
-                      Text(consignmentRequest.vehicleId),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text('Items ($itemUnit)'),
-                ),
-              ],
-            ),
-            hSizedBox(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Consignment Items Details",
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.latoBold16White
-                      .copyWith(color: AppColors.primaryColorShade5),
-                ),
-              ],
-            ),
-            hSizedBox(10),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Card(
-                      color: AppColors.routesCardColor,
-                      elevation: 4,
-                      shape: getCardShape(),
-                      child: Stack(
+    return Flexible(
+      flex: 1,
+      fit: FlexFit.loose,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Image.asset(semiCircles),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                rowMaker(
-                                    label: "Title",
-                                    value:
-                                        consignmentRequest.items[index].title),
-                                hSizedBox(10),
-                                rowMaker(
-                                    label: "Hub",
-                                    value: consignmentRequest.items[index].hubId
-                                        .toString()),
-                                hSizedBox(10),
-                                rowMaker(
-                                    label: "Item Collect",
-                                    value: consignmentRequest
-                                        .items[index].collect
-                                        .toString()),
-                                hSizedBox(10),
-                                rowMaker(
-                                    label: "Item Drop",
-                                    value: consignmentRequest
-                                        .items[index].dropOff
-                                        .toString()),
-                                hSizedBox(10),
-                                rowMaker(
-                                    label: "Payment",
-                                    value: consignmentRequest
-                                        .items[index].payment
-                                        .toString()),
-                                hSizedBox(10),
-                                rowMaker(
-                                    label: "Remark",
-                                    value: consignmentRequest
-                                        .items[index].remarks),
-                                hSizedBox(10),
-                              ],
-                            ),
-                          )
+                          Text('Client'),
+                          Text(selectedClient.username),
                         ],
                       ),
                     ),
-                  );
-                },
-                itemCount: consignmentRequest.items.length,
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text('Date'),
+                          Text(consignmentRequest.entryDate),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: rowMaker(
-                label: null,
-                value: SizedBox(
-                  height: buttonHeight,
-                  child: AppButton(
-                    onTap: () {
-                      onSubmitClicked(true);
-                    },
-                    background: AppColors.primaryColorShade5,
-                    buttonText: "Submit",
-                    borderColor: AppColors.primaryColorShade1,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Route'),
+                          Text(consignmentRequest.routeTitle),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text('Vehicle'),
+                          Text(consignmentRequest.vehicleId),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                          'Items (${consignmentRequest.weight} $itemUnit)'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: hSizedBox(10),
+            ),
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Consignment Items Details",
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.latoBold16White
+                        .copyWith(color: AppColors.primaryColorShade5),
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: hSizedBox(10),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) => Card(
+                  color: AppColors.routesCardColor,
+                  elevation: 4,
+                  shape: getCardShape(),
+                  child: Stack(
+                    children: [
+                      // Image.asset(semiCircles),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            rowMaker(
+                                label: "Title",
+                                value: consignmentRequest.items[index].title),
+                            hSizedBox(10),
+                            rowMaker(
+                                label: "Hub",
+                                value: consignmentRequest.items[index].hubId
+                                    .toString()),
+                            hSizedBox(10),
+                            rowMaker(
+                                label: "Item Collect",
+                                value: consignmentRequest.items[index].collect
+                                    .toString()),
+                            hSizedBox(10),
+                            rowMaker(
+                                label: "Item Drop",
+                                value: consignmentRequest.items[index].dropOff
+                                    .toString()),
+                            hSizedBox(10),
+                            rowMaker(
+                                label: "Payment",
+                                value: consignmentRequest.items[index].payment
+                                    .toString()),
+                            hSizedBox(10),
+                            rowMaker(
+                                label: "Remark",
+                                value:
+                                    consignmentRequest.items[index].remarks ??
+                                        'NA'),
+                            hSizedBox(10),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                childCount: consignmentRequest.items.length,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: hSizedBox(10),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: rowMaker(
+                  label: null,
+                  value: SizedBox(
+                    height: buttonHeight,
+                    child: AppButton(
+                      onTap: () {
+                        onSubmitClicked(true);
+                      },
+                      background: AppColors.primaryColorShade5,
+                      buttonText: "Submit",
+                      borderColor: AppColors.primaryColorShade1,
+                    ),
                   ),
                 ),
               ),

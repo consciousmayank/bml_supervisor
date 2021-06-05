@@ -3,18 +3,11 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
-import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:flutter/material.dart';
 
 abstract class DailyEntryApis {
-  Future<List<RoutesForSelectedClientAndDateResponse>>
-      getRoutesForSelectedClientAndDate({
-    @required int clientId,
-    @required String date,
-  });
-
   Future<EntryLog> getLatestDailyEntry({@required String registrationNumber});
   Future<ApiResponse> submitVehicleEntry({@required EntryLog entryLogRequest});
   Future<List<ViewEntryResponse>> getDailyEntries(
@@ -23,35 +16,6 @@ abstract class DailyEntryApis {
 }
 
 class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
-  @override
-  Future<List<RoutesForSelectedClientAndDateResponse>>
-      getRoutesForSelectedClientAndDate({int clientId, String date}) async {
-    List<RoutesForSelectedClientAndDateResponse> _routesList = [];
-
-    ParentApiResponse apiResponse = await apiService
-        .getRoutesForSelectedClientAndDate(clientId: clientId, date: date);
-
-    if (apiResponse.error == null) {
-      if (apiResponse.isNoDataFound()) {
-        snackBarService.showSnackbar(message: ParentApiResponse().emptyResult);
-      } else {
-        var routesList = apiResponse.response.data as List;
-
-        routesList.forEach((element) {
-          RoutesForSelectedClientAndDateResponse routes =
-              RoutesForSelectedClientAndDateResponse.fromMap(element);
-
-          _routesList.add(routes);
-        });
-      }
-    } else {
-      snackBarService.showSnackbar(
-        message: apiResponse.getErrorReason(),
-      );
-    }
-
-    return _routesList;
-  }
 
   @override
   Future<EntryLog> getLatestDailyEntry({String registrationNumber}) async {

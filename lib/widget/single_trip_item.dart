@@ -55,7 +55,7 @@ class SingleTripItem extends StatelessWidget {
             child: buildTitle(context),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
             color: AppColors.routesCardColor,
             child: Column(
               children: [
@@ -91,7 +91,7 @@ class SingleTripItem extends StatelessWidget {
     @required RowHelper helper,
   }) {
     return SizedBox(
-      height: 30,
+      height: 50,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
@@ -145,90 +145,94 @@ class SingleTripItem extends StatelessWidget {
   }
 
   Widget buildTitle(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 40,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          consignmentIcon,
-                          height: 20,
-                          width: 20,
-                        ),
-                        wSizedBox(8),
-                        Text(
-                          'C#${singleListItem.consignmentId}',
-                          style: AppTextStyles.latoBold12Black
-                              .copyWith(color: AppColors.primaryColorShade5),
-                        )
-                      ],
-                    ),
-                    status == TripStatus.ONGOING ||
-                            status == TripStatus.UPCOMING
-                        ? Container()
-                        : SizedBox(
-                            height: 15,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Text(
-                                  'Status : ',
-                                  style: AppTextStyles.latoBold12Black.copyWith(
-                                    color: AppColors.primaryColorShade5,
-                                    fontSize: 8,
-                                  ),
-                                ),
-                                Text(
-                                  getStatusTitle(
-                                      statusCode: singleListItem.statusCode,
-                                      context: context),
-                                  style: getStatusTitleStyle(
-                                      statusCode: singleListItem.statusCode),
-                                ),
-                              ],
-                            ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 40,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            consignmentIcon,
+                            height: 20,
+                            width: 20,
+                          ),
+                          wSizedBox(8),
+                          Text(
+                            'C#${singleListItem.consignmentId}',
+                            style: AppTextStyles.latoBold12Black
+                                .copyWith(color: AppColors.primaryColorShade5),
                           )
-                  ],
+                        ],
+                      ),
+                      status == TripStatus.ONGOING ||
+                              status == TripStatus.UPCOMING
+                          ? Container()
+                          : SizedBox(
+                              height: 15,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Text(
+                                    'Status : ',
+                                    style:
+                                        AppTextStyles.latoBold12Black.copyWith(
+                                      color: AppColors.primaryColorShade5,
+                                      fontSize: 8,
+                                    ),
+                                  ),
+                                  Text(
+                                    getStatusTitle(
+                                        statusCode: singleListItem.statusCode,
+                                        context: context),
+                                    style: getStatusTitleStyle(
+                                        statusCode: singleListItem.statusCode),
+                                  ),
+                                ],
+                              ),
+                            )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: AppButton(
-                      buttonTextFontWeight: FontWeight.normal,
-                      borderWidth: 0,
-                      borderColor: AppColors.primaryColorShade5,
-                      onTap: () {
-                        if (onTap != null) onTap.call();
-                      },
-                      background: AppColors.primaryColorShade5,
-                      buttonText: 'View'),
-                ),
-              )
-            ],
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: AppButton(
+                        buttonTextFontWeight: FontWeight.normal,
+                        borderWidth: 0,
+                        borderColor: AppColors.primaryColorShade5,
+                        onTap: () {
+                          if (onTap != null) onTap.call();
+                        },
+                        background: AppColors.primaryColorShade5,
+                        buttonText: 'View'),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
