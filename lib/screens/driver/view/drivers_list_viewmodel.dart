@@ -7,7 +7,6 @@ import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 class DriversListViewModel extends GeneralisedBaseViewModel {
   DriverApis _driverApis = locator<DriverApisImpl>();
@@ -63,7 +62,7 @@ class DriversListViewModel extends GeneralisedBaseViewModel {
     return hubNames;
   }
   Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
-    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+    await bottomSheetService.showCustomSheet(
       barrierDismissible: true,
       isScrollControlled: true,
       variant: BottomSheetType.DRIVER_DETAILS,

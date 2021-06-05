@@ -1,4 +1,7 @@
 In this build the following updates were done :-
 
-1. This build is same for android users. There is no change for them.
-2. But for ios users when fuel rate and fuel liters were added and amount was calulated, the validation of amount was not returning true. This bug has been solved in this bug.
+1. In single trips's items, now showing, routeTitle, itemValue, and then in next line RouteDescription.
+2. Made Routes Driven Km line chart visible again.
+3. In verified trip details bottom sheet, itemValue was showing multiple times. Removed one occurance of it.
+4. Remove all half bottomSheets.
+5. Title in expense Types BottomSheet in Add Expense. 

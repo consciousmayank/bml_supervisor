@@ -1,5 +1,4 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/models/login_response.dart';
+
 
 const String REGISTER_VEHICLE = "/vehicle/add";
 const String SUMBIT_ENTRY = "/dailyKilometer/add";

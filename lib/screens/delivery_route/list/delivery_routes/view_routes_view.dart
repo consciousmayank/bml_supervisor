@@ -1,6 +1,4 @@
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/routes/routes_view.dart';
 import 'package:flutter/material.dart';

@@ -1,13 +1,9 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/image_config.dart';
 import 'package:bml_supervisor/screens/vehicle/view/vehicles_list_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
-import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/new_search_widget.dart';

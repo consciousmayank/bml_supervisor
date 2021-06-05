@@ -19,9 +19,8 @@ class ReviewRejectConfirmationBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseHalfScreenBottomSheet(
-      margin: const EdgeInsets.all(defaultBorder),
-      height: 250,
+    return BaseBottomSheet(
+      // margin: const EdgeInsets.all(defaultBorder),
       request: request,
       completer: completer,
       child: Padding(
