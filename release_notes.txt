@@ -1,3 +1,4 @@
 In this build the following updates were done :-
 
-1. Now the Fuel and average card are hidden in Daily Kilometer Screen.
+1. This build is same for android users. There is no change for them.
+2. But for ios users when fuel rate and fuel liters were added and amount was calulated, the validation of amount was not returning true. This bug has been solved in this bug.

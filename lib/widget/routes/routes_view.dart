@@ -24,10 +24,6 @@ import 'package:stacked/stacked.dart';
 import '../app_button.dart';
 
 class RoutesView extends StatefulWidget {
-  final GetClientsResponse selectedClient;
-  final Function onRoutesPageInView;
-  final bool isInDashBoard;
-
   const RoutesView(
       {Key key,
       this.selectedClient,
@@ -35,48 +31,15 @@ class RoutesView extends StatefulWidget {
       this.isInDashBoard})
       : super(key: key);
 
+  final bool isInDashBoard;
+  final Function onRoutesPageInView;
+  final GetClientsResponse selectedClient;
+
   @override
   _RoutesViewState createState() => _RoutesViewState();
 }
 
 class _RoutesViewState extends State<RoutesView> {
-  PageController _pageViewController;
-  ScrollController _listViewController;
-
-  @override
-  void initState() {
-    _pageViewController = PageController();
-    _listViewController = ScrollController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _pageViewController.dispose();
-    _listViewController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<RoutesViewModel>.reactive(
-      onModelReady: (viewModel) =>
-          viewModel.getRoutesForClient(widget.selectedClient.clientId),
-      builder: (context, viewModel, child) {
-        return viewModel.isBusy
-            ? SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : buildRoutesListView(viewModel);
-      },
-      viewModelBuilder: () => RoutesViewModel(),
-    );
-  }
-
   Widget buildRoutesListView(RoutesViewModel viewModel) {
     return Padding(
       padding: EdgeInsets.only(
@@ -200,13 +163,13 @@ class _RoutesViewState extends State<RoutesView> {
     ).toList();
   }
 
-  getListLength({RoutesViewModel viewModel}) {
-    return widget.isInDashBoard
-        ? viewModel.routesList.length < 6
-            ? viewModel.routesList.length
-            : 6
-        : viewModel.routesList.length;
-  }
+    getListLength({RoutesViewModel viewModel}) {
+      return widget.isInDashBoard
+          ? viewModel.routesList.length < 6
+              ? viewModel.routesList.length
+              : 6
+          : viewModel.routesList.length;
+    }
 
   ///Show a 5 routes only
   getColumnList({@required RoutesViewModel viewModel}) {
@@ -257,13 +220,7 @@ class _RoutesViewState extends State<RoutesView> {
                 viewModel.onAddRouteClicked();
               }),
         ),
-        // addDriverView(
-        //   iconName: addIcon,
-        //   text: "Add New Route",
-        //   onTap: () {
-        //     viewModel.onAddRouteClicked();
-        //   },
-        // ),
+        
         hSizedBox(5),
         viewModel.routesList.length == 0
             ? NoDataWidget(
@@ -520,6 +477,26 @@ class _RoutesViewState extends State<RoutesView> {
           ),
         ),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<RoutesViewModel>.reactive(
+      onModelReady: (viewModel) =>
+          viewModel.getRoutesForClient(widget.selectedClient.clientId),
+      builder: (context, viewModel, child) {
+        return viewModel.isBusy
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height / 2,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : buildRoutesListView(viewModel);
+      },
+      viewModelBuilder: () => RoutesViewModel(),
     );
   }
 }
