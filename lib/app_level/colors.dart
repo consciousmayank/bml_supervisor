@@ -17,6 +17,9 @@ class AppColors {
   static const Color appScaffoldColor = Color(0xFFECECEC);
   static const Color drawerIconsBackgroundColor = Color(0xFFE6F3FF);
   static const Color black = Colors.black87;
+  static const Color bottomSheetGridTileColors = Color.fromRGBO(246, 246, 246, 1);
 
   static const Color white = Colors.white;
+
+  static const Color offWhite = Color(0xfff5f5f5);
 }

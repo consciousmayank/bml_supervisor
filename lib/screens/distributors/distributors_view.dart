@@ -6,6 +6,7 @@ import 'package:bml_supervisor/screens/distributors/distributors_viewmodel.dart'
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/client_dropdown.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -26,7 +27,7 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
       },
       builder: (context, viewModel, child) => Scaffold(
         appBar: AppBar(
-          title: Text('Distributors', style: AppTextStyles.appBarTitleStyle),
+          title: setAppBarTitle(title: 'Distributers'),
           centerTitle: true,
         ),
         body: viewModel.isBusy
@@ -96,70 +97,71 @@ class _DistributorsScreenViewState extends State<DistributorsScreenView> {
                         child: ListView.separated(
                           // physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    '${index + 1}',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    viewModel
-                                        .distributorsResponseList[index].title,
-                                    maxLines: 3,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  flex: 2,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    viewModel.distributorsResponseList[index]
-                                        .contactPerson,
-                                    maxLines: 3,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  flex: 2,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Align(
-                                      child: InkWell(
-                                        onTap: () {
-                                          if (double.parse(viewModel
-                                                  .distributorsResponseList[
-                                                      index]
-                                                  .mobile) >
-                                              0) {
-                                            launch(
-                                                "tel://${viewModel.distributorsResponseList[index].mobile}");
-                                          }
-                                        },
-                                        child: Image.asset(
-                                          callIcon,
-                                          height: 20,
-                                          width: 20,
-                                        ),
-                                      ),
-                                      alignment: Alignment.centerRight,
+                            return SizedBox(
+                              height: 40,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      '${index + 1}',
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                                  flex: 1,
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Text(
+                                      viewModel.distributorsResponseList[index]
+                                          .title,
+                                      maxLines: 3,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      viewModel.distributorsResponseList[index]
+                                          .contactPerson,
+                                      maxLines: 3,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Align(
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (double.parse(viewModel
+                                                    .distributorsResponseList[
+                                                        index]
+                                                    .mobile) >
+                                                0) {
+                                              launch(
+                                                  "tel://${viewModel.distributorsResponseList[index].mobile}");
+                                            }
+                                          },
+                                          child: Image.asset(
+                                            callIcon,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                        ),
+                                        alignment: Alignment.centerRight,
+                                      ),
+                                    ),
+                                    flex: 1,
+                                  ),
+                                ],
+                              ),
                             );
                           },
                           itemCount: viewModel.distributorsResponseList.length,
                           separatorBuilder: (BuildContext context, int index) {
-                            return Divider(
-                              thickness: 1,
-                              color: AppColors.primaryColorShade3,
-                            );
+                            return DottedDivider();
                           },
                         ),
                       ),

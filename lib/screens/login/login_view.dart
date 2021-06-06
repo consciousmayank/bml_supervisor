@@ -79,6 +79,14 @@ class _LoginViewState extends State<LoginView> {
               Text(
                 "BookMyLoading",
                 style: AppTextStyles.latoMediumItalics20,
+              ),
+              hSizedBox(20),
+              Text(
+                // S.of(context).appTitle,
+                'Manager App',
+                style: AppTextStyles.latoMediumItalics20.copyWith(
+                  fontSize: 18,
+                ),
               )
             ],
           ),
@@ -144,7 +152,7 @@ class _LoginViewState extends State<LoginView> {
     return loginTextFormField(
         controller: userNameController,
         focusNode: userNameFocusNode,
-        hintText: "UserName",
+        hintText: "Username",
         keyboardType: TextInputType.text,
         onFieldSubmitted: (_) {
           fieldFocusChange(

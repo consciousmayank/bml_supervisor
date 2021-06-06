@@ -2,15 +2,41 @@
 
 A new Flutter application for BML Supervisor.
 
-## Getting Started
+<!-- Run the dev flavour of the application.-->
+flutter run --flavor dev -t lib/main/main_dev.dart
+<!-- makes the dev flavour of the application with bookmyloading.in as server and com.mayank.bml_supervisor.dev as package-->
+flutter build apk --flavor dev -t lib/main/main_dev.dart
 
-This project is a starting point for a Flutter application.
+<!-- Run the dev flavour of the application.-->
+flutter run --flavor prod -t lib/main/main_prod.dart
+<!-- makes the release flavour of the application with bookmyloading.com as server and com.mayank.bml_supervisor as package-->
+flutter build apk --flavor prod -t lib/main/main_prod.dart
 
-A few resources to get you started if this is your first Flutter project:
+<!-- FOR VSCODE ONLY -->
+<!-- inside vscode folder, make a launch.json, if not made, and then copy below code-->
+{
+    "version": "0.2.0", <!-- comment this line if you are not using dart sdk version 0.2.0 -->
+    "configurations": [
+        {
+            "name": "bml manager dev",
+            "program": "lib/main/main_dev.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+        }
+        {
+            "name": "bml manager prod",
+            "program": "lib/main/main_prod.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "prod" 
+            ],
+        }
+    ]
+}
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

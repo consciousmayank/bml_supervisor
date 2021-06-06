@@ -1,6 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart'
@@ -12,11 +11,8 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -39,7 +35,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     initialPage: 0,
   );
 
-  ScrollController _scrollController = ScrollController();
   TextEditingController hubTitleController = TextEditingController();
   FocusNode hubTitleFocusNode = FocusNode();
 
@@ -47,8 +42,11 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   TextEditingController weightController = TextEditingController();
   TextEditingController weightGController = TextEditingController();
 
-  TextEditingController remarksController = TextEditingController();
-  FocusNode remarksFocusNode = FocusNode();
+  TextEditingController oldRemarksController = TextEditingController();
+  FocusNode oldRemarksFocusNode = FocusNode();
+
+  TextEditingController newRemarksController = TextEditingController();
+  FocusNode newRemarksFocusNode = FocusNode();
 
   TextEditingController dropController = TextEditingController();
   FocusNode dropFocusNode = FocusNode();
@@ -92,18 +90,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                 child: Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: true,
-                    title: Text(
-                        "Review Consignments - ${MyPreferences().getSelectedClient().clientId}",
-                        style: AppTextStyles.appBarTitleStyle),
-                    // actions: [
-                    //   isEditAllowed
-                    //       ? TextButton(
-                    //           onPressed: () {
-                    //             // call update consignment api
-                    //           },
-                    //           child: Text("Edit"))
-                    //       : Container()
-                    // ],
+                    title: setAppBarTitle(title: 'Review Consignment'),
                   ),
                   body: viewModel.isBusy
                       ? Center(
@@ -139,8 +126,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
             .consignmentDetailResponseNew.items[position].payment
             .toString() ??
         "";
-    remarksController.text =
+    oldRemarksController.text =
         viewModel.consignmentDetailResponseNew.items[position].remarks ?? "";
+    newRemarksController.text =
+        viewModel.reviewConsignmentRequest.reviewedItems[position].remarks ??
+            "";
+
     gDropController.text = viewModel
             .reviewConsignmentRequest.reviewedItems[position].dropOff
             .toString() ??
@@ -189,7 +180,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         ? SingleChildScrollView(
             child: SizedBox(
               // height: MediaQuery.of(context).size.height,
-              height: 850,
+              height: 950,
               child: Column(
                 children: [
                   Padding(
@@ -243,7 +234,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                     children: [
                       Expanded(
                         child: AppTiles(
-                          title: 'Total Collect',
+                          title:
+                              'Total Collect (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.collect ==
                                   0
@@ -261,7 +253,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                       Expanded(
                         child: AppTiles(
-                          title: 'Total Drop',
+                          title:
+                              'Total Drop (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.dropOff ==
                                   0
@@ -279,7 +272,6 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       ),
                     ],
                   ),
-
                   Expanded(
                     child: PageView.builder(
                       onPageChanged: (index) {
@@ -414,9 +406,27 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                     ],
                                   ),
                                   hSizedBox(25),
-                                  remarksInput(
-                                      context: context, viewModel: viewModel),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: oldRemarksInput(
+                                            context: context,
+                                            viewModel: viewModel),
+                                        flex: 1,
+                                      ),
+                                      wSizedBox(10),
+                                      Expanded(
+                                        child: newRemarksInput(
+                                            context: context,
+                                            viewModel: viewModel),
+                                        flex: 1,
+                                      ),
+                                    ],
+                                  ),
                                   hSizedBox(25),
+                                  Spacer(
+                                    flex: 2,
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
@@ -429,6 +439,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                   height: buttonHeight,
                                                   child: AppButton(
                                                     onTap: () {
+                                                      hideKeyboard(
+                                                          context: context);
                                                       updateReviewConsignmentData(
                                                         viewModel: viewModel,
                                                         index: index,
@@ -465,16 +477,25 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                             1
                                                     ? () {
                                                         // finish btn functionality
+                                                        hideKeyboard(
+                                                            context: context);
                                                         updateReviewConsignmentData(
                                                             viewModel:
                                                                 viewModel,
                                                             index: index);
                                                         // update api call
                                                         viewModel
-                                                            .updateConsignment();
+                                                            .updateConsignment(
+                                                          newRemarks:
+                                                              newRemarksController
+                                                                  .text
+                                                                  .trim(),
+                                                        );
                                                       }
                                                     : () {
                                                         // Next btn functionality
+                                                        hideKeyboard(
+                                                            context: context);
                                                         updateReviewConsignmentData(
                                                             viewModel:
                                                                 viewModel,
@@ -564,7 +585,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
     return TextFormField(
       style: getTextFormFieldStyle(),
-      decoration: getInputBorder(hint: "Review Item Weight"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Weight (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       enabled: true,
       controller: weightGController,
       keyboardType: TextInputType.text,
@@ -578,19 +601,49 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
-  Widget remarksInput(
+  Widget oldRemarksInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
     return TextFormField(
+      maxLines: 7,
       style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Remarks"),
-      controller: remarksController,
-      focusNode: remarksFocusNode,
+      decoration: getInputBorder(
+        hint: "Remarks",
+        contentPadding: EdgeInsets.all(16),
+      ),
+      controller: oldRemarksController,
+      focusNode: oldRemarksFocusNode,
       onFieldSubmitted: (_) {
-        remarksFocusNode.unfocus();
+        oldRemarksFocusNode.unfocus();
+
+        fieldFocusChange(
+          context,
+          oldRemarksFocusNode,
+          newRemarksFocusNode,
+        );
       },
       // hintText: "Hub Title",
       keyboardType: TextInputType.text,
+    );
+  }
+
+  Widget newRemarksInput(
+      {BuildContext context, ViewConsignmentViewModel viewModel}) {
+    return TextFormField(
+      maxLines: 7,
+      style: getTextFormFieldStyle(),
+      enabled: true,
+      decoration: getInputBorder(
+        hint: "Remarks (while Review)",
+        contentPadding: EdgeInsets.all(16),
+      ),
+      controller: newRemarksController,
+      focusNode: newRemarksFocusNode,
+      onFieldSubmitted: (_) {
+        newRemarksFocusNode.unfocus();
+      },
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
     );
   }
 
@@ -598,7 +651,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Item Drop"),
+      decoration: getInputBorder(
+          hint:
+              "Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: dropController,
       focusNode: dropFocusNode,
       onFieldSubmitted: (_) {
@@ -617,7 +672,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: true,
-      decoration: getInputBorder(hint: "Review Item Drop"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: gDropController,
       focusNode: gDropFocusNode,
       onFieldSubmitted: (_) {
@@ -643,7 +700,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: false,
-      decoration: getInputBorder(hint: "Item Collect"),
+      decoration: getInputBorder(
+          hint:
+              "Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: collectController,
       focusNode: collectFocusNode,
       onFieldSubmitted: (_) {
@@ -662,7 +721,9 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     return TextFormField(
       style: getTextFormFieldStyle(),
       enabled: true,
-      decoration: getInputBorder(hint: "Review Item Collect"),
+      decoration: getInputBorder(
+          hint:
+              "Review Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
       controller: gCollectController,
       focusNode: gCollectFocusNode,
       onFieldSubmitted: (_) {
@@ -698,7 +759,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         fieldFocusChange(
           context,
           paymentFocusNode,
-          remarksFocusNode,
+          oldRemarksFocusNode,
         );
       },
       keyboardType: TextInputType.number,
@@ -734,13 +795,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   }
 
   dateSelector({BuildContext context, ViewConsignmentViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
-    );
+    return selectedDateTextField(viewModel);
   }
 
   selectedDateTextField(ViewConsignmentViewModel viewModel) {
@@ -751,26 +806,19 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
       hintText: "Entry Date",
       labelText: "Entry Date",
       keyboardType: TextInputType.text,
-    );
-  }
-
-  selectDateButton(BuildContext context, ViewConsignmentViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Icon(Icons.calendar_today_outlined),
-        onPressed: (() async {
-          DateTime selectedDate = await selectDate();
-          if (selectedDate != null) {
-            selectedDateController.text =
-                DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.selectedRoute = null;
-            viewModel.entryDate = selectedDate;
-            // viewModel.getRoutes(viewModel.selectedClient.clientId);
-            viewModel.getConsignmentListWithDate();
-          }
-        }),
-      ),
+      buttonType: ButtonType.FULL,
+      buttonIcon: Icon(Icons.calendar_today_outlined),
+      onButtonPressed: (() async {
+        DateTime selectedDate = await selectDate();
+        if (selectedDate != null) {
+          selectedDateController.text =
+              DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+          viewModel.selectedRoute = null;
+          viewModel.entryDate = selectedDate;
+          // viewModel.getRoutes(viewModel.selectedClient.clientId);
+          viewModel.getConsignmentListWithDate();
+        }
+      }),
     );
   }
 
@@ -825,12 +873,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   //         color: AppColors.primaryColorShade1,
   //       ),
   //     ),
-  //     enabledBorder: OutlineInputBorder(
-  //       borderRadius: BorderRadius.circular(5.0),
-  //       borderSide: BorderSide(
-  //         color: AppColors.primaryColorShade1,
-  //       ),
-  //     ),
+      // enabledBorder: OutlineInputBorder(
+      //   borderRadius: BorderRadius.circular(5.0),
+      //   borderSide: BorderSide(
+      //     color: AppColors.primaryColorShade1,
+      //   ),
+      // ),
   //     errorBorder: OutlineInputBorder(
   //       borderRadius: BorderRadius.circular(5.0),
   //       borderSide: BorderSide(
@@ -845,8 +893,11 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         .copyWith(color: AppColors.primaryColorShade5, fontSize: 16);
   }
 
-  getInputBorder({@required String hint}) {
+  getInputBorder(
+      {@required String hint,
+      EdgeInsets contentPadding = const EdgeInsets.all(8)}) {
     return InputDecoration(
+      contentPadding: contentPadding,
       alignLabelWithHint: true,
       errorStyle: TextStyle(
         fontSize: 14,
@@ -892,30 +943,18 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     bool skip = false,
   }) {
     if (skip || viewModel.formKeyList[index].currentState.validate()) {
-      print('form validated');
-      print('gDropController.text: ${gDropController.text}');
-      print('gCollectController.text: ${gCollectController.text}');
-      print('gPaymentController.text: ${gPaymentController.text}');
-
       reviewConsignment.Item tempReviewItem =
           viewModel.reviewConsignmentRequest.reviewedItems[index];
       viewModel.reviewConsignmentRequest.reviewedItems.removeAt(index);
       // viewModel.consignmentDetailResponseNew.reviewedItems.add()
       tempReviewItem = tempReviewItem.copyWith(
-        dropOff: skip ? 0 : int.parse(gDropController.text),
-        collect: skip ? 0 : int.parse(gCollectController.text),
-        payment: skip ? 0 : double.parse(gPaymentController.text),
-      );
+          dropOff: skip ? 0 : int.parse(gDropController.text),
+          collect: skip ? 0 : int.parse(gCollectController.text),
+          payment: skip ? 0 : double.parse(gPaymentController.text),
+          remarks: skip ? '' : '${newRemarksController.text}');
       viewModel.reviewConsignmentRequest.reviewedItems
           .insert(index, tempReviewItem);
       viewModel.notifyListeners();
-      print('request object values');
-      print(
-          '${viewModel.reviewConsignmentRequest.reviewedItems[index].dropOff}');
-      print(
-          '${viewModel.reviewConsignmentRequest.reviewedItems[index].collect}');
-      print(
-          '${viewModel.reviewConsignmentRequest.reviewedItems[index].payment}');
 
       if (goForward) {
         if (index < viewModel.consignmentDetailResponseNew.items.length) {

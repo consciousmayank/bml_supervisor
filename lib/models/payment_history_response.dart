@@ -21,7 +21,7 @@ class PaymentHistoryResponse {
 
   int id;
   int transactionId;
-  String clientId;
+  int clientId;
   String entryDate;
   String remarks;
   double amount;

@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/configuration.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/main/app_configs.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/splash/app_start_apis.dart';
 import 'package:flutter/material.dart';
@@ -65,14 +69,19 @@ class _MyHomePageState extends State<MyHomePage> {
           print('Animation started playing');
         } else {
           locator<AppStartApiImpl>().getAppVersions().then((response) {
-            if (response.major > appVersion) {
-              locator<DialogService>()
-                  .showConfirmationDialog(
-                      title: 'App update required!',
-                      description:
-                          'It seems you are having an old version of this application. Please click ok and update the application.',
-                      cancelTitle: 'Abort App',
-                      confirmationTitle: 'Update App')
+            if (response.major != AppConfigs.MAJOR_VERSION ||
+                response.minor != AppConfigs.MINOR_VERSION) {
+              locator<BottomSheetService>()
+                  .showCustomSheet(
+                customData: ConfirmationBottomSheetInputArgs(
+                  title: 'App update required!',
+                  description:
+                      'It seems you are having an old version of this application. Please click ok and update the application.',
+                ),
+                barrierDismissible: false,
+                isScrollControlled: true,
+                variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+              )
                   .then((value) {
                 if (value.confirmed) {
                   // StoreRedirect.redirect();
@@ -88,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             } else {
               // Future.delayed(Duration(seconds: 3), () {
-              PreferencesSavedUser user = MyPreferences().getUserLoggedIn();
+              LoginResponse user = MyPreferences().getUserLoggedIn();
               if (user != null && user.isUserLoggedIn) {
                 if (MyPreferences().getSelectedClient() != null) {
                   locator<NavigationService>().replaceWith(dashBoardPageRoute);

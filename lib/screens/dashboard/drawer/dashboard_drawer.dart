@@ -1,5 +1,7 @@
+import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/drawerlistitem/drawer_list_item.dart';
 import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 
@@ -22,18 +24,19 @@ class DashBoardDrawer extends StatefulWidget {
 class _DashBoardDrawerState extends State<DashBoardDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      color: AppColors.white,
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.70,
-      child: SingleChildScrollView(
-        child: Padding(
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Padding(
           padding: EdgeInsets.only(
               top: 10 + MediaQuery.of(context).padding.top,
               left: drawerContentPadding,
               right: drawerContentPadding,
               bottom: drawerContentPadding),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClickableWidget(
                 childColor: AppColors.white,
@@ -65,7 +68,7 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                                   color: AppColors.primaryColorShade5),
                             ),
                             Text(
-                              '${widget.dashBoardScreenViewModel?.savedUser?.role}',
+                              '${widget.dashBoardScreenViewModel?.savedUser?.designation}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.latoMedium16Primary5
@@ -83,119 +86,226 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                 thickness: 1,
                 color: AppColors.black,
               ),
-              drawerList(
-                imageName: homeIcon,
-                text: "Dashboard",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .onDashboardDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: totalKmIcon,
-                text: "Daily Kilometers",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .onDailyKilometersDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: expensesIcon,
-                text: "Expenses",
-                onTap: () {
-                  widget.dashBoardScreenViewModel.onExpensesDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: consignmentIcon,
-                text: "Consignment",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .changeConsignmentGroupVisibility();
-                },
-              ),
-              AnimatedOpacity(
-                duration: Duration(milliseconds: 800),
-                opacity: widget.dashBoardScreenViewModel.openConsignmentGroup
-                    ? 1.0
-                    : 0.0,
-                child: widget.dashBoardScreenViewModel.openConsignmentGroup
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 24),
-                        child: Column(
-                          children: [
-                            drawerList(
-                              imageName: consignmentIcon,
-                              text: "Create",
-                              onTap: () {
-                                widget.dashBoardScreenViewModel
-                                    .onAllotConsignmentsDrawerTileClicked();
-                                widget.dashBoardScreenViewModel
-                                    .changeConsignmentGroupVisibility();
-                              },
-                            ),
-                            drawerList(
-                              imageName: consignmentListIcon,
-                              text: "List",
-                              onTap: () {
-                                widget.dashBoardScreenViewModel
-                                    .onListConsignmentTileClick();
-                                widget.dashBoardScreenViewModel
-                                    .changeConsignmentGroupVisibility();
-                              },
-                            ),
-                            drawerList(
-                              imageName: review_consig_Icon,
-                              text: "Review",
-                              onTap: () {
-                                widget.dashBoardScreenViewModel
-                                    .onPendingConsignmentsListDrawerTileClicked();
-                                widget.dashBoardScreenViewModel
-                                    .changeConsignmentGroupVisibility();
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(),
-              ),
-              drawerList(
-                imageName: routesIcon,
-                text: "Routes List",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .onViewRoutesDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: drawerRupeeIcon,
-                text: "Transaction History",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .onTransactionsDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: addDriverIcon,
-                text: "Add Driver",
-                onTap: () {
-                  widget.dashBoardScreenViewModel
-                      .onAddDriverDrawerTileClicked();
-                },
-              ),
-              drawerList(
-                imageName: addHubIcon,
-                text: "Add Hubs",
-                onTap: () {
-                  widget.dashBoardScreenViewModel.onAddHubTileClick();
-                },
-              ),
-              drawerList(
-                imageName: addRouteIcon,
-                text: "Create Route",
-                onTap: () {
-                  widget.dashBoardScreenViewModel.onAddRoutesTileClick();
-                },
+              Flexible(
+                fit: FlexFit.tight,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      DrawerListItem(
+                        imageName: homeIcon,
+                        text: "Dashboard",
+                        onTap: () {
+                          widget.dashBoardScreenViewModel
+                              .onDashboardDrawerTileClicked();
+                        },
+                      ),
+                      DrawerListItem(
+                        imageName: totalKmIcon,
+                        text: "Daily Kilometer",
+                        onTap: () {
+                          widget.dashBoardScreenViewModel
+                              .onDailyKilometersDrawerTileClicked();
+                        },
+                      ),
+                      DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Expense",
+                        onTap: () {
+                          widget.dashBoardScreenViewModel
+                              .onExpensesDrawerTileClicked();
+                        },
+                      ),
+                      DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Consignment",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            imageName: consignmentIcon,
+                            isSubMenu: true,
+                            text: "Create",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAllotConsignmentsDrawerTileClicked();
+                              widget.dashBoardScreenViewModel
+                                  .changeConsignmentGroupVisibility();
+                            },
+                          ),
+                          DrawerListItem(
+                            imageName: consignmentListIcon,
+                            isSubMenu: true,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onListConsignmentTileClick();
+                              widget.dashBoardScreenViewModel
+                                  .changeConsignmentGroupVisibility();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: reviewConsigIcon,
+                            text: "Review",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onPendingConsignmentsListDrawerTileClicked();
+                              widget.dashBoardScreenViewModel
+                                  .changeConsignmentGroupVisibility();
+                            },
+                          ),
+                        ],
+                      ),
+                      if(widget.dashBoardScreenViewModel.consignmentTrackingStatistics != null) DrawerListItem(
+                        imageName: expensesIcon,
+                        text: "Tracking",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: consignmentIcon,
+                            text:
+                                "Upcoming Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.created})",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.UPCOMING);
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: consignmentListIcon,
+                            text:
+                                "OnGoing Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.ongoing})",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.ONGOING);
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: reviewConsigIcon,
+                            text:
+                                "Completed Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.completed + widget.dashBoardScreenViewModel.consignmentTrackingStatistics.approved})",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .takeToUpcomingTripsDetailsView(
+                                      tripStatus: TripStatus.COMPLETED);
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: vehicleIcon,
+                        text: "Vehicle",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            imageName: addIcon,
+                            isSubMenu: true,
+                            text: "Add",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddVehicleTileClick();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: viewIcon,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onViewVehicleTileClick();
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: driverIcon,
+                        text: "Driver",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            imageName: addIcon,
+                            isSubMenu: true,
+                            text: "Add",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddDriverDrawerTileClicked();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: viewIcon,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onViewDriverTileClick();
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: routesIcon,
+                        text: "Route",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: addIcon,
+                            text: "Add",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddRoutesTileClick();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: viewIcon,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onViewRoutesDrawerTileClicked();
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: addHubIcon,
+                        text: "Hub",
+                        onTap: () {},
+                        children: [
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: addIcon,
+                            text: "Add",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onAddHubTileClick();
+                            },
+                          ),
+                          DrawerListItem(
+                            isSubMenu: true,
+                            imageName: viewIcon,
+                            text: "List",
+                            onTap: () {
+                              widget.dashBoardScreenViewModel
+                                  .onViewHubsListDrawerTileClicked();
+                            },
+                          ),
+                        ],
+                      ),
+                      DrawerListItem(
+                        imageName: drawerRupeeIcon,
+                        text: "Transaction History",
+                        onTap: () {
+                          widget.dashBoardScreenViewModel
+                              .onTransactionsDrawerTileClicked();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

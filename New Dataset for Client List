@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "vendorId": 1,
+        "dateOfReg": "01-05-2021",
+        "businessName": "Spoton Courier",
+        "contactPerson": "Shidharth Painuly",
+        "mobile": "7895667017",
+        "mobileAlternate": "7895667017",
+        "email": "info@speedx.com",
+        "photo": null,
+        "address": [
+            {
+                "id": 3,
+                "type": "COMMERCIAL",
+                "addressLine1": "HNO 123",
+                "addressLine2": "ABC STREET",
+                "locality": "TRANSPORT NAGAR",
+                "nearby": "TATA MOTORS",
+                "city": "DEHRADUN",
+                "state": "UTTARAKHAND",
+                "country": "INDIA",
+                "pincode": "248001",
+                "status": true,
+                "creationdate": "19-05-2021",
+                "lastupdated": "19-05-2021 16:43:10 PM"
+            }
+        ],
+        "username": "spoton",
+        "status": true,
+        "creationdate": "19-05-2021",
+        "lastupdated": "19-05-2021 14:30:18 PM"
+    },
+    {
+        "id": 2,
+        "vendorId": 1,
+        "dateOfReg": "01-01-2021",
+        "businessName": "Golden Harvest",
+        "contactPerson": "Pranay Sabarwal",
+        "mobile": "7895667017",
+        "mobileAlternate": "7895667017",
+        "email": "info@speedx.com",
+        "photo": null,
+        "address": [
+            {
+                "id": 4,
+                "type": "COMMERCIAL",
+                "addressLine1": "BUILDING NO 2",
+                "addressLine2": "ABC STREET",
+                "locality": "PATEL NAGAR",
+                "nearby": "AMAR UJALA",
+                "city": "DEHRADUN",
+                "state": "UTTARAKHAND",
+                "country": "INDIA",
+                "pincode": "248001",
+                "status": true,
+                "creationdate": "19-05-2021",
+                "lastupdated": "19-05-2021 16:43:10 PM"
+            }
+        ],
+        "username": "goldenharvest",
+        "status": true,
+        "creationdate": "19-05-2021",
+        "lastupdated": "19-05-2021 14:32:23 PM"
+    }
+]

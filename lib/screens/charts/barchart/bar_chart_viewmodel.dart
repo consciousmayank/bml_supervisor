@@ -13,6 +13,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
   List<String> uniqueDates = [];
   List<TickSpec<num>> listOfTicks;
 
+
   DateTime get selectedDate => _selectedDate;
 
   set selectedDate(DateTime value) {
@@ -27,6 +28,7 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
   set totalKmG(int value) {
     _totalKmG = value;
   }
+
   String _chartDate;
 
   String get chartDate => _chartDate;
@@ -56,44 +58,46 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  Future getBarGraphKmReport({String clientId}) async {
+  Future getBarGraphKmReport({int clientId}) async {
     kmReportListData.clear();
     uniqueDates.clear();
     chartDate = '';
 
     // int selectedDurationValue = selectedDuration == 'THIS MONTH' ? 1 : 2;
     notifyListeners();
-    List<KilometerReportResponse> res = await _chartsApi.getDailyDrivenKm(
-        clientId: clientId);
+    List<KilometerReportResponse> res =
+        await _chartsApi.getDailyDrivenKm(clientId: clientId);
 
     kmReportListData = copyList(res);
 
-    kmReportListData.forEach((element) {
-      totalKmG += element.drivenKm;
-      if (!uniqueDates.contains(element.entryDate)) {
-        uniqueDates.add(element.entryDate);
+    if (kmReportListData.length > 0) {
+      kmReportListData.forEach((element) {
+        totalKmG += element.drivenKm;
+        if (!uniqueDates.contains(element.entryDate)) {
+          uniqueDates.add(element.entryDate);
+        }
+      });
+      if (uniqueDates.length > 0) {
+        chartDate = uniqueDates.first;
       }
-    });
-    if(uniqueDates.length> 0) {
-      chartDate = uniqueDates.first;
-    }
 
-    seriesBarData = [
-      charts.Series(
-        id: 'Total Kms: ' + totalKmG.toString(),
-        data: kmReportListData,
-        insideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
-            charts.TextStyleSpec(fontSize: 10, color: charts.Color.white),
-        outsideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
-            charts.TextStyleSpec(fontSize: 10, color: charts.Color.black),
-        domainFn: (KilometerReportResponse series, _) =>
-            series.entryDate.split('-')[0],
-        measureFn: (KilometerReportResponse series, _) => series.drivenKm,
-        colorFn: (KilometerReportResponse series, _) => series.barColor,
-        labelAccessorFn: (KilometerReportResponse series, _) =>
-            '${series.drivenKm.toString()}\nkm',
-      ),
-    ];
+      seriesBarData = [
+        charts.Series(
+          id: 'Total Kms: ' + totalKmG.toString(),
+          data: kmReportListData,
+          insideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
+              charts.TextStyleSpec(fontSize: 10, color: charts.Color.white),
+          outsideLabelStyleAccessorFn: (KilometerReportResponse series, _) =>
+              charts.TextStyleSpec(fontSize: 10, color: charts.Color.black),
+          domainFn: (KilometerReportResponse series, _) =>
+              series.entryDate.split('-')[0],
+          measureFn: (KilometerReportResponse series, _) => series.drivenKm,
+          colorFn: (KilometerReportResponse series, _) => series.barColor,
+          labelAccessorFn: (KilometerReportResponse series, _) =>
+              '${series.drivenKm.toString()}\nkm',
+        ),
+      ];
+    }
 
     notifyListeners();
   }

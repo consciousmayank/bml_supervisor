@@ -92,7 +92,7 @@ class _BodyWidgetState extends State<BodyWidget> {
               ),
               hSizedBox(8),
               Text(
-                '( ${MyPreferences().getUserLoggedIn().role} )',
+                '( ${MyPreferences().getUserLoggedIn().designation} )',
                 style: AppTextStyles.latoBold18PrimaryShade5
                     .copyWith(fontSize: 10),
               ),
@@ -343,40 +343,45 @@ class _BodyWidgetState extends State<BodyWidget> {
       String trailingText = '',
       Function onTap}) {
     return ListTile(
-        onTap: onTap != null ? onTap : null,
-        isThreeLine: false,
-        dense: true,
-        leading: IconBlueBackground(
-          iconName: iconName,
-        ),
-        title: title != null
-            ? Text(
-                title,
-                style: subTitle == null
-                    ? AppTextStyles.latoBold14Black.copyWith(
-                        color: AppColors.primaryColorShade5,
-                      )
-                    : AppTextStyles.latoMedium12Black.copyWith(
-                        color: AppColors.primaryColorShade5,
-                      ),
-              )
-            : Container(),
-        subtitle: subTitle != null
-            ? Text(
-                subTitle,
+      onTap: onTap != null ? onTap : null,
+      isThreeLine: false,
+      dense: true,
+      leading: IconBlueBackground(
+        iconName: iconName,
+      ),
+      title: title != null
+          ? Text(
+              title,
+              style: subTitle == null
+                  ? AppTextStyles.latoBold14Black.copyWith(
+                      color: AppColors.primaryColorShade5,
+                    )
+                  : AppTextStyles.latoMedium12Black.copyWith(
+                      color: AppColors.primaryColorShade5,
+                    ),
+            )
+          : Container(),
+      subtitle: subTitle != null
+          ? Text(
+              subTitle,
+              style: AppTextStyles.latoBold14Black.copyWith(
+                color: AppColors.primaryColorShade5,
+              ),
+            )
+          : Container(),
+      trailing: trailingText.length == 0
+          ? null
+          : TextButton(
+              onPressed: () {
+                onTap.call();
+              },
+              child: Text(
+                trailingText,
                 style: AppTextStyles.latoBold14Black.copyWith(
                   color: AppColors.primaryColorShade5,
                 ),
-              )
-            : Container(),
-        trailing: InkWell(
-          onTap: onTap,
-          child: Text(
-            trailingText,
-            style: AppTextStyles.latoBold14Black.copyWith(
-              color: AppColors.primaryColorShade5,
+              ),
             ),
-          ),
-        ));
+    );
   }
 }

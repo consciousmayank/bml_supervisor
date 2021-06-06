@@ -7,8 +7,11 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
+import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:bml_supervisor/widget/gridViewBottomSheet/grid_view_bottomSheet.dart';
+// import 'package:bml_supervisor/widget/gridViewBottomSheet/bottomsheet_grid_view.dart';
 
 class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
@@ -86,10 +89,10 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   }
 
   getClients() async {
-    selectedClient = MyPreferences().getSelectedClient();
+    selectedClient = MyPreferences()?.getSelectedClient();
   }
 
-  void vehicleEntrySearch({String regNum, String clientId}) async {
+  void vehicleEntrySearch({String regNum, int clientId}) async {
     entryCount = 0;
     vehicleEntrySearchResponseList.clear();
     _vehicleLog = null;
@@ -137,11 +140,112 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
   double get totalFuelAmt => _totalFuelAmt;
 
   Future showMonthYearBottomSheet() async {
-    var sheetResponse = await bottomSheetService.showCustomSheet(
+    await bottomSheetService.showCustomSheet(
       barrierDismissible: true,
       isScrollControlled: true,
-      customData: tempList,
-      variant: BottomSheetType.viewEntry,
+      // customData: tempList,
+      customData: DailyKmPeriodBottomSheetInputArgs(
+        sheetTitle: 'Daily Km Period',
+        options: tempList,
+        selectedOption: tempList.first,
+      ),
+      variant: BottomSheetType.VIEW_ENTRY_PERIOD,
+    );
+  }
+
+  void openDailyEntryDetailsBottomSheet({ViewEntryResponse clickedDailyEntry}) {
+    List<GridViewHelper> helperList = [
+      GridViewHelper(
+        label: 'Vehicle Number',
+        value: clickedDailyEntry.vehicleId.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Entry Date',
+        value: clickedDailyEntry.entryDate.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Start Reading',
+        value: clickedDailyEntry.startReading.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Start Reading (G)',
+        value: clickedDailyEntry.startReadingGround.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'End Reading',
+        value: clickedDailyEntry.endReading.toString(),
+        onValueClick: null,
+      ),
+
+      GridViewHelper(
+        label: 'Trips',
+        value: clickedDailyEntry.trips.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Driven KM',
+        value: clickedDailyEntry.drivenKm.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Driven KM (G)',
+        value: clickedDailyEntry.drivenKmGround.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Fuel (Ltr)',
+        value: clickedDailyEntry.fuelLtr.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Fuel Meter Reading',
+        value: clickedDailyEntry.fuelMeterReading.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Rate Per Ltr',
+        value: clickedDailyEntry.ratePerLtr.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Amount Paid',
+        value: clickedDailyEntry.amountPaid.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Login Time',
+        value: clickedDailyEntry.loginTime.toString(),
+        onValueClick: null,
+      ),
+      GridViewHelper(
+        label: 'Logout Time',
+        value: clickedDailyEntry.logoutTime.toString(),
+        onValueClick: null,
+      ),
+    ];
+
+    List<GridViewHelper> footerListEx = [
+      GridViewHelper(
+        label: 'Description',
+        value: clickedDailyEntry.remarks,
+        onValueClick: null,
+      ),
+    ];
+
+    bottomSheetService.showCustomSheet(
+      customData: GridViewBottomSheetInputArgument(
+        headerList: [],
+        title: 'Entry Details',
+        footerList: footerListEx,
+        gridList: helperList,
+      ),
+      barrierDismissible: true,
+      isScrollControlled: true,
+      variant: BottomSheetType.VIEW_ENTRY_DETAILS,
     );
   }
 }

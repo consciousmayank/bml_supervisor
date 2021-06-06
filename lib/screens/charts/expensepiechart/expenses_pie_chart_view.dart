@@ -1,9 +1,9 @@
-
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/screens/charts/expensepiechart/expenses_pie_chart_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as axisMaterial;
@@ -26,64 +26,71 @@ class _ExpensesPieChartViewState extends State<ExpensesPieChartView> {
         // createNewModelOnInsert: true,
         onModelReady: (viewModel) {
           viewModel.getExpensesListForPieChart(
-            clientId: MyPreferences().getSelectedClient().clientId,
+            clientId: MyPreferences()?.getSelectedClient()?.clientId,
           );
         },
         builder: (context, viewModel, child) {
           return viewModel.isBusy
               ? DashBoardLoadingWidget()
-              : viewModel.expensePieChartResponseList.length > 0
-                  ? Card(
-                      elevation: defaultElevation,
-                      shape: getCardShape(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            buildChartTitle(title: 'Expenses'),
-                            // buildChartSubTitle(time: viewModel?.selectedDate),
-                            viewModel.buildChartSubTitleNew(),
-                            hSizedBox(5),
-                            // Text(viewModel.expensePieChartResponseList[0].vehicleId),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.width * 0.87,
-                              child: charts.PieChart(
-                                viewModel.expenseSeriesPieData,
-                                animate: true,
-                                animationDuration: Duration(milliseconds: 200),
-                                // behaviors: [
-                                //   charts.DatumLegend(
-                                //     outsideJustification: charts
-                                //         .OutsideJustification.middleDrawArea,
-                                //     horizontalFirst: true,
-                                //     // desiredMaxRows: 2,
-                                //     cellPadding: EdgeInsets.all(2),
-                                //     entryTextStyle: charts.TextStyleSpec(
-                                //         // color: charts.MaterialPalette.blue.shadeDefault,
-                                //         // fontFamily: 'Georgia',
-                                //         fontSize: 14),
-                                //   )
-                                // ],
-                                defaultRenderer: new charts.ArcRendererConfig(
-                                  arcWidth: 80,
-                                  arcRendererDecorators: [
-                                    charts.ArcLabelDecorator(
-                                      labelPosition:
-                                          charts.ArcLabelPosition.auto,
-                                    )
-                                  ],
+              : Card(
+                  elevation: defaultElevation,
+                  shape: getCardShape(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        buildChartTitle(title: 'Expenses'),
+                        // buildChartSubTitle(time: viewModel?.selectedDate),
+                        if (viewModel.expensePieChartResponseList.length > 0)
+                          viewModel.buildChartSubTitleNew(),
+
+                        if (viewModel.expensePieChartResponseList.length > 0)
+                          hSizedBox(5),
+                        // Text(viewModel.expensePieChartResponseList[0].vehicleId),
+                        viewModel.expensePieChartResponseList.length > 0
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.width * 0.87,
+                                child: charts.PieChart(
+                                  viewModel.expenseSeriesPieData,
+                                  animate: true,
+                                  animationDuration:
+                                      Duration(milliseconds: 200),
+                                  // behaviors: [
+                                  //   charts.DatumLegend(
+                                  //     outsideJustification: charts
+                                  //         .OutsideJustification.middleDrawArea,
+                                  //     horizontalFirst: true,
+                                  //     // desiredMaxRows: 2,
+                                  //     cellPadding: EdgeInsets.all(2),
+                                  //     entryTextStyle: charts.TextStyleSpec(
+                                  //         // color: charts.MaterialPalette.blue.shadeDefault,
+                                  //         // fontFamily: 'Georgia',
+                                  //         fontSize: 14),
+                                  //   )
+                                  // ],
+                                  defaultRenderer: new charts.ArcRendererConfig(
+                                    arcWidth: 80,
+                                    arcRendererDecorators: [
+                                      charts.ArcLabelDecorator(
+                                        labelPosition:
+                                            charts.ArcLabelPosition.auto,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                            hSizedBox(10),
-                            // route label bottom positioned
-                            buildColorLegendListView(viewModel)
-                          ],
-                        ),
-                      ),
-                    )
-                  : Container();
+                              )
+                            : NoDataWidget(),
+                        if (viewModel.expensePieChartResponseList.length > 0)
+                          hSizedBox(10),
+                        // route label bottom positioned
+                        if (viewModel.expensePieChartResponseList.length > 0)
+                          buildColorLegendListView(viewModel)
+                      ],
+                    ),
+                  ),
+                );
         },
         viewModelBuilder: () => ExpensesPieChartViewModel());
   }

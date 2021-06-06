@@ -26,7 +26,6 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
     );
   }
 
-
   // getRecentConsignments({int clientId, String duration}) async {
   //   this.clientId = clientId;
   //   this.duration = duration;
@@ -66,24 +65,28 @@ class ConsignmentListViewModel extends GeneralisedBaseViewModel {
           isFulPageView: true,
         ));
   }
-  getRecentDrivenKm({String clientId}) async {
+
+  getRecentDrivenKm({int clientId, bool isFullScreen}) async {
     recentConsignmentList.clear();
     // int selectedPeriodValue = period.contains('THIS MONTH') ? 1 : 2;
 
     setBusy(true);
     notifyListeners();
     try {
-      ParentApiResponse apiResponse = await apiService.getRecentDrivenKm(clientId: clientId);
+      ParentApiResponse apiResponse =
+          await apiService.getRecentDrivenKm(clientId: clientId);
       if (apiResponse.error == null) {
         if (apiResponse.isNoDataFound()) {
-          snackBarService.showSnackbar(message: apiResponse.emptyResult);
+          if (isFullScreen) {
+            snackBarService.showSnackbar(message: apiResponse.emptyResult);
+          }
         } else {
           if (apiResponse.response.data is List) {
             var list = apiResponse.response.data as List;
             if (list.length > 0) {
               for (Map singleConsignment in list) {
                 RecentConginmentResponse singleConsignmentResponse =
-                RecentConginmentResponse.fromJson(singleConsignment);
+                    RecentConginmentResponse.fromJson(singleConsignment);
                 recentConsignmentList.add(singleConsignmentResponse);
               }
             }

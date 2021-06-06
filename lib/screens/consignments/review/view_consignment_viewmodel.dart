@@ -1,6 +1,8 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignment_details.dart';
@@ -11,12 +13,10 @@ import 'package:bml_supervisor/models/review_consignment_request.dart'
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
-import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
-  DailyEntryApisImpl _dailyEntryApis = locator<DailyEntryApisImpl>();
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
 
   bool isInitiallyDataSet = false;
@@ -125,19 +125,19 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     setBusy(false);
   }
 
-  getRoutes(String clientId) async {
-    setBusy(true);
-    routesList = [];
-    hubList = [];
-    List<RoutesForSelectedClientAndDateResponse> response =
-        await _dailyEntryApis.getRoutesForSelectedClientAndDate(
-      clientId: clientId,
-      date: getDateString(entryDate),
-    );
-    this.routesList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
+  // getRoutes(int clientId) async {
+  //   setBusy(true);
+  //   routesList = [];
+  //   hubList = [];
+  //   List<RoutesForSelectedClientAndDateResponse> response =
+  //       await _dailyEntryApis.getRoutesForSelectedClientAndDate(
+  //     clientId: clientId,
+  //     date: getDateString(entryDate),
+  //   );
+  //   this.routesList = copyList(response);
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
   // get Consignments' list for it's dropdown
 
@@ -163,19 +163,21 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
         consignmentId: consignmentId);
 
     consignmentDetailResponseNew.items.forEach((element) {
-      reviewConsignmentRequest.reviewedItems.add(reviewConsignment.Item(
-        consignmentId: element.consignmentId,
-        title: element.title,
-        payment: element.payment,
-        collect: element.collect,
-        dropOff: element.dropOff,
-        flag: element.flag,
-        hubId: element.hubId,
-        paymentId: element.paymentId,
-        paymentMode: element.paymentMode,
-        remarks: element.remarks,
-        sequence: element.sequence,
-      ));
+      reviewConsignmentRequest.reviewedItems.add(
+        reviewConsignment.Item(
+          consignmentId: element.consignmentId,
+          title: element.title,
+          payment: element.payment,
+          collect: element.collect,
+          dropOff: element.dropOff,
+          flag: element.flag,
+          hubId: element.hubId,
+          paymentId: element.paymentId,
+          paymentMode: element.paymentMode,
+          remarks: element.remarks,
+          sequence: element.sequence,
+        ),
+      );
       _formKeyList.add(GlobalKey<FormState>());
     });
 
@@ -183,7 +185,7 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void updateConsignment() async {
+  void updateConsignment({@required String newRemarks}) async {
     // hit the update Consignment api
     reviewConsignmentRequest = reviewConsignmentRequest.copyWith(
       assessBy: MyPreferences().getUserLoggedIn().userName,
@@ -191,8 +193,8 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     reviewConsignmentRequest.reviewedItems.forEach((element) {
       element.copyWith(
         paymentId: 'NA',
-        remarks: element.remarks.length == 0 ? 'NA' : element.remarks,
-        title: element.title.length == 0 ? 'NA' : element.title,
+        remarks: element?.remarks?.length == 0 ? 'NA' : element.remarks,
+        title: element?.title?.length == 0 ? 'NA' : element.title,
       );
     });
     ApiResponse apiResponse = await _consignmentApis.updateConsignment(
@@ -205,11 +207,17 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
       snackBarService.showSnackbar(message: '${apiResponse.message}');
     } else {
       // print('')
-      dialogService
-          .showConfirmationDialog(
-              title: apiResponse.message, description: 'Consignment Reviewed.')
+      bottomSheetService
+          .showCustomSheet(
+            customData: ConfirmationBottomSheetInputArgs(
+              title: apiResponse.message,
+            ),
+            barrierDismissible: false,
+            isScrollControlled: true,
+            variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+          )
           .then((value) => navigationService.back(result: true));
-      setBusy(false);
     }
+    setBusy(false);
   }
 }

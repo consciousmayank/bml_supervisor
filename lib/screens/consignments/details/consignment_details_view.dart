@@ -9,7 +9,6 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_grid_view.dart';
 import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_list_view.dart';
-import 'package:bml_supervisor/widget/dots_indicator.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -45,12 +44,12 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              viewModel.consignmentDetailResponse != null
-                  ? viewModel.consignmentDetailResponse.entryDate
-                  : "Consignment",
-              style: AppTextStyles.appBarTitleStyle,
-            ),
+            title: viewModel.consignmentDetailResponse != null
+                ? Text(
+                    viewModel?.consignmentDetailResponse?.entryDate ?? '',
+                    style: AppTextStyles.appBarTitleStyle,
+                  )
+                : setAppBarTitle(title: 'Consignment'),
             actions: [
               IconButton(
                 icon: viewModel.isListViewSelected
@@ -176,62 +175,18 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                 children: [
                   Expanded(
                     child: AppTiles(
-                      value: viewModel.consignmentDetailResponse.collect == 0
-                          ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.first.collect
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.items
-                                      .first.collect
-                                      .toString()
-                              : viewModel
-                                  .consignmentDetailResponse.items.first.collect
-                                  .toString()
-                          : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length >
-                                  0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.first.collect
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.collect
-                                      .toString()
-                              : viewModel.consignmentDetailResponse.collect
-                                  .toString(),
-                      title: 'Total Collect',
+                      value: getTotalCollectValue(viewModel),
+                      title:
+                          'Total Collect (${viewModel.consignmentDetailResponse.itemUnit})',
                       iconName: collectIcon,
                     ),
                     flex: 1,
                   ),
                   Expanded(
                     child: AppTiles(
-                      value: viewModel.consignmentDetailResponse.dropOff == 0
-                          ? viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.last.dropOff
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.items.last
-                                      .dropOff
-                                      .toString()
-                              : viewModel
-                                  .consignmentDetailResponse.items.last.dropOff
-                                  .toString()
-                          : viewModel.consignmentDetailResponse.reviewedItems
-                                      .length > 0
-                              ? viewModel.consignmentDetailResponse
-                                      .reviewedItems.last.dropOff
-                                      .toString() +
-                                  '/' +
-                                  viewModel.consignmentDetailResponse.dropOff
-                                      .toString()
-                              : viewModel.consignmentDetailResponse.dropOff
-                                  .toString(),
-                      title: 'Total Drop',
+                      value: geTotalDropValue(viewModel),
+                      title:
+                          'Total Drop (${viewModel.consignmentDetailResponse.itemUnit})',
                       iconName: dropIcon,
                     ),
                     flex: 1,
@@ -251,6 +206,40 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
                   : Container(),
             ],
           );
+  }
+
+  String geTotalDropValue(ConsignmentDetailsViewModel viewModel) {
+    return viewModel.consignmentDetailResponse.dropOff == 0
+        ? viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.last.dropOff
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.items.last.dropOff
+                    .toString()
+            : viewModel.consignmentDetailResponse.items.last.dropOff.toString()
+        : viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.last.dropOff
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.dropOff.toString()
+            : viewModel.consignmentDetailResponse.dropOff.toString();
+  }
+
+  String getTotalCollectValue(ConsignmentDetailsViewModel viewModel) {
+    return viewModel.consignmentDetailResponse.collect == 0
+        ? viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.first.collect
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.items.first.collect
+                    .toString()
+            : viewModel.consignmentDetailResponse.items.first.collect.toString()
+        : viewModel.consignmentDetailResponse.reviewedItems.length > 0
+            ? viewModel.consignmentDetailResponse.reviewedItems.first.collect
+                    .toString() +
+                '/' +
+                viewModel.consignmentDetailResponse.collect.toString()
+            : viewModel.consignmentDetailResponse.collect.toString();
   }
 
   GridView makeGridView(
@@ -279,6 +268,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: SingleHubGridView(
+              itemUnit: viewModel.consignmentDetailResponse.itemUnit,
               singleHub: gridResponseNew[index],
               key: Key(gridResponseNew[index].hubId.toString()),
             ),
@@ -302,6 +292,7 @@ class _ConsignmentDetailsViewState extends State<ConsignmentDetailsView> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: SingleHubListView(
+                itemUnit: viewModel.consignmentDetailResponse.itemUnit,
                 singleHub: viewModel.newItems[index],
                 key: UniqueKey(),
               ),

@@ -1,20 +1,20 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/models/view_entry_response.dart';
-import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_viewmodel.dart';
-import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 
 class ViewDailyKmsView extends StatefulWidget {
@@ -57,9 +57,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
         });
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-                'Daily Kilometers - ${MyPreferences().getSelectedClient().clientId}',
-                style: AppTextStyles.appBarTitleStyle),
+            title: setAppBarTitle(title: 'Daily Kilometers'),
             centerTitle: true,
             actions: [
               InkWell(
@@ -85,8 +83,44 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
               : Column(
                   children: [
                     // buildSelectDurationTabWidget(viewModel),
-                    registrationSelector(
-                        context: context, viewModel: viewModel),
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: SearchWidget(
+                        onClearTextClicked: () {
+                          selectedRegNoController.clear();
+                          getDailyEntry(
+                            viewModel: viewModel,
+                            registrationNumber:
+                                selectedRegNoController.text.trim(),
+                          );
+                          hideKeyboard(context: context);
+                        },
+                        hintTitle: 'Search for vehicle',
+                        onTextChange: (String value) {},
+                        onEditingComplete: () {
+                          getDailyEntry(
+                            viewModel: viewModel,
+                            registrationNumber:
+                                selectedRegNoController.text.trim(),
+                          );
+                        },
+                        formatter: <TextInputFormatter>[
+                          TextFieldInputFormatter().alphaNumericFormatter,
+                        ],
+                        controller: selectedRegNoController,
+                        focusNode: selectedRegNoFocusNode,
+                        keyboardType: TextInputType.text,
+                        onFieldSubmitted: (String value) {
+                          getDailyEntry(
+                            viewModel: viewModel,
+                            registrationNumber:
+                                selectedRegNoController.text.trim(),
+                          );
+                        },
+                      ),
+                    ),
+                    // registrationSelector(
+                    //     context: context, viewModel: viewModel),
                     viewModel.vehicleEntrySearchResponseList.length > 0
                         ? Expanded(
                             child: searchResults(viewModel: viewModel),
@@ -94,21 +128,21 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
                         : Container()
                   ],
                 ),
-          floatingActionButton: AnimatedOpacity(
-            duration: Duration(milliseconds: 200),
-            opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
-            child: FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  viewModel.navigationService
-                      .navigateTo(addEntryLogPageRoute)
-                      .then(
-                        (value) => getDailyEntry(
-                            viewModel: viewModel,
-                            registrationNumber: selectedRegNoController.text),
-                      );
-                }),
-          ),
+          // floatingActionButton: AnimatedOpacity(
+          //   duration: Duration(milliseconds: 200),
+          //   opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
+          //   child: FloatingActionButton(
+          //       child: Icon(Icons.add),
+          //       onPressed: () {
+          //         viewModel.navigationService
+          //             .navigateTo(addEntryLogPageRoute)
+          //             .then(
+          //               (value) => getDailyEntry(
+          //                   viewModel: viewModel,
+          //                   registrationNumber: selectedRegNoController.text),
+          //             );
+          //       }),
+          // ),
         );
       },
       viewModelBuilder: () => ViewDailyKmsViewModel(),
@@ -117,19 +151,19 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
 
   registrationSelector(
       {BuildContext context, ViewDailyKmsViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
-        ),
-      ],
-    );
+    return registrationNumberTextField(viewModel);
   }
 
   registrationNumberTextField(ViewDailyKmsViewModel viewModel) {
     return appTextFormField(
+      buttonType: ButtonType.SMALL,
+      buttonIcon: Icon(Icons.search),
+      onButtonPressed: () {
+        getDailyEntry(
+          viewModel: viewModel,
+          registrationNumber: selectedRegNoController.text,
+        );
+      },
       inputDecoration: InputDecoration(
         hintText: 'Vehicle Number',
         hintStyle: TextStyle(
@@ -158,7 +192,7 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
       {ViewDailyKmsViewModel viewModel, String registrationNumber}) {
     viewModel.vehicleEntrySearch(
       regNum: registrationNumber,
-      clientId: viewModel.selectedClient.clientId,
+      clientId: viewModel.selectedClient?.clientId,
     );
   }
 
@@ -205,26 +239,27 @@ class _ViewDailyKmsViewState extends State<ViewDailyKmsView> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: buildViewEntrySummary(
-                  title: 'FUEL (LTR)',
-                  value: viewModel.totalFuelInLtr.toStringAsFixed(2),
-                  iconName: fuelIcon,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: buildViewEntrySummary(
-                  title: 'AVG./LTR',
-                  value: viewModel.avgPerLitre.toStringAsFixed(2),
-                  iconName: fuelIcon,
-                ),
-              ),
-            ],
-          ),
+          // Removed for V1
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       flex: 1,
+          //       child: buildViewEntrySummary(
+          //         title: 'FUEL (LTR)',
+          //         value: viewModel.totalFuelInLtr.toStringAsFixed(2),
+          //         iconName: fuelIcon,
+          //       ),
+          //     ),
+          //     Expanded(
+          //       flex: 1,
+          //       child: buildViewEntrySummary(
+          //         title: 'AVG./LTR',
+          //         value: viewModel.avgPerLitre.toStringAsFixed(2),
+          //         iconName: fuelIcon,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -440,8 +475,12 @@ class _SingleEntryWidget extends StatelessWidget {
                     hSizedBox(5),
                     InkWell(
                       onTap: () {
-                        showViewEntryDetailPreview(context,
-                            viewModel.vehicleEntrySearchResponseList[index]);
+                        viewModel.openDailyEntryDetailsBottomSheet(
+                          clickedDailyEntry:
+                              viewModel.vehicleEntrySearchResponseList[index],
+                        );
+                        // showViewEntryDetailPreview(context,
+                        //     viewModel.vehicleEntrySearchResponseList[index]);
                       },
                       child: Text(
                         'More Info',
@@ -466,7 +505,6 @@ class _SingleEntryWidget extends StatelessWidget {
         context: context,
         builder: (_) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.25,
             child: ClipRRect(
               borderRadius: getBorderRadius(),
               child: Card(

@@ -2,7 +2,9 @@ import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/screens/profile/profile_apis.dart';
@@ -19,11 +21,11 @@ class UserProfileViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  UserProfileResponse _userProfile;
+  LoginResponse _userProfile;
 
-  UserProfileResponse get userProfile => _userProfile;
+  LoginResponse get userProfile => _userProfile;
 
-  set userProfile(UserProfileResponse value) {
+  set userProfile(LoginResponse value) {
     _userProfile = value;
     notifyListeners();
   }
@@ -48,9 +50,9 @@ class UserProfileViewModel extends GeneralisedBaseViewModel {
 
   Future getUserProfile() async {
     setBusy(true);
-    UserProfileResponse profileResponse = await _profileApi.getUserProfile();
-    if (profileResponse != null) {
-      userProfile = profileResponse;
+    LoginResponse loggedInUser = MyPreferences().getUserLoggedIn();
+    if (loggedInUser != null) {
+      userProfile = loggedInUser;
       image = getImageFromBase64String(base64String: userProfile.photo);
     }
     notifyListeners();

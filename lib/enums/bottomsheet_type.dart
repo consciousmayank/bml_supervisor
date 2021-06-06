@@ -1,8 +1,23 @@
 enum BottomSheetType {
-  floating,
-  viewEntry,
+  CONFIRMATION_BOTTOM_SHEET,
+  VIEW_ENTRY_PERIOD,
   consignmentList,
   createConsignmentSummary,
   expenseFilters,
-  clientSelect
+  clientSelect,
+  // upcomingTrips,
+  COMPLETED_TRIP_REVIEW_REMARKS,
+  REJECT_DRIVER_TRIP,
+  DRIVER_DETAILS,
+  VEHICLE_DETAILS,
+  HUBS_DETAILS,
+  REVIEW_TRIPS_WARNING,
+  CREATE_ROUTE,
+  ADDRESS_TYPE,
+  STRING_LIST,
+  ROUTE_DETAILS,
+  EXPENSE_DETIALS,
+  UPCOMING_TRIPS,
+  VIEW_ENTRY_DETAILS,
+  ROUTES_BOTTOM_SHEET
 }

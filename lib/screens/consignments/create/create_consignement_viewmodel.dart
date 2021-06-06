@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
@@ -9,10 +10,12 @@ import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class CreateConsignmentModel extends GeneralisedBaseViewModel {
   double _totalWeight = 0.00;
@@ -50,6 +53,15 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   CreateConsignmentRequest _consignmentRequest;
   SearchByRegNoResponse _validatedRegistrationNumber;
   DateTime _entryDate;
+  TimeOfDay _dispatchTime = TimeOfDay.now();
+
+  TimeOfDay get dispatchTime => _dispatchTime;
+
+  set dispatchTime(TimeOfDay value) {
+    _dispatchTime = value;
+    notifyListeners();
+  }
+
   String _enteredTitle; //final _formKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> _formKeyList = [];
 
@@ -108,15 +120,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   FetchRoutesResponse _selectedRoute;
-  List<FetchRoutesResponse> _routesList = [];
-
-  List<FetchRoutesResponse> get routesList => _routesList;
-
-  set routesList(List<FetchRoutesResponse> value) {
-    _routesList = value;
-    notifyListeners();
-  }
-
   FetchRoutesResponse get selectedRoute => _selectedRoute;
 
   set selectedRoute(FetchRoutesResponse selectedRoute) {
@@ -124,25 +127,9 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  getRoutes(String clientId) async {
-    entryDate = null;
-    validatedRegistrationNumber = null;
-    consignmentRequest = null;
-
-    setBusy(true);
-    routesList = [];
-    hubsList = [];
-    List<FetchRoutesResponse> response =
-        await _dashBoardApis.getRoutes(clientId: clientId);
-    this.routesList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
-
   getClients() async {
     setBusy(true);
-    selectedClient = MyPreferences().getSelectedClient();
-    getRoutes(selectedClient.clientId);
+    selectedClient = MyPreferences()?.getSelectedClient();
     setBusy(false);
   }
 
@@ -186,9 +173,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
             hubTitle: element.title),
       );
     });
-    // final int dropOff;
-    // final int collect;
-    // final double payment;
 
     consignmentRequest = CreateConsignmentRequest(
         itemUnit: itemUnit,
@@ -197,16 +181,23 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
         entryDate: getConvertedDate(entryDate),
+        dispatchDateTime: getConvertedDateWithTime(DateTime(
+            entryDate.year,
+            entryDate.month,
+            entryDate.day,
+            dispatchTime.hour,
+            dispatchTime.minute)),
         title: enteredTitle,
         routeTitle: selectedRoute.routeTitle,
         items: items);
   }
 
   void createConsignment({String consignmentTitle}) async {
+    setBusy(true);
     consignmentRequest = consignmentRequest.copyWith(
       dropOff: consignmentRequest.items.last.dropOff,
       collect: consignmentRequest.items.first.collect,
-      payment: consignmentRequest.items.last.payment,
+      payment: consignmentRequest.getTotalPayment(),
       title: consignmentTitle,
       itemUnit: itemUnit,
       weight: this.totalWeight,
@@ -217,24 +208,31 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     tempItems.forEach((element) {
       element.copyWith(
         paymentId: "NA",
-        remarks: element.remarks.length == 0 ? "NA" : element.remarks,
+        remarks: element?.remarks?.length == 0 ? "NA" : element.remarks,
         title: element.title.length == 0 ? "NA" : element.title,
       );
     });
 
     ApiResponse createConsignmentResponse = await _consignmentApis
         .createConsignment(createConsignmentRequest: consignmentRequest);
-    dialogService
-        .showConfirmationDialog(
-            title: createConsignmentResponse.message,
-            description: "You can edit the consignment, in View Consignment.")
-        .then((value) {
-      if (createConsignmentResponse.status != 'failed') {
-        navigationService.back();
-      } else {
-        navigationService.back();
-      }
-    });
+
+    bottomSheetService
+        .showCustomSheet(
+      customData: ConfirmationBottomSheetInputArgs(
+        title: createConsignmentResponse.message,
+      ),
+      barrierDismissible: false,
+      isScrollControlled: true,
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+    )
+        .then(
+      (value) {
+        if (createConsignmentResponse.isSuccessful()) {
+          navigationService.replaceWith(allotConsignmentsPageRoute);
+        }
+      },
+    );
+
     setBusy(false);
   }
 
@@ -295,41 +293,12 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // getRecentConsignmentsForCreateConsignment() async {
-  //   setBusy(true);
-  //   recentConsignmentsList = [];
-  //   recentConsignmentsDateList = Set();
-  //   List<SinglePendingConsignmentListItem> response =
-  //       await _consignmentApis.getRecentConsignmentsForCreateConsignment(
-  //           clientId: MyPreferences().getSelectedClient().clientId);
-  //
-  //   response.forEach((element) {
-  //     recentConsignmentsDateList.add(element.entryDate);
-  //   });
-  //
-  //   recentConsignmentsList = copyList(response);
-  //
-  //   setBusy(false);
-  //   notifyListeners();
-  // }
-  //
-  // List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {
-  //   return recentConsignmentsList
-  //       .where((element) =>
-  //           element.entryDate == recentConsignmentsDateList.elementAt(index))
-  //       .toList();
-  // }
-
   Future consignmentsListBottomSheet() async {
-    var sheetResponse = await bottomSheetService.showCustomSheet(
+    await bottomSheetService.showCustomSheet(
       isScrollControlled: true,
       barrierDismissible: true,
       customData: consignmentsList,
       variant: BottomSheetType.consignmentList,
     );
-
-    print('confirmationResponse confirmed: ${sheetResponse?.confirmed}');
-    print(
-        'confirmationResponse return Data: ${sheetResponse?.responseData.toString()}');
   }
 }

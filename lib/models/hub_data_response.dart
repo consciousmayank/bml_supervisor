@@ -26,10 +26,12 @@ class HubResponse {
     this.status,
     this.creationdate,
     this.lastupdated,
+    this.clientId,
   });
 
   final int id;
   final String title;
+  final int clientId;
   final String contactPerson;
   final String mobile;
   final String phone;
@@ -70,6 +72,7 @@ class HubResponse {
     bool status,
     String creationdate,
     String lastupdated,
+    int clientId,
   }) =>
       HubResponse(
         id: id ?? this.id,
@@ -92,6 +95,7 @@ class HubResponse {
         status: status ?? this.status,
         creationdate: creationdate ?? this.creationdate,
         lastupdated: lastupdated ?? this.lastupdated,
+        clientId: clientId ?? this.clientId,
       );
 
   factory HubResponse.fromJson(String str) =>
@@ -102,6 +106,7 @@ class HubResponse {
   factory HubResponse.fromMap(Map<String, dynamic> json) => HubResponse(
         id: json["id"],
         title: json["title"],
+        clientId: json["clientId"],
         contactPerson: json["contactPerson"],
         mobile: json["mobile"],
         phone: json["phone"],
@@ -125,6 +130,7 @@ class HubResponse {
   Map<String, dynamic> toMap() => {
         "id": id,
         "title": title,
+        "clientId": clientId,
         "contactPerson": contactPerson,
         "mobile": mobile,
         "phone": phone,

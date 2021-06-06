@@ -13,6 +13,9 @@ const String supervisor_page_superviser_dr_title = "Daily Report";
 const String textPasswordPattern =
     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
 const String chasisNumberHint = "Enter Chasis Number";
+const String vehicleHeightHint = "Height (m)";
+const String vehicleWidthHint = "Width (m)";
+const String vehicleLengthHint = "Length (m)";
 const String invalidChasisNumber = "Invalid Chasis number";
 
 const String registrationNumberHint = "Enter Registration Number";
@@ -37,6 +40,7 @@ const String vehicleInitialReadingHint = "Enter Start Reading : ";
 const String fuelReadingHint = "Enter Fuel (in Litres)";
 const String fuelRateHint = "Enter Fuel Rate";
 const String fuelAmountHint = "Total Amount Paid";
+const String fuelLitreHint = "Fuel (in Liters)";
 const String fuelMeterReadingHint = "Meter Reading ";
 const String invalidVehicleInitialReading = "Invalid Reading";
 
@@ -57,7 +61,8 @@ const String vehicleFuelTypeHint = "Select Fuel Type";
 const String vehicleEmissionTypeHint = "Select Emmision Type";
 const String vehicleSeatingCapacityHint = "Select Vehicle Seating Capacity";
 const String drRegNoHint = "Vehicle Number";
-const String totalWeightHint = "Total Weight (Kg)";
+const String totalWeightHint1 = "Total Weight (Kg)";
+const String totalWeightHint2 = "Total Pieces ";
 const String consignmentTitleHint = "Enter Consignment Title";
 const String searchPageTitleHint = "Enter Registration Number";
 const String fuelMeterReadingError =
@@ -73,7 +78,7 @@ const String logoutTimeError =
 
 const List<String> ownerLevelList = ["1", "2", "3", "4", "5"];
 const List<String> vehicleClassList = ["Goods Carrier"];
-const List<String> vehicleSeatingList = ["2"];
+const List<String> vehicleSeatingList = ["1", "2", "3", "4", "5"];
 const List<String> vehicleEmmisionTypeList = [
   "BS I",
   "BS II",
@@ -117,9 +122,9 @@ const List<String> selectDurationList = [
   "LAST MONTH",
 ];
 const List<String> selectItemUnit = [
-  "Crate",
-  "Docket",
-  "Carton",
+  "Crates",
+  "Kilograms",
+  "Cartons",
   "Pieces",
 ];
 
@@ -191,6 +196,7 @@ const String addDriverAlternateMobileHint = "Alternate Mobile Number";
 const String addDriverWhatsAppMobileHint = "WhatsApp Number";
 const String addDriverExperienceHint = "Experience (Yrs)";
 const String addDriverStreetHint = "Street";
+const String addDriverHnoBuildingNameHint = "House No. or Building Name/Number";
 const String addDriverLocalityHint = "Locality";
 const String addDriverLandmarkHint = "Landmark";
 const String addDriverCityHint = "City";
@@ -199,7 +205,11 @@ const String addDriverCountryHint = "Country";
 const String addDriverAadhaarHint = "Aadhaar Card Number";
 const String addDriverDlHint = "Driving License";
 const String addDriverRemarksHint = "Remarks";
-const List<String> genders = ['MALE', 'FEMALE', 'OTHERS'];
+const List<String> genders = [
+  'MALE',
+  'FEMALE',
+  'OTHERS',
+];
 const List<String> bloodGroup = [
   'A+',
   'A-',
@@ -215,9 +225,17 @@ const List<String> selectDurationListDashBoard = [
   "LAST MONTH REPORT",
 ];
 const String addDriverSuccessful = "Driver added successfully";
+const String addPaymentSuccessful = "Payemnt added successfully";
 const String addRouteSuccessful = "Route added successfully";
 const String addDriverUnSuccessful = "Driver not added. Please try again";
+const String addPaymentUnSuccessful = "Payment not added. Please try again";
 const String addRouteUnSuccessful = "Route not added. Please try again";
 
 const String addHubSuccessful = "Hub added successfully";
 const String addHubUnSuccessful = "Hub not added. Please try again";
+const List<String> addressTypes = [
+  'Residential',
+  'Commercial',
+  'Non-Commercial',
+  'Others'
+];

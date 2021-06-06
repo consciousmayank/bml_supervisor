@@ -5,19 +5,18 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dashboard_loading.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class BarChartView extends StatefulWidget {
-  final String clientId;
+  final int clientId;
   final String selectedDuration;
 
-  BarChartView({
-     this.clientId,
-     this.selectedDuration,
-  });
+  const BarChartView({Key key, this.clientId, this.selectedDuration})
+      : super(key: key);
 
   @override
   _BarChartViewState createState() => _BarChartViewState();
@@ -28,124 +27,129 @@ class _BarChartViewState extends State<BarChartView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<BarChartViewModel>.reactive(
       onModelReady: (viewModel) => viewModel.getBarGraphKmReport(
-        clientId: MyPreferences().getSelectedClient().clientId,
+        clientId: MyPreferences()?.getSelectedClient()?.clientId,
       ),
       builder: (context, viewModel, child) {
         return viewModel.isBusy
             ? DashBoardLoadingWidget()
-            : viewModel.kmReportListData.length > 0
-                ? LimitedBox(
-                    maxHeight: 350,
-                    child: Card(
-                      elevation: defaultElevation,
-                      shape: getCardShape(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            buildChartTitle(title: "Driven Kilometers"),
-                            // buildChartSubTitle(time: viewModel?.selectedDate),
-                            buildChartSubTitleNew(
-                                date: viewModel.chartDate),
-                            hSizedBox(10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+            : LimitedBox(
+                maxHeight: (viewModel.kmReportListData.length > 0) ? 350 : 100,
+                child: Card(
+                  elevation: defaultElevation,
+                  shape: getCardShape(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        buildChartTitle(title: "Driven Kilometers"),
+                        // buildChartSubTitle(time: viewModel?.selectedDate),
+                        if (viewModel.kmReportListData.length > 0)
+                          buildChartSubTitleNew(date: viewModel.chartDate),
+                        if (viewModel.kmReportListData.length > 0)
+                          hSizedBox(10),
+                        if (viewModel.kmReportListData.length > 0)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (viewModel.kmReportListData.length > 0)
                                 Container(
                                   height: 15,
                                   width: 15,
                                   color: AppColors.primaryColorShade5,
                                 ),
-                                wSizedBox(10),
+                              wSizedBox(10),
+                              if (viewModel.kmReportListData.length > 0)
                                 Text(
-                                  "Driven km (Total: ${viewModel.totalKmG}, Avg: ${(viewModel.totalKmG / viewModel.kmReportListData.length).toStringAsFixed(0)})",
+                                  "Driven km (Total: ${viewModel?.totalKmG ?? 0}, Avg: ${(viewModel.totalKmG / viewModel.kmReportListData.length).toStringAsFixed(0)})",
                                   style: AppTextStyles.latoBold12Black,
                                   textAlign: TextAlign.center,
                                 ),
-                              ],
-                            ),
-                            Expanded(
-                              child: viewModel.kmReportListData.length > 0
-                                  ? charts.BarChart(
-                                      viewModel.seriesBarData,
-                                      animate: true,
-                                      domainAxis: charts.OrdinalAxisSpec(
-                                        // renderSpec:
-                                        //     charts.SmallTickRendererSpec(
-                                        //         labelRotation: 60),
-                                        viewport: charts.OrdinalViewport(
-                                          widget.selectedDuration ==
-                                                  'THIS MONTH REPORT'
-                                              ? viewModel.uniqueDates.last
-                                                  .split('-')[0]
-                                              : '',
-                                          7,
+                            ],
+                          ),
+                        viewModel.kmReportListData.length > 0
+                            ? Expanded(
+                                child: viewModel.kmReportListData.length > 0
+                                    ? charts.BarChart(
+                                        viewModel.seriesBarData,
+                                        animate: true,
+                                        domainAxis: charts.OrdinalAxisSpec(
+                                          // renderSpec:
+                                          //     charts.SmallTickRendererSpec(
+                                          //         labelRotation: 60),
+                                          viewport: charts.OrdinalViewport(
+                                             viewModel.uniqueDates.last
+                                                    .split('-')[0],
+                                            7,
+                                          ),
                                         ),
-                                      ),
-                                      barRendererDecorator: new charts
-                                          .BarLabelDecorator<String>(),
-                                      behaviors: [
-                                        charts.ChartTitle('Kilometer',
-                                            innerPadding: 1,
-                                            outerPadding: 2,
-                                            titleStyleSpec:
-                                                charts.TextStyleSpec(
-                                              fontSize: 14,
-                                            ),
-                                            behaviorPosition:
-                                                charts.BehaviorPosition.start,
-                                            titleOutsideJustification: charts
-                                                .OutsideJustification.middle),
-                                        charts.ChartTitle('Date',
-                                            innerPadding: 1,
-                                            outerPadding: 2,
-                                            titleStyleSpec:
-                                                charts.TextStyleSpec(
-                                              fontSize: 14,
-                                            ),
-                                            behaviorPosition:
-                                                charts.BehaviorPosition.bottom,
-                                            titleOutsideJustification: charts
-                                                .OutsideJustification.middle),
-                                        charts.SlidingViewport(),
-                                        charts.PanAndZoomBehavior(),
-                                      ],
-                                      primaryMeasureAxis:
-                                          new charts.NumericAxisSpec(
-                                        tickProviderSpec:
-                                            //     StaticNumericTickProviderSpec(
-                                            //   viewModel.listOfTicks,
-                                            // ),
-                                            BasicNumericTickProviderSpec(
-                                          zeroBound: true,
-                                          // desiredTickCount: 10,
-                                          desiredMinTickCount: 10,
+                                        barRendererDecorator: new charts
+                                            .BarLabelDecorator<String>(),
+                                        behaviors: [
+                                          charts.ChartTitle('Kilometer',
+                                              innerPadding: 1,
+                                              outerPadding: 2,
+                                              titleStyleSpec:
+                                                  charts.TextStyleSpec(
+                                                fontSize: 14,
+                                              ),
+                                              behaviorPosition:
+                                                  charts.BehaviorPosition.start,
+                                              titleOutsideJustification: charts
+                                                  .OutsideJustification.middle),
+                                          charts.ChartTitle('Date',
+                                              innerPadding: 1,
+                                              outerPadding: 2,
+                                              titleStyleSpec:
+                                                  charts.TextStyleSpec(
+                                                fontSize: 14,
+                                              ),
+                                              behaviorPosition: charts
+                                                  .BehaviorPosition.bottom,
+                                              titleOutsideJustification: charts
+                                                  .OutsideJustification.middle),
+                                          charts.SlidingViewport(),
+                                          charts.PanAndZoomBehavior(),
+                                        ],
+                                        primaryMeasureAxis:
+                                            new charts.NumericAxisSpec(
+                                          tickProviderSpec:
+                                              //     StaticNumericTickProviderSpec(
+                                              //   viewModel.listOfTicks,
+                                              // ),
+                                              BasicNumericTickProviderSpec(
+                                            zeroBound: true,
+                                            // desiredTickCount: 10,
+                                            desiredMinTickCount: 10,
+                                          ),
+                                          //to show axis line
+                                          showAxisLine: true,
+                                          //to show labels
+                                          renderSpec:
+                                              charts.GridlineRendererSpec(
+                                                  labelStyle:
+                                                      new charts.TextStyleSpec(
+                                                    fontSize: 10,
+                                                    color: charts
+                                                        .MaterialPalette.black,
+                                                  ),
+                                                  lineStyle:
+                                                      charts.LineStyleSpec(
+                                                    color: charts
+                                                        .MaterialPalette
+                                                        .gray
+                                                        .shadeDefault,
+                                                  )),
                                         ),
-                                        //to show axis line
-                                        showAxisLine: true,
-                                        //to show labels
-                                        renderSpec: charts.GridlineRendererSpec(
-                                            labelStyle:
-                                                new charts.TextStyleSpec(
-                                              fontSize: 10,
-                                              color:
-                                                  charts.MaterialPalette.black,
-                                            ),
-                                            lineStyle: charts.LineStyleSpec(
-                                              color: charts.MaterialPalette.gray
-                                                  .shadeDefault,
-                                            )),
-                                      ),
-                                    )
-                                  : Container(),
-                            ),
-                          ],
-                        ),
-                      ),
+                                      )
+                                    : Container(),
+                              )
+                            : NoDataWidget(),
+                      ],
                     ),
-                  )
-                : Container();
+                  ),
+                ),
+              );
       },
       viewModelBuilder: () => BarChartViewModel(),
     );

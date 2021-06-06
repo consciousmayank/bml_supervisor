@@ -10,7 +10,7 @@ const double createConsignmentCardHeight = 650.00;
 
 const double verticlePaddingValue = 20.00;
 
-const double defaultElevation = 4.0;
+const double defaultElevation = 1.0;
 
 const dashboardDistributerTileBgColor = 0xff04BFAE;
 const dashboardTotalKmTileBgColor = 0xffFFB300;
@@ -34,3 +34,5 @@ const double drawerIconsWidth = 20.00;
 const double defaultIconIconHeight = 24;
 const double defaultIconWidth = 24;
 const double profileImageSize = 100;
+const double appTextViewLabelFontSize = 10;
+const double appTextViewValueFontSize = 12;

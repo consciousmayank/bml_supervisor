@@ -5,7 +5,7 @@ import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 
-class RecentConsignmentListViewModel extends GeneralisedBaseViewModel{
+class RecentConsignmentListViewModel extends GeneralisedBaseViewModel {
   ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   Set<String> recentConsignmentsDateList = Set();
   List<SinglePendingConsignmentListItem> recentConsignmentsList = [];
@@ -14,8 +14,8 @@ class RecentConsignmentListViewModel extends GeneralisedBaseViewModel{
     recentConsignmentsList = [];
     recentConsignmentsDateList = Set();
     List<SinglePendingConsignmentListItem> response =
-    await _consignmentApis.getRecentConsignmentsForCreateConsignment(
-        clientId: MyPreferences().getSelectedClient().clientId);
+        await _consignmentApis.getRecentConsignmentsForCreateConsignment(
+            clientId: MyPreferences()?.getSelectedClient()?.clientId);
 
     response.forEach((element) {
       recentConsignmentsDateList.add(element.entryDate);
@@ -26,10 +26,11 @@ class RecentConsignmentListViewModel extends GeneralisedBaseViewModel{
     setBusy(false);
     notifyListeners();
   }
+
   List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {
     return recentConsignmentsList
         .where((element) =>
-    element.entryDate == recentConsignmentsDateList.elementAt(index))
+            element.entryDate == recentConsignmentsDateList.elementAt(index))
         .toList();
   }
 }

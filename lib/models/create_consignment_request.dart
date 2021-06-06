@@ -9,36 +9,39 @@ class CreateConsignmentRequest {
     this.itemUnit,
     this.dropOff,
     this.collect,
-    this.payment,
+    this.payment = 0.00,
     this.clientId,
     this.routeId,
     this.vehicleId,
     this.entryDate,
-    this.title = 'NA',
+    this.dispatchDateTime,
+    this.title,
     this.routeTitle,
     this.items,
     this.weight,
   });
 
-  final String clientId;
+  final int clientId;
   final int routeId;
   final dynamic vehicleId;
   final String entryDate;
+  final String dispatchDateTime;
   final String title;
   final String routeTitle;
   final int dropOff;
   final int collect;
-  final double payment;
+  double payment;
   final List<Item> items;
   final String itemUnit;
   final double weight;
 
   CreateConsignmentRequest copyWith({
     int id,
-    String clientId,
+    int clientId,
     int routeId,
     dynamic vehicleId,
     String entryDate,
+    String dispatchDateTime,
     String title,
     String routeTitle,
     List<Item> items,
@@ -53,6 +56,7 @@ class CreateConsignmentRequest {
         routeId: routeId ?? this.routeId,
         vehicleId: vehicleId ?? this.vehicleId,
         entryDate: entryDate ?? this.entryDate,
+        dispatchDateTime: dispatchDateTime ?? this.dispatchDateTime,
         title: title ?? this.title,
         routeTitle: routeTitle ?? this.routeTitle,
         items: items ?? this.items,
@@ -74,6 +78,7 @@ class CreateConsignmentRequest {
         routeId: json["routeId"],
         vehicleId: json["vehicleId"],
         entryDate: json["entryDate"],
+        dispatchDateTime: json["dispatchDateTime"],
         title: json["title"],
         routeTitle: json["routeTitle"],
         dropOff: json['dropOff'],
@@ -89,6 +94,7 @@ class CreateConsignmentRequest {
         "routeId": routeId,
         "vehicleId": vehicleId,
         "entryDate": entryDate,
+        "dispatchDateTime": dispatchDateTime,
         "payment": payment,
         "collect": collect,
         "dropOff": dropOff,
@@ -98,6 +104,22 @@ class CreateConsignmentRequest {
         "weight": weight,
         "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
+
+  getTotalPayment() {
+    double totalPayment = 0;
+    if (this.items == null || this.items.length == 0) {
+      return totalPayment;
+    } else {
+      this.items.forEach((element) {
+        if (element.payment == null) {
+          totalPayment = totalPayment + 0;
+        } else {
+          totalPayment = totalPayment + element.payment ?? 0;
+        }
+      });
+    }
+    return totalPayment;
+  }
 }
 
 class Item {
@@ -107,42 +129,46 @@ class Item {
     this.hubContactPerson,
     this.hubGeoLatitude,
     this.hubGeoLongitude,
-    this.id,
+    // this.id,
     this.hubId,
     this.sequence,
-    this.title = 'NA',
-    this.dropOff = 0,
-    this.collect = 0,
-    this.payment = 0.0,
-    this.dropOffG = 0,
-    this.collectG = 0,
-    this.paymentG = 0.0,
+    this.title,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.dropOffG,
+    this.collectG,
+    this.paymentG,
     this.paymentMode,
-    this.paymentId = 'NA',
-    this.remarks = 'NA',
+    this.paymentId,
+    this.remarks,
     this.flag,
+    this.collectError = false,
+    this.dropOffError = false,
+    this.paymentError = false,
+    this.titleError = false,
   });
 
-  final int id;
+  // final int id;
   final int hubId;
   final int sequence;
-  final dynamic title;
-  final int dropOff;
-  final int collect;
-  final double payment;
+  String title;
+  int dropOff;
+  int collect;
+  double payment;
   final int dropOffG;
   final int collectG;
   final double paymentG;
   final int paymentMode;
   final String paymentId;
-  final String remarks;
+  String remarks;
   final String flag;
   final String hubTitle;
   final String hubCity;
   final String hubContactPerson;
   final double hubGeoLatitude;
   final double hubGeoLongitude;
-
+  bool titleError, dropOffError, collectError, paymentError;
   Item copyWith({
     int id,
     int hubId,
@@ -165,7 +191,7 @@ class Item {
     double hubGeoLongitude,
   }) =>
       Item(
-        id: id ?? this.id,
+        // id: id ?? this.id,
         hubId: hubId ?? this.hubId,
         sequence: sequence ?? this.sequence,
         title: title ?? this.title,
@@ -190,7 +216,7 @@ class Item {
   String toJson() => json.encode(toMap());
 
   factory Item.fromMap(Map<String, dynamic> json) => Item(
-        id: json["id"],
+        // id: json["id"],
         hubId: json["hubId"],
         sequence: json["sequence"],
         title: json["title"],
@@ -212,7 +238,7 @@ class Item {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        // "id": id,
         "hubId": hubId,
         "sequence": sequence,
         "title": title,

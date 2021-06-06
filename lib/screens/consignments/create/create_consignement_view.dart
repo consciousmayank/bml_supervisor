@@ -1,25 +1,27 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignment_textfield.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
+import 'package:bml_supervisor/widget/create_new_button_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app_level/locator.dart';
 import 'create_consignment_params.dart';
 
 class CreateConsignmentView extends StatefulWidget {
@@ -32,6 +34,10 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   ScrollController _scrollController = ScrollController();
   TextEditingController selectedDateController = TextEditingController();
   final FocusNode selectedDateFocusNode = FocusNode();
+
+  TextEditingController selectedDispatchTimeController =
+      TextEditingController();
+  final FocusNode selectedDispatchTimeFocusNode = FocusNode();
 
   final TextEditingController selectedRegNoController = TextEditingController();
   final FocusNode selectedRegNoFocusNode = FocusNode();
@@ -49,19 +55,14 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       print("The value of listener");
     });
 
-  TextEditingController hubTitleController = TextEditingController();
   FocusNode hubTitleFocusNode = FocusNode();
 
-  TextEditingController remarksController = TextEditingController();
   FocusNode remarksFocusNode = FocusNode();
 
-  TextEditingController dropController = TextEditingController();
   FocusNode dropFocusNode = FocusNode();
 
-  TextEditingController collectController = TextEditingController();
   FocusNode collectFocusNode = FocusNode();
 
-  TextEditingController paymentController = TextEditingController();
   FocusNode paymentFocusNode = FocusNode();
 
   @override
@@ -72,23 +73,23 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         // viewModel.getRecentConsignmentsForCreateConsignment();
       },
       builder: (context, viewModel, child) => SafeArea(
-          left: false,
-          right: false,
-          child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: true,
-              title: Text("Create Consignment",
-                  style: AppTextStyles.appBarTitleStyle),
-            ),
-            body: viewModel.isBusy
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Padding(
-                    padding: getSidePadding(context: context),
-                    child: body(context, viewModel),
-                  ),
-          )),
+        left: false,
+        right: false,
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+            title: setAppBarTitle(title: 'Create Consignment'),
+          ),
+          body: viewModel.isBusy
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Padding(
+                  padding: getSidePadding(context: context),
+                  child: body(context, viewModel),
+                ),
+        ),
+      ),
       viewModelBuilder: () => CreateConsignmentModel(),
     );
   }
@@ -96,8 +97,31 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   Widget body(BuildContext context, CreateConsignmentModel viewModel) {
     return viewModel.entryDate == null
         ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              dateSelector(context: context, viewModel: viewModel),
+              // dateSelector(context: context, viewModel: viewModel),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: CreateNewButtonWidget(
+                  title: 'Create Consignment',
+                  onTap: () => dateSelectListener(viewModel: viewModel),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  bottom: 4,
+                ),
+                child: DottedDivider(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 4,
+                  right: 4,
+                ),
+                child: buildChartTitle(title: "Recently Created Consignments"),
+              ),
               Expanded(
                 child: RecentConsignmentList(),
               ),
@@ -129,36 +153,54 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                         ),
                       )
                     : Container(),
+                dispatchTimeSelectorSelector(
+                    context: context, viewModel: viewModel),
                 viewModel.entryDate == null
                     ? Container()
-                    : RoutesDropDown(
-                        optionList: viewModel.routesList,
-                        hint: "Select Routes",
-                        onOptionSelect: (FetchRoutesResponse selectedValue) {
-                          viewModel.selectedRoute = selectedValue;
+                    : appTextFormField(
+                        errorText: '',
+                        controller: TextEditingController(
+                          text: viewModel.selectedRoute == null
+                              ? ''
+                              : viewModel.selectedRoute.routeTitle,
+                        ),
+                        enabled: false,
+                        hintText: "Select Routes",
+                        keyboardType: TextInputType.text,
+                        buttonType: ButtonType.FULL,
+                        buttonIcon:
+                            // isOpen
+                            //     ? Icon(Icons.arrow_drop_up_sharp)
+                            // :
+                            Icon(Icons.arrow_drop_down_sharp),
+                        onButtonPressed: () {
+                          viewModel.bottomSheetService
+                              .showCustomSheet(
+                            isScrollControlled: true,
+                            barrierDismissible: true,
+                            variant: BottomSheetType.ROUTES_BOTTOM_SHEET,
+                          )
+                              .then((routesBottomSheetReponse) {
+                            if (routesBottomSheetReponse != null) {
+                              if (routesBottomSheetReponse.confirmed) {
+                                viewModel.selectedRoute =
+                                    routesBottomSheetReponse.responseData;
 
-                          selectedRegNoController.clear();
-                          consignmentTitleController.clear();
-                          viewModel.validatedRegistrationNumber = null;
-                          viewModel.consignmentRequest = null;
+                                selectedRegNoController.clear();
+                                consignmentTitleController.clear();
+                                viewModel.validatedRegistrationNumber = null;
+                                viewModel.consignmentRequest = null;
 
-                          viewModel.getHubs();
-                          consignmentTitleController.clear();
-                          hubTitleController.clear();
-                          dropController.clear();
-                          collectController.clear();
-                          paymentController.clear();
-                          remarksController.clear();
-                          viewModel.resetControllerBoolValue();
-                        },
-                        selectedValue: viewModel.selectedRoute == null
-                            ? null
-                            : viewModel.selectedRoute,
-                      ),
+                                viewModel.getHubs();
+                                consignmentTitleController.clear();
+                                viewModel.resetControllerBoolValue();
+                              }
+                            }
+                          });
+                        }),
                 viewModel.hubsList.length < 1
                     ? Container()
-                    : registrationSelector(
-                        context: context, viewModel: viewModel),
+                    : registrationSelector(viewModel: viewModel),
                 viewModel.hubsList.length < 1
                     ? Container()
                     : consignmentTextField(viewModel: viewModel),
@@ -192,52 +234,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   PageView _hubsPageView(CreateConsignmentModel viewModel) {
     return PageView.builder(
-      onPageChanged: (index) {
-        setValueAt(
-          textEditingController: hubTitleController,
-          value: viewModel.consignmentRequest.items[index].title ?? "NA",
-        );
-        setValueAt(
-          textEditingController: dropController,
-          value: viewModel.consignmentRequest.items[index].dropOff != null
-              ? dropController.text =
-                  viewModel.consignmentRequest.items[index].dropOff.toString()
-              : "0",
-        );
-
-        setValueAt(
-          textEditingController: collectController,
-          value: viewModel.consignmentRequest.items[index].collect != null
-              ? viewModel.consignmentRequest.items[index].collect.toString()
-              : "0",
-        );
-
-        setValueAt(
-          textEditingController: remarksController,
-          value: viewModel.consignmentRequest.items[index].remarks ?? "",
-        );
-
-        if (index == viewModel.hubsList.length - 1) {
-          double grandTotal = 0;
-          for (int i = 1;
-              i < viewModel.consignmentRequest.items.length - 1;
-              i++) {
-            if (viewModel.consignmentRequest.items[i].payment != null) {
-              grandTotal =
-                  grandTotal + viewModel.consignmentRequest.items[i].payment ??
-                      0;
-            }
-          }
-
-          viewModel.consignmentRequest.items.forEach((element) {});
-          paymentController.text = grandTotal.toString();
-        } else {
-          paymentController.text =
-              viewModel.consignmentRequest.items[index].payment != null
-                  ? viewModel.consignmentRequest.items[index].payment.toString()
-                  : "0.0";
-        }
-      },
       physics: NeverScrollableScrollPhysics(),
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
@@ -340,6 +336,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                         height: buttonHeight,
                                         child: AppButton(
                                           onTap: () {
+                                            hideKeyboard(context: context);
                                             updateData(
                                                 viewModel: viewModel,
                                                 index: index,
@@ -366,72 +363,28 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                                       onTap: index ==
                                               viewModel.hubsList.length - 1
                                           ? () {
+                                              hideKeyboard(context: context);
                                               updateData(
                                                   viewModel: viewModel,
                                                   index: index);
+                                              if (checkRequiredItems(
+                                                  viewModel: viewModel)) {
+                                                showSummaryBottomSheet(
+                                                        viewModel: viewModel)
+                                                    .then((value) {
+                                                  if (value) {
+                                                    viewModel.createConsignment(
+                                                        consignmentTitle:
+                                                            consignmentTitleController
+                                                                .text);
+                                                  }
+                                                });
 
-                                              if (consignmentTitleController
-                                                      .text
-                                                      .trim()
-                                                      .length ==
-                                                  0) {
-                                                locator<SnackbarService>()
-                                                    .showSnackbar(
-                                                        message:
-                                                            "Please Enter Consignment Title");
-                                                consignmentTitleFocusNode
-                                                    .requestFocus();
-                                                _scrollController.animateTo(0,
-                                                    duration: Duration(
-                                                        milliseconds: 200),
-                                                    curve: Curves.easeInOut);
-                                              } else {
-                                                if (viewModel.itemUnit ==
-                                                    null) {
-                                                  locator<SnackbarService>()
-                                                      .showSnackbar(
-                                                          message:
-                                                              "Please Select Item Unit");
-                                                } else {
-                                                  locator<BottomSheetService>()
-                                                      .showCustomSheet(
-                                                    isScrollControlled: true,
-                                                    barrierDismissible: true,
-                                                    variant: BottomSheetType
-                                                        .createConsignmentSummary,
-                                                    // Which builder you'd like to call that was assigned in the builders function above.
-                                                    customData:
-                                                        CreateConsignmentDialogParams(
-                                                      selectedClient: viewModel
-                                                          .selectedClient,
-                                                      validatedRegistrationNumber:
-                                                          viewModel
-                                                              .validatedRegistrationNumber,
-                                                      consignmentRequest:
-                                                          viewModel
-                                                              .consignmentRequest,
-                                                      selectedRoute: viewModel
-                                                          .selectedRoute,
-                                                      itemUnit:
-                                                          viewModel.itemUnit,
-                                                    ),
-                                                  )
-                                                      .then((value) {
-                                                    if (value != null) {
-                                                      if (value.confirmed) {
-                                                        viewModel.createConsignment(
-                                                            consignmentTitle:
-                                                                consignmentTitleController
-                                                                    .text);
-                                                      }
-                                                    }
-                                                  });
-                                                }
-
-                                                ///end of else
+                                                // viewModel.createConsignment();
                                               }
                                             }
                                           : () {
+                                              hideKeyboard(context: context);
                                               updateData(
                                                   viewModel: viewModel,
                                                   index: index);
@@ -446,22 +399,6 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                       ],
                     ),
                   ),
-                  index == viewModel.hubsList.length - 1 || index == 0
-                      ? Container()
-                      : Positioned(
-                          right: 10,
-                          top: 10,
-                          child: InkWell(
-                            child: Text("Skip"),
-                            onTap: () {
-                              updateData(
-                                  viewModel: viewModel,
-                                  index: index,
-                                  goForward: true,
-                                  skip: true);
-                            },
-                          ),
-                        )
                 ],
               ),
             ),
@@ -489,12 +426,16 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                   duration: Duration(milliseconds: 200),
                   curve: Curves.easeInOut);
             } else {
-              locator<DialogService>()
-                  .showConfirmationDialog(
+              locator<BottomSheetService>()
+                  .showCustomSheet(
+                customData: ConfirmationBottomSheetInputArgs(
+                  title: 'Create Consignment?',
+                  description:
+                      "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                ),
                 barrierDismissible: false,
-                title: 'Create Consignment?',
-                description:
-                    "Are you sure that you want to create a consignment? You can still update it afterwards.",
+                isScrollControlled: true,
+                variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
               )
                   .then((value) {
                 if (value != null) {
@@ -548,18 +489,8 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   //   );
   // }
 
-  registrationSelector(
-      {BuildContext context, CreateConsignmentModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: registrationNumberTextField(viewModel),
-        ),
-        selectRegButton(context, viewModel),
-      ],
-    );
+  registrationSelector({CreateConsignmentModel viewModel}) {
+    return registrationNumberTextField(viewModel);
   }
 
   registrationNumberTextField(CreateConsignmentModel viewModel) {
@@ -572,6 +503,11 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         focusNode: selectedRegNoFocusNode,
         hintText: drRegNoHint,
         keyboardType: TextInputType.text,
+        buttonType: ButtonType.SMALL,
+        buttonIcon: Icon(Icons.search),
+        onButtonPressed: () {
+          validateRegistrationNumber(viewModel: viewModel);
+        },
         onFieldSubmitted: (_) {
           validateRegistrationNumber(viewModel: viewModel);
         });
@@ -582,7 +518,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         enabled: true,
         controller: totalWeightController,
         focusNode: totalWeightFocusNode,
-        hintText: totalWeightHint,
+        hintText: 'Total ${viewModel.itemUnit ?? selectItemUnit[1]}',
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         onTextChange: (String value) {
           viewModel.totalWeight = double.parse(value);
@@ -602,67 +538,74 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         onFieldSubmitted: (value) => consignmentTitleFocusNode.unfocus());
   }
 
-  selectRegButton(BuildContext context, CreateConsignmentModel viewModel) {
-    return SizedBox(
-      height: 58,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 6.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {
-            validateRegistrationNumber(viewModel: viewModel);
-          },
-        ),
-      ),
-    );
+  dateSelector({BuildContext context, CreateConsignmentModel viewModel}) {
+    return selectedDateTextField(viewModel);
   }
 
-  dateSelector({BuildContext context, CreateConsignmentModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
-    );
+  dispatchTimeSelectorSelector(
+      {BuildContext context, CreateConsignmentModel viewModel}) {
+    return selectedDispatchTimeField(viewModel);
   }
 
   selectedDateTextField(CreateConsignmentModel viewModel) {
     return appTextFormField(
+        enabled: false,
+        controller: selectedDateController,
+        focusNode: selectedDateFocusNode,
+        inputDecoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
+            hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
+            hintText: 'Select date to create a new consigment'),
+        keyboardType: TextInputType.text,
+        buttonType: ButtonType.FULL,
+        buttonIcon: Icon(Icons.calendar_today_outlined),
+        onButtonPressed: () {
+          dateSelectListener(viewModel: viewModel);
+        });
+  }
+
+  selectedDispatchTimeField(CreateConsignmentModel viewModel) {
+    return appTextFormField(
       enabled: false,
-      controller: selectedDateController,
-      focusNode: selectedDateFocusNode,
+      controller: selectedDispatchTimeController,
+      focusNode: selectedDispatchTimeFocusNode,
       inputDecoration: InputDecoration(
           contentPadding:
               EdgeInsets.only(left: 16, top: 4, bottom: 4, right: 16),
           hintStyle: TextStyle(fontSize: 14, color: Colors.black45),
-          hintText: 'Entry Date'),
+          hintText: 'Dispatch Time'),
       keyboardType: TextInputType.text,
+      buttonType: ButtonType.FULL,
+      buttonIcon: Icon(Icons.date_range_outlined),
+      onButtonPressed: (() async {
+        TimeOfDay selectedDispatchTime = await selectTime(context: context);
+        if (selectedDispatchTime != null) {
+          selectedDispatchTimeController.text =
+              selectedDispatchTime.format(context).toLowerCase();
+          viewModel.dispatchTime = selectedDispatchTime;
+          viewModel.getConsignmentListWithDate();
+          selectedRegNoController.clear();
+          consignmentTitleController.clear();
+          viewModel.resetControllerBoolValue();
+        }
+      }),
     );
   }
 
-  selectDateButton(BuildContext context, CreateConsignmentModel viewModel) {
-    return SizedBox(
-      height: 56,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0, right: 4),
-        child: appSuffixIconButton(
-          icon: Icon(Icons.calendar_today_outlined),
-          onPressed: (() async {
-            DateTime selectedDate = await selectDate();
-            if (selectedDate != null) {
-              selectedDateController.text =
-                  DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-              viewModel.entryDate = selectedDate;
-              viewModel.getConsignmentListWithDate();
-              selectedRegNoController.clear();
-              consignmentTitleController.clear();
-              viewModel.resetControllerBoolValue();
-            }
-          }),
-        ),
-      ),
-    );
+  dateSelectListener({
+    @required CreateConsignmentModel viewModel,
+  }) async {
+    DateTime selectedDate = await selectDate();
+    if (selectedDate != null) {
+      selectedDateController.text =
+          DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+      viewModel.entryDate = selectedDate;
+      viewModel.getConsignmentListWithDate();
+      selectedRegNoController.clear();
+      consignmentTitleController.clear();
+      viewModel.resetControllerBoolValue();
+    }
   }
 
   Future<DateTime> selectDate() async {
@@ -685,7 +628,17 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: new DateTime(1990),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2500),
+    );
+
+    return picked;
+  }
+
+  Future<TimeOfDay> selectTime({@required BuildContext context}) async {
+    TimeOfDay picked = await showTimePicker(
+      initialEntryMode: TimePickerEntryMode.dial,
+      context: context,
+      initialTime: TimeOfDay.now(),
     );
 
     return picked;
@@ -693,39 +646,27 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget hubTitle(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isHubTitleEdited) {
-      hubTitleController.text =
-          viewModel?.consignmentRequest?.items[index]?.title?.toString();
-    }
+    // if (!viewModel.isHubTitleEdited) {
+    //   hubTitleController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.title?.toString();
+    // }
 
-    return TextFormField(
-      // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Item Title"),
-      // decoration: InputDecoration(
-      //   labelText: "Enter Email",
-      //   fillColor: AppColors.appScaffoldColor,
-      //   focusedBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(defaultBorder),
-      //     borderSide: BorderSide(
-      //       // color: Colors.blue,
-      //     ),
-      //   ),
-      //   enabledBorder: OutlineInputBorder(
-      //     borderRadius: BorderRadius.circular(defaultBorder),
-      //     borderSide: BorderSide(
-      //       color: AppColors.primaryColorShade5,
-      //       // width: 2.0,
-      //     ),
-      //   ),
-      // ),
+    return createConsignmentTextFormField(
+      decoration: getInputBorder(
+          hintText: "Item Title",
+          showSuffix: viewModel.consignmentRequest.items[index].titleError),
       enabled: true,
-      controller: hubTitleController,
+      // controller: hubTitleController,
+      initialValue: viewModel.consignmentRequest.items[index].title ?? '',
       keyboardType: TextInputType.text,
-      onChanged: (_) {
+      onTextChange: (String value) {
+        viewModel.consignmentRequest.items[index].titleError = false;
+        viewModel.consignmentRequest.items[index].title = value.trim();
+        viewModel.notifyListeners();
         viewModel.isHubTitleEdited = true;
       },
       onFieldSubmitted: (_) {
-        fieldFocusChange(
+        onfieldFocusChange(
           context,
           hubTitleFocusNode,
           dropFocusNode,
@@ -733,29 +674,31 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       },
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].titleError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
 
   Widget remarksInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isRemarksEdited) {
-      remarksController.text =
-          viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
-    }
+    // if (!viewModel.isRemarksEdited) {
+    //   remarksController.text =
+    //       viewModel?.consignmentRequest?.items[index]?.remarks?.toString();
+    // }
     return TextFormField(
       // style: AppTextStyles.appBarTitleStyle,
       decoration: getInputBorder(hintText: "Remarks"),
       // maxLines: 5,
       enabled: true,
-      controller: remarksController,
+      // controller: remarksController,
+      initialValue: viewModel.consignmentRequest.items[index].remarks ?? '',
       focusNode: remarksFocusNode,
-      onChanged: (_) {
+      onChanged: (String value) {
         viewModel.isRemarksEdited = true;
+        viewModel.consignmentRequest.items[index].remarks = value;
       },
       onFieldSubmitted: (_) {
         remarksFocusNode.unfocus();
@@ -767,19 +710,27 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
 
   Widget dropInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isDropCratesEdited) {
-      dropController.text =
-          viewModel?.consignmentRequest?.items[index]?.dropOff?.toString();
-    }
-    return TextFormField(
+    print('dropInput, index = $index');
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      onChanged: (_) {
+      onTextChange: (String value) {
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].dropOffError = false;
+        viewModel.consignmentRequest.items[index].dropOff =
+            value.trim().length == 0 ? 0 : int.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isDropCratesEdited = true;
       },
-      decoration: getInputBorder(hintText: "Item Drop"),
+      decoration: getInputBorder(
+          hintText: "Item Drop (${viewModel.itemUnit})",
+          showSuffix: viewModel.consignmentRequest.items[index].dropOffError),
       enabled: true,
-      controller: dropController,
+      // controller: dropController,
       focusNode: dropFocusNode,
+      initialValue: viewModel.consignmentRequest.items[index].dropOff == null
+          ? ''
+          : viewModel.consignmentRequest.items[index].dropOff.toString(),
       onFieldSubmitted: (_) {
         fieldFocusChange(
           context,
@@ -790,27 +741,37 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].dropOffError = true;
+          viewModel.notifyListeners();
         }
+
+        return null;
       },
     );
   }
 
   Widget collectInput(
       {BuildContext context, CreateConsignmentModel viewModel, int index}) {
-    if (!viewModel.isCollectCratesEdited) {
-      collectController.text =
-          viewModel?.consignmentRequest?.items[index]?.collect?.toString();
-    }
-    return TextFormField(
+    print('collectInput, index = $index');
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Item Collect"),
+      decoration: getInputBorder(
+        hintText: "Item Collect (${viewModel.itemUnit})",
+        showSuffix: viewModel.consignmentRequest.items[index].collectError,
+      ),
       enabled: true,
-      controller: collectController,
+      // controller: collectController,
       focusNode: collectFocusNode,
-      onChanged: (_) {
+      initialValue: viewModel.consignmentRequest.items[index].collect == null
+          ? ''
+          : viewModel.consignmentRequest.items[index].collect.toString(),
+      onTextChange: (String value) {
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].collectError = false;
+        viewModel.consignmentRequest.items[index].collect =
+            value.trim().length == 0 ? 0 : int.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isCollectCratesEdited = true;
       },
       onFieldSubmitted: (_) {
@@ -823,10 +784,10 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].collectError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
@@ -837,17 +798,24 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     bool enabled,
     int index,
   }) {
-    if (!viewModel.isPaymentEdited) {
-      paymentController.text =
-          viewModel?.consignmentRequest?.items[index]?.payment?.toString();
-    }
-
-    return TextFormField(
+    print('paymentInput, index = $index');
+    return createConsignmentTextFormField(
       // style: AppTextStyles.appBarTitleStyle,
-      decoration: getInputBorder(hintText: "Payment"),
+      decoration: getInputBorder(
+        hintText: "Payment",
+        showSuffix: viewModel.consignmentRequest.items[index].paymentError,
+      ),
       enabled: !enabled,
-      controller: paymentController,
-      onChanged: (_) {
+      initialValue: getPaymentLabelInnitialValue(
+          enabled: !enabled, viewModel: viewModel, index: index),
+      // controller: paymentController,
+      onTextChange: (String value) {
+        // if (value.trim().length > 0) {
+        viewModel.consignmentRequest.items[index].paymentError = false;
+        viewModel.consignmentRequest.items[index].payment =
+            value.trim().length == 0 ? 0 : double.parse(value);
+        viewModel.notifyListeners();
+        // }
         viewModel.isPaymentEdited = true;
       },
       focusNode: paymentFocusNode,
@@ -864,19 +832,23 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
           return null;
         }
         if (value.isEmpty) {
-          return textRequired;
-        } else {
-          return null;
+          viewModel.consignmentRequest.items[index].paymentError = true;
+          viewModel.notifyListeners();
         }
+        return null;
       },
     );
   }
 
-  getInputBorder({@required String hintText}) {
+  getInputBorder({
+    @required String hintText,
+    bool showSuffix = false,
+  }) {
     return InputDecoration(
       alignLabelWithHint: true,
+      focusedErrorBorder: normalTextFormFieldBorder(),
       errorStyle: TextStyle(
-        fontSize: 14,
+        fontSize: 10,
       ),
       helperStyle: TextStyle(
         fontSize: 14,
@@ -885,30 +857,38 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       labelText: hintText,
       labelStyle: TextStyle(color: AppColors.primaryColorShade5, fontSize: 14),
       fillColor: AppColors.appScaffoldColor,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-            // color: Colors.blue,
-            ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-          // width: 2.0,
-        ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(defaultBorder),
-        borderSide: BorderSide(
-          color: AppColors.primaryColorShade5,
-        ),
+      suffixIcon: showSuffix
+          ? InkWell(
+              onTap: () {
+                // onPasswordTogglePressed(obscureText);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  width: 70,
+                  child: Center(
+                    child: Text(
+                      'required',
+                      style: AppTextStyles.appBarTitleStyle
+                          .copyWith(color: Colors.red),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : null,
+      focusedBorder: normalTextFormFieldBorder(),
+      enabledBorder: normalTextFormFieldBorder(),
+      disabledBorder: normalTextFormFieldBorder(),
+      errorBorder: normalTextFormFieldBorder(),
+    );
+  }
+
+  normalTextFormFieldBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(defaultBorder),
+      borderSide: BorderSide(
+        color: AppColors.primaryColorShade5,
       ),
     );
   }
@@ -918,40 +898,75 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       int index,
       bool goForward = true,
       bool skip = false}) {
-    if (skip || viewModel.formKeyList[index].currentState.validate()) {
-      FetchHubsResponse tempVar = viewModel.hubsList[index];
-      viewModel.hubsList.removeAt(index);
-      tempVar.copyWith(isSubmitted: true);
-      viewModel.hubsList.insert(index, tempVar);
+    bool isAllIsWell = true;
 
-      viewModel.hubsList.forEach((element) {
-        if (element.sequence == viewModel.hubsList[index].sequence) {
-          Item item = viewModel.consignmentRequest.items[index];
-          viewModel.consignmentRequest.items.removeAt(index);
-          item = item.copyWith(
-            dropOff: skip ? 0 : int.parse(dropController.text),
-            collect: skip ? 0 : int.parse(collectController.text),
-            payment: skip ? 0 : double.parse(paymentController.text),
-            title: skip ? "NA" : hubTitleController.text.trim(),
-            remarks: skip ? " " : remarksController.text.trim(),
-          );
-          viewModel.consignmentRequest.items.insert(index, item);
-          viewModel.notifyListeners();
-        }
-      });
+    if (viewModel.consignmentRequest.items[index].dropOff == null) {
+      viewModel.consignmentRequest.items[index].dropOffError = true;
+      isAllIsWell = false;
+    }
 
+    if (viewModel.consignmentRequest.items[index].collect == null) {
+      viewModel.consignmentRequest.items[index].collectError = true;
+      isAllIsWell = false;
+    }
+
+    if (viewModel.consignmentRequest.items[index].title == null) {
+      viewModel.consignmentRequest.items[index].titleError = true;
+      isAllIsWell = false;
+    }
+
+    // if (index < viewModel.consignmentRequest.items.length - 1 &&
+    //     viewModel.consignmentRequest.items[index].payment == null) {
+    //   viewModel.consignmentRequest.items[index].paymentError = true;
+    //   isAllIsWell = false;
+    // }
+
+    if (isAllIsWell) {
       if (goForward) {
+        print('Go fwd, index = $index');
         if (index < viewModel.hubsList.length) {
           _controller.nextPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }
       } else {
+        print('Go back, index = $index');
         if (index > 0) {
           _controller.previousPage(
               duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         }
       }
+    } else {
+      viewModel.notifyListeners();
     }
+
+    // if (skip || viewModel.formKeyList[index].currentState.validate()) {
+    // FetchHubsResponse tempVar = viewModel.hubsList[index];
+    // viewModel.hubsList.removeAt(index);
+    // tempVar.copyWith(isSubmitted: true);
+    // viewModel.hubsList.insert(index, tempVar);
+
+    // viewModel.hubsList.forEach((element) {
+    //   if (element.sequence == viewModel.hubsList[index].sequence) {
+    //     Item item = viewModel.consignmentRequest.items[index];
+    //     viewModel.consignmentRequest.items.removeAt(index);
+    //     item = item.copyWith(
+    //       dropOff:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].dropOff,
+    //       collect:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].collect,
+    //       payment:
+    //           skip ? 0 : viewModel.consignmentRequest.items[index].payment,
+    //       title:
+    //           skip ? "NA" : viewModel.consignmentRequest.items[index].title,
+    //       remarks:
+    //           skip ? " " : viewModel.consignmentRequest.items[index].remarks,
+    //     );
+    //     viewModel.consignmentRequest.items.insert(index, item);
+    //     viewModel.notifyListeners();
+    //   }
+    // });
+
+    // }
   }
 
   void validateRegistrationNumber({CreateConsignmentModel viewModel}) {
@@ -983,6 +998,91 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     } else {
       return 'Consignments';
     }
+  }
+
+  ///Check if consignment title, item unit, dispatch time has been selected or not.
+  bool checkRequiredItems({@required CreateConsignmentModel viewModel}) {
+    bool allRequiredFieldsFilled = true;
+
+    if (consignmentTitleController.text.trim().length == 0) {
+      locator<SnackbarService>()
+          .showSnackbar(message: "Please Enter Consignment Title");
+      consignmentTitleFocusNode.requestFocus();
+      _scrollController.animateTo(0,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      allRequiredFieldsFilled = false;
+    } else {
+      if (viewModel.itemUnit == null) {
+        locator<SnackbarService>()
+            .showSnackbar(message: "Please Select Item Unit");
+        allRequiredFieldsFilled = false;
+      } else if (selectedDispatchTimeController.text.trim().length == 0) {
+        locator<SnackbarService>()
+            .showSnackbar(message: 'Please Select Dispatch Time.');
+        allRequiredFieldsFilled = false;
+      }
+    }
+    return allRequiredFieldsFilled;
+  }
+
+  Future<bool> showSummaryBottomSheet(
+      {@required CreateConsignmentModel viewModel}) async {
+    SheetResponse createConsignment = SheetResponse();
+
+    createConsignment = await locator<BottomSheetService>().showCustomSheet(
+      isScrollControlled: true,
+      barrierDismissible: true,
+      variant: BottomSheetType.createConsignmentSummary,
+      // Which builder you'd like to call that was assigned in the builders function above.
+      customData: CreateConsignmentDialogParams(
+        selectedClient: viewModel.selectedClient,
+        validatedRegistrationNumber: viewModel.validatedRegistrationNumber,
+        consignmentRequest: viewModel.consignmentRequest.copyWith(
+          weight: viewModel.totalWeight,
+        ),
+        selectedRoute: viewModel.selectedRoute,
+        itemUnit: viewModel.itemUnit,
+      ),
+    );
+
+    if (createConsignment != null) {
+      return createConsignment.confirmed;
+    } else {
+      return false;
+    }
+  }
+
+  getPaymentLabelInnitialValue({
+    @required bool enabled,
+    @required CreateConsignmentModel viewModel,
+    int index,
+  }) {
+    double payment = 0.00;
+
+    if (enabled) {
+      //payment can be entered in the widget. If individual item's payment
+      //viewModel.consignmentRequest.items[index].payment is not null, and has a value, show it,
+      //other wise show empty string.
+      if (viewModel.consignmentRequest.items[index].payment == null ||
+          viewModel.consignmentRequest.items[index].payment == 0) {
+        return '';
+      } else {
+        payment = viewModel.consignmentRequest.items[index].payment;
+      }
+    } else {
+      //payment can be not be entered in the widget. Its the last hub,
+      //hence it will show sum of all payments
+      //if viewModel.consignmentRequest.payment is not null, and has a value, show it,
+      // other wise show empty string.
+      if (viewModel.consignmentRequest.getTotalPayment() == null ||
+          viewModel.consignmentRequest.getTotalPayment() == 0) {
+        payment = 0;
+      } else {
+        payment = viewModel.consignmentRequest.getTotalPayment();
+      }
+    }
+
+    return payment.toString();
   }
 }
 

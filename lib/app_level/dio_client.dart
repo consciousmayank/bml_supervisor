@@ -3,27 +3,39 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../utils/api_endpoints.dart';
-import 'configuration.dart';
 
 class DioConfig {
-  final _dio = Dio();
-
-  DioConfig() {
+  final String baseUrl;
+  DioConfig({@required this.baseUrl}) {
     configureDio();
   }
+
+  final _dio = Dio();
 
   Interceptor get element => Interceptor();
 
   configureDio() {
     _dio.options
-      ..baseUrl = kReleaseMode ? baseRestUrlProduction : baseSecureUrlBmlApp
+      ..baseUrl = baseUrl
       ..contentType = "application/json";
-    _dio.interceptors.add(InterceptorsWrapper(
+      _dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
         onRequest: (RequestOptions options) => requestInterceptor(options),
-        onResponse: (Response response) => responseInterceptor(response),
-        onError: (DioError dioError) => errorInterceptor(dioError)));
+        // onResponse: (Response response) => responseInterceptor(response),
+        onError: (DioError dioError) => errorInterceptor(dioError),
+      ),
+    );
   }
 
   dynamic requestInterceptor(RequestOptions options) async {
@@ -38,27 +50,7 @@ class DioConfig {
   }
 
   dynamic responseInterceptor(Response options) async {
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    print("${options.request.baseUrl}${options.request.path}");
-    print("${options.data.toString()}");
-    print('${options.request.method}');
-    print('${options.request.data}');
-    print('${options.request.headers.toString()}');
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     return options;
-    // if (options.headers.value("verifyToken") != null) {
-    //   //if the header is present, then compare it with the Shared Prefs key
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   var verifyToken = prefs.get("VerifyToken");
-    //
-    //   // if the value is the same as the header, continue with the request
-    //   if (options.headers.value("verifyToken") == verifyToken) {
-    //     return options;
-    //   }
-    // }
-    //
-    // return DioError(
-    //     request: options.request, message: "User is no longer active");
   }
 
   dynamic errorInterceptor(DioError dioError) {

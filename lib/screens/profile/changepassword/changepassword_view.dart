@@ -7,7 +7,6 @@ import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
-import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -102,6 +101,14 @@ class _BodyWidgetState extends State<BodyWidget> {
               Text(
                 "BookMyLoading",
                 style: AppTextStyles.latoMediumItalics20,
+              ),
+              hSizedBox(20),
+              Text(
+                // S.of(context).appTitle,
+                'Manager App',
+                style: AppTextStyles.latoMediumItalics20.copyWith(
+                  fontSize: 18,
+                ),
               )
             ],
           ),

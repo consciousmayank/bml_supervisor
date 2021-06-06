@@ -1,7 +1,57 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppTextStyles {
+
+  final double fontSize;
+  final FontWeight fontWeight;
+  final Color textColor;
+
+  TextStyle get textStyle => TextStyle(
+    fontWeight: fontWeight,
+    fontSize: fontSize,
+    color: textColor,
+  );
+  
+  TextStyle get appBarTitleStyleNew => textStyle.copyWith(
+    color: AppColors.white,
+  );
+  
+  TextStyle get hintTextStyle => textStyle.copyWith(
+    color: Colors.black54,
+  );
+
+  TextStyle get underLinedTextStyleNew => textStyle.copyWith(decoration: TextDecoration.underline,);
+  TextStyle get textFormFieldTextStyle => textStyle.copyWith(decoration: TextDecoration.underline, fontSize: 16);
+  
+  TextStyle get hyperLinkStyleNew => textStyle.copyWith(decoration: TextDecoration.underline, fontWeight: FontWeight.bold,);
+
+  AppTextStyles({
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.normal,
+    this.textColor = AppColors.primaryColorShade5,
+  });
+  
+  AppTextStyles.bsGridViewLabelStyle({
+    this.fontSize = 12,
+    this.fontWeight = FontWeight.normal,
+    this.textColor = AppColors.primaryColorShade4,
+  });
+  
+  AppTextStyles.bsGridViewValueStyle({
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.w600,
+    this.textColor = AppColors.primaryColorShade4,
+  });
+  
+  AppTextStyles.expensesPeriodTitle({
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.bold,
+    this.textColor = AppColors.primaryColorShade4,
+  });
+
+  //Todo : delete in someTime.
   static const TextStyle latoBold18Black = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 18,
@@ -121,5 +171,6 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 14,
     color: AppColors.primaryColorShade5,
+    decoration: TextDecoration.underline,
   );
 }

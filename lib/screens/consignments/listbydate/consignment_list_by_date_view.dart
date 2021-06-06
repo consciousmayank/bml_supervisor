@@ -6,15 +6,16 @@ import 'package:bml_supervisor/screens/consignments/details/consignment_details_
 import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_by_date_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_suffix_icon_button.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
-import 'package:bml_supervisor/widget/app_tiles.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:stacked/stacked.dart';
@@ -44,9 +45,8 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
                 appBar: AppBar(
                   automaticallyImplyLeading: true,
                   centerTitle: true,
-                  title: Text(
-                    getTitle(viewModel),
-                    style: AppTextStyles.whiteRegular,
+                  title: setAppBarTitle(
+                    title: getTitle(viewModel),
                   ),
                 ),
                 body: viewModel.isBusy
@@ -71,7 +71,7 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        dateSelector(context: context, viewModel: viewModel),
+        dateSelector(viewModel: viewModel),
         hSizedBox(4),
         viewModel.consignmentsList.length == 0
             ? Expanded(
@@ -150,59 +150,71 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
       ConsignmentListByDateViewModel viewModel, int outerIndex) {
     return List.generate(
       viewModel.getConsolidatedData(outerIndex).length,
-      (index) => SingleConsignmentItem(
-        args: SingleConsignmentItemArguments(
-          vehicleId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .vehicleId
-              .toString(),
-          drop: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .dropOff
-              .toString(),
-          routeTitle: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeTitle
-              .toString(),
-          collect: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .collect
-              .toString(),
-          payment: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .payment
-              .toString(),
-          routeId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .routeId
-              .toString(),
-          consignmentId: viewModel
-              .getConsolidatedData(outerIndex)[index]
-              .consigmentId
-              .toString(),
-          onTap: () {
-            viewModel.takeToConsignmentDetailPage(
-              args: ConsignmentDetailsArgument(
-                vehicleId:
-                    viewModel.getConsolidatedData(outerIndex)[index].vehicleId,
-                callingScreen: CallingScreen.CONSIGNMENT_LIST,
-                consignmentId: viewModel
-                    .getConsolidatedData(outerIndex)[index]
-                    .consigmentId
-                    .toString(),
-                routeId: viewModel
-                    .getConsolidatedData(outerIndex)[index]
-                    .routeId
-                    .toString(),
-                routeName:
-                    viewModel.getConsolidatedData(outerIndex)[index].routeTitle,
-                entryDate:
-                    viewModel.getConsolidatedData(outerIndex)[index].entryDate,
-              ),
-            );
-          },
-        ),
-      ),
+      (index) {
+        print(
+          'getConsolidatedData :: ' +
+              viewModel
+                  .getConsolidatedData(outerIndex)[index]
+                  .collect
+                  .toString(),
+        );
+        return SingleConsignmentItem(
+          args: SingleConsignmentItemArguments(
+            vehicleId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .vehicleId
+                .toString(),
+            drop: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .dropOff
+                .toString(),
+            routeTitle: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .routeTitle
+                .toString(),
+            collect: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .collect
+                .toString(),
+            payment: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .payment
+                .toString(),
+            routeId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .routeId
+                .toString(),
+            consignmentId: viewModel
+                .getConsolidatedData(outerIndex)[index]
+                .consigmentId
+                .toString(),
+            onTap: () {
+              viewModel.takeToConsignmentDetailPage(
+                args: ConsignmentDetailsArgument(
+                  vehicleId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .vehicleId,
+                  callingScreen: CallingScreen.CONSIGNMENT_LIST,
+                  consignmentId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .consigmentId
+                      .toString(),
+                  routeId: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .routeId
+                      .toString(),
+                  routeName: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .routeTitle,
+                  entryDate: viewModel
+                      .getConsolidatedData(outerIndex)[index]
+                      .entryDate,
+                ),
+              );
+            },
+          ),
+        );
+      },
     ).toList();
   }
 
@@ -302,51 +314,44 @@ class _ConsignmentListByDateViewState extends State<ConsignmentListByDateView> {
     );
   }
 
-  dateSelector(
-      {BuildContext context, ConsignmentListByDateViewModel viewModel}) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedDateTextField(viewModel),
-        selectDateButton(context, viewModel),
-      ],
+  dateSelector({@required ConsignmentListByDateViewModel viewModel}) {
+    return SearchWidget.buttonLike(
+      hintTitle: 'Search Consignment by Date',
+      onClearTextClicked: () {},
+      controller: TextEditingController(),
     );
+
+    // return selectedDateTextField(
+    //   viewModel,
+    // );
   }
 
   selectedDateTextField(ConsignmentListByDateViewModel viewModel) {
     return appTextFormField(
+      buttonType: ButtonType.FULL,
+      buttonIcon: Image.asset(
+        calendarIcon,
+        height: 16,
+        width: 16,
+      ),
+      // Icon(Icons.calendar_today_outlined),
+      onButtonPressed: (() async {
+        DateTime selectedDate = await selectDate();
+        if (selectedDate != null) {
+          selectedDateController.text =
+              DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
+          viewModel.entryDate = selectedDate;
+
+          // viewModel.getRoutes(viewModel.selectedClient.id);
+          viewModel.getConsignmentListWithDate();
+        }
+      }),
       enabled: false,
       controller: selectedDateController,
       focusNode: selectedDateFocusNode,
       hintText: "Entry Date",
       labelText: "Entry Date",
       keyboardType: TextInputType.text,
-    );
-  }
-
-  selectDateButton(
-      BuildContext context, ConsignmentListByDateViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0, right: 4),
-      child: appSuffixIconButton(
-        icon: Image.asset(
-          calendarIcon,
-          height: 16,
-          width: 16,
-        ),
-        // Icon(Icons.calendar_today_outlined),
-        onPressed: (() async {
-          DateTime selectedDate = await selectDate();
-          if (selectedDate != null) {
-            selectedDateController.text =
-                DateFormat('dd-MM-yyyy').format(selectedDate).toLowerCase();
-            viewModel.entryDate = selectedDate;
-
-            // viewModel.getRoutes(viewModel.selectedClient.id);
-            viewModel.getConsignmentListWithDate();
-          }
-        }),
-      ),
     );
   }
 

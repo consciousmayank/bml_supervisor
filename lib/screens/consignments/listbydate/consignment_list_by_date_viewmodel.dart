@@ -2,7 +2,6 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
-import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
@@ -15,7 +14,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
   double _grandPayment = 0.0;
   List<SinglePendingConsignmentListItem> pendingConsignmentsList = [];
   Set<String> pendingConsignmentsDateList = Set();
-  int pageIndex = 0;
+  int pageIndex = 1;
 
   double get grandPayment => _grandPayment;
 
@@ -59,7 +58,7 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
 
     var response =
         await _consignmentApis.getConsignmentsForSelectedDateAndClient(
-      clientId: MyPreferences().getSelectedClient().clientId,
+      clientId: MyPreferences()?.getSelectedClient()?.clientId,
       date: getDateString(entryDate),
     );
 
@@ -69,32 +68,39 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
+  bool shouldCallGetConsignmentListPageWise = true;
+
   getConsignmentListPageWise({
     @required showLoading,
   }) async {
     // ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
-    if (showLoading) {
-      setBusy(true);
-      pendingConsignmentsList = [];
-      pendingConsignmentsDateList = Set();
-    }
+    if (shouldCallGetConsignmentListPageWise) {
+      if (showLoading) {
+        setBusy(true);
+        pendingConsignmentsList = [];
+        pendingConsignmentsDateList = Set();
+      }
 
-    List<SinglePendingConsignmentListItem> response =
-        await _consignmentApis.getConsignmentListPageWise(
-            clientId: MyPreferences().getSelectedClient().clientId,
-            pageIndex: pageIndex);
-    response.forEach((element) {
-      pendingConsignmentsDateList.add(element.entryDate);
-    });
-    if (pageIndex == 0) {
-      pendingConsignmentsList = copyList(response);
-    } else {
-      pendingConsignmentsList.addAll(response);
-    }
+      List<SinglePendingConsignmentListItem> response =
+          await _consignmentApis.getConsignmentListPageWise(
+              clientId: MyPreferences()?.getSelectedClient()?.clientId,
+              pageIndex: pageIndex);
+      response.forEach((element) {
+        pendingConsignmentsDateList.add(element.entryDate);
+      });
+      if (response.length == 0) {
+        shouldCallGetConsignmentListPageWise = false;
+      }
+      if (pageIndex == 0) {
+        pendingConsignmentsList = copyList(response);
+      } else {
+        pendingConsignmentsList.addAll(response);
+      }
 
-    pageIndex++;
-    if (showLoading) setBusy(false);
-    notifyListeners();
+      pageIndex++;
+      if (showLoading) setBusy(false);
+      notifyListeners();
+    }
   }
 
   List<SinglePendingConsignmentListItem> getConsolidatedData(int index) {
@@ -105,6 +111,10 @@ class ConsignmentListByDateViewModel extends GeneralisedBaseViewModel {
   }
 
   void takeToConsignmentDetailPage({ConsignmentDetailsArgument args}) async {
-    navigationService.navigateTo(consignmentDetailsPageRoute, arguments: args);
+    navigationService
+        .navigateTo(consignmentDetailsPageRoute, arguments: args)
+        .then(
+          (value) => print(value),
+        );
   }
 }

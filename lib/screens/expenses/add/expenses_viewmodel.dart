@@ -1,5 +1,9 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/expense_response.dart';
 import 'package:bml_supervisor/models/get_daily_kilometers_info.dart';
@@ -7,17 +11,64 @@ import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dailykms/daily_entry_api.dart';
-import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
+import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/expenses_api.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
+import 'package:flutter/material.dart';
 
 class ExpensesViewModel extends GeneralisedBaseViewModel {
-  DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
-  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
+  String entryDateError = '',
+      vehicleIdError = '',
+      expenseTypeError = '',
+      totalAmountError = '',
+      descriptionError = '',
+      fuelRateError = '',
+      fuelLitreError = '',
+      fuelMeterReadingError = '';
+  double fuelRate, fuelLitre;
+  int fuelMeterReading;
+  int pageNumber = 1;
+  double expenseAmount = -1.0;
+  String expenseDescription = '';
+  bool _callGetEntriesApi = true;
+  List<GetClientsResponse> _clientsList = [];
+  ConsignmentApis _consignmentApis = locator<ConsignmentApisImpl>();
   DailyEntryApis _dailyEntryApis = locator<DailyEntryApisImpl>();
-  bool _clearData = false;
   List<GetDailyKilometerInfo> _dailyKmInfoList = [];
+  DateTime _entryDate;
+  String _expenseType;
+  ExpensesApi _expensesApi = locator<ExpensesApisImpl>();
+  List<ExpenseResponse> _expensesList = [];
+  bool _getLastSevenDaysExpenses = false;
+  bool _isExpenseListLoading = false;
+  bool _isRegNumCorrect = false;
+  ApiResponse _saveExpenseResponse;
+  GetClientsResponse _selectedClient;
+  GetDailyKilometerInfo _selectedDailyKmInfo = GetDailyKilometerInfo(
+    vehicleId: null,
+    clientId: MyPreferences().getSelectedClient().clientId,
+    routeId: 0,
+    routeTitle: '',
+  );
+
+  SearchByRegNoResponse _selectedSearchVehicle;
+  bool _showSubmitForm = false;
+  SearchByRegNoResponse _validatedRegistrationNumber;
+
+  List<String> expenseTypes;
+
+  SearchByRegNoResponse get validatedRegistrationNumber =>
+      _validatedRegistrationNumber;
+
+  set validatedRegistrationNumber(SearchByRegNoResponse value) {
+    _validatedRegistrationNumber = value;
+    notifyListeners();
+  }
 
   List<GetDailyKilometerInfo> get dailyKmInfoList => _dailyKmInfoList;
 
@@ -26,21 +77,11 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  GetDailyKilometerInfo _selectedDailyKmInfo;
-
   GetDailyKilometerInfo get selectedDailyKmInfo => _selectedDailyKmInfo;
 
   set selectedDailyKmInfo(GetDailyKilometerInfo value) {
     _selectedDailyKmInfo = value;
   }
-
-  bool get clearData => _clearData;
-
-  set clearData(bool value) {
-    _clearData = value;
-  }
-
-  bool _isRegNumCorrect = false;
 
   bool get isRegNumCorrect => _isRegNumCorrect;
 
@@ -49,17 +90,7 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  DateTime _entryDate;
-
   DateTime get entryDate => _entryDate;
-
-  ApiResponse _saveExpenseResponse;
-
-  int pageNumber = 1;
-
-  bool _getLastSevenDaysExpenses = false;
-
-  List<ExpenseResponse> _expensesList = [];
 
   List<ExpenseResponse> get expensesList => _expensesList;
 
@@ -67,10 +98,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     _expensesList = expensesList;
     notifyListeners();
   }
-
-  bool _callGetEntriesApi = true;
-
-  bool _isExpenseListLoading = false;
 
   bool get isExpenseListLoading => _isExpenseListLoading;
 
@@ -88,14 +115,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
 
   bool get getLastSevenDaysExpenses => _getLastSevenDaysExpenses;
 
-  // set getLastSevenDaysExpenses(bool getLastSevenDaysExpenses) {
-  //   _getLastSevenDaysExpenses = getLastSevenDaysExpenses;
-  //   notifyListeners();
-  //   if (selectedSearchVehicle.registrationNumber != null && entryDate != null) {
-  //     getExpensesList(showLoader: true, increasePageNumber: false);
-  //   }
-  // }
-
   ApiResponse get saveExpenseResponse => _saveExpenseResponse;
 
   set saveExpenseResponse(ApiResponse saveExpenseResponse) {
@@ -110,10 +129,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     // getExpensesList();
     notifyListeners();
   }
-
-  String _expenseType;
-
-  bool _showSubmitForm = false;
 
   bool get showSubmitForm => _showSubmitForm;
 
@@ -131,13 +146,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  // set fromDate(DateTime fromDate) {
-  //   _fromDate = fromDate;
-  //   notifyListeners();
-  // }
-
-  SearchByRegNoResponse _selectedSearchVehicle;
-
   SearchByRegNoResponse get selectedSearchVehicle => _selectedSearchVehicle;
 
   set selectedSearchVehicle(SearchByRegNoResponse selectedSearchVehicle) {
@@ -145,16 +153,12 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<GetClientsResponse> _clientsList = [];
-
   List<GetClientsResponse> get clientsList => _clientsList;
 
   set clientsList(List<GetClientsResponse> value) {
     _clientsList = value;
     notifyListeners();
   }
-
-  GetClientsResponse _selectedClient;
 
   GetClientsResponse get selectedClient => _selectedClient;
 
@@ -167,56 +171,48 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     selectedSearchVehicle = await navigationService.navigateTo(searchPageRoute);
   }
 
-  getClients() async {
-    setBusy(true);
-    clientsList = [];
-    var response = await _dashBoardApis.getClientList();
-    _clientsList = copyList(response);
-    setBusy(false);
-    notifyListeners();
-  }
+  void saveExpense() async {
+    SaveExpenseRequest saveExpenseRequest = SaveExpenseRequest(
+      clientId: selectedDailyKmInfo.clientId,
+      vehicleId: selectedDailyKmInfo.vehicleId,
+      entryDate: DateTimeToStringConverter.ddmmyy(date: entryDate).convert(),
+      expenseType: expenseType,
+      expenseAmount: expenseAmount,
+      expenseDesc: expenseDescription,
+      fuelLtr: fuelLitre ?? 0.00,
+      fuelMeterReading: fuelMeterReading ?? 0,
+      ratePerLtr: fuelRate ?? 0,
+    );
 
-  void saveExpense(SaveExpenseRequest saveExpenseRequest) async {
+    setBusy(true);
     isExpenseListLoading = true;
     ApiResponse response =
         await _expensesApi.addExpense(saveExpenseRequest: saveExpenseRequest);
 
     if (response.isSuccessful()) {
-      entryDate = null;
-      selectedDailyKmInfo = null;
-      expenseType = null;
-      clearData = true;
-      showSubmitForm = false;
-      dailyKmInfoList.clear();
+      
+      bottomSheetService
+          .showCustomSheet(
+        customData: ConfirmationBottomSheetInputArgs(
+          title: response.message,
+        ),
+        barrierDismissible: false,
+        isScrollControlled: false,
+        variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+      )
+          .then(
+        (value) {
+          if (response.isSuccessful()) {
+            navigationService.replaceWith(addExpensesPageRoute,
+                arguments: AddExpenseArguments(
+                  expensesTypes: expenseTypes,
+                ));
+          }
+        },
+      );
     }
-    snackBarService.showSnackbar(message: response.message);
+    setBusy(false);
     isExpenseListLoading = false;
-  }
-
-  void searchByRegistrationNumber(
-      SaveExpenseRequest saveExpenseResponse) async {
-    setBusy(true);
-
-    var entryLog = await apiService
-        .searchByRegistrationNumber(saveExpenseResponse.vehicleId);
-    if (entryLog is String) {
-      snackBarService.showSnackbar(message: entryLog);
-    } else if (entryLog.data['status'].toString() == 'failed') {
-      setBusy(false);
-      snackBarService.showSnackbar(
-          message: "Enter Correct Registration Number");
-    } else {
-      SearchByRegNoResponse singleSearchResult =
-          SearchByRegNoResponse.fromMap(entryLog.data);
-      // print('init reading - ${singleSearchResult.initReading}');
-      isRegNumCorrect = true;
-      // vehicleLog = EntryLog.fromMap(entryLog.data);
-
-      // *call saveExpense api here
-      saveExpense(saveExpenseResponse);
-      setBusy(false);
-    }
-    // return isRegNumCorrect;
   }
 
   void getInfo() async {
@@ -226,5 +222,165 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
     );
     dailyKmInfoList = copyList(response);
     setBusy(false);
+  }
+
+  void validateRegistrationNumber({@required String regNum}) async {
+    setBusy(true);
+    validatedRegistrationNumber =
+        await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
+    if (validatedRegistrationNumber == null) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(
+          seconds: 4,
+        ),
+        message: 'Vehicle with registration number $regNum not found.',
+      );
+    }
+    notifyListeners();
+    setBusy(false);
+  }
+
+  bool validateViews({@required Function onErrorOccured}) {
+    if (entryDate == null) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please select entry date',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {
+          onErrorOccured(WidgetType.ENTRY_DATE_WIDGET);
+        },
+      );
+      entryDateError = textRequired;
+      return false;
+    } else if (selectedDailyKmInfo.vehicleId == null) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please select a vehicle',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {
+          onErrorOccured(WidgetType.VEHICLE_SEARCH_WIDGET);
+        },
+      );
+      vehicleIdError = textRequired;
+      return false;
+    } else if (expenseType == null) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please select an expense type',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {},
+      );
+      expenseTypeError = textRequired;
+      return false;
+    } else if (expenseAmount < 0) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please enter expense amount',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {
+          onErrorOccured(WidgetType.AMOUNT_WIDGET);
+        },
+      );
+      totalAmountError = textRequired;
+      return false;
+    } else if (expenseAmount == 0) {
+      snackBarService.showCustomSnackBar(
+        variant: SnackbarType.ERROR,
+        duration: Duration(seconds: 4),
+        message: 'Please check expense amount',
+        mainButtonTitle: 'Ok',
+        onMainButtonTapped: () {
+          onErrorOccured(WidgetType.AMOUNT_WIDGET);
+        },
+      );
+      totalAmountError = 'Amount cannot be 0';
+      return false;
+    } else if (expenseDescription.length == 0) {
+      expenseDescription = 'NA';
+      return true;
+    } else if (expenseType == "FUEL") {
+      if (fuelMeterReading == null) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires meter reading.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_METER_READING);
+          },
+        );
+        fuelMeterReadingError = textRequired;
+        return false;
+      } else if (fuelMeterReading != null && fuelMeterReading == 0) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires meter reading.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_METER_READING);
+          },
+        );
+        fuelMeterReadingError = 'Meter reading cannot be 0';
+        return false;
+      } else if (fuelLitre == null) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires fuel added in liters.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_LITERS);
+          },
+        );
+        fuelMeterReadingError = textRequired;
+        return false;
+      } else if (fuelLitre != null && fuelLitre == 0) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires fuel added in liters.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_LITERS);
+          },
+        );
+        fuelMeterReadingError = 'Added fuel cannot be 0';
+        return false;
+      } else if (fuelRate == null) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires fuel rate.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_RATE);
+          },
+        );
+        fuelMeterReadingError = textRequired;
+        return false;
+      } else if (fuelRate != null && fuelRate == 0) {
+        snackBarService.showCustomSnackBar(
+          variant: SnackbarType.ERROR,
+          duration: Duration(seconds: 4),
+          message: 'Selected expense \'Fuel\' requires fuel rate.',
+          mainButtonTitle: 'Ok',
+          onMainButtonTapped: () {
+            onErrorOccured(WidgetType.FUEL_RATE);
+          },
+        );
+        fuelMeterReadingError = 'Fuel rate cannot be 0';
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 }

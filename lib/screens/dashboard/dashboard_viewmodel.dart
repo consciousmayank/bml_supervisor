@@ -4,25 +4,28 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/trip_statuses.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statistics_response.dart';
+import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/dashborad_tiles_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
-import 'package:bml_supervisor/models/user_profile_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/screens/payments/payment_args.dart';
-import 'package:bml_supervisor/screens/profile/profile_apis.dart';
-import 'package:bml_supervisor/screens/viewhubs/view_routes_arguments.dart';
+import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
+import '../payments/view/payment_args.dart';
+import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
+
   bool openConsignmentGroup = false;
-  ProfileApi _profileApi = locator<ProfileApisImpl>();
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
-  UserProfileResponse _userProfile;
+  LoginResponse _userProfile;
   Uint8List _image;
 
   Uint8List get image => _image;
@@ -31,17 +34,17 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     _image = value;
   }
 
-  UserProfileResponse get userProfile => _userProfile;
+  LoginResponse get userProfile => _userProfile;
 
-  set userProfile(UserProfileResponse value) {
+  set userProfile(LoginResponse value) {
     _userProfile = value;
   }
 
-  PreferencesSavedUser _savedUser;
+  LoginResponse _savedUser;
 
-  PreferencesSavedUser get savedUser => _savedUser;
+  LoginResponse get savedUser => _savedUser;
 
-  set savedUser(PreferencesSavedUser value) {
+  set savedUser(LoginResponse value) {
     _savedUser = value;
     notifyListeners();
   }
@@ -106,33 +109,20 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  List<String> optionsTitle = [
-    "Add Entry",
-    "View Entry",
-    "Add Expense",
-    "View Expenses",
-    "Create Consignments",
-    "View Routes",
-    "Review Consignments",
-    "Payments",
-    // "Add Entry 2.0",
-    // "View Entry 2.0",
-  ];
-
   List<RecentConginmentResponse> recentConsignmentList = [];
 
-  getClients() async {
-    setBusy(true);
-    clientsList = [];
-    //* get bar graph data too when populating the client dropdown
-
-    List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
-    this.clientsList = copyList(responseList);
-
-    this.selectedClient = clientsList.first;
-    setBusy(false);
-    notifyListeners();
-  }
+  // getClients() async {
+  //   setBusy(true);
+  //   clientsList = [];
+  //   //* get bar graph data too when populating the client dropdown
+  //
+  //   List<GetClientsResponse> responseList = await _dashboardApi.getClientList();
+  //   this.clientsList = copyList(responseList);
+  //
+  //   this.selectedClient = clientsList.first;
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
   void getClientDashboardStats() async {
     setBusy(true);
@@ -203,6 +193,13 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         );
   }
 
+  void onViewHubsListDrawerTileClicked() {
+    navigationService.back();
+    navigationService.navigateTo(hubsListViewPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void onTransactionsDrawerTileClicked() {
     PaymentArgs _paymentArgs = PaymentArgs(
         totalKm: singleClientTileData.totalKm,
@@ -236,13 +233,35 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         );
   }
 
+  void onAddVehicleTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(addVehiclePageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewVehicleTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewVehiclesPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
+  void onViewDriverTileClick() {
+    navigationService.back();
+    navigationService.navigateTo(viewDriversPageRoute).then(
+          (value) => reloadPage(),
+        );
+  }
+
   void reloadPage() {
-    getClients();
+    // getClients();
     getClientDashboardStats();
+    getConsignmentTrackingStatistics();
   }
 
   takeToDistributorsPage() {
-    navigationService.navigateTo(distributorsLogPageRoute).then(
+    navigationService.navigateTo(hubsListViewPageRoute).then(
           (value) => reloadPage(),
         );
   }
@@ -301,9 +320,9 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   Future getUserProfile() async {
     setBusy(true);
-    UserProfileResponse profileResponse = await _profileApi.getUserProfile();
-    if (profileResponse != null) {
-      userProfile = profileResponse;
+    LoginResponse loggedInUserDetails = MyPreferences().getUserLoggedIn();
+    if (loggedInUserDetails != null) {
+      userProfile = loggedInUserDetails;
       image = getImageFromBase64String(base64String: userProfile.photo);
     }
     notifyListeners();
@@ -327,4 +346,28 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
       }
     }
   }
+
+  ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
+
+  void getConsignmentTrackingStatistics() async {
+    consignmentTrackingStatistics =
+        await _dashboardApi.getConsignmentTrackingStatistics(clientId: selectedClient.clientId);
+    notifyListeners();
+  }
+
+
+  void takeToUpcomingTripsDetailsView({@required TripStatus tripStatus}) {
+    navigationService.back();
+    navigationService
+        .navigateTo(
+          tripsDetailsPageRoute,
+          arguments: DetailedTripsViewArgs(tripStatus: tripStatus, consignmentTrackingStatistics: consignmentTrackingStatistics,),
+        )
+        .then((value) => reloadPage());
+  }
+}
+
+class LeftDrawerItem {
+  int id;
+  String headerName;
 }

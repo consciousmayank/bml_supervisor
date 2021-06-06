@@ -32,10 +32,10 @@ class ConsignmentDetailResponseNew {
   });
 
   int id;
-  String clientId;
+  int clientId;
   String createBy;
   String assessBy;
-  String driverId;
+  dynamic driverId;
   String itemUnit;
   double weight;
   int routeId;
@@ -52,10 +52,10 @@ class ConsignmentDetailResponseNew {
 
   ConsignmentDetailResponseNew copyWith(
           {int id,
-          String clientId,
+          int clientId,
           String createBy,
           String assessBy,
-          String driverId,
+          int driverId,
           String itemUnit,
           double weight,
           int routeId,
@@ -85,9 +85,9 @@ class ConsignmentDetailResponseNew {
         collect: collect ?? this.collect,
         payment: payment ?? this.payment,
         dropOff: dropOff ?? this.dropOff,
-        driverId: driverId??this.driverId,
-        itemUnit: itemUnit??this.itemUnit,
-        weight: weight??this.weight,
+        driverId: driverId ?? this.driverId,
+        itemUnit: itemUnit ?? this.itemUnit,
+        weight: weight ?? this.weight,
       );
 
   factory ConsignmentDetailResponseNew.fromJson(Map<String, dynamic> json) =>
@@ -135,24 +135,26 @@ class ConsignmentDetailResponseNew {
 }
 
 class Item {
-  Item(
-      {this.consignmentId,
-      this.hubId,
-      this.sequence,
-      this.title,
-      this.dropOff,
-      this.collect,
-      this.payment,
-      this.paymentMode,
-      this.paymentId,
-      this.remarks,
-      this.flag,
-      this.lastupdated,
-      this.hubCity,
-      this.hubTitle,
-      this.hubGeoLatitude,
-      this.hubGeoLongitude,
-      this.hubContactPerson});
+  Item({
+    this.consignmentId,
+    this.hubId,
+    this.sequence,
+    this.title,
+    this.dropOff,
+    this.collect,
+    this.payment,
+    this.paymentMode,
+    this.paymentId,
+    this.remarks,
+    this.flag,
+    this.lastupdated,
+    this.hubCity,
+    this.hubTitle,
+    this.hubGeoLatitude,
+    this.hubGeoLongitude,
+    this.hubContactPerson,
+    this.reviewRemarks = '',
+  });
 
   int consignmentId;
   String hubTitle;
@@ -171,6 +173,7 @@ class Item {
   String lastupdated;
   final double hubGeoLatitude;
   final double hubGeoLongitude;
+  String reviewRemarks;
 
   Item copyWith(
           {int consignmentId,

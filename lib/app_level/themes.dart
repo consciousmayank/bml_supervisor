@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -217,6 +218,7 @@ class ThemeConfiguration {
         opacity: 1.0,
         size: 24.0,
       ),
+
       // sliderTheme: SliderThemeData(
       //   activeTrackColor: primaryBackground,
       //   inactiveTrackColor: primaryBackground.withAlpha(130),
@@ -274,6 +276,27 @@ class ThemeConfiguration {
       //     style: BorderStyle.none,
       //   )),
       // ),
+      timePickerTheme: TimePickerThemeData(
+        hourMinuteColor: AppColors.primaryColorShade5,
+        dialBackgroundColor: AppColors.primaryColorShade5,
+        dialHandColor: AppColors.black,
+        dialTextColor: AppColors.white,
+        // dayPeriodColor: AppColors.primaryColorShade5,
+        dayPeriodTextStyle: AppTextStyles.latoBold12Black,
+        // dayPeriodBorderSide: BorderSide(
+        //   color: Colors.red,
+        // ),
+        dayPeriodShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          side: BorderSide(
+            color: AppColors.black,
+          ),
+        ),
+        dayPeriodTextColor: Colors.black,
+        backgroundColor: AppColors.appScaffoldColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+        hourMinuteShape: CircleBorder(),
+      ),
       dialogTheme: DialogTheme(
           shape: RoundedRectangleBorder(
         side: BorderSide(

@@ -6,28 +6,26 @@ import 'package:bml_supervisor/models/routes_driven_km_percetage.dart';
 import 'package:flutter/material.dart';
 
 abstract class ChartsApi {
-  Future<List<KilometerReportResponse>> getDailyDrivenKm({String clientId});
+  Future<List<KilometerReportResponse>> getDailyDrivenKm({int clientId});
 
-  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({String clientId});
+  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({int clientId});
 
   Future<List<RoutesDrivenKmPercentage>> getRoutesDrivenKmPercentage(
-      {String clientId});
+      {int clientId});
 
-  Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {String clientId});
+  Future<ParentApiResponse> getExpensesListForPieChartAggregate({int clientId});
 }
 
 class ChartsApiImpl extends BaseApi implements ChartsApi {
   @override
-  Future<List<KilometerReportResponse>> getDailyDrivenKm(
-      {String clientId}) async {
+  Future<List<KilometerReportResponse>> getDailyDrivenKm({int clientId}) async {
     List<KilometerReportResponse> dataList = [];
 
     ParentApiResponse apiResponse = await apiService.getDailyDrivenKm(
       client: clientId,
     );
 
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map singleDay in list) {
         KilometerReportResponse singleDayReport =
@@ -41,11 +39,11 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   //Get Client Route Driven Km (Line Chart)
   @override
-  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({String clientId}) async {
+  Future<List<RoutesDrivenKm>> getRoutesDrivenKm({int clientId}) async {
     List<RoutesDrivenKm> routesDrivenKmList = [];
     ParentApiResponse apiResponse =
         await apiService.getRoutesDrivenKm(clientId: clientId);
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map value in list) {
         RoutesDrivenKm routesDrivenKmResponse = RoutesDrivenKm.fromJson(value);
@@ -57,7 +55,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   @override
   Future<List<RoutesDrivenKmPercentage>> getRoutesDrivenKmPercentage(
-      {String clientId}) async {
+      {int clientId}) async {
     List<Color> pieChartsColorArray = [
       Color(0xff2f6497),
       Color(0xffee6868),
@@ -73,7 +71,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
     ParentApiResponse apiResponse =
         await apiService.getRoutesDrivenKmPercentage(clientId: clientId);
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(apiResponse, showSnackBar: false) != null) {
       var list = apiResponse.response.data as List;
       for (Map value in list) {
         RoutesDrivenKmPercentage routesDrivenKmResponse =
@@ -90,7 +88,7 @@ class ChartsApiImpl extends BaseApi implements ChartsApi {
 
   @override
   Future<ParentApiResponse> getExpensesListForPieChartAggregate(
-      {String clientId}) async {
+      {int clientId}) async {
     return await apiService.getExpensesListForPieChartAggregate(
         clientId: clientId);
   }

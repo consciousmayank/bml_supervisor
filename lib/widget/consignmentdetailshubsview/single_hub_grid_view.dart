@@ -7,11 +7,12 @@ import 'package:bml_supervisor/widget/consignmentdetailshubsview/single_hub_list
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-
 class SingleHubGridView extends StatelessWidget {
   final ItemForCard singleHub;
+  final String itemUnit;
   const SingleHubGridView({
     @required this.singleHub,
+    @required this.itemUnit,
     Key key,
   }) : super(key: key);
 
@@ -22,60 +23,60 @@ class SingleHubGridView extends StatelessWidget {
           // viewModel.getHubDate(singleHub.hubId);
         },
         builder: (context, viewModel, child) => Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColorShade5,
-                  borderRadius: BorderRadius.all(Radius.circular(25)),
-                ),
-                child: Text(
-                  "#${singleHub.sequence}",
-                  style: AppTextStyles.latoMedium14Black
-                      .copyWith(fontSize: 14, color: AppColors.white),
-                ),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColorShade5,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Text(
+                      "#${singleHub.sequence}",
+                      style: AppTextStyles.latoMedium14Black
+                          .copyWith(fontSize: 14, color: AppColors.white),
+                    ),
+                  ),
+                  hSizedBox(5),
+                  Text(
+                    singleHub?.hubTitle,
+                    style: AppTextStyles.latoMedium14Black.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryColorShade5,
+                    ),
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  hSizedBox(10),
+                  Text(
+                    singleHub.hubCity ?? '',
+                    style: AppTextStyles.latoMedium14Black.copyWith(
+                        fontSize: 14, color: AppColors.primaryColorShade5),
+                  ),
+                  hSizedBox(10),
+                  AppTextView(
+                    hintText: 'Collect ($itemUnit)',
+                    value: singleHub.collect.toString(),
+                  ),
+                  hSizedBox(10),
+                  AppTextView(
+                    hintText: 'Drop ($itemUnit)',
+                    value: singleHub?.dropOff?.toString(),
+                  ),
+                  hSizedBox(10),
+                  AppTextView(
+                    hintText: 'Payment',
+                    value: singleHub?.payment?.toString(),
+                  )
+                ],
               ),
-              hSizedBox(5),
-              Text(
-                singleHub?.hubTitle,
-                style: AppTextStyles.latoMedium14Black.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColorShade5,
-                ),
-                maxLines: 3,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
-              hSizedBox(10),
-              Text(
-                singleHub.hubCity ?? '',
-                style: AppTextStyles.latoMedium14Black.copyWith(
-                    fontSize: 14, color: AppColors.primaryColorShade5),
-              ),
-              hSizedBox(10),
-              AppTextView(
-                hintText: 'Collect',
-                value: singleHub.collect.toString(),
-              ),
-              hSizedBox(10),
-              AppTextView(
-                hintText: 'Drop',
-                value: singleHub?.dropOff?.toString(),
-              ),
-              hSizedBox(10),
-              AppTextView(
-                hintText: 'Payment',
-                value: singleHub?.payment?.toString(),
-              )
-            ],
-          ),
-        ),
+            ),
         viewModelBuilder: () => SingleHubListViewModel());
   }
 }

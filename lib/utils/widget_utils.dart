@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bml_supervisor/app_level/colors.dart';
+import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/widget/IconBlueBackground.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,22 @@ Text buildChartSubTitleNew({String date}) {
   return Text(
     '(' + getChartMonth(date: date) + ', ' + getChartYear(date: date) + ')',
     style: AppTextStyles.latoBold12Black,
+  );
+}
+
+Widget buildChartBadge({
+  String badgeTitle,
+}) {
+  return Container(
+    padding: EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      borderRadius:BorderRadius.all(Radius.circular(4)) ,
+      color:  AppColors.primaryColorShade5,
+    ),
+    child: Text(
+      badgeTitle,
+      style: AppTextStyles.latoMedium18White.copyWith(fontSize: 11),
+    ),
   );
 }
 
@@ -83,7 +101,7 @@ wSpacer() {
   );
 }
 
-void hideKeyboard(BuildContext context) {
+void hideKeyboard({@required BuildContext context}) {
   FocusScopeNode currentFocus = FocusScope.of(context);
   if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
     currentFocus.focusedChild.unfocus();
@@ -114,11 +132,13 @@ LinearProgressIndicator getLinearProgress() {
 }
 
 String capitalizeFirstLetter(String title) {
-  return "${title[0].toUpperCase()}${title.substring(1)}";
+  return title != null && title.length > 0
+      ? "${title[0].toUpperCase()}${title.substring(1)}"
+      : '';
 }
 
 String getDateString(DateTime date) {
-  return DateFormat('dd-MM-yyyy').format(date);
+  return DateTimeToStringConverter.ddmmyy(date: date).convert();
 }
 
 flatButtonTextStyle() {
@@ -274,11 +294,15 @@ Text headerText(String title) {
 }
 
 String getCurrentDate() {
-  return DateFormat('dd-MM-yyyy').format(DateTime.now()).toLowerCase();
+  return DateTimeToStringConverter.ddmmyy(date: DateTime.now()).convert();
 }
 
 String getConvertedDate(DateTime date) {
-  return DateFormat('dd-MM-yyyy').format(date).toLowerCase();
+  return DateTimeToStringConverter.ddmmyy(date: date).convert();
+}
+
+String getConvertedDateWithTime(DateTime date) {
+  return DateFormat('dd-MM-yyyy').add_jms().format(date).toLowerCase();
 }
 
 String convertFrom24HoursTime(String timeString) {
@@ -374,7 +398,12 @@ Row buildChartDateLabel() {
   );
 }
 
-Widget drawerList({String text, String imageName, Function onTap}) {
+Widget drawerList(
+    {String text,
+    String imageName,
+    Function onTap,
+    bool isSubMenu = false,
+    String trailingText}) {
   return Padding(
     padding: const EdgeInsets.only(top: 2, bottom: 2),
     child: ClickableWidget(
@@ -391,6 +420,7 @@ Widget drawerList({String text, String imageName, Function onTap}) {
                 ? Container()
                 : IconBlueBackground(
                     iconName: imageName,
+                    isSubMenu: isSubMenu,
                   ),
             imageName == null ? Container() : wSizedBox(20),
             Expanded(
@@ -400,9 +430,30 @@ Widget drawerList({String text, String imageName, Function onTap}) {
                     color: AppColors.primaryColorShade5, fontSize: 14),
               ),
             ),
+            trailingText != null
+                ? Text(
+                    trailingText,
+                    style: AppTextStyles.latoMedium12Black.copyWith(
+                        color: AppColors.primaryColorShade5, fontSize: 14),
+                  )
+                : Container()
           ],
         ),
       ),
     ),
+  );
+}
+
+Text setAppBarTitle({
+  @required String title,
+}) {
+  return Text(
+    '$title - ${capitalizeFirstLetter(
+      MyPreferences()?.getSelectedClient()?.businessName?.substring(
+            0,
+            14,
+          ),
+    )}',
+    style: AppTextStyles.whiteRegular,
   );
 }

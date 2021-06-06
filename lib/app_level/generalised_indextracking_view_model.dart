@@ -8,5 +8,4 @@ class GeneralisedIndexTrackingViewModel extends IndexTrackingViewModel {
   ApiService apiService = locator<ApiService>();
   SnackbarService snackBarService = locator<SnackbarService>();
   NavigationService navigationService = locator<NavigationService>();
-  DialogService dialogService = locator<DialogService>();
 }

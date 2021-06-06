@@ -14,13 +14,13 @@ class GetDailyKilometerInfo {
 
   final String routeTitle;
   final String vehicleId;
-  final String clientId;
+  final int clientId;
   final int routeId;
 
   GetDailyKilometerInfo copyWith({
     String routeTitle,
     String vehicleId,
-    String clientId,
+    int clientId,
     int routeId,
   }) =>
       GetDailyKilometerInfo(
