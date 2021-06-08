@@ -6,6 +6,7 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_completed_trips_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -91,7 +92,12 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                             viewModel.completedTripsDetails.startReadingImage,
                       ),
                       readingType: ReadingType.START,
-                      title: 'Start Reading',
+                      title: DateTimeToStringConverter.ddmmyy(
+                              date: StringToDateTimeConverter.ddmmyy(
+                                      date: viewModel
+                                          .completedTripsDetails.creationdate)
+                                  .convert())
+                          .convert(),
                       viewModel: viewModel,
                       widgetWidth: widgetWidth,
                       controller: startReadingController,
@@ -117,7 +123,12 @@ class _ReviewCompletedTripsViewState extends State<ReviewCompletedTripsView> {
                           viewModel.completedTripsDetails.endReadingImage,
                     ),
                     readingType: ReadingType.END,
-                    title: 'End Reading',
+                    title: DateTimeToStringConverter.ddmmyy(
+                            date: StringToDateTimeConverter.ddmmyy(
+                                    date: viewModel
+                                        .completedTripsDetails.creationdate)
+                                .convert())
+                        .convert(),
                     viewModel: viewModel,
                     widgetWidth: widgetWidth,
                     controller: endReadingController,
