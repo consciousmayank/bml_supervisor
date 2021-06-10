@@ -43,3 +43,7 @@ const String consignmentListByDatePageRoute = '/consignmentListByDatePageRoute';
 const String reviewCompletedTripsPageRoute = '/reviewCompletedTripsPageRoute';
 const String tripsDetailsPageRoute = '/tripsDetailsPageRoute';
 const String hubsListViewPageRoute = '/hubsListViewPageRoute';
+const String tempHubsListPostReviewConsigPageRoute =
+    '/tempHubsListPostReviewConsigPageRoute';
+const String tempAddHubsPostReviewConsigPageRoute =
+    '/tempAddHubsPostReviewConsigPageRoute';

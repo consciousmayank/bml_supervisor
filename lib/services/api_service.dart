@@ -361,14 +361,14 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
-Future<ParentApiResponse> getPaymentListAggregate(
+
+  Future<ParentApiResponse> getPaymentListAggregate(
       {@required int clientId}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_PAYMENT_LIST_AGGREGATE(clientId));
+      response =
+          await dioClient.getDio().get(GET_PAYMENT_LIST_AGGREGATE(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -590,14 +590,19 @@ Future<ParentApiResponse> getPaymentListAggregate(
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future<ParentApiResponse> getConsignmentTrackingStatus(
-      {int clientId, @required TripStatus tripStatus, @required int pageNumber,
+  Future<ParentApiResponse> getConsignmentTrackingStatus({
+    int clientId,
+    @required TripStatus tripStatus,
+    @required int pageNumber,
   }) async {
     Response response;
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            getApiCall(tripStatus: tripStatus, clientId: clientId, pageNumber: pageNumber),
+            getApiCall(
+                tripStatus: tripStatus,
+                clientId: clientId,
+                pageNumber: pageNumber),
           );
     } on DioError catch (e) {
       error = e;
@@ -605,7 +610,10 @@ Future<ParentApiResponse> getPaymentListAggregate(
     return ParentApiResponse(response: response, error: error);
   }
 
-  String getApiCall({@required TripStatus tripStatus, @required int clientId, @required int pageNumber}) {
+  String getApiCall(
+      {@required TripStatus tripStatus,
+      @required int clientId,
+      @required int pageNumber}) {
     switch (tripStatus) {
       case TripStatus.UPCOMING:
         return GET_UPCOMING_TRIPS_STATUS_LIST(clientId, pageNumber);
@@ -915,6 +923,20 @@ Future<ParentApiResponse> getPaymentListAggregate(
     try {
       response =
           await dioClient.getDio().get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getTransientHubsListBasedOn(
+      {String searchString}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient
+          .getDio()
+          .get(GET_TRANSIENT_HUBS_LIST_BASED_ON(searchString));
     } on DioError catch (e) {
       error = e;
     }

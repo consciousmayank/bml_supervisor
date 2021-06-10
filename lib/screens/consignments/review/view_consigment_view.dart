@@ -480,17 +480,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                         hideKeyboard(
                                                             context: context);
                                                         updateReviewConsignmentData(
+                                                            finished: true,
                                                             viewModel:
                                                                 viewModel,
                                                             index: index);
                                                         // update api call
-                                                        viewModel
-                                                            .updateConsignment(
-                                                          newRemarks:
-                                                              newRemarksController
-                                                                  .text
-                                                                  .trim(),
-                                                        );
+
+                                                        viewModel.takeToAddHubsAfterConsigReview(
+                                                            newRemarks:
+                                                                newRemarksController
+                                                                    .text
+                                                                    .trim());
                                                       }
                                                     : () {
                                                         // Next btn functionality
@@ -939,6 +939,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   void updateReviewConsignmentData({
     ViewConsignmentViewModel viewModel,
     int index,
+    bool finished = false,
     bool goForward = true,
     bool skip = false,
   }) {
@@ -958,15 +959,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           .insert(index, tempReviewItem);
       viewModel.notifyListeners();
 
-      if (goForward) {
-        if (index < viewModel.consignmentDetailResponseNew.items.length) {
-          _controller.nextPage(
-              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-        }
-      } else {
-        if (index > 0) {
-          _controller.previousPage(
-              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      if (!finished) {
+        if (goForward) {
+          if (index < viewModel.consignmentDetailResponseNew.items.length) {
+            _controller.nextPage(
+                duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          }
+        } else {
+          if (index > 0) {
+            _controller.previousPage(
+                duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          }
         }
       }
     }

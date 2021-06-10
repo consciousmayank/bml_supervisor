@@ -12,7 +12,9 @@ import 'package:bml_supervisor/models/review_consignment_request.dart'
     as reviewConsignment;
 import 'package:bml_supervisor/models/routes_for_selected_client_and_date_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -219,5 +221,26 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
           .then((value) => navigationService.back(result: true));
     }
     setBusy(false);
+  }
+
+  takeToAddHubsAfterConsigReview({@required String newRemarks}) {
+    navigationService
+        .navigateTo(
+      tempHubsListPostReviewConsigPageRoute,
+      arguments: TempHubsListArguments(
+        reviewedConsigId: consignmentDetailResponseNew.id,
+      ),
+    )
+        .then((value) {
+      if (value != null) {
+        if (value) {
+          snackBarService.showSnackbar(message: 'True');
+        } else {
+          snackBarService.showSnackbar(message: 'False');
+        }
+      }
+    });
+
+    // updateConsignment(newRemarks: newRemarks);
   }
 }

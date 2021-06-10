@@ -91,6 +91,7 @@ String getTitle(
       break;
 
     case BottomSheetDropDownType.EXISTING_HUB_TITLE_LIST:
+    case BottomSheetDropDownType.EXISTING_TEMP_HUBS_LIST:
       return '${inputArgs.allowedValues[index].title}';
       break;
 

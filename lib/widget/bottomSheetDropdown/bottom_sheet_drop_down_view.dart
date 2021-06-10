@@ -158,6 +158,17 @@ class _BottomSheetDropDownState<T> extends State<BottomSheetDropDown> {
             .toUpperCase();
         break;
 
+      case BottomSheetDropDownType.EXISTING_TEMP_HUBS_LIST:
+        String hubLabel;
+        if (widget.allowedValue.length > 1) {
+          hubLabel = 'hubs';
+        } else {
+          hubLabel = 'hub';
+        }
+        return '${widget.allowedValue.length.toString()} $hubLabel matches title \'${widget.supportText}\''
+            .toUpperCase();
+        break;
+
       default:
         return '';
     }
@@ -169,4 +180,5 @@ enum BottomSheetDropDownType {
   STRING,
   ADD_EXPENSES_ROUTES_LIST,
   EXISTING_HUB_TITLE_LIST,
+  EXISTING_TEMP_HUBS_LIST,
 }
