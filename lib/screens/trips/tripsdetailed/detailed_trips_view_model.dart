@@ -152,7 +152,7 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
   void getConsignmentTrackingStatus(
       {TripStatus tripStatus, int page = 1}) async {
     if (shouldCallGetConsignmentTrackingStatus) {
-      setBusy(true);
+      if (page <= 1) setBusy(true);
       List<ConsignmentTrackingStatusResponse> response =
           await _dashboardApi.getConsignmentTrackingStatus(
               tripStatus: tripStatus,
@@ -166,7 +166,7 @@ class DetailedTripsViewModel extends GeneralisedBaseViewModel {
       } else {
         trips.addAll(copyList(response));
       }
-
+      otherTripsPageNumber++;
       setBusy(false);
       notifyListeners();
     }

@@ -42,20 +42,20 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   TextEditingController weightController = TextEditingController();
   TextEditingController weightGController = TextEditingController();
 
-  TextEditingController oldRemarksController = TextEditingController();
-  FocusNode oldRemarksFocusNode = FocusNode();
+  // TextEditingController oldRemarksController = TextEditingController();
+  // FocusNode oldRemarksFocusNode = FocusNode();
 
   TextEditingController newRemarksController = TextEditingController();
   FocusNode newRemarksFocusNode = FocusNode();
 
-  TextEditingController dropController = TextEditingController();
-  FocusNode dropFocusNode = FocusNode();
+  // TextEditingController dropController = TextEditingController();
+  // FocusNode dropFocusNode = FocusNode();
 
-  TextEditingController collectController = TextEditingController();
-  FocusNode collectFocusNode = FocusNode();
+  // TextEditingController collectController = TextEditingController();
+  // FocusNode collectFocusNode = FocusNode();
 
-  TextEditingController paymentController = TextEditingController();
-  FocusNode paymentFocusNode = FocusNode();
+  // TextEditingController paymentController = TextEditingController();
+  // FocusNode paymentFocusNode = FocusNode();
 
   TextEditingController gDropController = TextEditingController();
   FocusNode gDropFocusNode = FocusNode();
@@ -114,23 +114,23 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
             .consignmentDetailResponseNew.items[position].title
             .toString() ??
         "";
-    dropController.text = viewModel
+    gDropController.text = viewModel
             .consignmentDetailResponseNew.items[position].dropOff
             .toString() ??
         "";
-    collectController.text = viewModel
+    gCollectController.text = viewModel
             .consignmentDetailResponseNew.items[position].collect
             .toString() ??
         "";
-    paymentController.text = viewModel
+    gPaymentController.text = viewModel
             .consignmentDetailResponseNew.items[position].payment
             .toString() ??
         "";
-    oldRemarksController.text =
-        viewModel.consignmentDetailResponseNew.items[position].remarks ?? "";
     newRemarksController.text =
-        viewModel.reviewConsignmentRequest.reviewedItems[position].remarks ??
-            "";
+        viewModel.consignmentDetailResponseNew.items[position].remarks ?? "";
+    // newRemarksController.text =
+    //     viewModel.reviewConsignmentRequest.reviewedItems[position].remarks ??
+    //         "";
 
     gDropController.text = viewModel
             .reviewConsignmentRequest.reviewedItems[position].dropOff
@@ -341,13 +341,13 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                   hSizedBox(25),
                                   Row(
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: dropInput(
-                                            context: context,
-                                            viewModel: viewModel),
-                                      ),
-                                      wSizedBox(10),
+                                      // Expanded(
+                                      //   flex: 1,
+                                      //   child: dropInput(
+                                      //       context: context,
+                                      //       viewModel: viewModel),
+                                      // ),
+                                      // wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gDropInput(
@@ -360,13 +360,13 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                   hSizedBox(25),
                                   Row(
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: collectInput(
-                                            context: context,
-                                            viewModel: viewModel),
-                                      ),
-                                      wSizedBox(10),
+                                      // Expanded(
+                                      //   flex: 1,
+                                      //   child: collectInput(
+                                      //       context: context,
+                                      //       viewModel: viewModel),
+                                      // ),
+                                      // wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gCollectInput(
@@ -378,19 +378,19 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                   hSizedBox(25),
                                   Row(
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: paymentInput(
-                                            context: context,
-                                            viewModel: viewModel,
-                                            enabled: index ==
-                                                viewModel
-                                                        .consignmentDetailResponseNew
-                                                        .items
-                                                        .length -
-                                                    1),
-                                      ),
-                                      wSizedBox(10),
+                                      // Expanded(
+                                      //   flex: 1,
+                                      //   child: paymentInput(
+                                      //       context: context,
+                                      //       viewModel: viewModel,
+                                      //       enabled: index ==
+                                      //           viewModel
+                                      //                   .consignmentDetailResponseNew
+                                      //                   .items
+                                      //                   .length -
+                                      //               1),
+                                      // ),
+                                      // wSizedBox(10),
                                       Expanded(
                                         flex: 1,
                                         child: gPaymentInput(
@@ -408,13 +408,13 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                   hSizedBox(25),
                                   Row(
                                     children: [
-                                      Expanded(
-                                        child: oldRemarksInput(
-                                            context: context,
-                                            viewModel: viewModel),
-                                        flex: 1,
-                                      ),
-                                      wSizedBox(10),
+                                      // Expanded(
+                                      //   child: oldRemarksInput(
+                                      //       context: context,
+                                      //       viewModel: viewModel),
+                                      //   flex: 1,
+                                      // ),
+                                      // wSizedBox(10),
                                       Expanded(
                                         child: newRemarksInput(
                                             context: context,
@@ -539,7 +539,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
         fieldFocusChange(
           context,
           hubTitleFocusNode,
-          dropFocusNode,
+          gDropFocusNode,
         );
       },
     );
@@ -601,31 +601,31 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
-  Widget oldRemarksInput(
-      {BuildContext context, ViewConsignmentViewModel viewModel}) {
-    return TextFormField(
-      maxLines: 7,
-      style: getTextFormFieldStyle(),
-      enabled: false,
-      decoration: getInputBorder(
-        hint: "Remarks",
-        contentPadding: EdgeInsets.all(16),
-      ),
-      controller: oldRemarksController,
-      focusNode: oldRemarksFocusNode,
-      onFieldSubmitted: (_) {
-        oldRemarksFocusNode.unfocus();
+  // Widget oldRemarksInput(
+  //     {BuildContext context, ViewConsignmentViewModel viewModel}) {
+  //   return TextFormField(
+  //     maxLines: 7,
+  //     style: getTextFormFieldStyle(),
+  //     enabled: false,
+  //     decoration: getInputBorder(
+  //       hint: "Remarks",
+  //       contentPadding: EdgeInsets.all(16),
+  //     ),
+  //     controller: oldRemarksController,
+  //     focusNode: oldRemarksFocusNode,
+  //     onFieldSubmitted: (_) {
+  //       oldRemarksFocusNode.unfocus();
 
-        fieldFocusChange(
-          context,
-          oldRemarksFocusNode,
-          newRemarksFocusNode,
-        );
-      },
-      // hintText: "Hub Title",
-      keyboardType: TextInputType.text,
-    );
-  }
+  //       fieldFocusChange(
+  //         context,
+  //         oldRemarksFocusNode,
+  //         newRemarksFocusNode,
+  //       );
+  //     },
+  //     // hintText: "Hub Title",
+  //     keyboardType: TextInputType.text,
+  //   );
+  // }
 
   Widget newRemarksInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
@@ -634,7 +634,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
       style: getTextFormFieldStyle(),
       enabled: true,
       decoration: getInputBorder(
-        hint: "Remarks (while Review)",
+        hint: "Remarks",
         contentPadding: EdgeInsets.all(16),
       ),
       controller: newRemarksController,
@@ -647,25 +647,25 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
-  Widget dropInput({BuildContext context, ViewConsignmentViewModel viewModel}) {
-    return TextFormField(
-      style: getTextFormFieldStyle(),
-      enabled: false,
-      decoration: getInputBorder(
-          hint:
-              "Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
-      controller: dropController,
-      focusNode: dropFocusNode,
-      onFieldSubmitted: (_) {
-        fieldFocusChange(
-          context,
-          dropFocusNode,
-          collectFocusNode,
-        );
-      },
-      keyboardType: TextInputType.number,
-    );
-  }
+  // Widget dropInput({BuildContext context, ViewConsignmentViewModel viewModel}) {
+  //   return TextFormField(
+  //     style: getTextFormFieldStyle(),
+  //     enabled: false,
+  //     decoration: getInputBorder(
+  //         hint:
+  //             "Item Drop (${viewModel.consignmentDetailResponseNew.itemUnit})"),
+  //     controller: dropController,
+  //     focusNode: dropFocusNode,
+  //     onFieldSubmitted: (_) {
+  //       fieldFocusChange(
+  //         context,
+  //         dropFocusNode,
+  //         collectFocusNode,
+  //       );
+  //     },
+  //     keyboardType: TextInputType.number,
+  //   );
+  // }
 
   Widget gDropInput(
       {BuildContext context, ViewConsignmentViewModel viewModel, int index}) {
@@ -695,26 +695,26 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
-  Widget collectInput(
-      {BuildContext context, ViewConsignmentViewModel viewModel}) {
-    return TextFormField(
-      style: getTextFormFieldStyle(),
-      enabled: false,
-      decoration: getInputBorder(
-          hint:
-              "Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
-      controller: collectController,
-      focusNode: collectFocusNode,
-      onFieldSubmitted: (_) {
-        fieldFocusChange(
-          context,
-          collectFocusNode,
-          paymentFocusNode,
-        );
-      },
-      keyboardType: TextInputType.number,
-    );
-  }
+  // Widget collectInput(
+  //     {BuildContext context, ViewConsignmentViewModel viewModel}) {
+  //   return TextFormField(
+  //     style: getTextFormFieldStyle(),
+  //     enabled: false,
+  //     decoration: getInputBorder(
+  //         hint:
+  //             "Item Collect (${viewModel.consignmentDetailResponseNew.itemUnit})"),
+  //     controller: collectController,
+  //     focusNode: collectFocusNode,
+  //     onFieldSubmitted: (_) {
+  //       fieldFocusChange(
+  //         context,
+  //         collectFocusNode,
+  //         paymentFocusNode,
+  //       );
+  //     },
+  //     keyboardType: TextInputType.number,
+  //   );
+  // }
 
   Widget gCollectInput(
       {BuildContext context, ViewConsignmentViewModel viewModel}) {
@@ -744,27 +744,27 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
     );
   }
 
-  Widget paymentInput({
-    BuildContext context,
-    ViewConsignmentViewModel viewModel,
-    bool enabled,
-  }) {
-    return TextFormField(
-      style: getTextFormFieldStyle(),
-      enabled: false,
-      decoration: getInputBorder(hint: enabled ? "" : "Payment"),
-      controller: paymentController,
-      focusNode: paymentFocusNode,
-      onFieldSubmitted: (_) {
-        fieldFocusChange(
-          context,
-          paymentFocusNode,
-          oldRemarksFocusNode,
-        );
-      },
-      keyboardType: TextInputType.number,
-    );
-  }
+  // Widget paymentInput({
+  //   BuildContext context,
+  //   ViewConsignmentViewModel viewModel,
+  //   bool enabled,
+  // }) {
+  //   return TextFormField(
+  //     style: getTextFormFieldStyle(),
+  //     enabled: false,
+  //     decoration: getInputBorder(hint: enabled ? "" : "Payment"),
+  //     controller: paymentController,
+  //     focusNode: paymentFocusNode,
+  //     onFieldSubmitted: (_) {
+  //       fieldFocusChange(
+  //         context,
+  //         paymentFocusNode,
+  //         oldRemarksFocusNode,
+  //       );
+  //     },
+  //     keyboardType: TextInputType.number,
+  //   );
+  // }
 
   Widget gPaymentInput({
     BuildContext context,
@@ -873,12 +873,12 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   //         color: AppColors.primaryColorShade1,
   //       ),
   //     ),
-      // enabledBorder: OutlineInputBorder(
-      //   borderRadius: BorderRadius.circular(5.0),
-      //   borderSide: BorderSide(
-      //     color: AppColors.primaryColorShade1,
-      //   ),
-      // ),
+  // enabledBorder: OutlineInputBorder(
+  //   borderRadius: BorderRadius.circular(5.0),
+  //   borderSide: BorderSide(
+  //     color: AppColors.primaryColorShade1,
+  //   ),
+  // ),
   //     errorBorder: OutlineInputBorder(
   //       borderRadius: BorderRadius.circular(5.0),
   //       borderSide: BorderSide(
@@ -947,6 +947,8 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           viewModel.reviewConsignmentRequest.reviewedItems[index];
       viewModel.reviewConsignmentRequest.reviewedItems.removeAt(index);
       // viewModel.consignmentDetailResponseNew.reviewedItems.add()
+
+      //TODO now instead of g- use normal controllers
       tempReviewItem = tempReviewItem.copyWith(
           dropOff: skip ? 0 : int.parse(gDropController.text),
           collect: skip ? 0 : int.parse(gCollectController.text),

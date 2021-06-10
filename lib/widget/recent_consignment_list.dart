@@ -95,7 +95,11 @@ class _RecentConsignmentListState extends State<RecentConsignmentList> {
           index == 0 ? Container() : DottedDivider(),
           SingleConsignmentItem(
             args: SingleConsignmentItemArguments(
-              onTap: () {},
+              onTap: () {
+                viewModel.takeToConsignmentDetails(
+                    clickedConsignment:
+                        viewModel.getConsolidatedData(outerIndex)[index]);
+              },
               vehicleId: viewModel
                   .getConsolidatedData(outerIndex)[index]
                   .vehicleId

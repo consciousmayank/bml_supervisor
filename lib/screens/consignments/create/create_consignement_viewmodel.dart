@@ -13,6 +13,7 @@ import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -181,12 +182,11 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
         entryDate: getConvertedDate(entryDate),
-        dispatchDateTime: getConvertedDateWithTime(DateTime(
-            entryDate.year,
-            entryDate.month,
-            entryDate.day,
-            dispatchTime.hour,
-            dispatchTime.minute)),
+        dispatchDateTime: DateTimeToStringConverter.ddmmyyhhmmssaa(
+                date: DateTime(entryDate.year, entryDate.month, entryDate.day,
+                    dispatchTime.hour, dispatchTime.minute))
+            .convert()
+            .toUpperCase(),
         title: enteredTitle,
         routeTitle: selectedRoute.routeTitle,
         items: items);

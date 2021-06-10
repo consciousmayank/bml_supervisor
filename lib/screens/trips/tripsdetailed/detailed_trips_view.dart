@@ -167,7 +167,7 @@ void callAppropriateApi(
     a}) {
   switch (tripStatus) {
     case TripStatus.UPCOMING:
-      if (consignmentTrackingStatistics.completed < tripList.length) {
+      if (viewModel.shouldCallGetConsignmentTrackingStatus) {
         viewModel.getConsignmentTrackingStatus(
           tripStatus: tripStatus,
           page: viewModel.otherTripsPageNumber,
@@ -175,7 +175,7 @@ void callAppropriateApi(
       }
       break;
     case TripStatus.ONGOING:
-      if (consignmentTrackingStatistics.ongoing < tripList.length) {
+      if (viewModel.shouldCallGetConsignmentTrackingStatus) {
         viewModel.getConsignmentTrackingStatus(
           tripStatus: tripStatus,
           page: viewModel.otherTripsPageNumber,
@@ -199,7 +199,7 @@ void callAppropriateApi(
       }
       break;
     case TripStatus.DISCARDED:
-      if (consignmentTrackingStatistics.discarded < tripList.length) {
+      if (viewModel.shouldCallGetConsignmentTrackingStatus) {
         viewModel.getConsignmentTrackingStatus(
           tripStatus: tripStatus,
           page: viewModel.otherTripsPageNumber,

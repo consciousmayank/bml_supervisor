@@ -77,10 +77,6 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                       InkWell(
                         onTap: () {
                           viewModel.showClientSelectBottomSheet();
-
-                          // MyPreferences().saveSelectedClient(null);
-                          // viewModel.navigationService
-                          //     .clearStackAndShow(clientSelectPageRoute);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

@@ -103,9 +103,13 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
       children: [
         Container(
           color: AppColors.primaryColorShade5,
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.only(
+            left: 24,
+            top: 16,
+            right: 24,
+            bottom: 16,
+          ),
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 flex: 1,
@@ -124,20 +128,9 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
               ),
               Expanded(
                 flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Text(
-                    ('Trips'),
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
                 child: Text(
                   'Consg.',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.end,
                   style: AppTextStyles.whiteRegular,
                 ),
               ),
@@ -169,29 +162,6 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
             ),
           ),
         ),
-        // Expanded(
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: ListView.separated(
-        //       physics: NeverScrollableScrollPhysics(),
-        //       itemBuilder: (context, index) {
-        //         return RecentDrivenSingleItem(
-        //           viewModel: viewModel,
-        //           index: index,
-        //         );
-        //       },
-        //       itemCount: viewModel.recentConsignmentList.length >= 7
-        //           ? 7
-        //           : viewModel.recentConsignmentList.length,
-        //       separatorBuilder: (BuildContext context, int index) {
-        //         return Padding(
-        //           padding: const EdgeInsets.all(8.0),
-        //           child: DottedDivider(),
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // ),
         hSizedBox(10),
         widget.isFulPageView
             ? Container()
@@ -218,34 +188,6 @@ class _ConsignmentListViewState extends State<ConsignmentListView> {
       ],
     );
   }
-
-  // void showConsignmentDetailsBottomSheet({
-  //   BuildContext context,
-  //   ConsignmentListViewModel viewModel,
-  //   RecentConginmentResponse clickedConsignmentDetails,
-  // }) async {
-  //   await showModalBottomSheet(
-  //       backgroundColor: Colors.white,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(defaultBorder),
-  //           topRight: Radius.circular(defaultBorder),
-  //         ),
-  //       ),
-  //       // isScrollControlled: true,
-  //       context: context,
-  //       builder: (_) {
-  //         return SizedBox(
-  //           height: MediaQuery
-  //               .of(context)
-  //               .size
-  //               .height * 0.75,
-  //           child: ConsignmentDetailsView(
-  //             : clickedConsignmentDetails.consgId,
-  //           ),
-  //         );
-  //       });
-  // }
 }
 
 class RecentDrivenSingleItem extends StatelessWidget {
@@ -278,9 +220,9 @@ class RecentDrivenSingleItem extends StatelessWidget {
             style: AppTextStyles.whiteRegular.copyWith(fontSize: 10),
           ),
         ),
-        Text(
-          viewModel.recentConsignmentList[index].trips.toString(),
-        ),
+        // Text(
+        //   viewModel.recentConsignmentList[index].trips.toString(),
+        // ),
         SizedBox(
           height: 25,
           width: 100,
@@ -312,10 +254,8 @@ class RecentDrivenSingleItem extends StatelessWidget {
                   },
             background: AppColors.primaryColorShade5,
             fontSize: 9,
-            buttonText: '#' +
-                viewModel.recentConsignmentList[index].routeId.toString() +
-                '-' +
-                viewModel.recentConsignmentList[index].routeTitle,
+            buttonText:
+                '#' + viewModel.recentConsignmentList[index].consgId.toString(),
           ),
         )
       ],
