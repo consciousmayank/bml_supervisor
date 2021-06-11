@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/app_level/BaseApi.dart';
+import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,10 @@ import 'package:flutter/material.dart';
 abstract class AddTempHubsApis extends BaseApi {
   Future<List<SingleTempHub>> getTransientHubsListBasedOn(
       {@required String searchString});
+
+  Future<ApiResponse> addTransientHubs({
+    @required List<SingleTempHub> hubList,
+  });
 }
 
 class AddTempHubsApisImpl extends AddTempHubsApis {
@@ -27,5 +32,18 @@ class AddTempHubsApisImpl extends AddTempHubsApis {
     }
 
     return responseList;
+  }
+
+  @override
+  Future<ApiResponse> addTransientHubs({List<SingleTempHub> hubList}) async {
+    ApiResponse apiResponse = ApiResponse(message: '', status: 'failed');
+    ParentApiResponse response = await apiService.addTransientHubs(
+      body: hubList,
+    );
+
+    if (filterResponse(response, showSnackBar: false) != null) {
+      apiResponse = ApiResponse.fromMap(response.response.data);
+    }
+    return apiResponse;
   }
 }

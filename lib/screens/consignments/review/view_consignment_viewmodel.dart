@@ -227,16 +227,14 @@ class ViewConsignmentViewModel extends GeneralisedBaseViewModel {
     navigationService
         .navigateTo(
       tempHubsListPostReviewConsigPageRoute,
-      arguments: TempHubsListArguments(
+      arguments: TempHubsListInputArguments(
         reviewedConsigId: consignmentDetailResponseNew.id,
       ),
     )
         .then((value) {
       if (value != null) {
         if (value) {
-          snackBarService.showSnackbar(message: 'True');
-        } else {
-          snackBarService.showSnackbar(message: 'False');
+          updateConsignment(newRemarks: newRemarks);
         }
       }
     });

@@ -302,7 +302,7 @@ class AppRouter {
         );
 
       case tempHubsListPostReviewConsigPageRoute:
-        TempHubsListArguments arguments = settings.arguments;
+        TempHubsListInputArguments arguments = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => TempHubsListView(
             arguments: arguments,

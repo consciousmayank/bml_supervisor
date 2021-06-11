@@ -1,16 +1,19 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_details_widget.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
+import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stacked/stacked.dart';
 
 class TempHubsListView extends StatefulWidget {
-  final TempHubsListArguments arguments;
+  final TempHubsListInputArguments arguments;
   const TempHubsListView({
     Key key,
     @required this.arguments,
@@ -47,22 +50,80 @@ class _TempHubsListViewState extends State<TempHubsListView> {
                       top: 2,
                     ),
                     child: CreateNewButtonWidget(
-                        title: 'Add New Hub',
+                        title: 'Add Hub Details',
                         onTap: () {
                           model.onAddHubClicked(
                             reviewedConsigId: widget.arguments.reviewedConsigId,
                           );
                         }),
                   ),
+                  if (model.hubsList.length > 0)
+                    Container(
+                      decoration:
+                          BoxDecoration(color: AppColors.primaryColorShade5),
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: Text(
+                                'Hub Title',
+                                style: AppTextStyles().appBarTitleStyleNew,
+                              ),
+                            ),
+                            flex: 2,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Collect',
+                              style: AppTextStyles().appBarTitleStyleNew,
+                              textAlign: TextAlign.center,
+                            ),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Drop',
+                              style: AppTextStyles().appBarTitleStyleNew,
+                              textAlign: TextAlign.center,
+                            ),
+                            flex: 1,
+                          ),
+                        ],
+                      ),
+                    ),
                   Flexible(
                     flex: 1,
                     child: model.hubsList.length > 0
                         ? ListView.builder(
-                            itemBuilder: (context, index) => ListTile(
-                              title: Text(
-                                model.hubsList[index].title,
-                              ),
-                              subtitle: Text(model.hubsList[index].city),
+                            itemBuilder: (context, index) => Column(
+                              children: [
+                                Slidable(
+                                  key: Key(index.toString()),
+                                  direction: Axis.horizontal,
+                                  actionPane: SlidableBehindActionPane(),
+                                  actionExtentRatio: 0.25,
+                                  child: Container(
+                                    color: AppColors.appScaffoldColor,
+                                    child: TempHubsDetailsView(
+                                      singleHub: model.hubsList[index],
+                                    ),
+                                  ),
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Delete',
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: () {
+                                        model.hubsList.removeAt(index);
+                                        model.notifyListeners();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                DottedDivider()
+                              ],
                             ),
                             itemCount: model.hubsList.length,
                           )
@@ -79,11 +140,15 @@ class _TempHubsListViewState extends State<TempHubsListView> {
                         'Submit',
                         style: AppTextStyles().appBarTitleStyleNew,
                       )),
-                      onTap: model.hubsList.length > 0 ? () {} : null,
+                      onTap: () {
+                        if (model.hubsList.length == 0) {
+                          model.showConfirmationBottomSheet();
+                        } else {
+                          model.addTrasientHubs();
+                        }
+                      },
                       borderRadius: getBorderRadius(),
-                      childColor: model.hubsList.length > 0
-                          ? AppColors.primaryColorShade5
-                          : AppColors.primaryColorShade5.withAlpha(185),
+                      childColor: AppColors.primaryColorShade5,
                     ),
                   )
                 ],

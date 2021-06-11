@@ -84,7 +84,8 @@ Widget appTextFormField({
                     focusNode: focusNode,
                     autofocus: autoFocus,
                     decoration: inputDecoration ??
-                        textFieldDecoration(showRupeesSymbol, errorText),
+                        textFieldDecoration(
+                            showRupeesSymbol, errorText, maxLines),
                     keyboardType: keyboardType,
                     onFieldSubmitted: onFieldSubmitted,
                     validator: validator),
@@ -121,7 +122,8 @@ Widget appTextFormField({
   );
 }
 
-InputDecoration textFieldDecoration(bool showRupeesSymbol, String errorText) {
+InputDecoration textFieldDecoration(
+    bool showRupeesSymbol, String errorText, int maxLines) {
   return new InputDecoration(
     prefix: showRupeesSymbol
         ? Text(
@@ -131,10 +133,7 @@ InputDecoration textFieldDecoration(bool showRupeesSymbol, String errorText) {
             ),
           )
         : null,
-    // prefixText: showRupeesSymbol ? rupeeSymbol : '',
-    // prefixStyle: AppTextStyles.latoBold15Black.copyWith(
-    // fontSize: 24,
-    // ),
+    contentPadding: EdgeInsets.all(16),
     hintStyle: TextStyle(fontSize: 14, color: Colors.white),
     focusedBorder: normalTextFormFieldBorder(),
     enabledBorder: normalTextFormFieldBorder(),

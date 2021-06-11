@@ -196,7 +196,7 @@ class BaseBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
   final Widget child;
-  // final EdgeInsets margin;
+  final double height;
   final String bottomSheetTitle;
 
   const BaseBottomSheet({
@@ -204,7 +204,16 @@ class BaseBottomSheet extends StatelessWidget {
     @required this.request,
     @required this.completer,
     @required this.child,
-    // this.margin,
+    this.height,
+    this.bottomSheetTitle,
+  }) : super(key: key);
+
+  const BaseBottomSheet.percent({
+    Key key,
+    @required this.request,
+    @required this.completer,
+    @required this.child,
+    @required this.height,
     this.bottomSheetTitle,
   }) : super(key: key);
 
@@ -213,7 +222,7 @@ class BaseBottomSheet extends StatelessWidget {
     return Container(
       // margin: margin ?? EdgeInsets.all(0),
       // padding: margin ?? EdgeInsets.all(0),
-      height: MediaQuery.of(context).size.height * 0.84,
+      height: height ?? MediaQuery.of(context).size.height * 0.84,
       decoration: BoxDecoration(
         color: AppColors.appScaffoldColor,
         borderRadius: BorderRadius.only(

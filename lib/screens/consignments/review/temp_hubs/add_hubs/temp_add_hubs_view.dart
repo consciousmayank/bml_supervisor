@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
@@ -7,6 +9,7 @@ import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_viewmodel.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/hub/add/add_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -51,18 +54,6 @@ class _TempAddHubsViewState extends State<TempAddHubsView> {
                 'Add Hubs',
                 style: AppTextStyles().appBarTitleStyleNew,
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    model.navigationService.back(
-                      result: copyList(
-                        model.hubsList,
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.done),
-                )
-              ],
             ),
             body: model.isBusy
                 ? ShimmerContainer(
@@ -99,7 +90,7 @@ class AddHubBodyWidget extends StatefulWidget {
 }
 
 class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
-  // TextEditingController hubTitleController = TextEditingController();
+  TextEditingController hubTitleController = TextEditingController();
   FocusNode hubTitleFocusNode = FocusNode();
 
   TextEditingController doRController = TextEditingController();
@@ -149,6 +140,11 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   TextEditingController remarkController = TextEditingController();
   FocusNode remarkFocusNode = FocusNode();
 
+  final TextEditingController _textEditingController = TextEditingController();
+
+  FocusNode focusNode = FocusNode();
+  GlobalKey autocompleteKey = GlobalKey();
+
   final List<GlobalKey> _key = List.generate(25, (index) => GlobalKey());
 
   @override
@@ -160,9 +156,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           children: [
             buildHubTitleTextFormField(viewModel: widget.viewModel),
             widget.viewModel.hubsList.length > 0
-                ? widget.viewModel.enteredHub.title.trim().length > 0
-                    ? buildExistingHubBottomSheetDropDown()
-                    : Container()
+                ? buildExistingHubBottomSheetDropDown()
                 : Container(),
             AppDropDown(
               showUnderLine: true,
@@ -174,28 +168,23 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
                 widget.viewModel.enteredHub = widget.viewModel.enteredHub
                     .copyWith(itemUnit: selectedValue);
                 widget.viewModel.notifyListeners();
-                contactPersonFocusNode.requestFocus();
+                itemsDropFocusNode.requestFocus();
               },
               optionList: selectItemUnit,
             ),
-            SizedBox(
-              height: 50,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: child,
-                    flex: 1,
-                  ),
-                  wSizedBox(10),
-                  Expanded(
-                    child: child,
-                    flex: 1,
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: dropInput(),
+                  flex: 1,
+                ),
+                wSizedBox(10),
+                Expanded(
+                  child: collectInput(),
+                  flex: 1,
+                ),
+              ],
             ),
-            buildContactPersonView(),
-            buildContactNumberTextFormField(),
             buildAddressSelector(),
             buildHnoBuildingNameTextFormField(),
             buildStreetTextFormField(),
@@ -206,6 +195,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             buildStateTextFormField(),
             buildCountryTextFormField(),
             buildPinCodeTextFormField(),
+            buildContactPersonView(),
+            buildContactNumberTextFormField(),
             buildLatitudeTextFormField(),
             buildLongitudeTextFormField(),
             buildRemarksTextFormField(),
@@ -219,7 +210,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   BottomSheetDropDown<SingleTempHub> buildExistingHubBottomSheetDropDown() {
     return BottomSheetDropDown<SingleTempHub>(
       bottomSheetTitle: 'Existing Hub(s)',
-      supportText: widget.viewModel.enteredHub.title,
+      supportText: widget.viewModel.proposedhubTitle,
       bottomSheetDropDownType: BottomSheetDropDownType.EXISTING_TEMP_HUBS_LIST,
       key: _key[19],
       allowedValue: widget.viewModel.hubsList,
@@ -235,8 +226,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           title: selectedValue.title,
           consignmentId: widget.reviewedConsigId,
           itemUnit: null,
-          dropOff: -1,
-          collect: -1,
+          dropOff: null,
+          collect: null,
           contactPerson: selectedValue.contactPerson,
           mobile: selectedValue.mobile,
           addressType: selectedValue.addressType,
@@ -278,41 +269,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           borderRadius: defaultBorder,
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
-            // if (_formKey.currentState.validate()) {
-            //   if (hubTitleController.text.length >= 8) {
-            //     if (contactNumberController.text.length >= 10) {
-            //       ///Change this
-
-            //     } else {
-            //       widget.viewModel.snackBarService.showSnackbar(
-            //           message: 'Please enter correct mobile number');
-            //     }
-            //   } else {
-            //     widget.viewModel.snackBarService.showSnackbar(
-            //         message: 'Hub Title Length should be greater than 7');
-            //   }
-            // }
-
             widget.viewModel.addToReturningHubsList(
               newHubObject: SingleTempHub.empty().copyWith(
-                  consignmentId: widget.reviewedConsigId,
-                  dropOff: 0,
-                  collect: 0,
-                  title: '',
-                  contactPerson: contactPersonController.text,
-                  mobile: contactNumberController.text,
-                  addressType: '',
-                  addressLine1: '',
-                  addressLine2: '',
-                  locality: '',
-                  nearby: '',
-                  city: '',
-                  state: '',
-                  country: '',
-                  pincode: '',
-                  geoLatitude: 0,
-                  geoLongitude: 0,
-                  remarks: ''),
+                consignmentId: widget.reviewedConsigId,
+              ),
             );
           },
           background: AppColors.primaryColorShade5,
@@ -320,39 +280,36 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
-  Widget buildItemsCollectTextFormField({TempAddHubsViewModel viewModel}) {
-    return appTextFormField(
-      controller: TextEditingController(text: viewModel.enteredHub.title),
-      enabled: true,
-      focusNode: hubTitleFocusNode,
-      hintText: addHubsHubNameHint,
-      keyboardType: TextInputType.text,
-      onTextChange: (String value) {
-        viewModel.enteredHub = viewModel.enteredHub.copyWith(title: value);
-        viewModel.notifyListeners();
-        if (value.length > 1) {
-          viewModel.checkForExistingHubTitleContainsApi(value.trim());
-        }
-      },
-      onFieldSubmitted: (_) {
-        hubTitleFocusNode.unfocus();
-      },
-      validator: FormValidators().normalValidator,
-    );
+  Timer _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   Widget buildHubTitleTextFormField({TempAddHubsViewModel viewModel}) {
+    hubTitleController =
+        TextEditingController(text: viewModel.enteredHub.title);
+
+    hubTitleController.selection = TextSelection.fromPosition(
+        TextPosition(offset: hubTitleController.text.length));
     return appTextFormField(
-      controller: TextEditingController(text: viewModel.enteredHub.title),
+      controller: hubTitleController,
       enabled: true,
       focusNode: hubTitleFocusNode,
       hintText: addHubsHubNameHint,
       keyboardType: TextInputType.text,
       onTextChange: (String value) {
-        viewModel.enteredHub = viewModel.enteredHub.copyWith(title: value);
-        viewModel.notifyListeners();
-        if (value.length > 1) {
-          viewModel.checkForExistingHubTitleContainsApi(value.trim());
+        if (value.length > 1 && viewModel.enteredHub.title != value) {
+          if (_debounce?.isActive ?? false) _debounce.cancel();
+          _debounce = Timer(
+              const Duration(
+                seconds: 1,
+              ), () {
+            viewModel.checkForExistingHubTitleContainsApi(value);
+            print("Value :: $value");
+          });
         }
       },
       onFieldSubmitted: (_) {
@@ -365,6 +322,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildContactPersonView() {
     if (widget.viewModel.enteredHub.contactPerson != null) {
       contactPersonController.text = widget.viewModel.enteredHub.contactPerson;
+    } else {
+      contactPersonController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -372,7 +331,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: contactPersonFocusNode,
       hintText: addHubsContactPersonHint,
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(contactPerson: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, contactPersonFocusNode, contactNumberFocusNode);
@@ -384,6 +346,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildContactNumberTextFormField() {
     if (widget.viewModel.enteredHub.mobile != null) {
       contactNumberController.text = widget.viewModel.enteredHub.mobile;
+    } else {
+      contactNumberController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -395,7 +359,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: contactNumberFocusNode,
       hintText: addHubsContactNumberHint,
       keyboardType: TextInputType.phone,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(mobile: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, contactNumberFocusNode, alternateMobileNumberFocusNode);
@@ -408,6 +375,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     if (widget.viewModel.enteredHub.addressLine1 != null) {
       houseNoBuildingNameController.text =
           widget.viewModel.enteredHub.addressLine1;
+    } else {
+      houseNoBuildingNameController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -419,7 +388,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: houseNoBuildingNameFocusNode,
       hintText: addDriverHnoBuildingNameHint,
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(addressLine1: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, houseNoBuildingNameFocusNode, streetFocusNode);
@@ -431,7 +403,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildAddressSelector() {
     return BottomSheetDropDown<String>(
       allowedValue: addressTypes,
-      selectedValue: widget.viewModel.enteredHub.addressType,
+      selectedValue: widget.viewModel.enteredHub.addressType ?? '',
       hintText: 'Address Type',
       bottomSheetTitle: 'Address Type',
       onValueSelected: (
@@ -449,6 +421,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildStreetTextFormField() {
     if (widget.viewModel.enteredHub.addressLine2 != null) {
       streetController.text = widget.viewModel.enteredHub.addressLine2;
+    } else {
+      streetController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -461,7 +435,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: streetFocusNode,
       hintText: addDriverStreetHint,
       keyboardType: TextInputType.name,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(addressLine2: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, streetFocusNode, localityFocusNode);
       },
@@ -472,6 +449,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildLocalityTextFormField() {
     if (widget.viewModel.enteredHub.locality != null) {
       localityController.text = widget.viewModel.enteredHub.locality;
+    } else {
+      localityController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -484,7 +463,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: localityFocusNode,
       hintText: addDriverLocalityHint,
       keyboardType: TextInputType.name,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(locality: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, localityFocusNode, landmarkFocusNode);
       },
@@ -493,31 +475,6 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   }
 
   buildCityTextFormField({TempAddHubsViewModel viewModel}) {
-    if (widget.viewModel.enteredHub.city != null) {
-      cityController.text = widget.viewModel.enteredHub.city;
-    }
-
-    return appTextFormField(
-      enabled: true,
-      textCapitalization: TextCapitalization.words,
-      formatter: <TextInputFormatter>[
-        TextFieldInputFormatter()
-            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
-      ],
-      controller: cityController,
-      focusNode: cityFocusNode,
-      hintText: addDriverCityHint,
-      keyboardType: TextInputType.name,
-      onTextChange: (String value) {
-        viewModel.enteredHub = viewModel.enteredHub.copyWith(city: value);
-        viewModel.notifyListeners();
-      },
-      onFieldSubmitted: (_) {
-        fieldFocusChange(context, localityFocusNode, landmarkFocusNode);
-      },
-      validator: FormValidators().normalValidator,
-    );
-
     return RawAutocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
         return viewModel.getCitiesListForAutoComplete().where((String option) {
@@ -531,15 +488,34 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             temp = element;
           }
         });
-        viewModel.selectedCity = temp;
+
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(city: temp.city);
+
+        viewModel.getPinCodeState(cityId: temp.id);
+        // viewModel.selectedCity = temp;
       },
       fieldViewBuilder: (BuildContext context,
           TextEditingController textEditingController,
           FocusNode focusNode,
           VoidCallback onFieldSubmitted) {
+        if (viewModel.enteredHub.city != null) {
+          textEditingController.text = viewModel.enteredHub.city;
+          textEditingController.selection = TextSelection.fromPosition(
+            TextPosition(
+              offset: textEditingController.text.length,
+            ),
+          );
+        } else {
+          textEditingController.clear();
+        }
+
         return appTextFormField(
           hintText: "City",
           controller: textEditingController,
+          onTextChange: (String value) {
+            widget.viewModel.enteredHub.copyWith(city: value);
+          },
           focusNode: focusNode,
           onFieldSubmitted: (String value) {
             onFieldSubmitted();
@@ -582,9 +558,76 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
+  Widget dropInput() {
+    if (widget.viewModel.enteredHub.dropOff != null) {
+      itemsDropController.text = widget.viewModel.enteredHub.dropOff.toString();
+      itemsDropController.selection = TextSelection.fromPosition(
+        TextPosition(
+          offset: itemsDropController.text.length,
+        ),
+      );
+    } else {
+      itemsDropController.clear();
+    }
+    return appTextFormField(
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub = widget.viewModel.enteredHub.copyWith(
+          dropOff: double.parse(value),
+        );
+        // widget.viewModel.notifyListeners();
+      },
+      hintText: "${widget.viewModel.enteredHub.itemUnit ?? 'Items'} Drop",
+      enabled: true,
+      controller: itemsDropController,
+      focusNode: itemsDropFocusNode,
+      onFieldSubmitted: (_) {
+        fieldFocusChange(
+          context,
+          itemsDropFocusNode,
+          itemsCollectFocusNode,
+        );
+      },
+      keyboardType: TextInputType.number,
+      validator: FormValidators().normalValidator,
+    );
+  }
+
+  Widget collectInput() {
+    if (widget.viewModel.enteredHub.collect != null) {
+      itemsCollectController.text =
+          widget.viewModel.enteredHub.collect.toString();
+      itemsCollectController.selection = TextSelection.fromPosition(
+        TextPosition(
+          offset: itemsCollectController.text.length,
+        ),
+      );
+    } else {
+      itemsCollectController.clear();
+    }
+    return appTextFormField(
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub = widget.viewModel.enteredHub.copyWith(
+          collect: double.parse(value),
+        );
+        // widget.viewModel.notifyListeners();
+      },
+      hintText: "${widget.viewModel.enteredHub.itemUnit ?? 'Items'} Collect",
+      enabled: true,
+      controller: itemsCollectController,
+      focusNode: itemsCollectFocusNode,
+      onFieldSubmitted: (_) {
+        itemsCollectFocusNode.unfocus();
+      },
+      keyboardType: TextInputType.number,
+      validator: FormValidators().normalValidator,
+    );
+  }
+
   Widget buildStateTextFormField() {
     if (widget.viewModel.enteredHub.state != null) {
       widget.viewModel.stateController.text = widget.viewModel.enteredHub.state;
+    } else {
+      widget.viewModel.stateController.clear();
     }
 
     return appTextFormField(
@@ -597,7 +640,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: widget.viewModel.stateFocusNode,
       hintText: addDriverStateHint,
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(state: value);
+      },
       onFieldSubmitted: (_) {
         widget.viewModel.pinCodeFocusNode.unfocus();
       },
@@ -615,6 +660,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     if (widget.viewModel.enteredHub.country != null) {
       widget.viewModel.countryController.text =
           widget.viewModel.enteredHub.country;
+    } else {
+      widget.viewModel.countryController.clear();
     }
     return appTextFormField(
       enabled: false,
@@ -626,7 +673,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: widget.viewModel.countryFocusNode,
       hintText: addDriverCountryHint,
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(country: value);
+      },
       onFieldSubmitted: (_) {
         widget.viewModel.countryFocusNode.unfocus();
       },
@@ -644,6 +693,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     if (widget.viewModel.enteredHub.pincode != null) {
       widget.viewModel.pinCodeController.text =
           widget.viewModel.enteredHub.pincode;
+    } else {
+      widget.viewModel.pinCodeController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -655,7 +706,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: widget.viewModel.pinCodeFocusNode,
       hintText: "PinCode",
       keyboardType: TextInputType.text,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(pincode: value);
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(
             context, widget.viewModel.pinCodeFocusNode, latitudeFocusNode);
@@ -674,6 +727,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     if (widget.viewModel.enteredHub.geoLatitude != null) {
       latitudeController.text =
           widget.viewModel.enteredHub.geoLatitude.toString();
+    } else {
+      latitudeController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -686,7 +741,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: latitudeFocusNode,
       hintText: "Latitude",
       keyboardType: TextInputType.number,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(geoLatitude: double.parse(value));
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, latitudeFocusNode, longitudeFocusNode);
       },
@@ -697,6 +754,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     if (widget.viewModel.enteredHub.geoLongitude != null) {
       longitudeController.text =
           widget.viewModel.enteredHub.geoLongitude.toString();
+    } else {
+      longitudeController.clear();
     }
     return appTextFormField(
       enabled: true,
@@ -709,7 +768,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: longitudeFocusNode,
       hintText: "Longitude",
       keyboardType: TextInputType.number,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(geoLongitude: double.parse(value));
+      },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, longitudeFocusNode, remarkFocusNode);
       },
@@ -719,10 +780,12 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
   Widget buildRemarksTextFormField() {
     if (widget.viewModel.enteredHub.remarks != null) {
       remarkController.text = widget.viewModel.enteredHub.remarks;
+    } else {
+      remarkController.clear();
     }
     return appTextFormField(
-      maxLines: 3,
       enabled: true,
+      maxLines: 7,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 -]')),
@@ -731,7 +794,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       focusNode: remarkFocusNode,
       hintText: addDriverRemarksHint,
       keyboardType: TextInputType.name,
-      onTextChange: (String value) {},
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub.copyWith(remarks: (value));
+      },
       onFieldSubmitted: (_) {
         remarkFocusNode.unfocus();
       },
@@ -741,6 +806,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
 
 class TempAddHubsViewArguments {
   final int reviewedConsigId;
-
-  TempAddHubsViewArguments({@required this.reviewedConsigId});
+  final List<SingleTempHub> hubsList;
+  TempAddHubsViewArguments({
+    @required this.reviewedConsigId,
+    this.hubsList,
+  });
 }

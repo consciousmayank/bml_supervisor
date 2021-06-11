@@ -1,10 +1,18 @@
-import 'package:bml_supervisor/models/review_consignment_request.dart';
+import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:flutter/material.dart';
 
-class TempHubsListArguments {
+class TempHubsListInputArguments {
   final int reviewedConsigId;
 
-  TempHubsListArguments({
+  TempHubsListInputArguments({
     @required this.reviewedConsigId,
+  });
+}
+
+class TempHubsListOutputArguments {
+  final SingleTempHub enteredHub;
+
+  TempHubsListOutputArguments({
+    @required this.enteredHub,
   });
 }
