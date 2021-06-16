@@ -47,7 +47,7 @@ firebase appdistribution:distribute "$PROJECT/app_builds/android/prod/app-prod-r
     --token "$TOKEN" \
     --release-notes-file "$PROJECT/release_notes.txt" --testers "$ANDROIDPRODTESTERS"
 
-flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+flutter build ipa --flavor dev -t lib/main/main_dev.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-dev -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist -allowProvisioningUpdates
 
 firebase appdistribution:distribute "$PROJECT/app_builds/ios/adhoc-dev/bml_supervisor.ipa" \
     --app "$IOSDEVAPPID"\
@@ -55,7 +55,7 @@ firebase appdistribution:distribute "$PROJECT/app_builds/ios/adhoc-dev/bml_super
     --release-notes-file "$PROJECT/release_notes.txt" \
     --testers "$IOSTESTERS"
 
-flutter build ipa --flavor prod -t lib/main/main_prod.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-prod -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist
+flutter build ipa --flavor prod -t lib/main/main_prod.dart && xcodebuild -exportArchive -archivePath $PROJECT/build/ios/archive/Runner.xcarchive -exportPath $PROJECT/app_builds/ios/adhoc-prod -exportOptionsPlist $PROJECT/iosExportOptions/exportOptionsAdHoc.plist -allowProvisioningUpdates
 firebase appdistribution:distribute "$PROJECT/app_builds/ios/adhoc-prod/bml_supervisor.ipa" \
     --app "$IOSPRODAPPID" \
     --token "$TOKEN" \

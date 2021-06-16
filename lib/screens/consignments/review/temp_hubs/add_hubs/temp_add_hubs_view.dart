@@ -270,10 +270,11 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           borderColor: AppColors.primaryColorShade1,
           onTap: () {
             widget.viewModel.addToReturningHubsList(
-              newHubObject: SingleTempHub.empty().copyWith(
-                consignmentId: widget.reviewedConsigId,
-              ),
-            );
+                newHubObject: SingleTempHub.empty().copyWith(
+                  consignmentId: widget.reviewedConsigId,
+                ),
+                onErrorOccured: (widgetType) =>
+                    onErrorOccured(widgetType: widgetType));
           },
           background: AppColors.primaryColorShade5,
           buttonText: 'Save'),
@@ -295,6 +296,14 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     hubTitleController.selection = TextSelection.fromPosition(
         TextPosition(offset: hubTitleController.text.length));
     return appTextFormField(
+      buttonType: hubTitleController.text.length > 0
+          ? ButtonType.SMALL
+          : ButtonType.NONE,
+      buttonIcon: hubTitleController.text.length > 0 ? Icon(Icons.close) : null,
+      buttonLabelText: 'Reset',
+      onButtonPressed: () {
+        viewModel.resetForm();
+      },
       controller: hubTitleController,
       enabled: true,
       focusNode: hubTitleFocusNode,
@@ -742,7 +751,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       hintText: "Latitude",
       keyboardType: TextInputType.number,
       onTextChange: (String value) {
-        widget.viewModel.enteredHub.copyWith(geoLatitude: double.parse(value));
+        widget.viewModel.enteredHub = widget.viewModel.enteredHub
+            .copyWith(geoLatitude: double.parse(value));
       },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, latitudeFocusNode, longitudeFocusNode);
@@ -769,7 +779,8 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       hintText: "Longitude",
       keyboardType: TextInputType.number,
       onTextChange: (String value) {
-        widget.viewModel.enteredHub.copyWith(geoLongitude: double.parse(value));
+        widget.viewModel.enteredHub = widget.viewModel.enteredHub
+            .copyWith(geoLongitude: double.parse(value));
       },
       onFieldSubmitted: (_) {
         fieldFocusChange(context, longitudeFocusNode, remarkFocusNode);
@@ -795,12 +806,51 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       hintText: addDriverRemarksHint,
       keyboardType: TextInputType.name,
       onTextChange: (String value) {
-        widget.viewModel.enteredHub.copyWith(remarks: (value));
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(remarks: (value));
       },
       onFieldSubmitted: (_) {
         remarkFocusNode.unfocus();
       },
     );
+  }
+
+  onErrorOccured({
+    @required ErrorWidgetType widgetType,
+  }) {
+    switch (widgetType) {
+      case ErrorWidgetType.TITLE:
+        hubTitleFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.DROP_INPUT:
+        itemsDropFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.COLLECT_INPUT:
+        itemsCollectFocusNode.requestFocus();
+        break;
+        break;
+      case ErrorWidgetType.HOUSE_N0_BUULDING_NAME:
+        houseNoBuildingNameFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.STREET:
+        streetFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.LOCALITY:
+        localityFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.CITY:
+        cityFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.PINCODE:
+        widget.viewModel.pinCodeFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.CONTACT_PERSON:
+        contactPersonFocusNode.requestFocus();
+        break;
+      case ErrorWidgetType.CONTACT_NUMBER:
+        contactNumberFocusNode.requestFocus();
+        break;
+    }
   }
 }
 
@@ -811,4 +861,17 @@ class TempAddHubsViewArguments {
     @required this.reviewedConsigId,
     this.hubsList,
   });
+}
+
+enum ErrorWidgetType {
+  TITLE,
+  DROP_INPUT,
+  COLLECT_INPUT,
+  HOUSE_N0_BUULDING_NAME,
+  STREET,
+  LOCALITY,
+  CITY,
+  PINCODE,
+  CONTACT_PERSON,
+  CONTACT_NUMBER,
 }

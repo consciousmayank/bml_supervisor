@@ -5,6 +5,7 @@ import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:bml_supervisor/widget/single_consignment_item_view.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,9 @@ class __MainBodyState extends State<_MainBody> {
   Widget build(BuildContext context) {
     return widget.viewModel.pendingConsignmentsDateList.length > 0
         ? createPendingConsignmentList(widget.viewModel)
-        : Container();
+        : NoDataWidget(
+            label: 'No consignments to review.',
+          );
   }
 
   Widget createPendingConsignmentList(

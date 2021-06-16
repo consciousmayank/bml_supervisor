@@ -150,7 +150,11 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
     ParentApiResponse apiResponse = await _apiService
         .getPendingConsignmentsList(clientId: clientId, pageIndex: pageIndex);
 
-    if (filterResponse(apiResponse) != null) {
+    if (filterResponse(
+          apiResponse,
+          showSnackBar: false,
+        ) !=
+        null) {
       var responseList = apiResponse.response.data as List;
       responseList.forEach((element) {
         SinglePendingConsignmentListItem singlePendingConsignmentListItem =

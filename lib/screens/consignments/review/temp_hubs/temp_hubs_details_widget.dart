@@ -35,7 +35,7 @@ class TempHubsDetailsView extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '${singleHub.collect.toString()}\n(${singleHub.itemUnit})',
+              '${singleHub.collect == null ? 0 : singleHub.collect.toString()}\n(${singleHub.itemUnit})',
               style: AppTextStyles(
                 textColor: AppColors.black,
               ).textStyle,
@@ -45,7 +45,7 @@ class TempHubsDetailsView extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              "${singleHub.dropOff.toString()}\n(${singleHub.itemUnit})",
+              "${singleHub.dropOff == null ? 0 : singleHub.dropOff.toString()}\n(${singleHub.itemUnit})",
               style: AppTextStyles(
                 textColor: AppColors.black,
               ).textStyle,

@@ -8,7 +8,6 @@ import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_api.dart';
-import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class TempHubsListViewModel extends GeneralisedBaseViewModel {
@@ -36,22 +35,24 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
     ApiResponse response =
         await _addHubsApis.addTransientHubs(hubList: hubsList);
     setBusy(false);
-    bottomSheetService
-        .showCustomSheet(
-      customData: ConfirmationBottomSheetInputArgs(
-        title: response.message,
-      ),
-      barrierDismissible: false,
-      isScrollControlled: true,
-      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
-    )
-        .then((value) {
-      if (value != null) {
-        if (response.isSuccessful()) {
-          navigationService.back(result: true);
+    if (response.isSuccessful()) {
+      bottomSheetService
+          .showCustomSheet(
+        customData: ConfirmationBottomSheetInputArgs(
+          title: response.message,
+        ),
+        barrierDismissible: false,
+        isScrollControlled: true,
+        variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+      )
+          .then((value) {
+        if (value != null) {
+          if (response.isSuccessful()) {
+            navigationService.back(result: true);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   void showConfirmationBottomSheet() {
@@ -59,8 +60,10 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
         .showCustomSheet(
       customData: ConfirmationBottomSheetInputArgs(
           title: 'You have not added any hubs.',
-          description: 'You want to continue?'),
-      barrierDismissible: false,
+          description: 'You want to continue?',
+          positiveButtonTitle: 'Yes',
+          negativeButtonTitle: 'No'),
+      barrierDismissible: true,
       isScrollControlled: true,
       variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
     )

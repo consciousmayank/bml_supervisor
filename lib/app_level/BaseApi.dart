@@ -5,7 +5,6 @@ import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/services/api_service.dart';
-import 'package:dio/dio.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class BaseApi {

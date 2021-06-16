@@ -1,14 +1,18 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
+import 'package:bml_supervisor/enums/snackbar_types.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
+import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
+import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -116,14 +120,18 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void addToReturningHubsList({SingleTempHub newHubObject}) async {
-    setBusy(true);
+  void addToReturningHubsList(
+      {SingleTempHub newHubObject, @required Function onErrorOccured}) async {
+    if (validate(onErrorOccured: onErrorOccured)) {
+      setBusy(true);
 
-    enteredHub = enteredHub.copyWith(consignmentId: newHubObject.consignmentId);
+      enteredHub =
+          enteredHub.copyWith(consignmentId: newHubObject.consignmentId);
 
-    setBusy(false);
-    notifyListeners();
-    takeBackWithResponse();
+      setBusy(false);
+      notifyListeners();
+      takeBackWithResponse();
+    } else {}
   }
 
   void checkForExistingHubTitleContainsApi(String searchString) async {
@@ -141,5 +149,126 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
         result: TempHubsListOutputArguments(
       enteredHub: enteredHub,
     ));
+  }
+
+  String titleError, itemUnitError, addressTypeError;
+
+  bool validate({Function onErrorOccured}) {
+    if (enteredHub.title == null) {
+      makeSnackbarMessage(
+          message: 'Please enter Hub title',
+          onOkButtonclicked: onErrorOccured(ErrorWidgetType.TITLE));
+      titleError = textRequired;
+      return false;
+    } else if (enteredHub.title.length < 8) {
+      makeSnackbarMessage(
+        message: 'Hub Title Length should be greater than 7',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.TITLE,
+        ),
+      );
+      titleError = 'Hub Title Length should be greater than 7';
+    } else if (enteredHub.itemUnit == null) {
+      makeSnackbarMessage(
+        message: 'Item unit is required.',
+        onOkButtonclicked: null,
+      );
+      itemUnitError = textRequired;
+    } else if ((enteredHub.dropOff == null || enteredHub.dropOff == 0) &&
+        (enteredHub.collect == null || enteredHub.collect == 0)) {
+      makeSnackbarMessage(
+        message: 'Collect or Drop values are required',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.DROP_INPUT,
+        ),
+      );
+    } else if (enteredHub.addressType == null) {
+      makeSnackbarMessage(
+        message: 'Please enter an address type',
+        onOkButtonclicked: null,
+      );
+    } else if (enteredHub.addressLine1 == null ||
+        enteredHub.addressLine1.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter House No/Building Name',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.HOUSE_N0_BUULDING_NAME,
+        ),
+      );
+    } else if (enteredHub.addressLine2 == null ||
+        enteredHub.addressLine2.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter Street',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.STREET,
+        ),
+      );
+    } else if (enteredHub.locality == null ||
+        enteredHub.addressLine2.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter Locality',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.LOCALITY,
+        ),
+      );
+    } else if (enteredHub.city == null || enteredHub.city.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter city',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.CITY,
+        ),
+      );
+    } else if (enteredHub.pincode == null ||
+        enteredHub.pincode.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter an pincode',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.PINCODE,
+        ),
+      );
+    } else if (enteredHub.contactPerson == null ||
+        enteredHub.contactPerson.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter an contact person',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.CONTACT_PERSON,
+        ),
+      );
+    } else if (enteredHub.mobile == null ||
+        enteredHub.mobile.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter an contact number',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.CONTACT_NUMBER,
+        ),
+      );
+    } else {
+      return true;
+    }
+  }
+
+  makeSnackbarMessage({
+    @required String message,
+    @required Function onOkButtonclicked,
+  }) {
+    snackBarService.showCustomSnackBar(
+      variant: SnackbarType.ERROR,
+      duration: Duration(seconds: 2),
+      message: message,
+      mainButtonTitle: onOkButtonclicked != null ? 'Ok' : null,
+      onMainButtonTapped: onOkButtonclicked != null
+          ? () {
+              onOkButtonclicked.call();
+            }
+          : null,
+    );
+  }
+
+  void resetForm() {
+    enteredHub = SingleTempHub.empty();
+    enteredHub = enteredHub.copyWith(
+        clientId: MyPreferences().getSelectedClient().clientId);
+    hubsList.clear();
+    notifyListeners();
   }
 }
