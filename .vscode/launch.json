@@ -34,6 +34,12 @@
                 "dev"
             ],
             "flutterMode": "profile"
+        },
+        {
+            "name": "run all tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "./test/",
         }
     ]
 }

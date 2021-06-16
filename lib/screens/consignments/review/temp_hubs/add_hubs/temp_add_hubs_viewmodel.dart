@@ -22,7 +22,8 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
   TextEditingController countryController = TextEditingController();
   FocusNode countryFocusNode = FocusNode();
   SingleTempHub enteredHub = SingleTempHub.empty().copyWith(
-    clientId: MyPreferences().getSelectedClient().clientId,
+    // clientId: MyPreferences().getSelectedClient().clientId,
+    clientId: 2,
   );
   List<SingleTempHub> hubsList = [];
   TextEditingController pinCodeController = TextEditingController();
