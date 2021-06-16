@@ -7,7 +7,6 @@ import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_viewmodel.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignment_textfield.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';

@@ -742,7 +742,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
 
   Widget buildRemarksTextFormField() {
     return appTextFormField(
-      maxLines: 3,
+      maxLines: 7,
       enabled: true,
       textCapitalization: TextCapitalization.words,
       formatter: <TextInputFormatter>[

@@ -41,8 +41,8 @@ Widget buildChartBadge({
   return Container(
     padding: EdgeInsets.all(3),
     decoration: BoxDecoration(
-      borderRadius:BorderRadius.all(Radius.circular(4)) ,
-      color:  AppColors.primaryColorShade5,
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+      color: AppColors.primaryColorShade5,
     ),
     child: Text(
       badgeTitle,

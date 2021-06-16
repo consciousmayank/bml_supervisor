@@ -1,5 +1,3 @@
-
-
 const String REGISTER_VEHICLE = "/vehicle/add";
 const String SUMBIT_ENTRY = "/dailyKilometer/add";
 const String SEARCH_BY_REG_NO = "/vehicle/list/";
@@ -76,6 +74,7 @@ const String GET_CITIES = "/location/city/list";
 const String ADD_DRIVER = "/manager/driver/add";
 const String ADD_ROUTE = "/route/add";
 const String ADD_HUB = "/hub/add";
+const String ADD_TRANSIENT_HUBS = "/hub/transient/add";
 const String GET_DAILY_ENTRIES = '/dailyKilometer/view';
 final GET_DAILY_KM_INFO = (date) => "/dailyKilometer/info/$date";
 final GET_CITY_LOCATION = (cityId) => "/location/city/$cityId";
@@ -89,10 +88,10 @@ final GET_DISTRIBUTORS = (clientId) => '/hub/list/client/$clientId';
 final REJECT_COMPLETED_TRIP_WITH_CONSIGNMENT_ID =
     (consignmentId) => '/consignment/$consignmentId/discard';
 
-final GET_TRIPS_STATISTICS = (clientId) =>
-    "/consignment/tracking/statistics/client/$clientId";
-    
-    final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
+final GET_TRIPS_STATISTICS =
+    (clientId) => "/consignment/tracking/statistics/client/$clientId";
+
+final GET_UPCOMING_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
     "/consignment/tracking/status/created/client/$clientId/page/$pageNumber";
 final GET_ONGOING_TRIPS_STATUS_LIST = (clientId, pageNumber) =>
     "/consignment/tracking/status/ongoing/client/$clientId/page/$pageNumber";
@@ -112,14 +111,13 @@ final GET_VEHICLES_LIST_PAGE_WISE =
 final GET_ALL_HUBS_FOR_CLIENT =
     (clientId, pageNumber) => '/hub/list/client/$clientId/page/$pageNumber';
 
-final CHECK_HUB_TITLE_CONTAINS =
-    (hubTitle) => '/hub/title/contains/$hubTitle';
+final CHECK_HUB_TITLE_CONTAINS = (hubTitle) => '/hub/title/contains/$hubTitle';
+final GET_TRANSIENT_HUBS_LIST_BASED_ON =
+    (searchString) => '/hub/transient/title/contains/$searchString/page/1';
 
-
-    
 final GET_EXPESNE_PERIOD =
     (clientId) => '/expense/client/$clientId/period/list';
 
-    const String GET_EXPENSES_TYPE = "/expense/type/list";
-    const String GET_EXPENSES_AGGREGATE = "/expense/list/aggregate";
+const String GET_EXPENSES_TYPE = "/expense/type/list";
+const String GET_EXPENSES_AGGREGATE = "/expense/list/aggregate";
 ///////////////////////////////////////////////////////////////

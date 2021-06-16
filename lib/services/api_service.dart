@@ -15,6 +15,7 @@ import 'package:bml_supervisor/models/parent_api_response.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
+import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/models/update_user_request.dart';
 import 'package:bml_supervisor/models/view_entry_request.dart';
 import 'package:bml_supervisor/utils/api_endpoints.dart';
@@ -24,7 +25,7 @@ import 'package:flutter/material.dart';
 class ApiService {
   final dioClient = locator<DioConfig>();
   final preferences = MyPreferences();
-
+  CancelToken cancelToken = CancelToken();
   /////////////////////////Post Security/////////////////////////
 
   ///Authorization, get the user role, first name, last name
@@ -361,14 +362,14 @@ class ApiService {
     }
     return ParentApiResponse(error: error, response: response);
   }
-Future<ParentApiResponse> getPaymentListAggregate(
+
+  Future<ParentApiResponse> getPaymentListAggregate(
       {@required int clientId}) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient
-          .getDio()
-          .get(GET_PAYMENT_LIST_AGGREGATE(clientId));
+      response =
+          await dioClient.getDio().get(GET_PAYMENT_LIST_AGGREGATE(clientId));
     } on DioError catch (e) {
       error = e;
     }
@@ -590,14 +591,19 @@ Future<ParentApiResponse> getPaymentListAggregate(
     return ParentApiResponse(response: response, error: error);
   }
 
-  Future<ParentApiResponse> getConsignmentTrackingStatus(
-      {int clientId, @required TripStatus tripStatus, @required int pageNumber,
+  Future<ParentApiResponse> getConsignmentTrackingStatus({
+    int clientId,
+    @required TripStatus tripStatus,
+    @required int pageNumber,
   }) async {
     Response response;
     DioError error;
     try {
       response = await dioClient.getDio().get(
-            getApiCall(tripStatus: tripStatus, clientId: clientId, pageNumber: pageNumber),
+            getApiCall(
+                tripStatus: tripStatus,
+                clientId: clientId,
+                pageNumber: pageNumber),
           );
     } on DioError catch (e) {
       error = e;
@@ -605,7 +611,10 @@ Future<ParentApiResponse> getPaymentListAggregate(
     return ParentApiResponse(response: response, error: error);
   }
 
-  String getApiCall({@required TripStatus tripStatus, @required int clientId, @required int pageNumber}) {
+  String getApiCall(
+      {@required TripStatus tripStatus,
+      @required int clientId,
+      @required int pageNumber}) {
     switch (tripStatus) {
       case TripStatus.UPCOMING:
         return GET_UPCOMING_TRIPS_STATUS_LIST(clientId, pageNumber);
@@ -915,6 +924,47 @@ Future<ParentApiResponse> getPaymentListAggregate(
     try {
       response =
           await dioClient.getDio().get(CHECK_HUB_TITLE_CONTAINS(hubTitle));
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> getTransientHubsListBasedOn(
+      {String searchString}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_TRANSIENT_HUBS_LIST_BASED_ON(searchString),
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  Future<ParentApiResponse> addTransientHubs({
+    @required List<SingleTempHub> body,
+  }) async {
+    String jsonBody = '';
+
+    StringBuffer sb = new StringBuffer();
+    body.forEach((element) {
+      sb.write(element.toJson());
+      sb.write(',');
+    });
+
+    jsonBody = sb.toString();
+    jsonBody = jsonBody.substring(0, jsonBody.length - 1);
+    jsonBody = "[" + jsonBody + "]";
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().post(
+            ADD_TRANSIENT_HUBS,
+            data: jsonBody,
+          );
     } on DioError catch (e) {
       error = e;
     }

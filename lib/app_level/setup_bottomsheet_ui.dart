@@ -16,6 +16,7 @@ import 'package:bml_supervisor/screens/trips/reviewcompleted/review_warning_bott
 import 'package:bml_supervisor/screens/vehicle/view/vehicle_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/string_list_type_bottomsheet.dart';
 import 'package:bml_supervisor/widget/routes/route_details_bottomsheet.dart';
@@ -138,24 +139,66 @@ class _ConfirmationBottomSheet extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-          SizedBox(
-            height: buttonHeight,
-            child: AppButton(
-                borderColor: AppColors.primaryColorShade5,
-                onTap: () => completer(SheetResponse(confirmed: true)),
-                background: AppColors.primaryColorShade5,
-                buttonText: 'Ok'),
-          ),
+          getConfirmationButtons(customData)
         ],
       ),
     );
+  }
+
+  Widget getConfirmationButtons(ConfirmationBottomSheetInputArgs customData) {
+    if (customData.negativeButtonTitle == null &&
+        customData.positiveButtonTitle == null) {
+      return SizedBox(
+        height: buttonHeight,
+        child: AppButton(
+            borderColor: AppColors.primaryColorShade5,
+            onTap: () => completer(SheetResponse(confirmed: true)),
+            background: AppColors.primaryColorShade5,
+            buttonText: 'Ok'),
+      );
+    } else {
+      return Row(
+        children: [
+          if (customData.negativeButtonTitle != null)
+            Expanded(
+              child: SizedBox(
+                height: buttonHeight,
+                child: AppButton(
+                    borderColor: AppColors.primaryColorShade5,
+                    onTap: () => completer(SheetResponse(confirmed: false)),
+                    background: AppColors.primaryColorShade5,
+                    buttonText: 'No'),
+              ),
+              flex: 1,
+            ),
+          wSizedBox(10),
+          if (customData.positiveButtonTitle != null)
+            Expanded(
+              child: SizedBox(
+                height: buttonHeight,
+                child: AppButton(
+                    borderColor: AppColors.primaryColorShade5,
+                    onTap: () => completer(SheetResponse(confirmed: true)),
+                    background: AppColors.primaryColorShade5,
+                    buttonText: 'Yes'),
+              ),
+              flex: 1,
+            ),
+        ],
+      );
+    }
   }
 }
 
 class ConfirmationBottomSheetInputArgs {
   final String title, description;
-
-  ConfirmationBottomSheetInputArgs({@required this.title, this.description});
+  final String positiveButtonTitle, negativeButtonTitle;
+  ConfirmationBottomSheetInputArgs({
+    @required this.title,
+    this.description,
+    this.positiveButtonTitle,
+    this.negativeButtonTitle,
+  });
 }
 
 class _CreateConsignmentDialog extends StatelessWidget {
@@ -196,7 +239,7 @@ class BaseBottomSheet extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
   final Widget child;
-  // final EdgeInsets margin;
+  final double height;
   final String bottomSheetTitle;
 
   const BaseBottomSheet({
@@ -204,7 +247,16 @@ class BaseBottomSheet extends StatelessWidget {
     @required this.request,
     @required this.completer,
     @required this.child,
-    // this.margin,
+    this.height,
+    this.bottomSheetTitle,
+  }) : super(key: key);
+
+  const BaseBottomSheet.percent({
+    Key key,
+    @required this.request,
+    @required this.completer,
+    @required this.child,
+    @required this.height,
     this.bottomSheetTitle,
   }) : super(key: key);
 
@@ -213,7 +265,7 @@ class BaseBottomSheet extends StatelessWidget {
     return Container(
       // margin: margin ?? EdgeInsets.all(0),
       // padding: margin ?? EdgeInsets.all(0),
-      height: MediaQuery.of(context).size.height * 0.84,
+      height: height ?? MediaQuery.of(context).size.height * 0.84,
       decoration: BoxDecoration(
         color: AppColors.appScaffoldColor,
         borderRadius: BorderRadius.only(

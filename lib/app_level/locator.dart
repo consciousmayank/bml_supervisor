@@ -1,4 +1,5 @@
 import 'package:bml_supervisor/main/app_configs.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_api.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/screens/charts/charts_api.dart';
@@ -52,6 +53,7 @@ void declareDependencies({@required AppConfigs configurations}) {
   locator.registerLazySingleton(() => VehicleApisImpl());
   locator.registerSingleton(BottomSheetService());
   locator.registerLazySingleton(() => RoutesApisImpl());
+  locator.registerLazySingleton(() => AddTempHubsApisImpl());
 
   //A Factory will return a new instance of the service anytime it is called.
   // locator.registerFactory(() => DashBoardApisImpl());

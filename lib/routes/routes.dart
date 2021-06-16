@@ -3,6 +3,9 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_view.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_arguments.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hubs_arguments.dart';
@@ -130,7 +133,9 @@ class AppRouter {
         List<HubResponse> hubsList = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
-                  child: AddHubsView(hubsList: hubsList,),
+                  child: AddHubsView(
+                    hubsList: hubsList,
+                  ),
                 ) //EntryLogsView(),
             );
 
@@ -255,12 +260,10 @@ class AppRouter {
           builder: (_) => AddDriverView(),
         );
 
-        case addPaymentPageRoute:
+      case addPaymentPageRoute:
         return MaterialPageRoute(
           builder: (_) => AddPaymentView(),
         );
-
-
 
       case hubsViewPageRoute:
         ViewRoutesArguments args = settings.arguments;
@@ -296,6 +299,21 @@ class AppRouter {
       case hubsListViewPageRoute:
         return MaterialPageRoute(
           builder: (_) => HubsListView(),
+        );
+
+      case tempHubsListPostReviewConsigPageRoute:
+        TempHubsListInputArguments arguments = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => TempHubsListView(
+            arguments: arguments,
+          ),
+        );
+      case tempAddHubsPostReviewConsigPageRoute:
+        TempAddHubsViewArguments arguments = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => TempAddHubsView(
+            arguments: arguments,
+          ),
         );
 
       default:

@@ -13,6 +13,7 @@ import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/app_tiles.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -235,7 +236,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       Expanded(
                         child: AppTiles(
                           title:
-                              'Total Collect (${viewModel.consignmentDetailResponseNew.itemUnit})',
+                              'Collect (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.collect ==
                                   0
@@ -254,7 +255,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                       Expanded(
                         child: AppTiles(
                           title:
-                              'Total Drop (${viewModel.consignmentDetailResponseNew.itemUnit})',
+                              'Drop (${viewModel.consignmentDetailResponseNew.itemUnit})',
                           value: viewModel
                                       .consignmentDetailResponseNew.dropOff ==
                                   0
@@ -480,17 +481,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
                                                         hideKeyboard(
                                                             context: context);
                                                         updateReviewConsignmentData(
+                                                            finished: true,
                                                             viewModel:
                                                                 viewModel,
                                                             index: index);
                                                         // update api call
-                                                        viewModel
-                                                            .updateConsignment(
-                                                          newRemarks:
-                                                              newRemarksController
-                                                                  .text
-                                                                  .trim(),
-                                                        );
+
+                                                        viewModel.takeToAddHubsAfterConsigReview(
+                                                            newRemarks:
+                                                                newRemarksController
+                                                                    .text
+                                                                    .trim());
                                                       }
                                                     : () {
                                                         // Next btn functionality
@@ -524,7 +525,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
               ),
             ),
           )
-        : Container();
+        : NoDataWidget();
   }
 
   Widget hubTitle(
@@ -939,6 +940,7 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
   void updateReviewConsignmentData({
     ViewConsignmentViewModel viewModel,
     int index,
+    bool finished = false,
     bool goForward = true,
     bool skip = false,
   }) {
@@ -958,15 +960,17 @@ class _ViewConsignmentViewState extends State<ViewConsignmentView> {
           .insert(index, tempReviewItem);
       viewModel.notifyListeners();
 
-      if (goForward) {
-        if (index < viewModel.consignmentDetailResponseNew.items.length) {
-          _controller.nextPage(
-              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-        }
-      } else {
-        if (index > 0) {
-          _controller.previousPage(
-              duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      if (!finished) {
+        if (goForward) {
+          if (index < viewModel.consignmentDetailResponseNew.items.length) {
+            _controller.nextPage(
+                duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          }
+        } else {
+          if (index > 0) {
+            _controller.previousPage(
+                duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          }
         }
       }
     }
