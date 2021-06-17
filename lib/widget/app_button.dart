@@ -14,18 +14,31 @@ class AppButton extends StatelessWidget {
   final String buttonText;
   final FontWeight buttonTextFontWeight;
 
-  const AppButton(
-      {Key key,
-      @required this.borderColor,
-      this.borderRadius = defaultBorder,
-      @required this.onTap,
-      this.onLongPressed,
-      @required this.background,
-      @required this.buttonText,
-      this.fontSize = 14,
-      this.borderWidth = 2,
-      this.buttonTextFontWeight = FontWeight.bold})
-      : super(key: key);
+  AppButton.normal({
+    Key key,
+    this.borderColor = AppColors.primaryColorShade5,
+    this.borderRadius = defaultBorder,
+    this.borderWidth = 0,
+    @required this.onTap,
+    this.onLongPressed,
+    this.background = AppColors.primaryColorShade5,
+    @required this.buttonText,
+    this.fontSize = 14,
+    this.buttonTextFontWeight = FontWeight.bold,
+  });
+
+  AppButton({
+    Key key,
+    @required this.borderColor,
+    this.borderRadius = defaultBorder,
+    @required this.onTap,
+    this.onLongPressed,
+    @required this.background,
+    @required this.buttonText,
+    this.fontSize = 14,
+    this.borderWidth = 2,
+    this.buttonTextFontWeight = FontWeight.bold,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 
 class SearchWidget extends StatelessWidget {
   final String hintTitle;
-
+  final bool autoFocus;
   final Function onEditingComplete;
   final Function onClearTextClicked;
   final Function onTextChange;
@@ -21,9 +21,15 @@ class SearchWidget extends StatelessWidget {
   final FocusNode focusNode;
   final TextInputType keyboardType;
   final Function onFieldSubmitted;
+  final Function onTap;
+  final showSuffixIcon;
+  final String searchIcon;
 
   const SearchWidget({
+    this.searchIcon,
+    this.showSuffixIcon = true,
     Key key,
+    this.onTap,
     @required this.hintTitle,
     this.enabled = true,
     @required this.onEditingComplete,
@@ -34,15 +40,19 @@ class SearchWidget extends StatelessWidget {
     @required this.focusNode,
     @required this.keyboardType,
     @required this.onFieldSubmitted,
+    this.autoFocus = false,
     this.textCapitalization = TextCapitalization.none,
   }) : super(key: key);
-  
+
   const SearchWidget.buttonLike({
+    this.searchIcon,
+    this.showSuffixIcon = true,
+    this.autoFocus = false,
     Key key,
     @required this.hintTitle,
     this.enabled = false,
     this.onEditingComplete,
-    @required this.onClearTextClicked,
+    this.onClearTextClicked,
     this.onTextChange,
     this.formatter,
     @required this.controller,
@@ -50,6 +60,7 @@ class SearchWidget extends StatelessWidget {
     this.keyboardType,
     this.onFieldSubmitted,
     this.textCapitalization = TextCapitalization.none,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
@@ -63,12 +74,13 @@ class SearchWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             IconBlueBackground(
-              iconName: searchBlueIcon,
+              iconName: searchIcon ?? searchBlueIcon,
             ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 2, right: 2),
                 child: TextFormField(
+                  autofocus: autoFocus,
                   decoration: InputDecoration(
                       hintText: hintTitle,
                       hintStyle: AppTextStyles().hintTextStyle),
@@ -95,18 +107,19 @@ class SearchWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                forwardArrowIcon,
-                height: 10,
-                width: 10,
+            if (showSuffixIcon)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  forwardArrowIcon,
+                  height: 10,
+                  width: 10,
+                ),
               ),
-            ),
           ],
         ),
       ),
-      onTap: null,
+      onTap: this.onTap,
       borderRadius: getBorderRadius(),
     );
   }

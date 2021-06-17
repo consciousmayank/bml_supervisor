@@ -90,122 +90,121 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
           //   },
           // ),
           hSizedBox(5),
-          widget.viewModel.hubsList.length ==0?NoDataWidget(label: 'No hubs yet'):
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Text(
-              'Hubs List',
-              style: AppTextStyles.latoBold14primaryColorShade6,
-            ),
-          ),
-          widget.viewModel.hubsList.length ==0?Container():
-          SearchWidget(
-            onClearTextClicked: () {
-
-              hideKeyboard(context: context);
-            },
-            hintTitle: 'Search for hub',
-            onTextChange: (String value) {
-              // viewModel.selectedVehicleId = value;
-              // viewModel.notifyListeners();
-            },
-            onEditingComplete: () {
-
-            },
-            formatter: <TextInputFormatter>[
-              TextFieldInputFormatter().alphaNumericFormatter,
-            ],
-            controller: TextEditingController(),
-            // focusNode: selectedRegNoFocusNode,
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (String value) {
-
-            },
-          ),
+          widget.viewModel.hubsList.length == 0
+              ? NoDataWidget(label: 'No hubs yet')
+              : Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    'Hubs List',
+                    style: AppTextStyles.latoBold14primaryColorShade6,
+                  ),
+                ),
+          widget.viewModel.hubsList.length == 0
+              ? Container()
+              : SearchWidget(
+                  focusNode: FocusNode(),
+                  onClearTextClicked: () {
+                    hideKeyboard(context: context);
+                  },
+                  hintTitle: 'Search for hub',
+                  onTextChange: (String value) {
+                    // viewModel.selectedVehicleId = value;
+                    // viewModel.notifyListeners();
+                  },
+                  onEditingComplete: () {},
+                  formatter: <TextInputFormatter>[
+                    TextFieldInputFormatter().alphaNumericFormatter,
+                  ],
+                  controller: TextEditingController(),
+                  // focusNode: selectedRegNoFocusNode,
+                  keyboardType: TextInputType.text,
+                  onFieldSubmitted: (String value) {},
+                ),
           // buildSearchDriverTextFormField(viewModel: widget.viewModel),
           hSizedBox(8),
-          widget.viewModel.hubsList.length ==0?Container():
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.primaryColorShade5,
-              // borderRadius: BorderRadius.only(
-              //   topLeft: Radius.circular(defaultBorder),
-              //   topRight: Radius.circular(defaultBorder),
-              // ),
-            ),
-            padding: EdgeInsets.all(15),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    ('SNO'),
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
+          widget.viewModel.hubsList.length == 0
+              ? Container()
+              : Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColorShade5,
                   ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Text(
-                    ('HUB NAME'),
-                    textAlign: TextAlign.left,
-                    style: AppTextStyles.whiteRegular,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          widget.viewModel.hubsList.length ==0?Container():
-          Expanded(
-            child: LazyLoadScrollView(
-                scrollOffset: 300,
-                onEndOfPage: () {
-                  widget.viewModel.gethubList(showLoading: false);
-                },
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        ClickableWidget(
-                          borderRadius: getBorderRadius(),
-                          onTap: () {
-                            widget.viewModel.openDriverDetailsBottomSheet(
-                                selectedDriverIndex: index);
-                          },
-                          child: SizedBox(
-                            height: 50,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '${index + 1}',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  flex: 1,
-                                ),
-                                wSizedBox(10),
-                                Expanded(
-                                  child: Text(
-                                    widget.viewModel.hubsList[index].title,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  flex: 5,
-                                )
-                              ],
-                            ),
-                          ),
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          ('SNO'),
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.whiteRegular,
                         ),
-                        DottedDivider()
-                      ],
-                    );
-                  },
-                  itemCount: widget.viewModel.hubsList.length,
-                )),
-          ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Text(
+                          ('HUB NAME'),
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          widget.viewModel.hubsList.length == 0
+              ? Container()
+              : Expanded(
+                  child: LazyLoadScrollView(
+                      scrollOffset: 300,
+                      onEndOfPage: () {
+                        widget.viewModel.gethubList(showLoading: false);
+                      },
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              ClickableWidget(
+                                borderRadius: getBorderRadius(),
+                                onTap: () {
+                                  widget.viewModel.openDriverDetailsBottomSheet(
+                                      selectedDriverIndex: index);
+                                },
+                                child: SizedBox(
+                                  height: 50,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${index + 1}',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        flex: 1,
+                                      ),
+                                      wSizedBox(10),
+                                      Expanded(
+                                        child: Text(
+                                          widget
+                                              .viewModel.hubsList[index].title,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        flex: 5,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              DottedDivider()
+                            ],
+                          );
+                        },
+                        itemCount: widget.viewModel.hubsList.length,
+                      )),
+                ),
         ],
       ),
     );
@@ -289,13 +288,13 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                 padding: EdgeInsets.all(8.0),
                 children: options
                     .map((String option) => GestureDetector(
-                  onTap: () {
-                    onSelected(option);
-                  },
-                  child: ListTile(
-                    title: Text(option),
-                  ),
-                ))
+                          onTap: () {
+                            onSelected(option);
+                          },
+                          child: ListTile(
+                            title: Text(option),
+                          ),
+                        ))
                     .toList(),
               ),
             ),
@@ -327,11 +326,11 @@ class _AddDriverBodyWidgetState extends State<AddDriverBodyWidget> {
                       iconName == null
                           ? Container()
                           : Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: IconBlueBackground(
-                          iconName: iconName,
-                        ),
-                      ),
+                              padding: const EdgeInsets.all(2.0),
+                              child: IconBlueBackground(
+                                iconName: iconName,
+                              ),
+                            ),
                       iconName == null ? Container() : wSizedBox(20),
                       Expanded(
                         child: Text(

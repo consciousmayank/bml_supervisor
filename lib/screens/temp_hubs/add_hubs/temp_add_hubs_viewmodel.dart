@@ -6,12 +6,12 @@ import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_api.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_api.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,6 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
   List<SingleTempHub> hubsList = [];
   TextEditingController pinCodeController = TextEditingController();
   FocusNode pinCodeFocusNode = FocusNode();
-  String proposedhubTitle = '';
 
   TextEditingController stateController = TextEditingController();
   FocusNode stateFocusNode = FocusNode();
@@ -122,24 +121,19 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
 
   void addToReturningHubsList(
       {SingleTempHub newHubObject, @required Function onErrorOccured}) async {
+    enteredHub = enteredHub.copyWith(
+      consignmentId: newHubObject.consignmentId,
+      title: newHubObject.title,
+    );
     if (validate(onErrorOccured: onErrorOccured)) {
-      setBusy(true);
-
-      enteredHub =
-          enteredHub.copyWith(consignmentId: newHubObject.consignmentId);
-
-      setBusy(false);
-      notifyListeners();
       takeBackWithResponse();
-    } else {}
+    }
   }
 
   void checkForExistingHubTitleContainsApi(String searchString) async {
     // setBusy(true);
     List<SingleTempHub> list = await _addHubsApis.getTransientHubsListBasedOn(
         searchString: searchString.trim());
-    proposedhubTitle = searchString;
-    enteredHub = enteredHub.copyWith(title: searchString);
     hubsList = copyList(list);
     notifyListeners();
   }

@@ -47,3 +47,4 @@ const String tempHubsListPostReviewConsigPageRoute =
     '/tempHubsListPostReviewConsigPageRoute';
 const String tempAddHubsPostReviewConsigPageRoute =
     '/tempAddHubsPostReviewConsigPageRoute';
+const String tempSearchForHubsPageRoute = '/tempSearchForHubsPageRoute';

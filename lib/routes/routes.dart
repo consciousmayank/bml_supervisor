@@ -3,9 +3,6 @@ import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_view.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_arguments.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/add_routes/add_routes_view.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hubs_arguments.dart';
@@ -39,6 +36,10 @@ import 'package:bml_supervisor/screens/hub/add/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
 import 'package:bml_supervisor/screens/payments/add/add_payment_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_view.dart';
 import '../screens/payments/view/payment_args.dart';
 import '../screens/payments/view/payments_view.dart';
 import 'package:bml_supervisor/screens/profile/changepassword/changepassword_view.dart';
@@ -312,6 +313,13 @@ class AppRouter {
         TempAddHubsViewArguments arguments = settings.arguments;
         return MaterialPageRoute(
           builder: (_) => TempAddHubsView(
+            arguments: arguments,
+          ),
+        );
+      case tempSearchForHubsPageRoute:
+        SearchForHubsViewArguments arguments = settings.arguments;
+        return MaterialPageRoute(
+          builder: (_) => SearchForHubsView(
             arguments: arguments,
           ),
         );

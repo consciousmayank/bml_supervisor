@@ -10,6 +10,7 @@ import 'package:bml_supervisor/screens/driver/add/address_type_bottomsheet.dart'
 import 'package:bml_supervisor/screens/driver/view/driver_details_botomsheet.dart';
 import 'package:bml_supervisor/screens/expenses/view/expenses_filter_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dart';
+import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_values_bottomSheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_reject_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_remarks_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/trips/reviewcompleted/review_warning_bottom_sheet.dart';
@@ -81,6 +82,10 @@ void setupBottomSheetUi() {
 
     BottomSheetType.ROUTES_BOTTOM_SHEET: (context, sheetRequest, completer) =>
         RoutesListBottomSheetView(request: sheetRequest, completer: completer),
+
+    BottomSheetType.TEMP_SEARCH_HUBS_ENTER_VALUES: (context, sheetRequest,
+            completer) =>
+        SeachForHubsBottomSheet(request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

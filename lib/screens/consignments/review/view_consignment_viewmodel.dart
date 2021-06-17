@@ -14,7 +14,7 @@ import 'package:bml_supervisor/models/routes_for_selected_client_and_date_respon
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 

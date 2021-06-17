@@ -1,14 +1,19 @@
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_viewmodel.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_details_widget.dart';
+import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_viewmodel.dart';
+import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_details_widget.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
+import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
+import 'package:bml_supervisor/widget/new_search_widget.dart';
+import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stacked/stacked.dart';
 
@@ -43,6 +48,7 @@ class _TempHubsListViewState extends State<TempHubsListView> {
             body: Padding(
               padding: getSidePadding(context: context),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
@@ -50,13 +56,32 @@ class _TempHubsListViewState extends State<TempHubsListView> {
                       top: 2,
                     ),
                     child: CreateNewButtonWidget(
-                        title: 'Add Hub Details',
+                        title: 'Add New Hub',
                         onTap: () {
                           model.onAddHubClicked(
                             reviewedConsigId: widget.arguments.reviewedConsigId,
                           );
                         }),
                   ),
+                  hSizedBox(5),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Hubs List',
+                      style: AppTextStyles.latoBold14primaryColorShade6,
+                    ),
+                  ),
+                  SearchWidget.buttonLike(
+                    searchIcon: addIcon,
+                    hintTitle: 'Select Hub',
+                    controller: TextEditingController(),
+                    onTap: () {
+                      model.onSearchForHubClicked(
+                        reviewedConsigId: widget.arguments.reviewedConsigId,
+                      );
+                    },
+                  ),
+                  hSizedBox(5),
                   if (model.hubsList.length > 0)
                     Container(
                       decoration:

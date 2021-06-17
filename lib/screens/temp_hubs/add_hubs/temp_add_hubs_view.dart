@@ -1,16 +1,9 @@
 import 'dart:async';
 
 import 'package:bml_supervisor/app_level/colors.dart';
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:bml_supervisor/app_level/themes.dart';
-import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
-import 'package:bml_supervisor/models/hub_data_response.dart';
-import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_viewmodel.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
-import 'package:bml_supervisor/screens/hub/add/add_hubs_viewmodel.dart';
+import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
@@ -20,19 +13,19 @@ import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/app_dropdown.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';
 import 'package:bml_supervisor/widget/bottomSheetDropdown/bottom_sheet_drop_down_view.dart';
-import 'package:bml_supervisor/widget/client_dropdown.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 class TempAddHubsView extends StatefulWidget {
-  final TempAddHubsViewArguments arguments;
   const TempAddHubsView({
     Key key,
     @required this.arguments,
   }) : super(key: key);
+
+  final TempAddHubsViewArguments arguments;
+
   @override
   _TempAddHubsViewState createState() => _TempAddHubsViewState();
 }
@@ -60,6 +53,7 @@ class _TempAddHubsViewState extends State<TempAddHubsView> {
                     itemCount: 20,
                   )
                 : AddHubBodyWidget(
+                    hubTitle: widget.arguments.hubTitle,
                     reviewedConsigId: widget.arguments.reviewedConsigId,
                     viewModel: model,
                     hubsList: model.hubsList,
@@ -75,142 +69,75 @@ class _TempAddHubsViewState extends State<TempAddHubsView> {
 }
 
 class AddHubBodyWidget extends StatefulWidget {
-  final TempAddHubsViewModel viewModel;
+  const AddHubBodyWidget({
+    Key key,
+    @required this.viewModel,
+    @required this.hubsList,
+    @required this.reviewedConsigId,
+    this.hubTitle,
+  }) : super(key: key);
+
   final List<SingleTempHub> hubsList;
   final int reviewedConsigId;
-  const AddHubBodyWidget(
-      {Key key,
-      @required this.viewModel,
-      @required this.hubsList,
-      @required this.reviewedConsigId})
-      : super(key: key);
+  final String hubTitle;
+  final TempAddHubsViewModel viewModel;
 
   @override
   _AddHubBodyWidgetState createState() => _AddHubBodyWidgetState();
 }
 
 class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
-  TextEditingController hubTitleController = TextEditingController();
-  FocusNode hubTitleFocusNode = FocusNode();
-
-  TextEditingController doRController = TextEditingController();
-  FocusNode doRFocusNode = FocusNode();
-
-  TextEditingController contactPersonController = TextEditingController();
-  FocusNode contactPersonFocusNode = FocusNode();
-
-  TextEditingController itemsCollectController = TextEditingController();
-  FocusNode itemsCollectFocusNode = FocusNode();
-
-  TextEditingController itemsDropController = TextEditingController();
-  FocusNode itemsDropFocusNode = FocusNode();
-
-  TextEditingController contactNumberController = TextEditingController();
-
-  FocusNode contactNumberFocusNode = FocusNode();
-
   TextEditingController alternateMobileNumberController =
       TextEditingController();
-  FocusNode alternateMobileNumberFocusNode = FocusNode();
 
+  FocusNode alternateMobileNumberFocusNode = FocusNode();
+  GlobalKey autocompleteKey = GlobalKey();
+  TextEditingController cityController = TextEditingController();
+  FocusNode cityFocusNode = FocusNode();
+  TextEditingController contactNumberController = TextEditingController();
+  FocusNode contactNumberFocusNode = FocusNode();
+  TextEditingController contactPersonController = TextEditingController();
+  FocusNode contactPersonFocusNode = FocusNode();
+  TextEditingController doRController = TextEditingController();
+  FocusNode doRFocusNode = FocusNode();
   TextEditingController emailController = TextEditingController();
   FocusNode emailFocusNode = FocusNode();
-
+  FocusNode focusNode = FocusNode();
+  TextEditingController houseNoBuildingNameController = TextEditingController();
+  FocusNode houseNoBuildingNameFocusNode = FocusNode();
+  TextEditingController hubTitleController = TextEditingController();
+  FocusNode hubTitleFocusNode = FocusNode();
+  TextEditingController itemsCollectController = TextEditingController();
+  FocusNode itemsCollectFocusNode = FocusNode();
+  TextEditingController itemsDropController = TextEditingController();
+  FocusNode itemsDropFocusNode = FocusNode();
+  TextEditingController landmarkController = TextEditingController();
+  FocusNode landmarkFocusNode = FocusNode();
+  TextEditingController latitudeController = TextEditingController();
+  FocusNode latitudeFocusNode = FocusNode();
+  TextEditingController localityController = TextEditingController();
+  FocusNode localityFocusNode = FocusNode();
+  TextEditingController longitudeController = TextEditingController();
+  FocusNode longitudeFocusNode = FocusNode();
+  TextEditingController remarkController = TextEditingController();
+  FocusNode remarkFocusNode = FocusNode();
   TextEditingController streetController = TextEditingController();
   FocusNode streetFocusNode = FocusNode();
 
-  TextEditingController houseNoBuildingNameController = TextEditingController();
-  FocusNode houseNoBuildingNameFocusNode = FocusNode();
-
-  TextEditingController localityController = TextEditingController();
-  FocusNode localityFocusNode = FocusNode();
-
-  TextEditingController landmarkController = TextEditingController();
-  FocusNode landmarkFocusNode = FocusNode();
-
-  TextEditingController cityController = TextEditingController();
-  FocusNode cityFocusNode = FocusNode();
-
-  TextEditingController latitudeController = TextEditingController();
-  FocusNode latitudeFocusNode = FocusNode();
-
-  TextEditingController longitudeController = TextEditingController();
-  FocusNode longitudeFocusNode = FocusNode();
-
-  TextEditingController remarkController = TextEditingController();
-  FocusNode remarkFocusNode = FocusNode();
-
+  Timer _debounce;
+  final List<GlobalKey> _key = List.generate(25, (index) => GlobalKey());
   final TextEditingController _textEditingController = TextEditingController();
 
-  FocusNode focusNode = FocusNode();
-  GlobalKey autocompleteKey = GlobalKey();
-
-  final List<GlobalKey> _key = List.generate(25, (index) => GlobalKey());
-
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: getSidePadding(context: context),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildHubTitleTextFormField(viewModel: widget.viewModel),
-            widget.viewModel.hubsList.length > 0
-                ? buildExistingHubBottomSheetDropDown()
-                : Container(),
-            AppDropDown(
-              showUnderLine: true,
-              selectedValue: widget.viewModel.enteredHub.itemUnit != null
-                  ? widget.viewModel.enteredHub.itemUnit
-                  : null,
-              hint: "Item Unit",
-              onOptionSelect: (selectedValue) {
-                widget.viewModel.enteredHub = widget.viewModel.enteredHub
-                    .copyWith(itemUnit: selectedValue);
-                widget.viewModel.notifyListeners();
-                itemsDropFocusNode.requestFocus();
-              },
-              optionList: selectItemUnit,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: dropInput(),
-                  flex: 1,
-                ),
-                wSizedBox(10),
-                Expanded(
-                  child: collectInput(),
-                  flex: 1,
-                ),
-              ],
-            ),
-            buildAddressSelector(),
-            buildHnoBuildingNameTextFormField(),
-            buildStreetTextFormField(),
-            buildLocalityTextFormField(),
-            widget.viewModel.cityList.length > 0
-                ? buildCityTextFormField(viewModel: widget.viewModel)
-                : Container(),
-            buildStateTextFormField(),
-            buildCountryTextFormField(),
-            buildPinCodeTextFormField(),
-            buildContactPersonView(),
-            buildContactNumberTextFormField(),
-            buildLatitudeTextFormField(),
-            buildLongitudeTextFormField(),
-            buildRemarksTextFormField(),
-            buildSaveButton(),
-          ],
-        ),
-      ),
-    );
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   BottomSheetDropDown<SingleTempHub> buildExistingHubBottomSheetDropDown() {
     return BottomSheetDropDown<SingleTempHub>(
       bottomSheetTitle: 'Existing Hub(s)',
-      supportText: widget.viewModel.proposedhubTitle,
+      supportText: hubTitleController.text,
       bottomSheetDropDownType: BottomSheetDropDownType.EXISTING_TEMP_HUBS_LIST,
       key: _key[19],
       allowedValue: widget.viewModel.hubsList,
@@ -221,44 +148,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       onValueSelected: (
         SingleTempHub selectedValue,
         int selectedIndex,
-      ) {
-        widget.viewModel.enteredHub = widget.viewModel.enteredHub.copyWith(
-          title: selectedValue.title,
-          consignmentId: widget.reviewedConsigId,
-          itemUnit: null,
-          dropOff: null,
-          collect: null,
-          contactPerson: selectedValue.contactPerson,
-          mobile: selectedValue.mobile,
-          addressType: selectedValue.addressType,
-          addressLine1: selectedValue.addressLine1,
-          addressLine2: selectedValue.addressLine2,
-          locality: selectedValue.locality,
-          nearby: selectedValue.nearby,
-          city: selectedValue.city,
-          state: selectedValue.state,
-          country: selectedValue.country,
-          pincode: selectedValue.pincode,
-          geoLatitude: selectedValue.geoLatitude,
-          geoLongitude: selectedValue.geoLongitude,
-          remarks: selectedValue.remarks,
-        );
-
-        widget.viewModel.notifyListeners();
-      },
-    );
-  }
-
-  Widget selectClientForDashboardStats({AddHubsViewModel viewModel}) {
-    return ClientsDropDown(
-      optionList: viewModel.clientsList,
-      hint: "Select Client",
-      onOptionSelect: (GetClientsResponse selectedValue) {
-        viewModel.selectedClient = selectedValue;
-        // viewModel.getDistributors(selectedClient: selectedValue);
-      },
-      selectedClient:
-          viewModel.selectedClient == null ? null : viewModel.selectedClient,
+      ) {},
     );
   }
 
@@ -271,6 +161,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
           onTap: () {
             widget.viewModel.addToReturningHubsList(
                 newHubObject: SingleTempHub.empty().copyWith(
+                  title: hubTitleController.text,
                   consignmentId: widget.reviewedConsigId,
                 ),
                 onErrorOccured: (widgetType) =>
@@ -281,20 +172,10 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
-  Timer _debounce;
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    super.dispose();
-  }
-
   Widget buildHubTitleTextFormField({TempAddHubsViewModel viewModel}) {
-    hubTitleController =
-        TextEditingController(text: viewModel.enteredHub.title);
-
-    hubTitleController.selection = TextSelection.fromPosition(
-        TextPosition(offset: hubTitleController.text.length));
+    if (widget.hubTitle != null && widget.hubTitle.trim().length > 0) {
+      hubTitleController.text = widget.hubTitle;
+    }
     return appTextFormField(
       buttonType: hubTitleController.text.length > 0
           ? ButtonType.SMALL
@@ -303,6 +184,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       buttonLabelText: 'Reset',
       onButtonPressed: () {
         viewModel.resetForm();
+        hubTitleController.clear();
       },
       controller: hubTitleController,
       enabled: true,
@@ -310,16 +192,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       hintText: addHubsHubNameHint,
       keyboardType: TextInputType.text,
       onTextChange: (String value) {
-        if (value.length > 1 && viewModel.enteredHub.title != value) {
-          if (_debounce?.isActive ?? false) _debounce.cancel();
-          _debounce = Timer(
-              const Duration(
-                seconds: 1,
-              ), () {
-            viewModel.checkForExistingHubTitleContainsApi(value);
-            print("Value :: $value");
-          });
-        }
+        viewModel.checkForExistingHubTitleContainsApi(value);
       },
       onFieldSubmitted: (_) {
         hubTitleFocusNode.unfocus();
@@ -852,15 +725,78 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
         break;
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: getSidePadding(context: context),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildHubTitleTextFormField(viewModel: widget.viewModel),
+            widget.viewModel.hubsList.length > 0
+                ? buildExistingHubBottomSheetDropDown()
+                : Container(),
+            AppDropDown(
+              showUnderLine: true,
+              selectedValue: widget.viewModel.enteredHub.itemUnit != null
+                  ? widget.viewModel.enteredHub.itemUnit
+                  : null,
+              hint: "Item Unit",
+              onOptionSelect: (selectedValue) {
+                widget.viewModel.enteredHub = widget.viewModel.enteredHub
+                    .copyWith(itemUnit: selectedValue);
+                widget.viewModel.notifyListeners();
+                itemsDropFocusNode.requestFocus();
+              },
+              optionList: selectItemUnit,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: dropInput(),
+                  flex: 1,
+                ),
+                wSizedBox(10),
+                Expanded(
+                  child: collectInput(),
+                  flex: 1,
+                ),
+              ],
+            ),
+            buildAddressSelector(),
+            buildHnoBuildingNameTextFormField(),
+            buildStreetTextFormField(),
+            buildLocalityTextFormField(),
+            widget.viewModel.cityList.length > 0
+                ? buildCityTextFormField(viewModel: widget.viewModel)
+                : Container(),
+            buildStateTextFormField(),
+            buildCountryTextFormField(),
+            buildPinCodeTextFormField(),
+            buildContactPersonView(),
+            buildContactNumberTextFormField(),
+            buildLatitudeTextFormField(),
+            buildLongitudeTextFormField(),
+            buildRemarksTextFormField(),
+            buildSaveButton(),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class TempAddHubsViewArguments {
-  final int reviewedConsigId;
-  final List<SingleTempHub> hubsList;
   TempAddHubsViewArguments({
     @required this.reviewedConsigId,
     this.hubsList,
+    this.hubTitle,
   });
+
+  final List<SingleTempHub> hubsList;
+  final int reviewedConsigId;
+  final String hubTitle;
 }
 
 enum ErrorWidgetType {

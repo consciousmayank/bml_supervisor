@@ -5,9 +5,10 @@ import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/add_hubs/temp_add_hubs_view.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/hubs_list/temp_hubs_list_args.dart';
-import 'package:bml_supervisor/screens/consignments/review/temp_hubs/temp_hubs_api.dart';
+import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
+import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_view.dart';
+import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_api.dart';
 import 'package:flutter/material.dart';
 
 class TempHubsListViewModel extends GeneralisedBaseViewModel {
@@ -25,6 +26,23 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
       if (value != null) {
         TempHubsListOutputArguments arguments = value;
         hubsList.add(arguments.enteredHub);
+        notifyListeners();
+      }
+    });
+  }
+
+  void onSearchForHubClicked({@required int reviewedConsigId}) {
+    navigationService
+        .navigateTo(
+      tempSearchForHubsPageRoute,
+      arguments: SearchForHubsViewArguments(
+        consignmentId: reviewedConsigId,
+      ),
+    )
+        .then((value) {
+      if (value != null) {
+        SearchForHubsViewOutpuArguments arguments = value;
+        hubsList.add(arguments.selectedHub);
         notifyListeners();
       }
     });

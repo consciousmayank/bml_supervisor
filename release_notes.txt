@@ -1,7 +1,3 @@
 In this build the following updates were done :-
 
-1. Before submitting a consignment for review, manager has an option to add hubs to the consignment.
-2. Ge can add temprary hubs.
-    2.1. While adding the hubs, once manager enters a hub title. App will show any hubs matching the entered hub title. manger can the select one hub from the options.
-    2.3. Once manager clicks the cross icon the whole data will be reformatted, whatever he has entered.
-3. The page where hub list are shown which manager has entered, he can swipe to remove the hubs from the list.
+1. Add temp hubs functionality made as per new discussion.
