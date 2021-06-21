@@ -114,6 +114,8 @@ final GET_ALL_HUBS_FOR_CLIENT =
 final CHECK_HUB_TITLE_CONTAINS = (hubTitle) => '/hub/title/contains/$hubTitle';
 final GET_TRANSIENT_HUBS_LIST_BASED_ON =
     (searchString) => '/hub/transient/title/contains/$searchString/page/1';
+final GET_TRANSIENT_HUBS_LIST = (clientId, pageNumber) =>
+    '/hub/transient/list/client/$clientId/page/$pageNumber';
 
 final GET_EXPESNE_PERIOD =
     (clientId) => '/expense/client/$clientId/period/list';

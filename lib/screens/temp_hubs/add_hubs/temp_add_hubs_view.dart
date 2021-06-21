@@ -300,6 +300,29 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     );
   }
 
+  Widget buildLandmarkTextFormField() {
+    return appTextFormField(
+      enabled: true,
+      formatter: <TextInputFormatter>[
+        TextFieldInputFormatter()
+            .alphaNumericWithSpaceSlashHyphenUnderScoreFormatter,
+      ],
+      controller: landmarkController,
+      focusNode: landmarkFocusNode,
+      hintText: addDriverLandmarkHint,
+      keyboardType: TextInputType.text,
+      validator: FormValidators().normalValidator,
+      onTextChange: (String value) {
+        widget.viewModel.enteredHub =
+            widget.viewModel.enteredHub.copyWith(nearby: value);
+      },
+      onFieldSubmitted: (_) {
+        fieldFocusChange(
+            context, landmarkFocusNode, widget.viewModel.cityFocusNode);
+      },
+    );
+  }
+
   Widget buildStreetTextFormField() {
     if (widget.viewModel.enteredHub.addressLine2 != null) {
       streetController.text = widget.viewModel.enteredHub.addressLine2;
@@ -454,7 +477,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     return appTextFormField(
       onTextChange: (String value) {
         widget.viewModel.enteredHub = widget.viewModel.enteredHub.copyWith(
-          dropOff: double.parse(value),
+          dropOff: value.trim().length == 0 ? 0 : double.parse(value),
         );
         // widget.viewModel.notifyListeners();
       },
@@ -489,7 +512,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
     return appTextFormField(
       onTextChange: (String value) {
         widget.viewModel.enteredHub = widget.viewModel.enteredHub.copyWith(
-          collect: double.parse(value),
+          collect: value.trim().length == 0 ? 0 : double.parse(value),
         );
         // widget.viewModel.notifyListeners();
       },
@@ -723,6 +746,9 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
       case ErrorWidgetType.CONTACT_NUMBER:
         contactNumberFocusNode.requestFocus();
         break;
+      case ErrorWidgetType.LANDMARK:
+        landmarkFocusNode.requestFocus();
+        break;
     }
   }
 
@@ -768,6 +794,7 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
             buildHnoBuildingNameTextFormField(),
             buildStreetTextFormField(),
             buildLocalityTextFormField(),
+            buildLandmarkTextFormField(),
             widget.viewModel.cityList.length > 0
                 ? buildCityTextFormField(viewModel: widget.viewModel)
                 : Container(),
@@ -807,6 +834,7 @@ enum ErrorWidgetType {
   STREET,
   LOCALITY,
   CITY,
+  LANDMARK,
   PINCODE,
   CONTACT_PERSON,
   CONTACT_NUMBER,

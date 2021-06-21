@@ -944,6 +944,22 @@ class ApiService {
     return ParentApiResponse(error: error, response: response);
   }
 
+  Future<ParentApiResponse> getTransientHubsList({
+    int clientId,
+    int pageNumber,
+  }) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_TRANSIENT_HUBS_LIST(clientId, pageNumber),
+          );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
   Future<ParentApiResponse> addTransientHubs({
     @required List<SingleTempHub> body,
   }) async {

@@ -32,7 +32,7 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SearchForHubsViewModel>.reactive(
-      onModelReady: (model) => model.gethubList(showLoading: true),
+      onModelReady: (model) => model.getTransientHubList(showLoading: true),
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -60,16 +60,21 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
                           model.hubsList.clear();
                           model.notifyListeners();
                           hubSearchController.clear();
+                          model.changeListViewHubsList(
+                              hubListType: HubListType.TRANSIENT_HUBS_LIST);
                           hideKeyboard(context: context);
                         },
                         hintTitle: 'Search for Hub',
                         onTextChange: (String value) {
-                          model.checkForExistingHubTitleContainsApi(value);
+                          if (value.trim().length == 0) {
+                            model.changeListViewHubsList(
+                                hubListType: HubListType.TRANSIENT_HUBS_LIST);
+                          } else {
+                            model.checkForExistingHubTitleContainsApi(value);
+                          }
                         },
                         onEditingComplete: () {
                           hideKeyboard(context: context);
-                          // model.checkForExistingHubTitleContainsApi(
-                          //     hubSearchController.text);
                         },
                         formatter: <TextInputFormatter>[
                           TextFieldInputFormatter().alphaNumericFormatter,
@@ -78,7 +83,6 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
                         keyboardType: TextInputType.text,
                         onFieldSubmitted: (String value) {
                           hideKeyboard(context: context);
-                          // model.checkForExistingHubTitleContainsApi(value);
                         },
                       ),
                       hSizedBox(5),
@@ -134,7 +138,7 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
                               child: LazyLoadScrollView(
                                 scrollOffset: 100,
                                 onEndOfPage: () {
-                                  model.gethubList(showLoading: false);
+                                  model.getTransientHubList(showLoading: false);
                                 },
                                 child: ListView.builder(
                                   itemBuilder: (context, index) => Column(

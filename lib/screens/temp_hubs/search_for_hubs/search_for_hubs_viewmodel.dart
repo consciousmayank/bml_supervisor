@@ -2,10 +2,8 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
-import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
 import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_view.dart';
 import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_values_bottomSheet.dart';
 import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_view.dart';
@@ -17,6 +15,7 @@ import 'package:stacked_services/stacked_services.dart';
 class SearchForHubsViewModel extends GeneralisedBaseViewModel {
   AddTempHubsApis _addTempHubsApis = locator<AddTempHubsApisImpl>();
   List<SingleTempHub> hubsList = [];
+  List<SingleTempHub> transientHubsList = [];
 
   void checkForExistingHubTitleContainsApi(String searchString) async {
     // setBusy(true);
@@ -63,23 +62,24 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
 
   bool shouldCallGetHubListApi = true;
   int pageNumber = 1;
-  AddHubsApis _addHubsApis = locator<AddHubApisImpl>();
 
-  gethubList({@required bool showLoading}) async {
+  getTransientHubList({@required bool showLoading}) async {
     if (shouldCallGetHubListApi) {
       if (showLoading) {
         setBusy(true);
         hubsList = [];
       }
 
-      List<HubResponse> response = await _addHubsApis.getAllHubsForClient(
-          pageNumber: pageNumber,
-          clientId: MyPreferences()?.getSelectedClient()?.clientId);
+      List<SingleTempHub> response =
+          await _addTempHubsApis.getTransientHubsList(
+        pageNumber: pageNumber,
+        clientId: MyPreferences()?.getSelectedClient()?.clientId,
+      );
       if (response.length > 0) {
         if (pageNumber == 0) {
-          hubsList = copyList(convertResponse(response));
+          transientHubsList = copyList((response));
         } else {
-          hubsList.addAll(convertResponse(response));
+          transientHubsList.addAll((response));
         }
 
         pageNumber++;
@@ -87,39 +87,24 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
         shouldCallGetHubListApi = false;
       }
       if (showLoading) setBusy(false);
+      changeListViewHubsList(hubListType: HubListType.TRANSIENT_HUBS_LIST);
       notifyListeners();
     }
   }
 
-  List<SingleTempHub> convertResponse(List<HubResponse> response) {
-    List<SingleTempHub> returningResponse = [];
-    response.forEach((element) {
-      returningResponse.add(
-        SingleTempHub(
-          clientId: element.clientId,
-          consignmentId: 2,
-          itemUnit: 'None',
-          dropOff: 0,
-          collect: 0,
-          title: element.title,
-          contactPerson: element.contactPerson,
-          mobile: element.mobile,
-          addressType: 'none',
-          addressLine1: element.street,
-          addressLine2: element.street,
-          locality: element.locality,
-          nearby: element.street,
-          city: element.city,
-          state: element.state,
-          country: element.country,
-          pincode: element.pincode,
-          geoLatitude: element.geoLatitude,
-          geoLongitude: element.geoLongitude,
-          remarks: element.remarks,
-        ),
-      );
-    });
+  void changeListViewHubsList({@required HubListType hubListType}) {
+    switch (hubListType) {
+      case HubListType.TRANSIENT_HUBS_LIST:
+        hubsList = copyList(transientHubsList);
+        break;
 
-    return returningResponse;
+      case HubListType.TRANSIENT_HUBS_WITH_ENTERED_NAME:
+        break;
+    }
   }
+}
+
+enum HubListType {
+  TRANSIENT_HUBS_LIST,
+  TRANSIENT_HUBS_WITH_ENTERED_NAME,
 }

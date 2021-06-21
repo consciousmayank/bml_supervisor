@@ -10,6 +10,7 @@ import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.d
 import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_view.dart';
 import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_api.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class TempHubsListViewModel extends GeneralisedBaseViewModel {
   AddTempHubsApis _addHubsApis = locator<AddTempHubsApisImpl>();
@@ -87,8 +88,29 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
     )
         .then((value) {
       if (value != null) {
-        navigationService.back(result: true);
+        if (value.confirmed) {
+          navigationService.back(result: true);
+        }
       }
     });
+  }
+
+  Future<bool> openConfirmBackBottomSheet() async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      customData: ConfirmationBottomSheetInputArgs(
+          title: 'Do you really want to go back?',
+          description: 'The selected/added hubs will be lost.',
+          positiveButtonTitle: 'Yes',
+          negativeButtonTitle: 'No'),
+      barrierDismissible: true,
+      isScrollControlled: true,
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+    );
+
+    if (sheetResponse == null) {
+      return Future.value(false);
+    } else {
+      return Future.value(sheetResponse.confirmed);
+    }
   }
 }

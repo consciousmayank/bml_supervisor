@@ -169,10 +169,11 @@ class _ConfirmationBottomSheet extends StatelessWidget {
               child: SizedBox(
                 height: buttonHeight,
                 child: AppButton(
-                    borderColor: AppColors.primaryColorShade5,
-                    onTap: () => completer(SheetResponse(confirmed: false)),
-                    background: AppColors.primaryColorShade5,
-                    buttonText: 'No'),
+                  borderColor: AppColors.primaryColorShade5,
+                  onTap: () => completer(SheetResponse(confirmed: false)),
+                  background: AppColors.primaryColorShade5,
+                  buttonText: customData.negativeButtonTitle,
+                ),
               ),
               flex: 1,
             ),
@@ -182,10 +183,11 @@ class _ConfirmationBottomSheet extends StatelessWidget {
               child: SizedBox(
                 height: buttonHeight,
                 child: AppButton(
-                    borderColor: AppColors.primaryColorShade5,
-                    onTap: () => completer(SheetResponse(confirmed: true)),
-                    background: AppColors.primaryColorShade5,
-                    buttonText: 'Yes'),
+                  borderColor: AppColors.primaryColorShade5,
+                  onTap: () => completer(SheetResponse(confirmed: true)),
+                  background: AppColors.primaryColorShade5,
+                  buttonText: customData.positiveButtonTitle,
+                ),
               ),
               flex: 1,
             ),

@@ -8,6 +8,11 @@ abstract class AddTempHubsApis extends BaseApi {
   Future<List<SingleTempHub>> getTransientHubsListBasedOn(
       {@required String searchString});
 
+  Future<List<SingleTempHub>> getTransientHubsList({
+    @required int clientId,
+    @required int pageNumber,
+  });
+
   Future<ApiResponse> addTransientHubs({
     @required List<SingleTempHub> hubList,
   });
@@ -21,6 +26,30 @@ class AddTempHubsApisImpl extends AddTempHubsApis {
 
     ParentApiResponse response = await apiService.getTransientHubsListBasedOn(
         searchString: searchString);
+
+    if (filterResponse(response, showSnackBar: false) != null) {
+      var list = response.response.data as List;
+
+      for (Map item in list) {
+        SingleTempHub singleDayReport = SingleTempHub.fromMap(item);
+        responseList.add(singleDayReport);
+      }
+    }
+
+    return responseList;
+  }
+
+  @override
+  Future<List<SingleTempHub>> getTransientHubsList({
+    @required int clientId,
+    @required int pageNumber,
+  }) async {
+    List<SingleTempHub> responseList = [];
+
+    ParentApiResponse response = await apiService.getTransientHubsList(
+      clientId: clientId,
+      pageNumber: pageNumber,
+    );
 
     if (filterResponse(response, showSnackBar: false) != null) {
       var list = response.response.data as List;

@@ -148,12 +148,14 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
   String titleError, itemUnitError, addressTypeError;
 
   bool validate({Function onErrorOccured}) {
+    bool allFieldsValidated = true;
+
     if (enteredHub.title == null) {
       makeSnackbarMessage(
           message: 'Please enter Hub title',
           onOkButtonclicked: onErrorOccured(ErrorWidgetType.TITLE));
       titleError = textRequired;
-      return false;
+      allFieldsValidated = false;
     } else if (enteredHub.title.length < 8) {
       makeSnackbarMessage(
         message: 'Hub Title Length should be greater than 7',
@@ -162,12 +164,14 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
         ),
       );
       titleError = 'Hub Title Length should be greater than 7';
+      allFieldsValidated = false;
     } else if (enteredHub.itemUnit == null) {
       makeSnackbarMessage(
         message: 'Item unit is required.',
         onOkButtonclicked: null,
       );
       itemUnitError = textRequired;
+      allFieldsValidated = false;
     } else if ((enteredHub.dropOff == null || enteredHub.dropOff == 0) &&
         (enteredHub.collect == null || enteredHub.collect == 0)) {
       makeSnackbarMessage(
@@ -176,11 +180,13 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.DROP_INPUT,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.addressType == null) {
       makeSnackbarMessage(
         message: 'Please enter an address type',
         onOkButtonclicked: null,
       );
+      allFieldsValidated = false;
     } else if (enteredHub.addressLine1 == null ||
         enteredHub.addressLine1.trim().length == 0) {
       makeSnackbarMessage(
@@ -189,6 +195,7 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.HOUSE_N0_BUULDING_NAME,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.addressLine2 == null ||
         enteredHub.addressLine2.trim().length == 0) {
       makeSnackbarMessage(
@@ -197,6 +204,7 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.STREET,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.locality == null ||
         enteredHub.addressLine2.trim().length == 0) {
       makeSnackbarMessage(
@@ -205,6 +213,7 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.LOCALITY,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.city == null || enteredHub.city.trim().length == 0) {
       makeSnackbarMessage(
         message: 'Please enter city',
@@ -212,6 +221,16 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.CITY,
         ),
       );
+      allFieldsValidated = false;
+    } else if (enteredHub.nearby == null ||
+        enteredHub.nearby.trim().length == 0) {
+      makeSnackbarMessage(
+        message: 'Please enter landmark',
+        onOkButtonclicked: onErrorOccured(
+          ErrorWidgetType.LANDMARK,
+        ),
+      );
+      allFieldsValidated = false;
     } else if (enteredHub.pincode == null ||
         enteredHub.pincode.trim().length == 0) {
       makeSnackbarMessage(
@@ -220,6 +239,7 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.PINCODE,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.contactPerson == null ||
         enteredHub.contactPerson.trim().length == 0) {
       makeSnackbarMessage(
@@ -228,6 +248,7 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.CONTACT_PERSON,
         ),
       );
+      allFieldsValidated = false;
     } else if (enteredHub.mobile == null ||
         enteredHub.mobile.trim().length == 0) {
       makeSnackbarMessage(
@@ -236,9 +257,10 @@ class TempAddHubsViewModel extends GeneralisedBaseViewModel {
           ErrorWidgetType.CONTACT_NUMBER,
         ),
       );
-    } else {
-      return true;
+      allFieldsValidated = false;
     }
+
+    return allFieldsValidated;
   }
 
   makeSnackbarMessage({

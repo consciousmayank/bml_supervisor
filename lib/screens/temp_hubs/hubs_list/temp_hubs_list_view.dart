@@ -35,8 +35,12 @@ class _TempHubsListViewState extends State<TempHubsListView> {
       builder: (context, model, child) => SafeArea(
         child: WillPopScope(
           onWillPop: () {
-            model.navigationService.back(result: false);
-            return Future.value(false);
+            if (model.hubsList.length == 0) {
+              model.navigationService.back(result: false);
+              return Future.value(false);
+            } else {
+              return model.openConfirmBackBottomSheet();
+            }
           },
           child: Scaffold(
             appBar: AppBar(
@@ -72,7 +76,7 @@ class _TempHubsListViewState extends State<TempHubsListView> {
                     ),
                   ),
                   SearchWidget.buttonLike(
-                    searchIcon: addIcon,
+                    searchIcon: addHubIcon,
                     hintTitle: 'Select Hub',
                     controller: TextEditingController(),
                     onTap: () {
