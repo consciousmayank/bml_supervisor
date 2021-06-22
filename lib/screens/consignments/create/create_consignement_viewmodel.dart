@@ -8,6 +8,9 @@ import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_
 import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
+import 'package:bml_supervisor/models/login_response.dart';
+import 'package:bml_supervisor/models/pushnotification.dart';
+import 'package:bml_supervisor/models/pushnotification.dart' as pN;
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
@@ -52,7 +55,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   CreateConsignmentRequest _consignmentRequest;
-  SearchByRegNoResponse _validatedRegistrationNumber;
+  LoginResponse _validatedRegistrationNumber;
   DateTime _entryDate;
   TimeOfDay _dispatchTime = TimeOfDay.now();
 
@@ -76,10 +79,9 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  SearchByRegNoResponse get validatedRegistrationNumber =>
-      _validatedRegistrationNumber;
+  LoginResponse get validatedRegistrationNumber => _validatedRegistrationNumber;
 
-  set validatedRegistrationNumber(SearchByRegNoResponse value) {
+  set validatedRegistrationNumber(LoginResponse value) {
     _validatedRegistrationNumber = value;
     notifyListeners();
   }
@@ -147,7 +149,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     consignmentRequest = null;
     setBusy(true);
     validatedRegistrationNumber =
-        await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
+        await _consignmentApis.getDriverDetails(registrationNumber: regNum);
     if (validatedRegistrationNumber != null) {
       initializeConsignments();
     } else {
@@ -178,7 +180,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     consignmentRequest = CreateConsignmentRequest(
         itemUnit: itemUnit,
         weight: this.totalWeight,
-        vehicleId: validatedRegistrationNumber.registrationNumber,
+        // vehicleId: validatedRegistrationNumber.registrationNumber,
         clientId: selectedClient.clientId,
         routeId: selectedRoute.routeId,
         entryDate: getConvertedDate(entryDate),
@@ -300,5 +302,22 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
       customData: consignmentsList,
       variant: BottomSheetType.consignmentList,
     );
+  }
+
+  void sendNotification() async {
+    Data data = Data(
+        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+        title: "Clicked",
+        body: "This is a test for push notification from manager app.");
+    Pushnotification pushnotification = Pushnotification(
+        priority: 'HIGH',
+        data: data,
+        notification: pN.Notification(title: data.title, body: data.body),
+        to: validatedRegistrationNumber.fcmId);
+
+    var response = await _consignmentApis.sendPushNotification(
+        notification: pushnotification);
+
+    // validatedRegistrationNumber
   }
 }

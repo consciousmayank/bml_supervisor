@@ -310,14 +310,14 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                               ),
 
                               ///line chart (Routes Driven Kilometers)
-                              LineChartView(
-                                key: ValueKey(4),
-                                clientId: MyPreferences()
-                                    ?.getSelectedClient()
-                                    ?.clientId,
-                                selectedDuration:
-                                    MyPreferences().getSelectedDuration(),
-                              ),
+                              // LineChartView(
+                              //   key: ValueKey(4),
+                              //   clientId: MyPreferences()
+                              //       ?.getSelectedClient()
+                              //       ?.clientId,
+                              //   selectedDuration:
+                              //       MyPreferences().getSelectedDuration(),
+                              // ),
 
                               /// Driven Km % pie chart
                               PieChartView(

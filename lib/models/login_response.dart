@@ -18,6 +18,7 @@ class LoginResponse {
     this.whatsApp,
     this.photo,
     this.isUserLoggedIn = false,
+    this.fcmId,
   });
 
   final String firstName;
@@ -29,6 +30,7 @@ class LoginResponse {
   final String designation;
   final String whatsApp;
   final String photo;
+  final String fcmId;
 
   get userName => '${this.firstName} ${this.lastName}';
 
@@ -43,6 +45,7 @@ class LoginResponse {
     String whatsApp,
     String photo,
     bool isUserLoggedIn,
+    String fcmId,
   }) =>
       LoginResponse(
         firstName: firstName ?? this.firstName,
@@ -55,6 +58,7 @@ class LoginResponse {
         whatsApp: whatsApp ?? this.whatsApp,
         photo: photo ?? this.photo,
         isUserLoggedIn: isUserLoggedIn ?? this.isUserLoggedIn,
+        fcmId: fcmId ?? this.fcmId,
       );
 
   factory LoginResponse.fromJson(String str) =>
@@ -72,7 +76,8 @@ class LoginResponse {
       designation: json["designation"],
       whatsApp: json["WhatsApp"],
       photo: json["photo"],
-      isUserLoggedIn: json['isUserLoggedIn']);
+      isUserLoggedIn: json['isUserLoggedIn'],
+      fcmId: json['fcmId']);
 
   Map<String, dynamic> toMap() => {
         "firstName": firstName,
@@ -85,5 +90,6 @@ class LoginResponse {
         "WhatsApp": whatsApp,
         "photo": photo,
         "isUserLoggedIn": isUserLoggedIn,
+        "fcmId": fcmId,
       };
 }

@@ -221,6 +221,14 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                 viewModel.validatedRegistrationNumber != null
                     ? totalWeightTextField(viewModel)
                     : Container(),
+                SizedBox(
+                  height: buttonHeight,
+                  child: AppButton.normal(
+                      onTap: () {
+                        viewModel.sendNotification();
+                      },
+                      buttonText: 'Send Notification'),
+                ),
                 viewModel.validatedRegistrationNumber == null
                     ? Container()
                     : SizedBox(
@@ -497,7 +505,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
     return appTextFormField(
         vehicleOwnerName: viewModel.validatedRegistrationNumber == null
             ? null
-            : "(${viewModel.validatedRegistrationNumber.ownerName}, ${viewModel.validatedRegistrationNumber.model})",
+            : "(${viewModel.validatedRegistrationNumber.firstName}${viewModel.validatedRegistrationNumber.lastName})",
         enabled: true,
         controller: selectedRegNoController,
         focusNode: selectedRegNoFocusNode,
@@ -1036,7 +1044,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
       // Which builder you'd like to call that was assigned in the builders function above.
       customData: CreateConsignmentDialogParams(
         selectedClient: viewModel.selectedClient,
-        validatedRegistrationNumber: viewModel.validatedRegistrationNumber,
+        validatedRegistrationNumber: null,
         consignmentRequest: viewModel.consignmentRequest.copyWith(
           weight: viewModel.totalWeight,
         ),

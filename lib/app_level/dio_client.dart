@@ -21,7 +21,7 @@ class DioConfig {
     _dio.options
       ..baseUrl = baseUrl
       ..contentType = "application/json";
-      _dio.interceptors.add(PrettyDioLogger(
+    _dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
         responseBody: true,
@@ -42,7 +42,14 @@ class DioConfig {
     bool result = await DataConnectionChecker().hasConnection;
     if (result == true) {
       String credentials = MyPreferences().getCredentials();
-      if (options.path != GET_APP_VERSION) {
+      if (options.path == SEND_PUSH_NOTIFICATIONS) {
+        options.baseUrl = SEND_PUSH_NOTIFICATIONS;
+        options.headers.addAll({
+          "Content-Type": "application/json",
+          "Authorization":
+              "key=AAAAdlTzGIA:APA91bFrQTLgLUYFm150wohKKdbkhjvoblPb9vb1TsyltT6uX78B_k_nLE1ubyOmEZGIH6KS7j5qIfMrktq9eafafkV-Mkyz4Ps3_6JoCpBBAEan7MCLkCRutTGkUZjd9vg5ae0hAESc"
+        });
+      } else if (options.path != GET_APP_VERSION) {
         options.headers.addAll(getAuthHeader(base64String: credentials));
       }
       return options;

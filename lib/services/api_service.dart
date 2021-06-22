@@ -12,6 +12,7 @@ import 'package:bml_supervisor/models/create_consignment_request.dart';
 import 'package:bml_supervisor/models/create_route_request.dart';
 import 'package:bml_supervisor/models/entry_log.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
+import 'package:bml_supervisor/models/pushnotification.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/save_expense_request.dart';
 import 'package:bml_supervisor/models/save_payment_request.dart';
@@ -105,6 +106,22 @@ class ApiService {
     try {
       response =
           await dioClient.getDio().get('/vehicle/view/$registrationNumber');
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  ///This will give the driver detials for creating the consignment
+  Future<ParentApiResponse> getDriverDetails(String registrationNumber) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().get(
+            GET_DRIVER_DETAILS(
+              registrationNumber,
+            ),
+          );
     } on DioError catch (e) {
       error = e;
     }
@@ -981,6 +998,19 @@ class ApiService {
             ADD_TRANSIENT_HUBS,
             data: jsonBody,
           );
+    } on DioError catch (e) {
+      error = e;
+    }
+    return ParentApiResponse(error: error, response: response);
+  }
+
+  sendPushNotification({Pushnotification notification}) async {
+    Response response;
+    DioError error;
+    try {
+      response = await dioClient.getDio().post(
+          "https://fcm.googleapis.com/fcm/send",
+          data: notification.toJson());
     } on DioError catch (e) {
       error = e;
     }

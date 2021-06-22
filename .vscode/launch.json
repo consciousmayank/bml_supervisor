@@ -15,6 +15,16 @@
             ],
         },
         {
+            "name": "bml manager local",
+            "program": "lib/main/main_local.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+        },
+        {
             "name": "bml manager prod",
             "program": "lib/main/main_prod.dart",
             "request": "launch",

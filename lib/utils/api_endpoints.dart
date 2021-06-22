@@ -120,6 +120,10 @@ final GET_TRANSIENT_HUBS_LIST = (clientId, pageNumber) =>
 final GET_EXPESNE_PERIOD =
     (clientId) => '/expense/client/$clientId/period/list';
 
+final GET_DRIVER_DETAILS =
+    (vehicleId) => '/consignment/driver/vehicle/$vehicleId';
+
 const String GET_EXPENSES_TYPE = "/expense/type/list";
 const String GET_EXPENSES_AGGREGATE = "/expense/list/aggregate";
+const String SEND_PUSH_NOTIFICATIONS = "https://fcm.googleapis.com/fcm/send";
 ///////////////////////////////////////////////////////////////

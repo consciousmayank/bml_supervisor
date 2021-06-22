@@ -4,7 +4,9 @@ import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignment_detail_response_new.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
+import 'package:bml_supervisor/models/login_response.dart';
 import 'package:bml_supervisor/models/parent_api_response.dart';
+import 'package:bml_supervisor/models/pushnotification.dart';
 import 'package:bml_supervisor/models/review_consignment_request.dart';
 import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/single_pending_consignments_item.dart';
@@ -13,8 +15,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 abstract class ConsignmentApis {
+  Future<ApiResponse> sendPushNotification(
+      {@required Pushnotification notification});
+
   Future<SearchByRegNoResponse> getVehicleDetails(
       {@required String registrationNumber});
+
+  Future<LoginResponse> getDriverDetails({@required String registrationNumber});
 
   Future<ApiResponse> createConsignment(
       {@required CreateConsignmentRequest createConsignmentRequest});
@@ -59,6 +66,26 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
       } else {
         vehicleDetails =
             SearchByRegNoResponse.fromMap(apiResponse.response.data);
+      }
+    } else {
+      //negative
+      _snackBarService.showSnackbar(message: apiResponse.getErrorReason());
+    }
+    return vehicleDetails;
+  }
+
+  @override
+  Future<LoginResponse> getDriverDetails({String registrationNumber}) async {
+    LoginResponse vehicleDetails;
+    ParentApiResponse apiResponse =
+        await _apiService.getDriverDetails(registrationNumber);
+    if (apiResponse.error == null) {
+      //positive
+
+      if (apiResponse.isNoDataFound()) {
+        vehicleDetails = null;
+      } else {
+        vehicleDetails = LoginResponse.fromMap(apiResponse.response.data);
       }
     } else {
       //negative
@@ -206,5 +233,11 @@ class ConsignmentApisImpl extends BaseApi implements ConsignmentApis {
     }
 
     return response;
+  }
+
+  @override
+  Future<ApiResponse> sendPushNotification(
+      {Pushnotification notification}) async {
+    var response = apiService.sendPushNotification(notification: notification);
   }
 }
