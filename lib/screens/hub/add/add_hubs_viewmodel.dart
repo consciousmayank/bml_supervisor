@@ -210,13 +210,13 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
       variant: BottomSheetType.TEMP_SEARCH_HUBS_ENTER_VALUES,
       barrierDismissible: false,
       isScrollControlled: true,
-      customData: SeachForHubsBottomSheetInputArgument(
+      customData: SearchForHubsBottomSheetInputArgument(
           bottomSheetTitle: 'Enter following values'),
     );
 
     if (sheetResponse != null) {
       if (sheetResponse.confirmed) {
-        SeachForHubsBottomSheetOutputArguments returnedArgs =
+        SearchForHubsBottomSheetOutputArguments returnedArgs =
             sheetResponse.responseData;
         selectedHub = selectedHub.copyWith(
             itemUnit: returnedArgs.itemUnit,

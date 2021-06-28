@@ -180,7 +180,6 @@ class ViewDailyKmsViewModel extends GeneralisedBaseViewModel {
         value: clickedDailyEntry.endReading.toString(),
         onValueClick: null,
       ),
-
       GridViewHelper(
         label: 'Trips',
         value: clickedDailyEntry.trips.toString(),

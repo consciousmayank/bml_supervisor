@@ -20,21 +20,19 @@ class SelectClientBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBottomSheet(
-      bottomSheetTitle: 'Select client',
-      request: request,
-      completer: completer,
-      child: Expanded(
-        child: ClientSelectView(
-          preSelectedClient: request.customData,
-          isCalledFromBottomSheet: true,
-          onClientSelected: (GetClientsResponse selectedClient) {
-            completer(
-              SheetResponse(confirmed: true, responseData: selectedClient),
-            );
-          },
-        ),
-      )
-    );
-
+        bottomSheetTitle: 'Select client',
+        request: request,
+        completer: completer,
+        child: Expanded(
+          child: ClientSelectView(
+            preSelectedClient: request.customData,
+            isCalledFromBottomSheet: true,
+            onClientSelected: (GetClientsResponse selectedClient) {
+              completer(
+                SheetResponse(confirmed: true, responseData: selectedClient),
+              );
+            },
+          ),
+        ));
   }
 }

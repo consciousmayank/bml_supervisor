@@ -160,13 +160,13 @@ class _RoutesViewState extends State<RoutesView> {
     ).toList();
   }
 
-    getListLength({RoutesViewModel viewModel}) {
-      return widget.isInDashBoard
-          ? viewModel.routesList.length < 6
-              ? viewModel.routesList.length
-              : 6
-          : viewModel.routesList.length;
-    }
+  getListLength({RoutesViewModel viewModel}) {
+    return widget.isInDashBoard
+        ? viewModel.routesList.length < 6
+            ? viewModel.routesList.length
+            : 6
+        : viewModel.routesList.length;
+  }
 
   ///Show a 5 routes only
   getColumnList({@required RoutesViewModel viewModel}) {
@@ -217,7 +217,7 @@ class _RoutesViewState extends State<RoutesView> {
                 viewModel.onAddRouteClicked();
               }),
         ),
-        
+
         hSizedBox(5),
         viewModel.routesList.length == 0
             ? NoDataWidget(

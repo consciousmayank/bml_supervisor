@@ -40,7 +40,6 @@ class _PieChartViewState extends State<PieChartView> {
                         buildChartTitle(title: 'Route Driven Kilometers (%)'),
 
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
-
                           hSizedBox(3),
                         if (viewModel.routesDrivenKmPercentageList.length > 0)
                           Row(

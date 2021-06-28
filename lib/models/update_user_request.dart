@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-UpdateUserRequest updateUserMobileRequestFromMap(String str) => UpdateUserRequest.fromMap(json.decode(str));
+UpdateUserRequest updateUserMobileRequestFromMap(String str) =>
+    UpdateUserRequest.fromMap(json.decode(str));
 
-String updateUserMobileRequestToMap(UpdateUserRequest data) => json.encode(data.toMap());
+String updateUserMobileRequestToMap(UpdateUserRequest data) =>
+    json.encode(data.toMap());
 
 class UpdateUserRequest {
   UpdateUserRequest({
@@ -26,15 +28,16 @@ class UpdateUserRequest {
         email: email ?? this.email,
       );
 
-  factory UpdateUserRequest.fromMap(Map<String, dynamic> json) => UpdateUserRequest(
-    mobile: json["mobile"],
-    email: json["email"],
-  );
+  factory UpdateUserRequest.fromMap(Map<String, dynamic> json) =>
+      UpdateUserRequest(
+        mobile: json["mobile"],
+        email: json["email"],
+      );
 
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {
-    "mobile": mobile,
-    "email": email,
-  };
+        "mobile": mobile,
+        "email": email,
+      };
 }

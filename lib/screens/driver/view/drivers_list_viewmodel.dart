@@ -52,15 +52,14 @@ class DriversListViewModel extends GeneralisedBaseViewModel {
     navigationService.navigateTo(addDriverPageRoute);
   }
 
-
-  List<String> getDriverNameForAutoComplete(
-      List<DriverInfo> hubsList) {
+  List<String> getDriverNameForAutoComplete(List<DriverInfo> hubsList) {
     List<String> hubNames = [];
     hubsList.forEach((element) {
       hubNames.add(element.firstName);
     });
     return hubNames;
   }
+
   Future<void> openDriverDetailsBottomSheet({int selectedDriverIndex}) async {
     await bottomSheetService.showCustomSheet(
       barrierDismissible: true,

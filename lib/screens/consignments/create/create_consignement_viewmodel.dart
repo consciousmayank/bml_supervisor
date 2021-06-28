@@ -111,13 +111,14 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  FetchRoutesResponse _selectedRoute;
+  FetchRoutesResponse _selectedRoute = FetchRoutesResponse(
+    srcLocation: null,
+    routeId: 34,
+    routeTitle: 'RAJPUR ROAD ZONE',
+    dstLocation: null,
+    kilometers: 35.0,
+  );
   FetchRoutesResponse get selectedRoute => _selectedRoute;
-
-  set selectedRoute(FetchRoutesResponse selectedRoute) {
-    _selectedRoute = selectedRoute;
-    notifyListeners();
-  }
 
   getClients() async {
     setBusy(true);
@@ -367,7 +368,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     )
         .then((value) {
       if (value != null) {
-        TempHubsListToCreateConsigmentArguments args = value;
+        TempHubsListToCreateConsignmentArguments args = value;
         notifyListeners();
         initializeConsignments(hubsList: copyList(args.hubList));
         showSummaryBottomSheet();

@@ -1,11 +1,8 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
-import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
-import 'package:bml_supervisor/models/fetch_routes_response.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignement_viewmodel.dart';
-import 'package:bml_supervisor/screens/consignments/create/create_consignment_textfield.dart';
 import 'package:bml_supervisor/screens/consignments/create/driver_list_bottomsheet/driver_list_bottomsheet.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
@@ -19,6 +16,7 @@ import 'package:bml_supervisor/widget/disabled_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/recent_consignment_list.dart';
 import 'package:bml_supervisor/widget/shimmer_container.dart';
+import 'package:bml_supervisor/widget/user_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +24,6 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app_level/locator.dart';
-import 'create_consignment_params.dart';
 
 class CreateConsignmentView extends StatefulWidget {
   @override
@@ -68,6 +65,8 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
   FocusNode collectFocusNode = FocusNode();
 
   FocusNode paymentFocusNode = FocusNode();
+
+  ValueKey imageKey = ValueKey('selectedDriverKey');
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +133,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
         : SingleChildScrollView(
             controller: _scrollController,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 dateSelector(context: context, viewModel: viewModel),
@@ -164,7 +163,7 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                   ),
                   disabled: viewModel.entryDate == null,
                 ),
-                DisabledWidget(
+                /*DisabledWidget(
                   disabled: viewModel.dispatchTime == null,
                   child: appTextFormField(
                     errorText: '',
@@ -201,52 +200,169 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                       });
                     },
                   ),
-                ),
-                DisabledWidget(
-                  disabled: viewModel.selectedRoute == null,
-                  child: appTextFormField(
-                    errorText: '',
-                    controller: TextEditingController(
-                      text: viewModel.selectedDriver == null
-                          ? ''
-                          : viewModel.selectedDriver.getCompleteName(),
-                    ),
-                    enabled: false,
-                    hintText: "Select Driver",
-                    keyboardType: TextInputType.text,
-                    buttonType: ButtonType.FULL,
-                    buttonIcon: Icon(Icons.arrow_drop_down_sharp),
-                    onButtonPressed: () {
-                      viewModel.bottomSheetService
-                          .showCustomSheet(
-                        isScrollControlled: true,
-                        barrierDismissible: true,
-                        customData:
-                            DriverListBottomSheetBottomSheetInputArgument(
-                                bottomSheetTitle: 'Selct Driver'),
-                        variant:
-                            BottomSheetType.CREATE_CONSIGNMENT_DRIVERS_LIST,
-                      )
-                          .then((driverListBottomSheetResponse) {
-                        if (driverListBottomSheetResponse != null) {
-                          if (driverListBottomSheetResponse.confirmed) {
-                            DriverListBottomSheetBottomSheetOutputArguments
-                                args =
-                                driverListBottomSheetResponse.responseData;
-                            viewModel.selectedDriver = args.selectedDriver;
-                            viewModel.notifyListeners();
-
-                            selectedRegNoController.clear();
-                            consignmentTitleController.clear();
-                            viewModel.consignmentRequest = null;
-                            viewModel.consignmentTitle = '';
-                            viewModel.resetControllerBoolValue();
-                          }
-                        }
-                      });
-                    },
+                ),*/
+                hSizedBox(8),
+                FractionallySizedBox(
+                  widthFactor: 0.30,
+                  // heightFactor: 0.5,
+                  child: ProfileImageWidget(
+                    key: imageKey,
+                    image: viewModel.selectedDriver != null
+                        ? getImageFromBase64String(
+                            base64String: viewModel.selectedDriver.photo)
+                        : null,
+                    // circularBorderRadius: 100,
+                    size: 120,
                   ),
                 ),
+                hSizedBox(4),
+                if (viewModel.selectedDriver != null)
+                  Text(
+                    "${viewModel.selectedDriver.firstName} ${viewModel.selectedDriver.lastName}",
+                    style: AppTextStyles(
+                      textColor: AppColors.primaryColorShade5,
+                    ).textStyle,
+                  ),
+                hSizedBox(4),
+                if (viewModel.selectedDriver != null)
+                  Text(
+                    '(Vehicle No: ${viewModel.selectedDriver.vehicleId})',
+                    style: AppTextStyles(
+                      textColor: AppColors.primaryColorShade5,
+                    ).textStyle,
+                  ),
+
+                viewModel.selectedDriver == null
+                    ? TextButton(
+                        child: Text(
+                          "Select Driver",
+                          style: AppTextStyles().hyperLinkStyleNew,
+                        ),
+                        onPressed: () {
+                          openSelectDriverBottomSheet(viewModel);
+                        },
+                      )
+                    : TextButton(
+                        child: Text(
+                          "Change Driver",
+                          style: AppTextStyles().hyperLinkStyleNew,
+                        ),
+                        onPressed: () {
+                          openSelectDriverBottomSheet(viewModel);
+                        },
+                      ),
+
+                // if (viewModel.selectedDriver != null)
+                //   Card(
+                //     shape: getCardShape(),
+                //     elevation: defaultElevation,
+                //     child: Row(
+                //       children: [
+                //         Padding(
+                //           padding: const EdgeInsets.all(4.0),
+                //           child: ProfileImageWidget(
+                //             size: 60,
+                //             borderWidth: 0,
+                //             circularBorderRadius: defaultBorder,
+                //             image: getImageFromBase64String(
+                //               base64String: viewModel.selectedDriver.photo,
+                //             ),
+                //           ),
+                //         ),
+                //         Expanded(
+                //           flex: 1,
+                //           child: Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //             children: [
+                //               Text(
+                //                 "Driver",
+                //                 style: AppTextStyles.bsGridViewLabelStyle()
+                //                     .textStyle,
+                //               ),
+                //               hSizedBox(16),
+                //               Text(
+                //                 "${viewModel.selectedDriver.firstName} ${viewModel.selectedDriver.lastName}",
+                //                 style: AppTextStyles.bsGridViewValueStyle()
+                //                     .textStyle,
+                //                 textAlign: TextAlign.left,
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //         Expanded(
+                //           child: Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //             children: [
+                //               Text(
+                //                 "Vehicle",
+                //                 style: AppTextStyles(
+                //                   fontSize: 18,
+                //                 ).textStyle,
+                //               ),
+                //               hSizedBox(16),
+                //               Text(
+                //                 viewModel.selectedDriver.vehicleId,
+                //                 textAlign: TextAlign.left,
+                //                 style: AppTextStyles.bsGridViewValueStyle()
+                //                     .textStyle,
+                //               ),
+                //             ],
+                //           ),
+                //           flex: 1,
+                //         ),
+                //       ],
+                //     ),
+                //   )
+                // else
+                //   DisabledWidget(
+                //     disabled: viewModel.dispatchTime == null,
+                //     child: appTextFormField(
+                //       errorText: '',
+                //       controller: TextEditingController(
+                //         text: viewModel.selectedDriver == null
+                //             ? ''
+                //             : viewModel.selectedDriver.getCompleteName(),
+                //       ),
+                //       enabled: false,
+                //       hintText: "Select Driver",
+                //       keyboardType: TextInputType.text,
+                //       buttonType: ButtonType.FULL,
+                //       buttonIcon: Icon(Icons.arrow_drop_down_sharp),
+                //       onButtonPressed: () {
+                //         viewModel.bottomSheetService
+                //             .showCustomSheet(
+                //           isScrollControlled: true,
+                //           barrierDismissible: true,
+                //           customData:
+                //               DriverListBottomSheetBottomSheetInputArgument(
+                //                   bottomSheetTitle: 'Select Driver'),
+                //           variant:
+                //               BottomSheetType.CREATE_CONSIGNMENT_DRIVERS_LIST,
+                //         )
+                //             .then((driverListBottomSheetResponse) {
+                //           if (driverListBottomSheetResponse != null) {
+                //             if (driverListBottomSheetResponse.confirmed) {
+                //               DriverListBottomSheetBottomSheetOutputArguments
+                //                   args =
+                //                   driverListBottomSheetResponse.responseData;
+                //               viewModel.selectedDriver = args.selectedDriver;
+                //               viewModel.notifyListeners();
+                //
+                //               selectedRegNoController.clear();
+                //               consignmentTitleController.clear();
+                //               viewModel.consignmentRequest = null;
+                //               viewModel.consignmentTitle = '';
+                //               viewModel.resetControllerBoolValue();
+                //             }
+                //           }
+                //         });
+                //       },
+                //     ),
+                //   ),
                 DisabledWidget(
                   disabled: viewModel.selectedDriver == null,
                   child: consignmentTextField(viewModel: viewModel),
@@ -273,13 +389,45 @@ class _CreateConsignmentViewState extends State<CreateConsignmentView> {
                 ),
                 DisabledWidget(
                   disabled: viewModel.totalWeight == 0,
-                  child: createConsignmentButton(
-                    viewModel: viewModel,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                    ),
+                    child: createConsignmentButton(
+                      viewModel: viewModel,
+                    ),
                   ),
                 ),
               ],
             ),
           );
+  }
+
+  void openSelectDriverBottomSheet(CreateConsignmentModel viewModel) {
+    viewModel.bottomSheetService
+        .showCustomSheet(
+      isScrollControlled: true,
+      barrierDismissible: true,
+      customData: DriverListBottomSheetBottomSheetInputArgument(
+          bottomSheetTitle: 'Select Driver'),
+      variant: BottomSheetType.CREATE_CONSIGNMENT_DRIVERS_LIST,
+    )
+        .then((driverListBottomSheetResponse) {
+      if (driverListBottomSheetResponse != null) {
+        if (driverListBottomSheetResponse.confirmed) {
+          DriverListBottomSheetBottomSheetOutputArguments args =
+              driverListBottomSheetResponse.responseData;
+          viewModel.selectedDriver = args.selectedDriver;
+          viewModel.notifyListeners();
+
+          selectedRegNoController.clear();
+          consignmentTitleController.clear();
+          viewModel.consignmentRequest = null;
+          viewModel.consignmentTitle = '';
+          viewModel.resetControllerBoolValue();
+        }
+      }
+    });
   }
 
   Widget createConsignmentButton({CreateConsignmentModel viewModel}) {

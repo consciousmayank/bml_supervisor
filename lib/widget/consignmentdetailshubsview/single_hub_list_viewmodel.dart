@@ -1,7 +1,7 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 
-class SingleHubListViewModel extends GeneralisedBaseViewModel{
+class SingleHubListViewModel extends GeneralisedBaseViewModel {
   HubResponse _hubDetails;
 
   HubResponse get hubDetails => _hubDetails;

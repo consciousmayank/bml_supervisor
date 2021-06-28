@@ -1,5 +1,4 @@
 import 'package:bml_supervisor/enums/calling_screen.dart';
-import 'package:bml_supervisor/models/fetch_hubs_response.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +17,10 @@ class TempHubsListOutputArguments {
   });
 }
 
-class TempHubsListToCreateConsigmentArguments {
+class TempHubsListToCreateConsignmentArguments {
   final List<SingleTempHub> hubList;
 
-  TempHubsListToCreateConsigmentArguments({
+  TempHubsListToCreateConsignmentArguments({
     @required this.hubList,
   });
 }

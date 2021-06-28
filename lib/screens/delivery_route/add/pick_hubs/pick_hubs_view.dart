@@ -40,7 +40,6 @@ class _PickHubsViewState extends State<PickHubsView> {
                   children: [
                     SearchWidget(
                       onClearTextClicked: () {
-
                         hideKeyboard(context: context);
                       },
                       hintTitle: 'Search for hub',
@@ -48,18 +47,14 @@ class _PickHubsViewState extends State<PickHubsView> {
                         // viewModel.selectedVehicleId = value;
                         // viewModel.notifyListeners();
                       },
-                      onEditingComplete: () {
-
-                      },
+                      onEditingComplete: () {},
                       formatter: <TextInputFormatter>[
                         TextFieldInputFormatter().alphaNumericFormatter,
                       ],
                       controller: TextEditingController(),
                       // focusNode: selectedRegNoFocusNode,
                       keyboardType: TextInputType.text,
-                      onFieldSubmitted: (String value) {
-
-                      },
+                      onFieldSubmitted: (String value) {},
                     ),
                     // buildCityTextFormField(viewModel: viewModel),
                     hSizedBox(10),

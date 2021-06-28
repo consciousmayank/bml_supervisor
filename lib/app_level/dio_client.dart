@@ -21,7 +21,7 @@ class DioConfig {
     _dio.options
       ..baseUrl = baseUrl
       ..contentType = "application/json";
-      _dio.interceptors.add(PrettyDioLogger(
+    _dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
         responseBody: true,

@@ -60,12 +60,15 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
       tempSearchForHubsPageRoute,
       arguments: SearchForHubsViewArguments(
         consignmentId: reviewedConsigId,
+        hubsList: hubsList,
       ),
     )
         .then((value) {
       if (value != null) {
-        SearchForHubsViewOutpuArguments arguments = value;
-        hubsList.add(arguments.selectedHub);
+        SearchForHubsViewOutputArguments arguments = value;
+        hubsList.add(
+          arguments.selectedHub,
+        );
         notifyListeners();
       }
     });
@@ -140,7 +143,7 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
     // TempHubsListToCreateConsigmentArguments
 
     navigationService.back(
-      result: TempHubsListToCreateConsigmentArguments(
+      result: TempHubsListToCreateConsignmentArguments(
         hubList: hubsList,
       ),
     );

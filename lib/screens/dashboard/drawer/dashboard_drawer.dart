@@ -155,46 +155,49 @@ class _DashBoardDrawerState extends State<DashBoardDrawer> {
                           ),
                         ],
                       ),
-                      if(widget.dashBoardScreenViewModel.consignmentTrackingStatistics != null) DrawerListItem(
-                        imageName: expensesIcon,
-                        text: "Tracking",
-                        onTap: () {},
-                        children: [
-                          DrawerListItem(
-                            isSubMenu: true,
-                            imageName: consignmentIcon,
-                            text:
-                                "Upcoming Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.created})",
-                            onTap: () {
-                              widget.dashBoardScreenViewModel
-                                  .takeToUpcomingTripsDetailsView(
-                                      tripStatus: TripStatus.UPCOMING);
-                            },
-                          ),
-                          DrawerListItem(
-                            isSubMenu: true,
-                            imageName: consignmentListIcon,
-                            text:
-                                "OnGoing Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.ongoing})",
-                            onTap: () {
-                              widget.dashBoardScreenViewModel
-                                  .takeToUpcomingTripsDetailsView(
-                                      tripStatus: TripStatus.ONGOING);
-                            },
-                          ),
-                          DrawerListItem(
-                            isSubMenu: true,
-                            imageName: reviewConsigIcon,
-                            text:
-                                "Completed Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.completed + widget.dashBoardScreenViewModel.consignmentTrackingStatistics.approved})",
-                            onTap: () {
-                              widget.dashBoardScreenViewModel
-                                  .takeToUpcomingTripsDetailsView(
-                                      tripStatus: TripStatus.COMPLETED);
-                            },
-                          ),
-                        ],
-                      ),
+                      if (widget.dashBoardScreenViewModel
+                              .consignmentTrackingStatistics !=
+                          null)
+                        DrawerListItem(
+                          imageName: expensesIcon,
+                          text: "Tracking",
+                          onTap: () {},
+                          children: [
+                            DrawerListItem(
+                              isSubMenu: true,
+                              imageName: consignmentIcon,
+                              text:
+                                  "Upcoming Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.created})",
+                              onTap: () {
+                                widget.dashBoardScreenViewModel
+                                    .takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.UPCOMING);
+                              },
+                            ),
+                            DrawerListItem(
+                              isSubMenu: true,
+                              imageName: consignmentListIcon,
+                              text:
+                                  "OnGoing Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.ongoing})",
+                              onTap: () {
+                                widget.dashBoardScreenViewModel
+                                    .takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.ONGOING);
+                              },
+                            ),
+                            DrawerListItem(
+                              isSubMenu: true,
+                              imageName: reviewConsigIcon,
+                              text:
+                                  "Completed Trips (${widget.dashBoardScreenViewModel.consignmentTrackingStatistics.completed + widget.dashBoardScreenViewModel.consignmentTrackingStatistics.approved})",
+                              onTap: () {
+                                widget.dashBoardScreenViewModel
+                                    .takeToUpcomingTripsDetailsView(
+                                        tripStatus: TripStatus.COMPLETED);
+                              },
+                            ),
+                          ],
+                        ),
                       DrawerListItem(
                         imageName: vehicleIcon,
                         text: "Vehicle",

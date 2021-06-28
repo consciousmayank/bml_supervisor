@@ -1,4 +1,3 @@
-import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/enums/snackbar_types.dart';
@@ -38,7 +37,7 @@ class _SeachForHubsBottomSheetState extends State<SeachForHubsBottomSheet> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SearchForHubsBottomSheetViewModel>.reactive(
       builder: (context, model, child) {
-        SeachForHubsBottomSheetInputArgument args = widget.request.customData;
+        SearchForHubsBottomSheetInputArgument args = widget.request.customData;
         return BaseBottomSheet(
           bottomSheetTitle: args.bottomSheetTitle,
           request: widget.request,
@@ -115,7 +114,7 @@ class _SeachForHubsBottomSheetState extends State<SeachForHubsBottomSheet> {
                                 SheetResponse(
                                   confirmed: true,
                                   responseData:
-                                      SeachForHubsBottomSheetOutputArguments(
+                                      SearchForHubsBottomSheetOutputArguments(
                                     collect: itemsCollectController.text
                                                 .trim()
                                                 .length ==
@@ -187,19 +186,19 @@ class _SeachForHubsBottomSheetState extends State<SeachForHubsBottomSheet> {
   }
 }
 
-class SeachForHubsBottomSheetInputArgument {
+class SearchForHubsBottomSheetInputArgument {
   final String bottomSheetTitle;
 
-  SeachForHubsBottomSheetInputArgument({
+  SearchForHubsBottomSheetInputArgument({
     @required this.bottomSheetTitle,
   });
 }
 
-class SeachForHubsBottomSheetOutputArguments {
+class SearchForHubsBottomSheetOutputArguments {
   final String itemUnit;
   final double drop, collect;
 
-  SeachForHubsBottomSheetOutputArguments({
+  SearchForHubsBottomSheetOutputArguments({
     @required this.itemUnit,
     @required this.drop,
     @required this.collect,

@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-
-
 class GetRouteDetailsResponse {
   GetRouteDetailsResponse({
     this.id,
@@ -49,25 +47,26 @@ class GetRouteDetailsResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory GetRouteDetailsResponse.fromMap(Map<String, dynamic> json) => GetRouteDetailsResponse(
-    id: json["id"],
-    clientId: json["clientId"],
-    title: json["title"],
-    srcLocation: json["srcLocation"],
-    dstLocation: json["dstLocation"],
-    hubs: List<Hub>.from(json["hubs"].map((x) => Hub.fromMap(x))),
-    remarks: json["remarks"],
-  );
+  factory GetRouteDetailsResponse.fromMap(Map<String, dynamic> json) =>
+      GetRouteDetailsResponse(
+        id: json["id"],
+        clientId: json["clientId"],
+        title: json["title"],
+        srcLocation: json["srcLocation"],
+        dstLocation: json["dstLocation"],
+        hubs: List<Hub>.from(json["hubs"].map((x) => Hub.fromMap(x))),
+        remarks: json["remarks"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "clientId": clientId,
-    "title": title,
-    "srcLocation": srcLocation,
-    "dstLocation": dstLocation,
-    "hubs": List<dynamic>.from(hubs.map((x) => x.toMap())),
-    "remarks": remarks,
-  };
+        "id": id,
+        "clientId": clientId,
+        "title": title,
+        "srcLocation": srcLocation,
+        "dstLocation": dstLocation,
+        "hubs": List<dynamic>.from(hubs.map((x) => x.toMap())),
+        "remarks": remarks,
+      };
 }
 
 class Hub {
@@ -109,22 +108,22 @@ class Hub {
       );
 
   factory Hub.fromMap(Map<String, dynamic> json) => Hub(
-    id: json["id"],
-    routeId: json["routeId"],
-    hub: json["hub"],
-    sequence: json["sequence"],
-    kms: json["kms"],
-    flag: json["flag"],
-    status: json["status"],
-  );
+        id: json["id"],
+        routeId: json["routeId"],
+        hub: json["hub"],
+        sequence: json["sequence"],
+        kms: json["kms"],
+        flag: json["flag"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "routeId": routeId,
-    "hub": hub,
-    "sequence": sequence,
-    "kms": kms,
-    "flag": flag,
-    "status": status,
-  };
+        "id": id,
+        "routeId": routeId,
+        "hub": hub,
+        "sequence": sequence,
+        "kms": kms,
+        "flag": flag,
+        "status": status,
+      };
 }

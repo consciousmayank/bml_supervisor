@@ -1,12 +1,9 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_viewmodel.dart';
-import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_details_widget.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
-import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
-import 'package:bml_supervisor/widget/app_button.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/new_search_widget.dart';
@@ -33,6 +30,9 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SearchForHubsViewModel>.reactive(
       onModelReady: (model) {
+        model.preSelectedHubsList = copyList(
+          widget.arguments.hubsList,
+        );
         model.apiToHit = widget.arguments.consignmentId == 0
             ? ApiToHit.GET_HUBS
             : ApiToHit.GET_TRANSIENT_HUBS;
@@ -154,9 +154,19 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
                                         borderRadius: getBorderRadius(),
                                         onTap: () {
                                           hideKeyboard(context: context);
-                                          model.openBottomSheet(
+                                          if (checkIfSelectedHubExists(
+                                            selectedHub: model.hubsList[index],
+                                          )) {
+                                            model.warnForExistingHub(
                                               selectedHub:
-                                                  model.hubsList[index]);
+                                                  model.hubsList[index],
+                                            );
+                                          } else {
+                                            model.openBottomSheet(
+                                              selectedHub:
+                                                  model.hubsList[index],
+                                            );
+                                          }
                                         },
                                         child: SizedBox(
                                           height: 50,
@@ -204,18 +214,35 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
       viewModelBuilder: () => SearchForHubsViewModel(),
     );
   }
+
+  bool checkIfSelectedHubExists({SingleTempHub selectedHub}) {
+    bool result = false;
+    widget.arguments.hubsList.forEach((element) {
+      if (element.title == selectedHub.title) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
 }
 
 class SearchForHubsViewArguments {
   final int consignmentId;
+  final List<SingleTempHub> hubsList;
 
-  SearchForHubsViewArguments({@required this.consignmentId});
+  SearchForHubsViewArguments({
+    @required this.consignmentId,
+    @required this.hubsList,
+  });
 }
 
-class SearchForHubsViewOutpuArguments {
+class SearchForHubsViewOutputArguments {
   final SingleTempHub selectedHub;
 
-  SearchForHubsViewOutpuArguments({@required this.selectedHub});
+  SearchForHubsViewOutputArguments({
+    @required this.selectedHub,
+  });
 }
 
 enum ApiToHit {

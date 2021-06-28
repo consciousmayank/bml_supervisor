@@ -48,8 +48,7 @@ class VehiclesListViewModel extends GeneralisedBaseViewModel {
     }
   }
 
-  List<String> getVehicleNumberForAutoComplete(
-      List<VehicleInfo> hubsList) {
+  List<String> getVehicleNumberForAutoComplete(List<VehicleInfo> hubsList) {
     List<String> driverNames = [];
     hubsList.forEach((element) {
       driverNames.add(element.registrationNumber);

@@ -45,7 +45,6 @@ Widget loginTextFormField({
           controller: controller,
           focusNode: focusNode,
           autofocus: autoFocus,
-
           decoration: InputDecoration(
             // hintText: 'asdf',
             labelText: showSuffix ? ' ' : null,

@@ -36,18 +36,20 @@ class ExpenseAggregate {
 
   String toJson() => json.encode(toMap());
 
-  factory ExpenseAggregate.fromJson(String source) => ExpenseAggregate.fromMap(json.decode(source));
+  factory ExpenseAggregate.fromJson(String source) =>
+      ExpenseAggregate.fromMap(json.decode(source));
 
   @override
-  String toString() => 'ExpenseAggregate(totalAmount: $totalAmount, recordCount: $recordCount)';
+  String toString() =>
+      'ExpenseAggregate(totalAmount: $totalAmount, recordCount: $recordCount)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is ExpenseAggregate &&
-      other.totalAmount == totalAmount &&
-      other.recordCount == recordCount;
+        other.totalAmount == totalAmount &&
+        other.recordCount == recordCount;
   }
 
   @override

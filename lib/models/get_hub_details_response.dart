@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-GetHubDetailsResponse getHubDetailsResponseFromMap(String str) => GetHubDetailsResponse.fromMap(json.decode(str));
+GetHubDetailsResponse getHubDetailsResponseFromMap(String str) =>
+    GetHubDetailsResponse.fromMap(json.decode(str));
 
-String getHubDetailsResponseToMap(GetHubDetailsResponse data) => json.encode(data.toMap());
+String getHubDetailsResponseToMap(GetHubDetailsResponse data) =>
+    json.encode(data.toMap());
 
 class GetHubDetailsResponse {
   GetHubDetailsResponse({
@@ -94,47 +96,48 @@ class GetHubDetailsResponse {
         remarks: remarks ?? this.remarks,
       );
 
-  factory GetHubDetailsResponse.fromMap(Map<String, dynamic> json) => GetHubDetailsResponse(
-    id: json["id"],
-    clientId: json["clientId"],
-    title: json["title"],
-    contactPerson: json["contactPerson"],
-    mobile: json["mobile"],
-    phone: json["phone"],
-    email: json["email"],
-    addressLine: json["addressLine"],
-    street: json["street"],
-    locality: json["locality"],
-    landmark: json["landmark"],
-    city: json["city"],
-    state: json["state"],
-    country: json["country"],
-    pincode: json["pincode"],
-    registrationDate: json["registrationDate"],
-    geoLatitude: json["geoLatitude"].toDouble(),
-    geoLongitude: json["geoLongitude"].toDouble(),
-    remarks: json["remarks"],
-  );
+  factory GetHubDetailsResponse.fromMap(Map<String, dynamic> json) =>
+      GetHubDetailsResponse(
+        id: json["id"],
+        clientId: json["clientId"],
+        title: json["title"],
+        contactPerson: json["contactPerson"],
+        mobile: json["mobile"],
+        phone: json["phone"],
+        email: json["email"],
+        addressLine: json["addressLine"],
+        street: json["street"],
+        locality: json["locality"],
+        landmark: json["landmark"],
+        city: json["city"],
+        state: json["state"],
+        country: json["country"],
+        pincode: json["pincode"],
+        registrationDate: json["registrationDate"],
+        geoLatitude: json["geoLatitude"].toDouble(),
+        geoLongitude: json["geoLongitude"].toDouble(),
+        remarks: json["remarks"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "clientId": clientId,
-    "title": title,
-    "contactPerson": contactPerson,
-    "mobile": mobile,
-    "phone": phone,
-    "email": email,
-    "addressLine": addressLine,
-    "street": street,
-    "locality": locality,
-    "landmark": landmark,
-    "city": city,
-    "state": state,
-    "country": country,
-    "pincode": pincode,
-    "registrationDate": registrationDate,
-    "geoLatitude": geoLatitude,
-    "geoLongitude": geoLongitude,
-    "remarks": remarks,
-  };
+        "id": id,
+        "clientId": clientId,
+        "title": title,
+        "contactPerson": contactPerson,
+        "mobile": mobile,
+        "phone": phone,
+        "email": email,
+        "addressLine": addressLine,
+        "street": street,
+        "locality": locality,
+        "landmark": landmark,
+        "city": city,
+        "state": state,
+        "country": country,
+        "pincode": pincode,
+        "registrationDate": registrationDate,
+        "geoLatitude": geoLatitude,
+        "geoLongitude": geoLongitude,
+        "remarks": remarks,
+      };
 }
