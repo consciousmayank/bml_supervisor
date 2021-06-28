@@ -12,25 +12,32 @@ class ProfileImageWidget extends StatelessWidget {
     this.size = profileImageSize,
     this.circularBorderRadius,
     this.imageFit = BoxFit.cover,
+    this.borderWidth = 2,
   }) : super(key: key);
 
   final Uint8List image;
   final double size;
   final double circularBorderRadius;
+  final double borderWidth;
   final BoxFit imageFit;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.primaryColorShade5, width: 2),
+        border: Border.all(
+          color: AppColors.primaryColorShade5,
+          width: borderWidth,
+        ),
         borderRadius: BorderRadius.circular(
-            circularBorderRadius != null ? circularBorderRadius : size),
+          circularBorderRadius != null ? circularBorderRadius : size,
+        ),
         color: AppColors.appScaffoldColor,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(
-            circularBorderRadius != null ? circularBorderRadius : size),
+          circularBorderRadius != null ? circularBorderRadius : size,
+        ),
         child: image == null
             ? Image.asset(
                 profileIcon,

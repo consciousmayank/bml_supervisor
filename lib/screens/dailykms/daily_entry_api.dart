@@ -16,7 +16,6 @@ abstract class DailyEntryApis {
 }
 
 class DailyEntryApisImpl extends BaseApi implements DailyEntryApis {
-
   @override
   Future<EntryLog> getLatestDailyEntry({String registrationNumber}) async {
     EntryLog _vehicleLatestDailyEntry;

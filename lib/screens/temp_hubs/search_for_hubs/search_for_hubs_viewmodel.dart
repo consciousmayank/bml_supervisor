@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
+import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
@@ -15,6 +16,7 @@ import 'package:stacked_services/stacked_services.dart';
 class SearchForHubsViewModel extends GeneralisedBaseViewModel {
   AddTempHubsApis _addTempHubsApis = locator<AddTempHubsApisImpl>();
   List<SingleTempHub> hubsList = [];
+  List<SingleTempHub> preSelectedHubsList = [];
   List<SingleTempHub> transientHubsList = [];
 
   ApiToHit apiToHit;
@@ -27,7 +29,7 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void takeToAddTransietHubs({
+  void takeToAddTransientHubs({
     @required String title,
     @required int consignmentId,
   }) {
@@ -43,20 +45,45 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
       variant: BottomSheetType.TEMP_SEARCH_HUBS_ENTER_VALUES,
       barrierDismissible: false,
       isScrollControlled: true,
-      customData: SeachForHubsBottomSheetInputArgument(
-          bottomSheetTitle: 'Enter following values'),
+      customData: SearchForHubsBottomSheetInputArgument(
+        bottomSheetTitle: 'Enter following values',
+      ),
     );
 
     if (sheetResponse != null) {
       if (sheetResponse.confirmed) {
-        SeachForHubsBottomSheetOutputArguments returnedArgs =
+        SearchForHubsBottomSheetOutputArguments returnedArgs =
             sheetResponse.responseData;
         selectedHub = selectedHub.copyWith(
             itemUnit: returnedArgs.itemUnit,
             dropOff: returnedArgs.drop,
             collect: returnedArgs.collect);
         navigationService.back(
-          result: SearchForHubsViewOutpuArguments(selectedHub: selectedHub),
+          result: SearchForHubsViewOutputArguments(
+            selectedHub: selectedHub,
+          ),
+        );
+      }
+    }
+  }
+
+  void warnForExistingHub({SingleTempHub selectedHub}) async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.CONFIRMATION_BOTTOM_SHEET,
+      barrierDismissible: false,
+      isScrollControlled: true,
+      customData: ConfirmationBottomSheetInputArgs(
+        title: 'Warning',
+        description:
+            'You have already selected this hub. Do you want to replace it?',
+        negativeButtonTitle: 'Ok',
+      ),
+    );
+
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        openBottomSheet(
+          selectedHub: selectedHub,
         );
       }
     }

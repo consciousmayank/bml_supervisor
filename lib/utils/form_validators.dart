@@ -75,8 +75,9 @@ class TextFieldInputFormatter {
           RegularExpressions().alphabeticSpaceRegEx);
   final TextInputFormatter numericFormatter =
       FilteringTextInputFormatter.allow(RegularExpressions().numericRegEx);
-      final TextInputFormatter numericWithDecimalFormatter =
-      FilteringTextInputFormatter.allow(RegularExpressions().numericWithDecimalRegEx);
+  final TextInputFormatter numericWithDecimalFormatter =
+      FilteringTextInputFormatter.allow(
+          RegularExpressions().numericWithDecimalRegEx);
 
   TextInputFormatter maxLengthFormatter({@required int maxLength}) {
     return LengthLimitingTextInputFormatter(maxLength);

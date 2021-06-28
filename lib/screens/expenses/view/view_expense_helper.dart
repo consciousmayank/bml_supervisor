@@ -11,7 +11,8 @@ class ViewExpensesAggregateHelper {
   ViewExpensesAggregateHelper.aggregateViewExpensesByClient({
     @required this.month,
     @required this.year,
-    this.expenseEnumType = ViewExpensesAggregateType.AGGREGATE_EXPENSE_BY_CLIENT,
+    this.expenseEnumType =
+        ViewExpensesAggregateType.AGGREGATE_EXPENSE_BY_CLIENT,
     @required this.clientId,
   });
 
@@ -45,7 +46,6 @@ class ViewExpensesAggregateHelper {
 }
 
 class ViewExpensesHelper {
-
   ViewExpensesHelper.viewExpensesByClient({
     @required this.month,
     @required this.year,
@@ -53,7 +53,7 @@ class ViewExpensesHelper {
     this.expenseEnumType = ViewExpensesType.VIEW_EXPENSE_BY_CLIENT,
     @required this.clientId,
   });
-  
+
   ViewExpensesHelper.viewExpensesByClientAndType({
     @required this.month,
     @required this.year,

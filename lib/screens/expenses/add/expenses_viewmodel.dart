@@ -190,7 +190,6 @@ class ExpensesViewModel extends GeneralisedBaseViewModel {
         await _expensesApi.addExpense(saveExpenseRequest: saveExpenseRequest);
 
     if (response.isSuccessful()) {
-      
       bottomSheetService
           .showCustomSheet(
         customData: ConfirmationBottomSheetInputArgs(

@@ -13,7 +13,6 @@ class BarChartViewModel extends GeneralisedBaseViewModel {
   List<String> uniqueDates = [];
   List<TickSpec<num>> listOfTicks;
 
-
   DateTime get selectedDate => _selectedDate;
 
   set selectedDate(DateTime value) {

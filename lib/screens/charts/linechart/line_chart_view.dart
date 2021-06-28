@@ -57,15 +57,14 @@ class _LineChartViewState extends State<LineChartView> {
                     // buildChartSubTitle(
                     //     time: viewModel?.selectedDateForLineChart),
                     if (viewModel.routesDrivenKmListForLineChart.length > 0)
-
                       hSizedBox(2),
-                      Row(
-                        children: [
-                          buildChartBadge(badgeTitle: 'Top 3'),
-                          wSizedBox(3),
-                          buildChartSubTitleNew(date: viewModel.chartDate),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        buildChartBadge(badgeTitle: 'Top 3'),
+                        wSizedBox(3),
+                        buildChartSubTitleNew(date: viewModel.chartDate),
+                      ],
+                    ),
 
                     viewModel.routesDrivenKmListForLineChart.length > 0
                         ? Expanded(
@@ -136,8 +135,6 @@ class _LineChartViewState extends State<LineChartView> {
     );
   }
 }
-
-
 
 Widget buildColorLegendListView(LineChartViewModel viewModel) {
   // return ListView(children: getWidgets(viewModel), scrollDirection: axisMaterial.Axis.horizontal,);

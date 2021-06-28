@@ -7,8 +7,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 ///For showing information in a gridView in bottomSheet
 class GridViewBottomSheet extends StatelessWidget {
-    final SheetRequest request;
-    final Function(SheetResponse) completer;
+  final SheetRequest request;
+  final Function(SheetResponse) completer;
 
   const GridViewBottomSheet({
     Key key,

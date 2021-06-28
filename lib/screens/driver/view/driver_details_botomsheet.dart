@@ -55,11 +55,11 @@ class DriverInfoWidget extends StatelessWidget {
             borderRadius: getBorderRadius(borderRadius: 20),
             child: ProfileImageWidget(
               image: args.driverInfo.photo != null &&
-                  args.driverInfo.photo.length == 0
+                      args.driverInfo.photo.length == 0
                   ? null
                   : getImageFromBase64String(
-                base64String: args.driverInfo.photo,
-              ),
+                      base64String: args.driverInfo.photo,
+                    ),
               // image: null,
               circularBorderRadius: 100,
               size: 120,
@@ -78,7 +78,7 @@ class DriverInfoWidget extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                  '${args.driverInfo?.firstName ?? ''} ${args.driverInfo?.lastName ?? ''}',
+                      '${args.driverInfo?.firstName ?? ''} ${args.driverInfo?.lastName ?? ''}',
                   style: AppTextStyles.latoBold18PrimaryShade5
                       .copyWith(color: AppColors.primaryColorShade5),
                 ),
@@ -357,15 +357,13 @@ class InfoWidget extends StatelessWidget {
               onTap: onValueClicked == null
                   ? null
                   : () {
-                onValueClicked.call();
-              },
+                      onValueClicked.call();
+                    },
               child: Text(
                 value == null ? 'NA' : value,
                 textAlign: TextAlign.left,
-                style: AppTextStyles.latoMedium16Primary5.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600
-                ),
+                style: AppTextStyles.latoMedium16Primary5
+                    .copyWith(fontSize: 14, fontWeight: FontWeight.w600),
                 // TextStyle(
                 //     fontSize: 16,
                 //     color: AppColors.primaryColorShade5
@@ -413,8 +411,8 @@ SizedBox buildContentRow({
             onTap: helper.onValue1Clicked == null
                 ? null
                 : () {
-              helper.onValue1Clicked.call();
-            },
+                    helper.onValue1Clicked.call();
+                  },
             child: AppTextView(
               labelFontSize: helper.labelFontSize,
               valueFontSize: helper.valueFontSize,
@@ -433,8 +431,8 @@ SizedBox buildContentRow({
             onTap: helper.onValue2Clicked == null
                 ? null
                 : () {
-              helper.onValue2Clicked.call();
-            },
+                    helper.onValue2Clicked.call();
+                  },
             child: AppTextView(
               labelFontSize: helper.labelFontSize,
               valueFontSize: helper.valueFontSize,
@@ -461,117 +459,117 @@ class AddressesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return addressList.length == 0
         ? Expanded(
-      child: Container(
-        child: Center(
-          child: NoDataWidget(),
-        ),
-      ),
-    )
-        : Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Card(
-            color: AppColors.bottomSheetGridTileColors,
-            shape: Border(
-              left: BorderSide(
-                  color: AppColors.primaryColorShade5, width: 4),
+            child: Container(
+              child: Center(
+                child: NoDataWidget(),
+              ),
             ),
-            // shape: getCardShape(),
-            elevation: defaultElevation,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
+          )
+        : Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Card(
+                  color: AppColors.bottomSheetGridTileColors,
+                  shape: Border(
+                    left: BorderSide(
+                        color: AppColors.primaryColorShade5, width: 4),
+                  ),
+                  // shape: getCardShape(),
+                  elevation: defaultElevation,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        addressList[index].addressLine1 != null &&
-                            addressList[index].addressLine1 != 'NA'
-                            ? TextSpan(
-                          text: addressList[index].addressLine1,
-                          style: AppTextStyles.lato20PrimaryShade5
-                              .copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              addressList[index].addressLine1 != null &&
+                                      addressList[index].addressLine1 != 'NA'
+                                  ? TextSpan(
+                                      text: addressList[index].addressLine1,
+                                      style: AppTextStyles.lato20PrimaryShade5
+                                          .copyWith(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                    )
+                                  : TextSpan(),
+                              addressList[index].addressLine2 != null &&
+                                      addressList[index].addressLine2 != 'NA'
+                                  ? TextSpan(
+                                      text: ', ' +
+                                          addressList[index].addressLine2,
+                                      style: AppTextStyles.lato20PrimaryShade5
+                                          .copyWith(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                    )
+                                  : TextSpan(),
+                            ],
+                          ),
+                        ),
+                        // addressList[index].addressLine1 != null &&
+                        //         addressList[index].addressLine1 != 'NA'
+                        //     ? Text(
+                        //         addressList[index].addressLine1 + ' :Line 1',
+                        //         style:
+                        //             AppTextStyles.lato20PrimaryShade5.copyWith(
+                        //           fontSize: 14,
+                        //         ),
+                        //       )
+                        //     : Container(),
+                        // addressList[index].addressLine2 != null &&
+                        //         addressList[index].addressLine2 != 'NA'
+                        //     ? Text(
+                        //         addressList[index].addressLine2 + ' :Line 2',
+                        //         style:
+                        //             AppTextStyles.lato20PrimaryShade5.copyWith(
+                        //           fontSize: 14,
+                        //         ),
+                        //       )
+                        //     : Container(),
+                        hSizedBox(6),
+                        addressList[index].locality != null &&
+                                addressList[index].locality != 'NA'
+                            ? Text(
+                                addressList[index].locality,
+                                style:
+                                    AppTextStyles.lato20PrimaryShade5.copyWith(
+                                  fontSize: 14,
+                                ),
+                              )
+                            : Container(),
+                        addressList[index].nearby != null &&
+                                addressList[index].nearby != 'NA'
+                            ? Text(
+                                'Landmark: ' + addressList[index].nearby,
+                                style:
+                                    AppTextStyles.lato20PrimaryShade5.copyWith(
+                                  fontSize: 14,
+                                ),
+                              )
+                            : Container(),
+                        Text(
+                          '${addressList[index].city}, ${addressList[index].pincode}',
+                          style: AppTextStyles.lato20PrimaryShade5.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                        hSizedBox(6),
+                        Text(
+                          '${addressList[index].state}, ${addressList[index].country}',
+                          style: AppTextStyles.lato20PrimaryShade5.copyWith(
+                            fontSize: 14,
+                          ),
                         )
-                            : TextSpan(),
-                        addressList[index].addressLine2 != null &&
-                            addressList[index].addressLine2 != 'NA'
-                            ? TextSpan(
-                          text: ', ' +
-                              addressList[index].addressLine2,
-                          style: AppTextStyles.lato20PrimaryShade5
-                              .copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        )
-                            : TextSpan(),
                       ],
                     ),
                   ),
-                  // addressList[index].addressLine1 != null &&
-                  //         addressList[index].addressLine1 != 'NA'
-                  //     ? Text(
-                  //         addressList[index].addressLine1 + ' :Line 1',
-                  //         style:
-                  //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                  //           fontSize: 14,
-                  //         ),
-                  //       )
-                  //     : Container(),
-                  // addressList[index].addressLine2 != null &&
-                  //         addressList[index].addressLine2 != 'NA'
-                  //     ? Text(
-                  //         addressList[index].addressLine2 + ' :Line 2',
-                  //         style:
-                  //             AppTextStyles.lato20PrimaryShade5.copyWith(
-                  //           fontSize: 14,
-                  //         ),
-                  //       )
-                  //     : Container(),
-                  hSizedBox(6),
-                  addressList[index].locality != null &&
-                      addressList[index].locality != 'NA'
-                      ? Text(
-                    addressList[index].locality,
-                    style:
-                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                      fontSize: 14,
-                    ),
-                  )
-                      : Container(),
-                  addressList[index].nearby != null &&
-                      addressList[index].nearby != 'NA'
-                      ? Text(
-                    'Landmark: ' + addressList[index].nearby,
-                    style:
-                    AppTextStyles.lato20PrimaryShade5.copyWith(
-                      fontSize: 14,
-                    ),
-                  )
-                      : Container(),
-                  Text(
-                    '${addressList[index].city}, ${addressList[index].pincode}',
-                    style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                      fontSize: 14,
-                    ),
-                  ),
-                  hSizedBox(6),
-                  Text(
-                    '${addressList[index].state}, ${addressList[index].country}',
-                    style: AppTextStyles.lato20PrimaryShade5.copyWith(
-                      fontSize: 14,
-                    ),
-                  )
-                ],
-              ),
+                );
+              },
+              itemCount: addressList.length,
             ),
           );
-        },
-        itemCount: addressList.length,
-      ),
-    );
   }
 }
 
@@ -585,67 +583,67 @@ class BankDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return bankDetailsList.length == 0
         ? Expanded(
-      child: Container(
-        child: Center(
-          child: NoDataWidget(),
-        ),
-      ),
-    )
-        : Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Card(
-            shape: Border(
-              left: BorderSide(
-                  color: AppColors.primaryColorShade5, width: 4),
-            ),
-            // shape: getCardShape(),
-            elevation: defaultElevation,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'Account Type',
-                      value1: bankDetailsList[index].accountType,
-                      label2: 'Account Number',
-                      value2: bankDetailsList[index].accountNumber,
-                    ),
-                  ),
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'Bank Type',
-                      value1: bankDetailsList[index].type,
-                      label2: 'Account Name',
-                      value2: bankDetailsList[index].accountName,
-                    ),
-                  ),
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'IFSC Number',
-                      value1: bankDetailsList[index].ifsc,
-                      label2: 'Bank Name',
-                      value2: bankDetailsList[index].bankName,
-                    ),
-                  ),
-                  buildContentRow(
-                    helper: RowHelper(
-                      label1: 'PAN',
-                      value1: bankDetailsList[index].pan,
-                      label2: 'Address',
-                      value2: bankDetailsList[index].address,
-                    ),
-                  ),
-                ],
+            child: Container(
+              child: Center(
+                child: NoDataWidget(),
               ),
             ),
+          )
+        : Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Card(
+                  shape: Border(
+                    left: BorderSide(
+                        color: AppColors.primaryColorShade5, width: 4),
+                  ),
+                  // shape: getCardShape(),
+                  elevation: defaultElevation,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildContentRow(
+                          helper: RowHelper(
+                            label1: 'Account Type',
+                            value1: bankDetailsList[index].accountType,
+                            label2: 'Account Number',
+                            value2: bankDetailsList[index].accountNumber,
+                          ),
+                        ),
+                        buildContentRow(
+                          helper: RowHelper(
+                            label1: 'Bank Type',
+                            value1: bankDetailsList[index].type,
+                            label2: 'Account Name',
+                            value2: bankDetailsList[index].accountName,
+                          ),
+                        ),
+                        buildContentRow(
+                          helper: RowHelper(
+                            label1: 'IFSC Number',
+                            value1: bankDetailsList[index].ifsc,
+                            label2: 'Bank Name',
+                            value2: bankDetailsList[index].bankName,
+                          ),
+                        ),
+                        buildContentRow(
+                          helper: RowHelper(
+                            label1: 'PAN',
+                            value1: bankDetailsList[index].pan,
+                            label2: 'Address',
+                            value2: bankDetailsList[index].address,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              itemCount: bankDetailsList.length,
+            ),
           );
-        },
-        itemCount: bankDetailsList.length,
-      ),
-    );
   }
 }
 

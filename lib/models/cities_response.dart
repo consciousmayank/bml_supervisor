@@ -22,17 +22,18 @@ class CitiesResponse {
         city: city ?? this.city,
       );
 
-  factory CitiesResponse.fromJson(String str) => CitiesResponse.fromMap(json.decode(str));
+  factory CitiesResponse.fromJson(String str) =>
+      CitiesResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory CitiesResponse.fromMap(Map<String, dynamic> json) => CitiesResponse(
-    id: json["id"],
-    city: json["city"],
-  );
+        id: json["id"],
+        city: json["city"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "city": city,
-  };
+        "id": id,
+        "city": city,
+      };
 }

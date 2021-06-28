@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-DashboardTilesStatsResponse dashboardTilesStatsResponseFromJson(String str) => DashboardTilesStatsResponse.fromJson(json.decode(str));
+DashboardTilesStatsResponse dashboardTilesStatsResponseFromJson(String str) =>
+    DashboardTilesStatsResponse.fromJson(json.decode(str));
 
-String dashboardTilesStatsResponseToJson(DashboardTilesStatsResponse data) => json.encode(data.toJson());
+String dashboardTilesStatsResponseToJson(DashboardTilesStatsResponse data) =>
+    json.encode(data.toJson());
 
 class DashboardTilesStatsResponse {
   DashboardTilesStatsResponse({
@@ -50,25 +52,26 @@ class DashboardTilesStatsResponse {
         dueExpense: dueExpense ?? this.dueExpense,
       );
 
-  factory DashboardTilesStatsResponse.fromJson(Map<String, dynamic> json) => DashboardTilesStatsResponse(
-    totalKmVariance: json["totalKmVariance"].toDouble(),
-    totalExpenseVariance: json["totalExpenseVariance"].toDouble(),
-    hubCount: json["hubCount"],
-    totalKm: json["totalKm"],
-    routeCount: json["routeCount"],
-    dueKm: json["dueKm"],
-    totalExpense: json["totalExpense"].toDouble(),
-    dueExpense: json["dueExpense"].toDouble(),
-  );
+  factory DashboardTilesStatsResponse.fromJson(Map<String, dynamic> json) =>
+      DashboardTilesStatsResponse(
+        totalKmVariance: json["totalKmVariance"].toDouble(),
+        totalExpenseVariance: json["totalExpenseVariance"].toDouble(),
+        hubCount: json["hubCount"],
+        totalKm: json["totalKm"],
+        routeCount: json["routeCount"],
+        dueKm: json["dueKm"],
+        totalExpense: json["totalExpense"].toDouble(),
+        dueExpense: json["dueExpense"].toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "totalKmVariance": totalKmVariance,
-    "totalExpenseVariance": totalExpenseVariance,
-    "hubCount": hubCount,
-    "totalKm": totalKm,
-    "routeCount": routeCount,
-    "dueKm": dueKm,
-    "totalExpense": totalExpense,
-    "dueExpense": dueExpense,
-  };
+        "totalKmVariance": totalKmVariance,
+        "totalExpenseVariance": totalExpenseVariance,
+        "hubCount": hubCount,
+        "totalKm": totalKm,
+        "routeCount": routeCount,
+        "dueKm": dueKm,
+        "totalExpense": totalExpense,
+        "dueExpense": dueExpense,
+      };
 }
