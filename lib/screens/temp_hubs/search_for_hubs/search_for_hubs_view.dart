@@ -32,7 +32,14 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SearchForHubsViewModel>.reactive(
-      onModelReady: (model) => model.getTransientHubList(showLoading: true),
+      onModelReady: (model) {
+        model.apiToHit = widget.arguments.consignmentId == 0
+            ? ApiToHit.GET_HUBS
+            : ApiToHit.GET_TRANSIENT_HUBS;
+        model.getHubList(
+          showLoading: true,
+        );
+      },
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -138,7 +145,7 @@ class _SearchForHubsViewState extends State<SearchForHubsView> {
                               child: LazyLoadScrollView(
                                 scrollOffset: 100,
                                 onEndOfPage: () {
-                                  model.getTransientHubList(showLoading: false);
+                                  model.getHubList(showLoading: false);
                                 },
                                 child: ListView.builder(
                                   itemBuilder: (context, index) => Column(
@@ -209,4 +216,9 @@ class SearchForHubsViewOutpuArguments {
   final SingleTempHub selectedHub;
 
   SearchForHubsViewOutpuArguments({@required this.selectedHub});
+}
+
+enum ApiToHit {
+  GET_TRANSIENT_HUBS,
+  GET_HUBS,
 }

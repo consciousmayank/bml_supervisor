@@ -41,7 +41,7 @@ class _ViewRoutesViewState extends State<ViewRoutesView> {
                   selectedClient: viewModel.selectedClient,
                   onRoutesPageInView: (clickedRoute) {
                     FetchRoutesResponse route = clickedRoute;
-                    viewModel.takeToHubsView(clickedRoute: route);
+                    // viewModel.takeToHubsView(clickedRoute: route);
                   },
                 ),
               ),

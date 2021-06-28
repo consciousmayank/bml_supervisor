@@ -2,8 +2,10 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_details_botomsheet.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -54,7 +56,13 @@ class HubsListViewModel extends GeneralisedBaseViewModel {
 
   void onAddHubClicked() {
     // navigationService.back();
-    navigationService.navigateTo(addHubRoute, arguments: hubsList);
+    navigationService.navigateTo(
+      addHubRoute,
+      arguments: AddHubsIncomingArguments(
+        callingScreen: CallingScreen.DASHBOARD,
+        hubsList: hubsList,
+      ),
+    );
   }
 
   List<String> getVehicleNumberForAutoComplete(List<HubResponse> hubsList) {

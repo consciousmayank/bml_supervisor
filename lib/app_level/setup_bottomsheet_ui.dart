@@ -1,5 +1,6 @@
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
 import 'package:bml_supervisor/screens/consignments/create/create_consignment_params.dart';
+import 'package:bml_supervisor/screens/consignments/create/driver_list_bottomsheet/driver_list_bottomsheet.dart';
 import 'package:bml_supervisor/screens/consignments/create/existing_consignment_bottom_sheet.dart';
 import 'package:bml_supervisor/screens/consignments/create/routes_bottomsheet/routes_list_bottomsheet_view.dart';
 import 'package:bml_supervisor/screens/dailykms/view/view_daily_kms_bottom_sheet.dart';
@@ -86,6 +87,10 @@ void setupBottomSheetUi() {
     BottomSheetType.TEMP_SEARCH_HUBS_ENTER_VALUES: (context, sheetRequest,
             completer) =>
         SeachForHubsBottomSheet(request: sheetRequest, completer: completer),
+
+    BottomSheetType.CREATE_CONSIGNMENT_DRIVERS_LIST:
+        (context, sheetRequest, completer) => DriverListBottomSheetBottomSheet(
+            request: sheetRequest, completer: completer),
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);
@@ -233,7 +238,7 @@ class _CreateConsignmentDialog extends StatelessWidget {
         consignmentRequest: args.consignmentRequest,
         selectedRoute: args.selectedRoute,
         itemUnit: args.itemUnit,
-        validatedRegistrationNumber: args.validatedRegistrationNumber,
+        selectedDriver: args.selectedDriver,
         onSubmitClicked: (bool value) {
           completer(SheetResponse(confirmed: value));
         },

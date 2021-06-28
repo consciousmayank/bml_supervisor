@@ -47,7 +47,7 @@ const String ADD_CONSIGNMENT_DATA_TO_HUB = "/consignment/add";
 const String ADD_VEHICLE = "/vehicle/add";
 const String GET_CONSIGNMENTS_LIST = "/consignment/find/";
 
-final GET_HUBS = (routeId) => "/route/$routeId/hub/list";
+final GET_HUBS = (clientId, page) => "/hub/list/client/$clientId/page/$page";
 final GET_CONSIGNMENT_FOR_CLIENT_AND_DATE = (clientId, routeId, date) =>
     "/consignment/client/$clientId/route/$routeId/date/$date";
 final GET_PAYMENT_HISTORY =

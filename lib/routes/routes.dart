@@ -9,8 +9,6 @@ import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hu
 import 'package:bml_supervisor/screens/delivery_route/add/arrangehubs/arrange_hubs_view.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/delivery_route/add/pick_hubs/pick_hubs_view.dart';
-import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/hubs_view.dart';
-import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/screens/delivery_route/list/delivery_routes/view_routes_view.dart';
 import 'package:bml_supervisor/screens/driver/add/add_driver_view.dart';
 import 'package:bml_supervisor/screens/clientselect/client_select_view.dart';
@@ -32,6 +30,7 @@ import 'package:bml_supervisor/screens/expenses/add/add_expense_arguments.dart';
 import 'package:bml_supervisor/screens/expenses/add/expenses_mobile_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_detailed_view.dart';
 import 'package:bml_supervisor/screens/expenses/view/view_expenses_view.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/hub/add/add_hubs_view.dart';
 import 'package:bml_supervisor/screens/hub/view/hubs_list_view.dart';
 import 'package:bml_supervisor/screens/login/login_view.dart';
@@ -131,11 +130,11 @@ class AppRouter {
         );
 
       case addHubRoute:
-        List<HubResponse> hubsList = settings.arguments;
+        AddHubsIncomingArguments arguments = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => NetworkSensitive(
                   child: AddHubsView(
-                    hubsList: hubsList,
+                    args: arguments,
                   ),
                 ) //EntryLogsView(),
             );
@@ -266,15 +265,15 @@ class AppRouter {
           builder: (_) => AddPaymentView(),
         );
 
-      case hubsViewPageRoute:
-        ViewRoutesArguments args = settings.arguments;
-        return MaterialPageRoute(
-          builder: (_) => NetworkSensitive(
-            child: HubsView(
-              selectedRoute: args.clickedRoute,
-            ),
-          ),
-        );
+      // case hubsViewPageRoute:
+      //   ViewRoutesArguments args = settings.arguments;
+      //   return MaterialPageRoute(
+      //     builder: (_) => NetworkSensitive(
+      //       child: HubsView(
+      //         selectedRoute: args.clickedRoute,
+      //       ),
+      //     ),
+      //   );
 
       case consignmentsListPageRoute:
         ConsignmentListArguments args = settings.arguments;

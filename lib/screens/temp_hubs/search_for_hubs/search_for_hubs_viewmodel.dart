@@ -17,6 +17,8 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
   List<SingleTempHub> hubsList = [];
   List<SingleTempHub> transientHubsList = [];
 
+  ApiToHit apiToHit;
+
   void checkForExistingHubTitleContainsApi(String searchString) async {
     // setBusy(true);
     List<SingleTempHub> list = await _addTempHubsApis
@@ -63,7 +65,7 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
   bool shouldCallGetHubListApi = true;
   int pageNumber = 1;
 
-  getTransientHubList({@required bool showLoading}) async {
+  getHubList({@required bool showLoading}) async {
     if (shouldCallGetHubListApi) {
       if (showLoading) {
         setBusy(true);
@@ -74,6 +76,7 @@ class SearchForHubsViewModel extends GeneralisedBaseViewModel {
           await _addTempHubsApis.getTransientHubsList(
         pageNumber: pageNumber,
         clientId: MyPreferences()?.getSelectedClient()?.clientId,
+        apiToHit: apiToHit,
       );
       if (response.length > 0) {
         if (pageNumber == 0) {
