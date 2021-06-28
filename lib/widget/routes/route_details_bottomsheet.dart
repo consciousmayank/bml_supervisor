@@ -84,17 +84,15 @@ class InfoWidget extends StatelessWidget {
         viewModel.srcHub != null
             ? buildHubDetailsItem(
                 label: 'Source',
-          context: context,
-          hubResponse: viewModel?.srcHub
-              )
+                context: context,
+                hubResponse: viewModel?.srcHub)
             : Container(),
         viewModel.dstHub == null
             ? Container()
             : buildHubDetailsItem(
-            label: 'Destination',
-            context: context,
-            hubResponse: viewModel?.dstHub
-        ),
+                label: 'Destination',
+                context: context,
+                hubResponse: viewModel?.dstHub),
         // Text('Destination: ${viewModel?.dstHub?.title}'),
         buildHubTitleItem(
           context: context,
@@ -118,8 +116,8 @@ class InfoWidget extends StatelessWidget {
           width: 120,
           child: AppButton(
             borderColor: AppColors.primaryColorShade11,
-            onTap:  () {
-              viewModel.takeToHubsView(clickedRoute: route);
+            onTap: () {
+              // viewModel.takeToHubsView(clickedRoute: route);
             },
             background: AppColors.primaryColorShade5,
             fontSize: 14,

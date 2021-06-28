@@ -1,19 +1,18 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/image_config.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_viewmodel.dart';
 import 'package:bml_supervisor/screens/temp_hubs/temp_hubs_details_widget.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/clickable_widget.dart';
 import 'package:bml_supervisor/widget/create_new_button_widget.dart';
+import 'package:bml_supervisor/widget/disabled_widget.dart';
 import 'package:bml_supervisor/widget/dotted_divider.dart';
 import 'package:bml_supervisor/widget/new_search_widget.dart';
-import 'package:bml_supervisor/widget/no_data_dashboard_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stacked/stacked.dart';
 
@@ -45,7 +44,9 @@ class _TempHubsListViewState extends State<TempHubsListView> {
           child: Scaffold(
             appBar: AppBar(
               title: Text(
-                'Hubs for C#${widget.arguments.reviewedConsigId}',
+                widget.arguments.reviewedConsigId == 0
+                    ? 'Hubs'
+                    : 'Hubs for C#${widget.arguments.reviewedConsigId}',
                 style: AppTextStyles().appBarTitleStyleNew,
               ),
             ),
@@ -160,24 +161,32 @@ class _TempHubsListViewState extends State<TempHubsListView> {
                             child: Text('No Hubs'),
                           ),
                   ),
-                  SizedBox(
-                    height: buttonHeight,
-                    width: double.infinity,
-                    child: ClickableWidget(
-                      child: Center(
-                          child: Text(
-                        'Submit',
-                        style: AppTextStyles().appBarTitleStyleNew,
-                      )),
-                      onTap: () {
-                        if (model.hubsList.length == 0) {
-                          model.showConfirmationBottomSheet();
-                        } else {
-                          model.addTrasientHubs();
-                        }
-                      },
-                      borderRadius: getBorderRadius(),
-                      childColor: AppColors.primaryColorShade5,
+                  DisabledWidget(
+                    disabled: widget.arguments.reviewedConsigId == 0 &&
+                        model.hubsList.length < 2,
+                    child: SizedBox(
+                      height: buttonHeight,
+                      width: double.infinity,
+                      child: ClickableWidget(
+                        child: Center(
+                            child: Text(
+                          'Submit',
+                          style: AppTextStyles().appBarTitleStyleNew,
+                        )),
+                        onTap: () {
+                          if (model.hubsList.length == 0) {
+                            model.showConfirmationBottomSheet();
+                          } else {
+                            if (widget.arguments.reviewedConsigId == 0) {
+                              model.sendBackHubsList();
+                            } else {
+                              model.addTrasientHubs();
+                            }
+                          }
+                        },
+                        borderRadius: getBorderRadius(),
+                        childColor: AppColors.primaryColorShade5,
+                      ),
                     ),
                   )
                 ],

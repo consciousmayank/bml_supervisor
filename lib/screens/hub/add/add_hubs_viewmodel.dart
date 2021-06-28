@@ -2,19 +2,24 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/city_location_response.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
 import 'package:bml_supervisor/screens/driver/driver_apis.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/hub/add_hubs_apis.dart';
+import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_values_bottomSheet.dart';
 import 'package:bml_supervisor/utils/stringutils.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class AddHubsViewModel extends GeneralisedBaseViewModel {
   String _alternateMobileNumber = '';
@@ -110,8 +115,6 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     return _hubTitles;
   }
 
-
-
   set cityList(List<CitiesResponse> value) {
     _cityList = value;
     notifyListeners();
@@ -124,14 +127,14 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     cityList = copyList(citiesList);
   }
 
-  void checkForExistingHubTitleContainsApi(String hubTitle) async{
+  void checkForExistingHubTitleContainsApi(String hubTitle) async {
     // setBusy(true);
-    var list  = await _addHubsApis.checkForExistingHubTitleContainsApi(hubTitle: hubTitle);
+    var list = await _addHubsApis.checkForExistingHubTitleContainsApi(
+        hubTitle: hubTitle);
     existingHubsList = copyList(list);
     // setBusy(false);
     notifyListeners();
   }
-
 
   void getPinCodeState() async {
     cityLocation = await _driverApis.getCityLocation(cityId: selectedCity.id);
@@ -151,7 +154,9 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  void addHub({AddHubRequest newHubObject}) async {
+  void addHub(
+      {AddHubRequest newHubObject,
+      @required CallingScreen callingScreen}) async {
     setBusy(true);
     ApiResponse _apiResponse = await _addHubsApis.addHub(request: newHubObject);
     setBusy(false);
@@ -168,9 +173,63 @@ class AddHubsViewModel extends GeneralisedBaseViewModel {
     )
         .then((value) {
       if (_apiResponse.isSuccessful()) {
-        navigationService.replaceWith(addHubRoute);
+        if (callingScreen == CallingScreen.TEMP_HUB_LIST) {
+          openBottomSheet(
+            selectedHub: SingleTempHub(
+              clientId: newHubObject.clientId,
+              consignmentId: 0,
+              itemUnit: '',
+              dropOff: 0.00,
+              collect: 0.00,
+              title: newHubObject.title,
+              contactPerson: newHubObject.contactPerson,
+              mobile: newHubObject.mobile,
+              addressType: '',
+              addressLine1: newHubObject.street,
+              addressLine2: newHubObject.addressLine,
+              locality: newHubObject.locality,
+              nearby: newHubObject.landmark,
+              city: newHubObject.city,
+              state: newHubObject.state,
+              country: newHubObject.country,
+              pincode: newHubObject.pincode,
+              geoLatitude: newHubObject.geoLatitude,
+              geoLongitude: newHubObject.geoLongitude,
+              remarks: newHubObject.remarks,
+            ),
+          );
+        } else {
+          navigationService.replaceWith(addHubRoute);
+        }
       }
     });
+  }
+
+  void openBottomSheet({SingleTempHub selectedHub}) async {
+    SheetResponse sheetResponse = await bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.TEMP_SEARCH_HUBS_ENTER_VALUES,
+      barrierDismissible: false,
+      isScrollControlled: true,
+      customData: SeachForHubsBottomSheetInputArgument(
+          bottomSheetTitle: 'Enter following values'),
+    );
+
+    if (sheetResponse != null) {
+      if (sheetResponse.confirmed) {
+        SeachForHubsBottomSheetOutputArguments returnedArgs =
+            sheetResponse.responseData;
+        selectedHub = selectedHub.copyWith(
+            itemUnit: returnedArgs.itemUnit,
+            dropOff: returnedArgs.drop,
+            collect: returnedArgs.collect);
+
+        navigationService.back(
+          result: AddHubsReturnArguments(
+            singleTempHub: selectedHub,
+          ),
+        );
+      }
+    }
   }
 
   getClients() async {

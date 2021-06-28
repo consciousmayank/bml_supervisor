@@ -3,16 +3,20 @@ import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/consignments_for_selected_date_and_client_response.dart';
 import 'package:bml_supervisor/models/create_consignment_request.dart';
-import 'package:bml_supervisor/models/fetch_hubs_response.dart';
+import 'package:bml_supervisor/models/driver-info.dart';
 import 'package:bml_supervisor/models/fetch_routes_response.dart';
-import 'package:bml_supervisor/models/search_by_reg_no_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/consignments/consignment_api.dart';
+import 'package:bml_supervisor/screens/consignments/create/create_consignment_params.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
+import 'package:bml_supervisor/screens/driver/driver_apis.dart';
+import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/utils/datetime_converter.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +29,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
 
   set totalWeight(double value) {
     _totalWeight = value;
+    notifyListeners();
   }
 
   DashBoardApis _dashBoardApis = locator<DashBoardApisImpl>();
@@ -43,6 +48,7 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   String _itemUnit;
+  String consignmentTitle;
 
   String get itemUnit => _itemUnit;
 
@@ -52,9 +58,9 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
   }
 
   CreateConsignmentRequest _consignmentRequest;
-  SearchByRegNoResponse _validatedRegistrationNumber;
+  // SearchByRegNoResponse _validatedRegistrationNumber;
   DateTime _entryDate;
-  TimeOfDay _dispatchTime = TimeOfDay.now();
+  TimeOfDay _dispatchTime;
 
   TimeOfDay get dispatchTime => _dispatchTime;
 
@@ -63,7 +69,6 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  String _enteredTitle; //final _formKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> _formKeyList = [];
 
   // double grandTotal = 0;
@@ -76,37 +81,23 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     notifyListeners();
   }
 
-  SearchByRegNoResponse get validatedRegistrationNumber =>
-      _validatedRegistrationNumber;
+  // SearchByRegNoResponse get validatedRegistrationNumber =>
+  //     _validatedRegistrationNumber;
 
-  set validatedRegistrationNumber(SearchByRegNoResponse value) {
-    _validatedRegistrationNumber = value;
-    notifyListeners();
-  }
+  // set validatedRegistrationNumber(SearchByRegNoResponse value) {
+  //   _validatedRegistrationNumber = value;
+  //   notifyListeners();
+  // }
 
   set formKeyList(List<GlobalKey<FormState>> value) {
     _formKeyList = value;
   }
 
-  String get enteredTitle => _enteredTitle;
-
-  set enteredTitle(String value) {
-    _enteredTitle = value;
-  }
-
   DateTime get entryDate => _entryDate;
-  List<FetchHubsResponse> _hubsList = [];
-
-  List<FetchHubsResponse> get hubsList => _hubsList;
-
-  set hubsList(List<FetchHubsResponse> value) {
-    _hubsList = value;
-    notifyListeners();
-  }
 
   set entryDate(DateTime selectedDate) {
     _entryDate = selectedDate;
-    validatedRegistrationNumber = null;
+    // validatedRegistrationNumber = null;
     consignmentRequest = null;
     notifyListeners();
   }
@@ -134,84 +125,106 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
     setBusy(false);
   }
 
-  getHubs() async {
-    hubsList = [];
-    List<FetchHubsResponse> hubList =
-        await _dashBoardApis.getHubs(routeId: selectedRoute.routeId);
-    this.hubsList = copyList(hubList);
-    setBusy(false);
-    notifyListeners();
-  }
+  // getHubs() async {
+  //   hubsList = [];
+  //   List<FetchHubsResponse> hubList =
+  //       await _dashBoardApis.getHubs(routeId: selectedRoute.routeId);
+  //   this.hubsList = copyList(hubList);
+  //   setBusy(false);
+  //   notifyListeners();
+  // }
 
-  void validateRegistrationNumber(String regNum) async {
-    consignmentRequest = null;
-    setBusy(true);
-    validatedRegistrationNumber =
-        await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
-    if (validatedRegistrationNumber != null) {
-      initializeConsignments();
-    } else {
-      snackBarService.showSnackbar(
-          message: 'Vehicle with registration number $regNum not found.');
-    }
-    setBusy(false);
-  }
+  // void validateRegistrationNumber(String regNum) async {
+  //   consignmentRequest = null;
+  //   setBusy(true);
+  //   validatedRegistrationNumber =
+  //       await _consignmentApis.getVehicleDetails(registrationNumber: regNum);
+  //   if (validatedRegistrationNumber != null) {
+  //     initializeConsignments();
+  //   } else {
+  //     snackBarService.showSnackbar(
+  //         message: 'Vehicle with registration number $regNum not found.');
+  //   }
+  //   setBusy(false);
+  // }
 
-  void initializeConsignments() {
+  // this.hubTitle,
+  // this.hubCity,
+  // this.hubContactPerson,
+  // this.hubGeoLatitude,
+  // this.hubGeoLongitude,
+  // this.hubId,
+  // this.sequence,
+  // this.title,
+  // this.dropOff,
+  // this.collect,
+  // this.payment,
+  // this.dropOffG,
+  // this.collectG,
+  // this.paymentG,
+  // this.paymentMode,
+  // this.paymentId,
+  // this.remarks,
+  // this.flag,
+  // this.collectError = false,
+  // this.dropOffError = false,
+  // this.paymentError = false,
+  // this.titleError = false,
+
+  void initializeConsignments({
+    List<SingleTempHub> hubsList,
+  }) {
     List<Item> items = [];
-    _hubsList.forEach((element) {
+    hubsList.forEach((element) {
       _formKeyList.add(GlobalKey<FormState>());
-      print("Element Flag :: ${element.flag}");
+
       items.add(
         Item(
-            hubId: element.id,
-            sequence: element.sequence,
-            flag: element.flag,
-            hubCity: element.city,
-            hubContactPerson: element.contactPerson,
-            hubGeoLatitude: element.geoLatitude,
-            hubGeoLongitude: element.geoLongitude,
-            hubTitle: element.title),
+          hubTitle: element.title,
+          hubCity: element.city,
+          hubContactPerson: element.contactPerson,
+          hubGeoLatitude: element.geoLatitude,
+          hubGeoLongitude: element.geoLongitude,
+          hubId: element.consignmentId,
+          sequence: hubsList.indexOf(element),
+          title: 'NA',
+          dropOff: element.dropOff.toInt(),
+          collect: element.collect.toInt(),
+          payment: 0,
+          dropOffG: 0,
+          collectG: 0,
+          paymentG: 0,
+          paymentMode: 0,
+          paymentId: 'NA',
+          remarks: "NA",
+          flag: '',
+        ),
       );
     });
 
     consignmentRequest = CreateConsignmentRequest(
-        itemUnit: itemUnit,
-        weight: this.totalWeight,
-        vehicleId: validatedRegistrationNumber.registrationNumber,
-        clientId: selectedClient.clientId,
-        routeId: selectedRoute.routeId,
-        entryDate: getConvertedDate(entryDate),
-        dispatchDateTime: DateTimeToStringConverter.ddmmyyhhmmssaa(
-                date: DateTime(entryDate.year, entryDate.month, entryDate.day,
-                    dispatchTime.hour, dispatchTime.minute))
-            .convert()
-            .toUpperCase(),
-        title: enteredTitle,
-        routeTitle: selectedRoute.routeTitle,
-        items: items);
-  }
-
-  void createConsignment({String consignmentTitle}) async {
-    setBusy(true);
-    consignmentRequest = consignmentRequest.copyWith(
-      dropOff: consignmentRequest.items.last.dropOff,
-      collect: consignmentRequest.items.first.collect,
-      payment: consignmentRequest.getTotalPayment(),
-      title: consignmentTitle,
       itemUnit: itemUnit,
       weight: this.totalWeight,
+      vehicleId: selectedDriver.vehicleId,
+      clientId: selectedClient.clientId,
+      routeId: selectedRoute.routeId,
+      entryDate: getConvertedDate(entryDate),
+      dispatchDateTime: DateTimeToStringConverter.ddmmyyhhmmssaa(
+              date: DateTime(entryDate.year, entryDate.month, entryDate.day,
+                  dispatchTime.hour, dispatchTime.minute))
+          .convert()
+          .toUpperCase(),
+      title: consignmentTitle,
+      routeTitle: selectedRoute.routeTitle,
+      items: items,
+      dropOff: items.last.dropOff,
+      collect: items.first.collect,
+      payment: 0,
     );
+  }
 
-    List<Item> tempItems = consignmentRequest.items;
-
-    tempItems.forEach((element) {
-      element.copyWith(
-        paymentId: "NA",
-        remarks: element?.remarks?.length == 0 ? "NA" : element.remarks,
-        title: element.title.length == 0 ? "NA" : element.title,
-      );
-    });
+  void createConsignment() async {
+    setBusy(true);
 
     ApiResponse createConsignmentResponse = await _consignmentApis
         .createConsignment(createConsignmentRequest: consignmentRequest);
@@ -300,5 +313,89 @@ class CreateConsignmentModel extends GeneralisedBaseViewModel {
       customData: consignmentsList,
       variant: BottomSheetType.consignmentList,
     );
+  }
+
+  //Get Driver
+  DriverInfo selectedDriver;
+
+  DriverApis _driverApis = locator<DriverApisImpl>();
+  int pageNumber = 1;
+  List<DriverInfo> _driversList = [];
+  bool shouldCallGetDriverListApi = true;
+
+  List<DriverInfo> get driversList => _driversList;
+
+  set driversList(List<DriverInfo> driversList) {
+    _driversList = driversList;
+    notifyListeners();
+  }
+
+  getDriversList({@required bool showLoading}) async {
+    if (shouldCallGetDriverListApi) {
+      if (showLoading) {
+        setBusy(true);
+        driversList = [];
+      }
+
+      List<DriverInfo> response = await _driverApis.getDriversList(
+        pageNumber: pageNumber,
+      );
+      if (response.length > 0) {
+        if (pageNumber == 0) {
+          driversList = copyList(response);
+        } else {
+          driversList.addAll(response);
+        }
+
+        pageNumber++;
+      } else {
+        shouldCallGetDriverListApi = false;
+      }
+      if (showLoading) setBusy(false);
+      notifyListeners();
+    }
+  }
+
+  void takeToAddHubsView() {
+    navigationService
+        .navigateTo(
+      tempHubsListPostReviewConsigPageRoute,
+      arguments: TempHubsListInputArguments(
+        reviewedConsigId: 0,
+        callingScreen: CallingScreen.CREATE_CONSIGNMENT,
+      ),
+    )
+        .then((value) {
+      if (value != null) {
+        TempHubsListToCreateConsigmentArguments args = value;
+        notifyListeners();
+        initializeConsignments(hubsList: copyList(args.hubList));
+        showSummaryBottomSheet();
+      }
+    });
+  }
+
+  showSummaryBottomSheet() async {
+    locator<BottomSheetService>()
+        .showCustomSheet(
+      isScrollControlled: true,
+      barrierDismissible: true,
+      variant: BottomSheetType.createConsignmentSummary,
+      // Which builder you'd like to call that was assigned in the builders function above.
+      customData: CreateConsignmentDialogParams(
+        selectedClient: selectedClient,
+        selectedDriver: selectedDriver,
+        consignmentRequest: consignmentRequest.copyWith(
+          weight: totalWeight,
+        ),
+        selectedRoute: selectedRoute,
+        itemUnit: itemUnit,
+      ),
+    )
+        .then((value) {
+      if (value != null && value.confirmed) {
+        createConsignment();
+      }
+    });
   }
 }

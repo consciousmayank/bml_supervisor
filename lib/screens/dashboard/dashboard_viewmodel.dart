@@ -4,6 +4,7 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/enums/trip_statuses.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statistics_response.dart';
 import 'package:bml_supervisor/models/consignment_tracking_statusresponse.dart';
@@ -14,7 +15,7 @@ import 'package:bml_supervisor/models/recent_consignment_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import '../payments/view/payment_args.dart';
 import 'package:bml_supervisor/screens/trips/tripsdetailed/detailedTripsArgs.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
@@ -22,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
-
   bool openConsignmentGroup = false;
   DashBoardApis _dashboardApi = locator<DashBoardApisImpl>();
   LoginResponse _userProfile;
@@ -221,7 +221,15 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
 
   void onAddHubTileClick() {
     navigationService.back();
-    navigationService.navigateTo(addHubRoute).then(
+    navigationService
+        .navigateTo(
+          addHubRoute,
+          arguments: AddHubsIncomingArguments(
+            callingScreen: CallingScreen.DASHBOARD,
+            hubsList: [],
+          ),
+        )
+        .then(
           (value) => reloadPage(),
         );
   }
@@ -278,16 +286,16 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
         );
   }
 
-  takeToHubsView({FetchRoutesResponse clickedRoute}) {
-    navigationService
-        .navigateTo(hubsViewPageRoute,
-            arguments: ViewRoutesArguments(
-              clickedRoute: clickedRoute,
-            ))
-        .then(
-          (value) => reloadPage(),
-        );
-  }
+  // takeToHubsView({FetchRoutesResponse clickedRoute}) {
+  //   navigationService
+  //       .navigateTo(hubsViewPageRoute,
+  //           arguments: ViewRoutesArguments(
+  //             clickedRoute: clickedRoute,
+  //           ))
+  //       .then(
+  //         (value) => reloadPage(),
+  //       );
+  // }
 
   void takeToViewRoutesPage() {
     navigationService.navigateTo(viewRoutesPageRoute).then(
@@ -350,18 +358,20 @@ class DashBoardScreenViewModel extends GeneralisedBaseViewModel {
   ConsignmentTrackingStatisticsResponse consignmentTrackingStatistics;
 
   void getConsignmentTrackingStatistics() async {
-    consignmentTrackingStatistics =
-        await _dashboardApi.getConsignmentTrackingStatistics(clientId: selectedClient.clientId);
+    consignmentTrackingStatistics = await _dashboardApi
+        .getConsignmentTrackingStatistics(clientId: selectedClient.clientId);
     notifyListeners();
   }
-
 
   void takeToUpcomingTripsDetailsView({@required TripStatus tripStatus}) {
     navigationService.back();
     navigationService
         .navigateTo(
           tripsDetailsPageRoute,
-          arguments: DetailedTripsViewArgs(tripStatus: tripStatus, consignmentTrackingStatistics: consignmentTrackingStatistics,),
+          arguments: DetailedTripsViewArgs(
+            tripStatus: tripStatus,
+            consignmentTrackingStatistics: consignmentTrackingStatistics,
+          ),
         )
         .then((value) => reloadPage());
   }

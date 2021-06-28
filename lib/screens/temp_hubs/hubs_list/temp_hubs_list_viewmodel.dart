@@ -2,9 +2,11 @@ import 'package:bml_supervisor/app_level/generalised_base_view_model.dart';
 import 'package:bml_supervisor/app_level/locator.dart';
 import 'package:bml_supervisor/app_level/setup_bottomsheet_ui.dart';
 import 'package:bml_supervisor/enums/bottomsheet_type.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/ApiResponse.dart';
 import 'package:bml_supervisor/models/single_temp_hub.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/temp_hubs/add_hubs/temp_add_hubs_view.dart';
 import 'package:bml_supervisor/screens/temp_hubs/hubs_list/temp_hubs_list_args.dart';
 import 'package:bml_supervisor/screens/temp_hubs/search_for_hubs/search_for_hubs_view.dart';
@@ -16,20 +18,40 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
   AddTempHubsApis _addHubsApis = locator<AddTempHubsApisImpl>();
   List<SingleTempHub> hubsList = [];
   void onAddHubClicked({@required int reviewedConsigId}) {
-    navigationService
-        .navigateTo(
-      tempAddHubsPostReviewConsigPageRoute,
-      arguments: TempAddHubsViewArguments(
-        reviewedConsigId: reviewedConsigId,
-      ),
-    )
-        .then((value) {
-      if (value != null) {
-        TempHubsListOutputArguments arguments = value;
-        hubsList.add(arguments.enteredHub);
-        notifyListeners();
-      }
-    });
+    if (reviewedConsigId == 0) {
+      navigationService
+          .navigateTo(
+        addHubRoute,
+        arguments: AddHubsIncomingArguments(
+          callingScreen: CallingScreen.TEMP_HUB_LIST,
+          hubsList: [],
+        ),
+      )
+          .then((value) {
+        if (value != null) {
+          AddHubsReturnArguments arguments = value;
+          hubsList.add(
+            arguments.singleTempHub,
+          );
+          notifyListeners();
+        }
+      });
+    } else {
+      navigationService
+          .navigateTo(
+        tempAddHubsPostReviewConsigPageRoute,
+        arguments: TempAddHubsViewArguments(
+          reviewedConsigId: reviewedConsigId,
+        ),
+      )
+          .then((value) {
+        if (value != null) {
+          TempHubsListOutputArguments arguments = value;
+          hubsList.add(arguments.enteredHub);
+          notifyListeners();
+        }
+      });
+    }
   }
 
   void onSearchForHubClicked({@required int reviewedConsigId}) {
@@ -112,5 +134,15 @@ class TempHubsListViewModel extends GeneralisedBaseViewModel {
     } else {
       return Future.value(sheetResponse.confirmed);
     }
+  }
+
+  void sendBackHubsList() {
+    // TempHubsListToCreateConsigmentArguments
+
+    navigationService.back(
+      result: TempHubsListToCreateConsigmentArguments(
+        hubList: hubsList,
+      ),
+    );
   }
 }

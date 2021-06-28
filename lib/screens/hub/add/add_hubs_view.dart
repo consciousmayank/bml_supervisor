@@ -1,10 +1,12 @@
 import 'package:bml_supervisor/app_level/colors.dart';
 import 'package:bml_supervisor/app_level/shared_prefs.dart';
 import 'package:bml_supervisor/app_level/themes.dart';
+import 'package:bml_supervisor/enums/calling_screen.dart';
 import 'package:bml_supervisor/models/add_hub_request.dart';
 import 'package:bml_supervisor/models/cities_response.dart';
 import 'package:bml_supervisor/models/hub_data_response.dart';
 import 'package:bml_supervisor/models/secured_get_clients_response.dart';
+import 'package:bml_supervisor/screens/hub/add/add_hubs_arguments.dart';
 import 'package:bml_supervisor/screens/hub/add/add_hubs_viewmodel.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
 import 'package:bml_supervisor/utils/form_validators.dart';
@@ -22,9 +24,9 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 class AddHubsView extends StatefulWidget {
-  final List<HubResponse> hubsList;
+  final AddHubsIncomingArguments args;
 
-  AddHubsView({@required this.hubsList});
+  AddHubsView({@required this.args});
 
   @override
   _AddHubsViewState createState() => _AddHubsViewState();
@@ -49,7 +51,8 @@ class _AddHubsViewState extends State<AddHubsView> {
                     )
                   : AddHubBodyWidget(
                       viewModel: viewModel,
-                      hubsList: widget.hubsList,
+                      hubsList: widget.args.hubsList,
+                      callingScreen: widget.args.callingScreen,
                     ),
             ),
         viewModelBuilder: () => AddHubsViewModel());
@@ -59,10 +62,14 @@ class _AddHubsViewState extends State<AddHubsView> {
 class AddHubBodyWidget extends StatefulWidget {
   final AddHubsViewModel viewModel;
   final List<HubResponse> hubsList;
+  final CallingScreen callingScreen;
 
-  const AddHubBodyWidget(
-      {Key key, @required this.viewModel, @required this.hubsList})
-      : super(key: key);
+  const AddHubBodyWidget({
+    Key key,
+    @required this.viewModel,
+    @required this.hubsList,
+    @required this.callingScreen,
+  }) : super(key: key);
 
   @override
   _AddHubBodyWidgetState createState() => _AddHubBodyWidgetState();
@@ -196,30 +203,32 @@ class _AddHubBodyWidgetState extends State<AddHubBodyWidget> {
               if (hubTitleController.text.length >= 8) {
                 if (contactNumberController.text.length >= 10) {
                   widget.viewModel.addHub(
+                      callingScreen: widget.callingScreen,
                       newHubObject: AddHubRequest(
-                    addressLine: houseNoBuildingNameController.text,
-                    clientId: MyPreferences()?.getSelectedClient()?.clientId,
-                    title: hubTitleController.text.trim(),
-                    contactPerson: contactPersonController.text.trim(),
-                    email: emailController.text.trim(),
-                    geoLatitude: latitudeController.text.length > 0
-                        ? double.parse(latitudeController.text.trim())
-                        : 0,
-                    geoLongitude: longitudeController.text.length > 0
-                        ? double.parse(longitudeController.text.trim())
-                        : 0,
-                    landmark: landmarkController.text.trim(),
-                    remarks: remarkController.text.trim(),
-                    city: widget.viewModel.selectedCity.city,
-                    state: widget.viewModel.stateController.text,
-                    country: widget.viewModel.countryController.text,
-                    pincode: widget.viewModel.pinCodeController.text,
-                    locality: localityController.text.trim(),
-                    mobile: contactNumberController.text.trim(),
-                    phone: widget.viewModel.alternateMobileNumber.trim(),
-                    registrationDate: doRController.text,
-                    street: streetController.text.trim(),
-                  ));
+                        addressLine: houseNoBuildingNameController.text,
+                        clientId:
+                            MyPreferences()?.getSelectedClient()?.clientId,
+                        title: hubTitleController.text.trim(),
+                        contactPerson: contactPersonController.text.trim(),
+                        email: emailController.text.trim(),
+                        geoLatitude: latitudeController.text.length > 0
+                            ? double.parse(latitudeController.text.trim())
+                            : 0,
+                        geoLongitude: longitudeController.text.length > 0
+                            ? double.parse(longitudeController.text.trim())
+                            : 0,
+                        landmark: landmarkController.text.trim(),
+                        remarks: remarkController.text.trim(),
+                        city: widget.viewModel.selectedCity.city,
+                        state: widget.viewModel.stateController.text,
+                        country: widget.viewModel.countryController.text,
+                        pincode: widget.viewModel.pinCodeController.text,
+                        locality: localityController.text.trim(),
+                        mobile: contactNumberController.text.trim(),
+                        phone: widget.viewModel.alternateMobileNumber.trim(),
+                        registrationDate: doRController.text,
+                        street: streetController.text.trim(),
+                      ));
                 } else {
                   widget.viewModel.snackBarService.showSnackbar(
                       message: 'Please enter correct mobile number');

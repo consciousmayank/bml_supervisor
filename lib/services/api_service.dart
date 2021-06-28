@@ -83,12 +83,18 @@ class ApiService {
 
   ///Get all the hubs for selected RouteId
   Future<ParentApiResponse> getHubsList({
-    @required int routeId,
+    @required int clientId,
+    @required int page,
   }) async {
     Response response;
     DioError error;
     try {
-      response = await dioClient.getDio().get(GET_HUBS(routeId));
+      response = await dioClient.getDio().get(
+            GET_HUBS(
+              clientId,
+              page,
+            ),
+          );
     } on DioError catch (e) {
       error = e;
     }

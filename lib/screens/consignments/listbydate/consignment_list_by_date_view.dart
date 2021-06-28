@@ -6,7 +6,6 @@ import 'package:bml_supervisor/screens/consignments/details/consignment_details_
 import 'package:bml_supervisor/screens/consignments/listbydate/consignment_list_by_date_viewmodel.dart';
 import 'package:bml_supervisor/utils/app_text_styles.dart';
 import 'package:bml_supervisor/utils/dimens.dart';
-import 'package:bml_supervisor/utils/form_validators.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/app_text_view.dart';
 import 'package:bml_supervisor/widget/app_textfield.dart';

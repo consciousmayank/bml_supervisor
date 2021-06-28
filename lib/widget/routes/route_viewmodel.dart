@@ -6,7 +6,6 @@ import 'package:bml_supervisor/models/get_hub_details_response.dart';
 import 'package:bml_supervisor/models/get_route_details_response.dart';
 import 'package:bml_supervisor/routes/routes_constants.dart';
 import 'package:bml_supervisor/screens/dashboard/dashboard_apis.dart';
-import 'package:bml_supervisor/screens/delivery_route/list/delivery_hubs/view_routes_arguments.dart';
 import 'package:bml_supervisor/utils/widget_utils.dart';
 import 'package:bml_supervisor/widget/routes/route_details_bottomsheet.dart';
 import 'package:bml_supervisor/widget/routes/routes_apis.dart';
@@ -107,14 +106,6 @@ class RoutesViewModel extends GeneralisedBaseViewModel {
   void onAddRouteClicked() {
     // navigationService.back();
     navigationService.navigateTo(addRoutesPageRoute);
-  }
-
-  takeToHubsView({FetchRoutesResponse clickedRoute}) {
-    navigationService.back();
-    navigationService.navigateTo(hubsViewPageRoute,
-        arguments: ViewRoutesArguments(
-          clickedRoute: clickedRoute,
-        ));
   }
 
   Future<void> openRouteDetailsBottomSheet(

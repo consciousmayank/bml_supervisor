@@ -130,6 +130,10 @@ class DriverInfo {
         lastupdated: lastupdated ?? this.lastupdated,
       );
 
+  String getCompleteName() {
+    return "$firstName $lastName";
+  }
+
   factory DriverInfo.fromJson(String str) =>
       DriverInfo.fromMap(json.decode(str));
 
@@ -351,26 +355,26 @@ class Bank {
   String toJson() => json.encode(toMap());
 
   factory Bank.fromMap(Map<String, dynamic> json) => Bank(
-    id: json["id"],
-    type: json["type"],
-    accountName: json["accountName"],
-    accountType: json["accountType"],
-    accountNumber: json["accountNumber"],
-    bankName: json["bankName"],
-    ifsc: json["ifsc"],
-    pan: json["pan"],
-    address: json["address"],
-  );
+        id: json["id"],
+        type: json["type"],
+        accountName: json["accountName"],
+        accountType: json["accountType"],
+        accountNumber: json["accountNumber"],
+        bankName: json["bankName"],
+        ifsc: json["ifsc"],
+        pan: json["pan"],
+        address: json["address"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "type": type,
-    "accountName": accountName,
-    "accountType": accountType,
-    "accountNumber": accountNumber,
-    "bankName": bankName,
-    "ifsc": ifsc,
-    "pan": pan,
-    "address": address,
-  };
+        "id": id,
+        "type": type,
+        "accountName": accountName,
+        "accountType": accountType,
+        "accountNumber": accountNumber,
+        "bankName": bankName,
+        "ifsc": ifsc,
+        "pan": pan,
+        "address": address,
+      };
 }

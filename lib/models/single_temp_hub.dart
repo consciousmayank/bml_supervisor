@@ -2,9 +2,9 @@
 //
 //     final singleTempHub = singleTempHubFromMap(jsonString);
 
-import 'package:bml_supervisor/app_level/shared_prefs.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 class SingleTempHub {
   SingleTempHub.empty({

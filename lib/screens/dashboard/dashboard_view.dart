@@ -310,14 +310,14 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                               ),
 
                               ///line chart (Routes Driven Kilometers)
-                              LineChartView(
-                                key: ValueKey(4),
-                                clientId: MyPreferences()
-                                    ?.getSelectedClient()
-                                    ?.clientId,
-                                selectedDuration:
-                                    MyPreferences().getSelectedDuration(),
-                              ),
+                              // LineChartView(
+                              //   key: ValueKey(4),
+                              //   clientId: MyPreferences()
+                              //       ?.getSelectedClient()
+                              //       ?.clientId,
+                              //   selectedDuration:
+                              //       MyPreferences().getSelectedDuration(),
+                              // ),
 
                               /// Driven Km % pie chart
                               PieChartView(
@@ -334,24 +334,24 @@ class _DashBoardScreenViewState extends State<DashBoardScreenView>
                               ),
 
                               //Route List
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Card(
-                                  elevation: defaultElevation,
-                                  child: RoutesView(
-                                    key: ValueKey(7),
-                                    // selectedClient: viewModel.selectedClient,
-                                    onRoutesPageInView:
-                                        (FetchRoutesResponse clickedRoute) {
-                                      viewModel.takeToHubsView(
-                                          clickedRoute: clickedRoute);
-                                    },
-                                    isInDashBoard: true,
-                                    selectedClient:
-                                        MyPreferences()?.getSelectedClient(),
-                                  ),
-                                ),
-                              ),
+                              // ClipRRect(
+                              //   borderRadius: BorderRadius.circular(20),
+                              //   child: Card(
+                              //     elevation: defaultElevation,
+                              //     child: RoutesView(
+                              //       key: ValueKey(7),
+                              //       // selectedClient: viewModel.selectedClient,
+                              //       onRoutesPageInView:
+                              //           (FetchRoutesResponse clickedRoute) {
+                              //         viewModel.takeToHubsView(
+                              //             clickedRoute: clickedRoute);
+                              //       },
+                              //       isInDashBoard: true,
+                              //       selectedClient:
+                              //           MyPreferences()?.getSelectedClient(),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                   ),
